@@ -1,4 +1,4 @@
-package levelHandling 
+package model.levelHandling 
 {
 	/**
 	 * The class containing access to the board, including width, height as well as model information on what tiles are where
@@ -17,7 +17,7 @@ package levelHandling
 			m_board = level.board_array;
 		}
 		
-		public function getTile(x:int, y:int)
+		public function getTile(x:int, y:int):int
 		{
 			var result:int;
 			if (x >= m_width || y >= m_height)

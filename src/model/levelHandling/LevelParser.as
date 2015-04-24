@@ -1,4 +1,4 @@
-package levelHandling 
+package model.levelHandling 
 {
 	import flash.events.Event;
 	import flash.net.URLLoader;
@@ -14,7 +14,7 @@ package levelHandling
 	public class LevelParser 
 	{
 		
-		[Embed(source="../../assets/levels/testlevel.json", mimeType="application/octet-stream")]
+		[Embed(source="../../../assets/levels/testlevel.json", mimeType="application/octet-stream")]
 		var testLevel:Class;
 		
 		public function LevelParser() 

@@ -3,5 +3,5 @@ Games Capstone Project
 
 # Team Members
 Jack Fancher -- DingusaurusRex
-Marc-Antoine Fontenelle
+Marc-Antoine Fontenelle -- BeljunWaffel
 Panji Wisesa -- panjiw
