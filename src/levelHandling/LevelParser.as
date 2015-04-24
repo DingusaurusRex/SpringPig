@@ -22,10 +22,10 @@ package levelHandling
 			
 		}
 		
-		public function parseFile():Object
+		public function parseLevel():Board
 		{
 			var levelString:String = (new testLevel() as ByteArray).toString();
-			return JSON.parse(levelString);
+			return new Board(JSON.parse(levelString));
 		}
 		
 	}
