@@ -1,24 +1,23 @@
-package  
+package levelHandling 
 {
 	import flash.events.Event;
 	import flash.net.URLLoader;
 	import flash.net.URLRequest;
 	import flash.utils.ByteArray;
 	
-	import com.adobe.serialization.json.JSON;
 	
 
 	/**
 	 * ...
 	 * @author Jack
 	 */
-	public class FileParser 
+	public class LevelParser 
 	{
 		
-		[Embed(source = "../assets/levels/testlevel.json", mimeType = "application/octet-stream")]
+		[Embed(source="../../assets/levels/testlevel.json", mimeType="application/octet-stream")]
 		var testLevel:Class;
 		
-		public function FileParser() 
+		public function LevelParser() 
 		{
 			
 		}
