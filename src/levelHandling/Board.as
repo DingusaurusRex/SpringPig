@@ -8,7 +8,7 @@ package levelHandling
 	{
 		private var m_width:int;
 		private var m_height:int;
-		private var m_board:Vector.<int>;
+		private var m_board:Array;
 		
 		public function Board(level:Object) 
 		{
@@ -19,8 +19,14 @@ package levelHandling
 		
 		public function getTile(x:int, y:int)
 		{
+			var result:int;
+			if (x >= m_width || y >= m_height)
+			{
+				result = -1;
+			}
 			var index:int = y * m_width + x;
-			return m_board[index];
+			result = m_board[index];
+			return result;
 		}
 		
 		/**

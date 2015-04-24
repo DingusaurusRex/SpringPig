@@ -3,6 +3,7 @@ package
 	import flash.display.Sprite;
 	import flash.events.Event;
 	import flash.text.TextField;
+	import levelHandling.Board;
 	import levelHandling.LevelParser;
 	
 	/**
@@ -24,11 +25,8 @@ package
 			// entry point
 			
 			var levelReader:LevelParser = new LevelParser();
-			var level:Object = levelReader.parseFile();
-			
-			var text:TextField = new TextField()
-			text.text = level.message;
-			stage.addChild(text);
+			var level:Board = levelReader.parseLevel();
+			var level:Board = levelReader.parseLevel();
 		}
 		
 	}
