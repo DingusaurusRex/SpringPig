@@ -15,8 +15,7 @@ package
 	[SWF(width = "800", height = "600", frameRate = "30")]
 	
 	public class Main extends Sprite 
-	{
-		
+	{		
 		public function Main():void 
 		{
 			if (stage) init();
