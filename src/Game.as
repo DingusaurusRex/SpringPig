@@ -45,7 +45,7 @@ package
 			this.board = board;
 			
 			this.playerStart = playerStart;
-			trace(board.getTileDimensions());
+			trace(board.tileSideLength);
 			
 			stage.addEventListener(KeyboardEvent.KEY_DOWN, onKeyDown);
 			stage.addEventListener(KeyboardEvent.KEY_UP, onKeyUp);
@@ -70,11 +70,11 @@ package
 			
 			// Process Keyboard controls
 			if (keyUp && !player.inAir) {
-				if (player.character.y < board.getBoardHeightInPixels())
-					player.character.y -= 1 * board.getTileDimensions(); // Jump one square
+				if (player.character.y < board.boardHeightInPixels)
+					player.character.y -= 1 * board.tileSideLength; // Jump one square
 			}
 			if (keyRight) {
-				if (player.character.x < board.getBoardWidthInPixels()) {
+				if (player.character.x < board.boardWidthInPixels) {
 					player.inAir ? player.character.x += player.airSpeedX : player.character.x += player.speedX
 					
 					// If you ran into a wall, keep the player in the previous square
@@ -105,10 +105,14 @@ package
 			if (keyR) {
 				player.character.x = playerStart.x;
 				player.character.y = playerStart.y;
+				player.energy = 0;
 			}
 			
 			if (player.inAir) {
 				// Fall down, or keep going up based on accel
+				// NOTE:  This is actually just updatign the character based on their velocity
+				// The velocity never changes, which is not what we want.  In reality, we want the velocity to be changing at a constant rate,
+				// and the character's position changes based on what the velocity is at that moment.
 				player.character.y += gravity;
 			}
 		}
@@ -174,10 +178,10 @@ package
 		 */
 		private function getPlayerTiles():Vector.<IntPair>
 		{
-			var lowX:int = (int) (player.character.x / board.getTileDimensions());
-			var highX:int = (int) ((player.character.x + player.character.width) / board.getTileDimensions());
-			var highY:int = (int) (player.character.y / board.getTileDimensions());
-			var lowY:int = (int) ((player.character.y + player.character.height - 1) / board.getTileDimensions());
+			var lowX:int = (int) (player.character.x / board.tileSideLength);
+			var highX:int = (int) ((player.character.x + player.character.width) / board.tileSideLength);
+			var highY:int = (int) (player.character.y / board.tileSideLength);
+			var lowY:int = (int) ((player.character.y + player.character.height - 1) / board.tileSideLength);
 			
 			// Determines if any of the above values are the same (Whether the player is located inside a square or in between two or more squares)
 			var oneX:Boolean = false; 
@@ -216,9 +220,9 @@ package
 		 */
 		private function getTilesBelowPlayer():Vector.<IntPair>
 		{
-			var lowX:int = (int) (player.character.x / board.getTileDimensions());
-			var highX:int = (int) ((player.character.x + player.character.width) / board.getTileDimensions());
-			var lowY:int = (int) ((player.character.y + player.character.height) / board.getTileDimensions());
+			var lowX:int = (int) (player.character.x / board.tileSideLength);
+			var highX:int = (int) ((player.character.x + player.character.width) / board.tileSideLength);
+			var lowY:int = (int) ((player.character.y + player.character.height) / board.tileSideLength);
 			
 			// Determines if any of the above values are the same (Whether the player is located inside a square or in between two or more squares)
 			var oneX:Boolean = false;
@@ -245,9 +249,9 @@ package
 		 */
 		private function getTilesOnPlayerRight():Vector.<IntPair>
 		{
-			var highX:int = (int) ((player.character.x + player.character.width) / board.getTileDimensions());
-			var lowY:int = (int) ((player.character.y + player.character.height - 1) / board.getTileDimensions());
-			var highY:int = (int) (player.character.y / board.getTileDimensions());
+			var highX:int = (int) ((player.character.x + player.character.width) / board.tileSideLength);
+			var lowY:int = (int) ((player.character.y + player.character.height - 1) / board.tileSideLength);
+			var highY:int = (int) (player.character.y / board.tileSideLength);
 		
 			// Determines if any of the above values are the same (Whether the player is located inside a square or in between two or more squares)
 			var oneY:Boolean = false;
@@ -274,9 +278,9 @@ package
 		 */
 		private function getTilesOnPlayerLeft():Vector.<IntPair>
 		{
-			var lowX:int = (int) (player.character.x / board.getTileDimensions());
-			var lowY:int = (int) ((player.character.y + player.character.height - 1) / board.getTileDimensions());
-			var highY:int = (int) (player.character.y / board.getTileDimensions());
+			var lowX:int = (int) (player.character.x / board.tileSideLength);
+			var lowY:int = (int) ((player.character.y + player.character.height - 1) / board.tileSideLength);
+			var highY:int = (int) (player.character.y / board.tileSideLength);
 			
 			// Determines if any of the above values are the same (Whether the player is located inside a square or in between two or more squares)
 			var oneY:Boolean = false;

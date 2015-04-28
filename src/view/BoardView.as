@@ -36,7 +36,7 @@ package view
 		private function draw(board:Board):void
 		{
 			// Determine the dimensions of a tile
-			var tileSideLength:int = board.getTileDimensions();
+			var tileSideLength:int = board.tileSideLength;
 			
 			
 			m_boardViewWidth = board.width * tileSideLength;

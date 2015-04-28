@@ -43,8 +43,8 @@ package
 			// Add the player to the board
 			var player:Player = new Player();
 			var playerStart:IntPair = boardSprite.getPlayerStart(); // Top right of the square
-			player.character.height = level.getTileDimensions();
-			player.character.width = level.getTileDimensions();
+			player.character.height = level.tileSideLength;
+			player.character.width = level.tileSideLength;
 			player.character.x = playerStart.x;
 			player.character.y = playerStart.y;
 			

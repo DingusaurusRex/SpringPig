@@ -14,6 +14,12 @@ package model.levelHandling
 	public class LevelParser 
 	{
 		
+		/**
+		 * 
+		 * Embedded Levels
+		 * 
+		**/
+		
 		[Embed(source="../../../assets/levels/testlevel.json", mimeType="application/octet-stream")]
 		private var testLevel:Class;
 		

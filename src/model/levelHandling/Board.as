@@ -10,11 +10,22 @@ package model.levelHandling
 		private var m_height:int;
 		private var m_board:Array;
 		
+		private var m_tileSideLength:int;			// The length of the side of a single tile (in pixels)
+		private var m_boardWidthInPixels:int;		// The total width of the board portion of the screen (in pixels)
+		private var m_boardHeightInPixels:int;	// The total height of the board portion of the screen (in pixels)
+		
 		public function Board(level:Object) 
 		{
 			m_width = level.width;
 			m_height = level.height;
 			m_board = level.board_array;
+			
+			var tileWidth:int = Constants.BOARD_WIDTH / m_width;
+			var tileHeight:int = Constants.BOARD_HEIGHT / m_height;
+			m_tileSideLength = Math.min(tileWidth, tileHeight);
+			
+			m_boardWidthInPixels = m_width * m_tileSideLength;
+			m_boardHeightInPixels = m_height * m_tileSideLength;
 		}
 		
 		public function getTile(x:int, y:int):int
@@ -52,23 +63,21 @@ package model.levelHandling
 		 * @param	height	- Number of tiles vertically on the board
 		 * @return	The largest number of pixels that a tile can be in order to fit all the tiles on the screen
 		**/
-		public function getTileDimensions():int
+		public function get tileSideLength():int
 		{
-			var tileWidth:int = Constants.BOARD_WIDTH / width;
-			var tileHeight:int = Constants.BOARD_HEIGHT / height;
-			return Math.min(tileWidth, tileHeight);
+			return m_tileSideLength
 		}
 		
-		public function getBoardHeightInPixels():int 
+		public function get boardWidthInPixels():int 
 		{
-			var tileLength:int = getTileDimensions();
-			return height * tileLength;
+			return m_boardWidthInPixels
 		}
 		
-		public function getBoardWidthInPixels():int 
+		public function get boardHeightInPixels():int 
 		{
-			var tileLength:int = getTileDimensions();
-			return width * tileLength;
+			return m_boardHeightInPixels
 		}
+		
+		
 	}
 }
