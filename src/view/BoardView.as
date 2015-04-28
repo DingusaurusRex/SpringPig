@@ -3,6 +3,7 @@ package view
 	import flash.display.Bitmap;
 	import flash.display.Sprite;
 	import model.levelHandling.Board;
+	import util.IntPair;
 	/**
 	 * A Sprite containing all the static tiles
 	 * 
@@ -12,20 +13,30 @@ package view
 	 */
 	public class BoardView extends Sprite
 	{
+		// Embedded Assets
+		[Embed(source = "../../assets/art/tiles/wall.png")]
+		private var WallArt:Class;
 		
+		[Embed(source = "../../assets/art/tiles/lava.png")]
+		private var LavaArt:Class;
+		
+		[Embed(source = "../../assets/art/tiles/end.png")]
+		private var EndArt:Class;
 		
 		protected var m_boardViewWidth:int;		// The actual total width of the BoardView
 		protected var m_boardViewHeight:int;	// The actual total height of the BoardView
+		
+		private var m_playerStart:IntPair;
 		
 		public function BoardView(board:Board) 
 		{
 			draw(board);
 		}
 		
-		public function draw(board:Board):void
+		private function draw(board:Board):void
 		{
 			// Determine the dimensions of a tile
-			var tileSideLength:int = getTileDimensions(board.width, board.height);
+			var tileSideLength:int = board.getTileDimensions();
 			
 			
 			m_boardViewWidth = board.width * tileSideLength;
@@ -37,6 +48,8 @@ package view
 				for (var x:int = 0; x < board.width; x++)
 				{
 					var id:int = board.getTile(x, y);
+					if (id == Constants.START)
+						m_playerStart = new IntPair(x * tileSideLength, y * tileSideLength);
 					var asset:Bitmap = getAssetBitmap(id);
 					if (asset)
 					{
@@ -77,7 +90,7 @@ package view
 		 * @param	id - the ID of the tile to return the asset of
 		 * @return
 		**/
-		public function getAssetBitmap(id:int):Bitmap
+		private function getAssetBitmap(id:int):Bitmap
 		{
 			var result:Bitmap = null;
 			switch (id)
@@ -90,7 +103,7 @@ package view
 					break;
 				case Constants.END:
 					result = new EndArt();
-					break;				
+					break;
 				default:
 					result = null;
 					break;
@@ -101,17 +114,12 @@ package view
 		}
 		
 		/**
-		 * Returns the number of pixels wide and tall a single tile is based on the provided width and height (in tiles) of the board
-		 * 
-		 * @param	width	- Number of tiles horizontally on the board
-		 * @param	height	- Number of tiles vertically on the board
-		 * @return	The largest number of pixels that a tile can be in order to fit all the tiles on the screen
-		**/
-		public function getTileDimensions(width:int, height:int):int
+		 * Returns the tile on which the player starts
+		 * @return
+		 */
+		public function getPlayerStart():IntPair
 		{
-			var tileWidth:int = Constants.BOARD_WIDTH / width;
-			var tileHeight:int = Constants.BOARD_HEIGHT / height;
-			return Math.min(tileWidth, tileHeight);
+			return m_playerStart;
 		}
 	}
 

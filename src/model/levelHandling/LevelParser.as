@@ -15,7 +15,7 @@ package model.levelHandling
 	{
 		
 		[Embed(source="../../../assets/levels/testlevel.json", mimeType="application/octet-stream")]
-		var testLevel:Class;
+		private var testLevel:Class;
 		
 		public function LevelParser() 
 		{

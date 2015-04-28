@@ -44,5 +44,31 @@ package model.levelHandling
 		{
 			return m_height;
 		}
+		
+		/**
+		 * Returns the number of pixels wide and tall a single tile is based on the provided width and height (in tiles) of the board
+		 * 
+		 * @param	width	- Number of tiles horizontally on the board
+		 * @param	height	- Number of tiles vertically on the board
+		 * @return	The largest number of pixels that a tile can be in order to fit all the tiles on the screen
+		**/
+		public function getTileDimensions():int
+		{
+			var tileWidth:int = Constants.BOARD_WIDTH / width;
+			var tileHeight:int = Constants.BOARD_HEIGHT / height;
+			return Math.min(tileWidth, tileHeight);
+		}
+		
+		public function getBoardHeightInPixels():int 
+		{
+			var tileLength:int = getTileDimensions();
+			return height * tileLength;
+		}
+		
+		public function getBoardWidthInPixels():int 
+		{
+			var tileLength:int = getTileDimensions();
+			return width * tileLength;
+		}
 	}
 }
