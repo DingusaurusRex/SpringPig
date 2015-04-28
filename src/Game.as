@@ -45,7 +45,6 @@ package
 			this.board = board;
 			
 			this.playerStart = playerStart;
-			trace(board.tileSideLength);
 			
 			stage.addEventListener(KeyboardEvent.KEY_DOWN, onKeyDown);
 			stage.addEventListener(KeyboardEvent.KEY_UP, onKeyUp);
@@ -62,9 +61,10 @@ package
 			for each (var tile:IntPair in getTilesBelowPlayer()) {
 				var id:int = board.getTile(tile.x, tile.y);
 				// If one of the tiles below player is not empty, then player is not falling
-				if (id != Constants.EMPTY && id != Constants.START) 
+				if (id != Constants.EMPTY && id != Constants.START) {
 					inAir = false;
 					break;
+				}
 			}
 			player.inAir = inAir;
 			
@@ -238,6 +238,7 @@ package
 			} else {
 				result.push(new IntPair(lowX, lowY));
 				result.push(new IntPair(highX, lowY));
+				var id:int = board.getTile(highX, lowY);
 			}		
 			
 			return result;
