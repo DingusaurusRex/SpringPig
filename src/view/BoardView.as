@@ -12,15 +12,7 @@ package view
 	 */
 	public class BoardView extends Sprite
 	{
-		// Embedded Assets
-		[Embed(source = "../../assets/art/tiles/wall.png")]
-		var WallArt:Class;
 		
-		[Embed(source = "../../assets/art/tiles/lava.png")]
-		var LavaArt:Class;
-		
-		[Embed(source = "../../assets/art/tiles/end.png")]
-		var EndArt:Class;
 		
 		protected var m_boardViewWidth:int;		// The actual total width of the BoardView
 		protected var m_boardViewHeight:int;	// The actual total height of the BoardView
