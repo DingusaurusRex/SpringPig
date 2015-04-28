@@ -61,10 +61,23 @@ package
 			for each (var tile:IntPair in getTilesBelowPlayer()) {
 				var id:int = board.getTile(tile.x, tile.y);
 				// If one of the tiles below player is not empty, then player is not falling
-				if (id != Constants.EMPTY && id != Constants.START) {
+				if (id != Constants.EMPTY && id != Constants.START && id != Constants.END) {
+					//trace("1 :" + ((int) (tile.y * board.tileSideLength - player.character.height)));
+					//trace("2 :" + player.character.y);
+					//player.character.y = (int) (tile.y * board.tileSideLength - player.character.height);
 					inAir = false;
 					break;
 				}
+			}
+			// Check if the player has started falling. If so, get his starting height in order to later calculate energy gained.
+			if (!player.inAir && inAir) {
+				player.startingHeight = player.character.y / board.tileSideLength;
+				//trace("starting: " + player.startingHeight);
+			}
+			// Check if the player has stopped falling. If so, calculate his energy gained.
+			if (player.inAir && !inAir) {
+				player.energy += (player.character.y / board.tileSideLength) - player.startingHeight - Constants.ENERGY_DOWNGRADE;
+				//trace("energy: " + player.energy)
 			}
 			player.inAir = inAir;
 			
@@ -113,6 +126,7 @@ package
 				// NOTE:  This is actually just updatign the character based on their velocity
 				// The velocity never changes, which is not what we want.  In reality, we want the velocity to be changing at a constant rate,
 				// and the character's position changes based on what the velocity is at that moment.
+				//trace("here");
 				player.character.y += gravity;
 			}
 		}

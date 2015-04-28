@@ -40,6 +40,15 @@ package
 		
 		public static const START:int = 10;
 		public static const END:int = 11;
+		
+		/**
+		 * 
+		 * ENERGY CONSTANTS
+		 * 
+		 */
+		
+		// How much energy is lost every time you fall.
+		public static const ENERGY_DOWNGRADE:int = 1;
 	}
 
 }

@@ -17,6 +17,8 @@ package model.player
 		public var airSpeedX:Number = 5;
 		public var inAir:Boolean = false;
 		
+		public var startingHeight:int = 0;
+		
 		public function Player() 
 		{
 			character = new playerArt();
