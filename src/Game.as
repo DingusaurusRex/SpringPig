@@ -11,6 +11,7 @@ package
 	import model.player.Player;
 	import util.IntPair;
 	import view.BoardView;
+	import view.MeterView;
 	/**
 	 * ...
 	 * @author Marc
@@ -31,6 +32,7 @@ package
 		// Stage
 		private var stage:Stage;
 		private var board:Board;
+		private var meter:MeterView;
 		
 		private var gravity:int = 3;
 		
@@ -38,11 +40,12 @@ package
 		 * Begins the game
 		 * @param	p - Player Object (added to stage in main)
 		 */
-		public function Game(stage:Stage, player:Player, board:Board, playerStart:IntPair) 
+		public function Game(stage:Stage, player:Player, board:Board, playerStart:IntPair, meter:MeterView) 
 		{
 			this.player = player;
 			this.stage = stage;
 			this.board = board;
+			this.meter = meter;
 			
 			this.playerStart = playerStart;
 			
@@ -77,6 +80,7 @@ package
 			// Check if the player has stopped falling. If so, calculate his energy gained.
 			if (player.inAir && !inAir) {
 				player.energy += (player.character.y / board.tileSideLength) - player.startingHeight - Constants.ENERGY_DOWNGRADE;
+				meter.count = player.energy;
 				//trace("energy: " + player.energy)
 			}
 			player.inAir = inAir;
@@ -119,6 +123,7 @@ package
 				player.character.x = playerStart.x;
 				player.character.y = playerStart.y;
 				player.energy = 0;
+				meter.count = player.energy;
 			}
 			
 			if (player.inAir) {
