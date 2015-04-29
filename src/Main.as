@@ -9,6 +9,7 @@ package
 	import util.IntPair;
 	import view.BoardView;
 	import model.player.Player;
+	import view.MeterView;
 	
 	/**
 	 * ...
@@ -40,6 +41,12 @@ package
 			var boardSprite:BoardView = new BoardView(level);
 			stage.addChild(boardSprite);
 			
+			// Get the graphics for the meter
+			var meterSprite:MeterView = new MeterView();
+			meterSprite.x = Constants.METER_X;
+			meterSprite.y = Constants.METER_Y;
+			stage.addChild(meterSprite);
+			
 			// Add the player to the board
 			var player:Player = new Player();
 			var playerStart:IntPair = boardSprite.getPlayerStart(); // Top right of the square
@@ -66,7 +73,7 @@ package
 			stage.addChild(player.character);
 			
 			// start the game
-			new Game(stage, player, level, playerStart);
+			new Game(stage, player, level, playerStart, meterSprite);
 		}
 		
 	}

@@ -12,9 +12,17 @@ package
 		
 		public static const BACKGROUND_COLOR:uint = 0xcceaff;
 		
+		// Grid values
 		public static const GRID_THICKNESS:Number = 1;
 		public static const GRID_COLOR:uint = 0x000000;
 		public static const GRID_ALPHA:Number = 0.25;
+		
+		// Meter values
+		public static const METER_BACKGROUND_COLOR:uint = 0xaaaaaa;
+		public static const METER_LEVEL_COLOR:uint = 0xff0000;
+		
+		public static const METER_LINES_COLOR:uint = 0x000000;
+		public static const METER_LINES_TICKNESS:uint = 1;
 		
 		/**
 		 * Screen Values
@@ -23,10 +31,19 @@ package
 		public static const SCREEN_WIDTH:int = 800;
 		public static const SCREEN_HEIGHT:int = 600;
 		
-		public static const SIDEBAR_WIDTH:int = 50;
+		public static const SIDEBAR_WIDTH:int = 100;
 		
 		public static const BOARD_WIDTH:int = SCREEN_WIDTH - SIDEBAR_WIDTH;
 		public static const BOARD_HEIGHT:int = SCREEN_HEIGHT;
+		
+		// Meter Values
+		public static const METER_WIDTH:int = SIDEBAR_WIDTH;
+		public static const METER_HEIGHT:int = 300;
+		
+		public static const METER_RULER_WIDTH:int = METER_WIDTH / 4;
+		
+		public static const METER_X:int = BOARD_WIDTH;
+		public static const METER_Y:int	= 20;
 		
 		/**
 		 *
@@ -47,6 +64,7 @@ package
 		 * 
 		 */
 		
+
 		// How much energy is lost every time you fall.
 		public static const ENERGY_DOWNGRADE:int = 1;
 		public static const GRAVITY:int = 5;

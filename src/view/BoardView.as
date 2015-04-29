@@ -40,7 +40,12 @@ package view
 			
 			
 			m_boardViewWidth = board.width * tileSideLength;
-			m_boardViewHeight = board.height * tileSideLength;
+			m_boardViewHeight = board.height * tileSideLength
+			
+			// Draw background
+			graphics.beginFill(Constants.BACKGROUND_COLOR);
+			graphics.drawRect(0, 0, m_boardViewWidth, m_boardViewHeight);
+			graphics.endFill();
 			
 			// Draw Tiles
 			for (var y:int = 0; y < board.height; y++)
