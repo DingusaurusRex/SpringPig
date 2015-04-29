@@ -7,8 +7,8 @@ package model.player
 	 */
 	public interface PhysicsObject 
 	{
-		function updatePosition():void;
-		function set velocity(value:int):void;
+		function updatePosition(tileSize:int):void;
+		function set velocity(value:Number):void;
 	}
 	
 }

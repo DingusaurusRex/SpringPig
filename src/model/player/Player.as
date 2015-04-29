@@ -26,15 +26,15 @@ package model.player
 			character = new playerArt();
 		}
 		
-		public function updatePosition():void
+		public function updatePosition(tileSize:int):void
 		{
-			character.y = character.y + dy;
-			dy = dy + Constants.GRAVITY;
+			character.y = character.y + dy * tileSize;
+			dy = Math.min(dy + Constants.GRAVITY, Constants.TERMINAL_VELOCITY);
 		}
 		
-		public function set velocity(value:int):void
+		public function set velocity(value:Number):void
 		{
-			dy = value;
+			dy = Math.min(value, Constants.TERMINAL_VELOCITY);
 		}
 		
 	}

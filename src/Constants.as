@@ -63,14 +63,13 @@ package
 		 * ENERGY CONSTANTS
 		 * 
 		 */
-		// -15
-		public static const JUMP_VELOCITIES:Array = new Array(-20, -20, -23, -27, -30, -32, -35, -35, -45, -50);
-													  
+		// -.3
+		public static const JUMP_VELOCITIES:Array = new Array(-.3, -.375, -.45, -.5, -.56, -.61, -.66, -.7, -.74, -.78);
 		
-
-		// How much energy is lost every time you fall.
-		public static const ENERGY_DOWNGRADE:int = 1;
-		public static const GRAVITY:Number = 1.6;
+		public static const INITIAL_FALL_VELOCITY = .15	// The velocity given to an object when it starts falling
+		public static const ENERGY_DOWNGRADE:int = 1;	// How much energy is lost every time you fall.
+		public static const TERMINAL_VELOCITY:int = 1;	// Maximum Velocity (game might break if exceeded)
+		public static const GRAVITY:Number = .03;		// change in blocks / updates ^2
 	}
 
 }

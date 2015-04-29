@@ -64,19 +64,15 @@ package
 			player.inAir = isPlayerInAir();
 			// Check if the player has started falling. If so, get his starting height in order to later calculate energy gained.
 			if (player.inAir && !wasInAir) {
-				player.startingHeight = (board.boardHeightInPixels - player.character.y - player.character.height ) / board.tileSideLength;
-				player.velocity = 2;
+				player.startingHeight = getYPositionOfPlayer();
+				player.velocity = Constants.INITIAL_FALL_VELOCITY;
 			}
-			// Check if the player has stopped falling. If so, calculate his energy gained.
-			
 			
 			// Process Keyboard controls
 			if (keyUp && !player.inAir) {
-				//if (player.character.y < board.boardHeightInPixels)
-					//player.character.y -= 1 * board.tileSideLength; // Jump one square
 				player.velocity = Constants.JUMP_VELOCITIES[0];
 				player.inAir = true;
-				player.startingHeight = (board.boardHeightInPixels - player.character.y - player.character.height )/ board.tileSideLength;
+				player.startingHeight = getYPositionOfPlayer();
 			}
 			if (keyRight) {
 				if (player.character.x < board.boardWidthInPixels) {
@@ -116,20 +112,21 @@ package
 			}
 			
 			if (player.inAir) {
-				// Fall down, or keep going up based on accel
-				// NOTE:  This is actually just updatign the character based on their velocity
-				// The velocity never changes, which is not what we want.  In reality, we want the velocity to be changing at a constant rate,
-				// and the character's position changes based on what the velocity is at that moment.
-				player.updatePosition();
+				player.updatePosition(board.tileSideLength);
 				
 				player.inAir = isPlayerInAir();
 				if (!player.inAir) {
 					player.velocity = 0;
-					var energy:int = player.startingHeight - ((board.boardHeightInPixels - player.character.y - player.character.height ) / board.tileSideLength) - Constants.ENERGY_DOWNGRADE;
+					var energy:int = player.startingHeight - getYPositionOfPlayer() - Constants.ENERGY_DOWNGRADE;
 					player.energy += Math.max(0, energy);
 					meter.count = player.energy;
 				}
 			}
+		}
+		
+		private function getYPositionOfPlayer()
+		{
+			return (board.boardHeightInPixels - player.character.y - player.character.height ) / board.tileSideLength;
 		}
 		
 		/**
