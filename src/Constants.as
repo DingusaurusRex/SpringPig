@@ -64,7 +64,10 @@ package
 		 * 
 		 */
 		
-		public static const ENERGY_DOWNGRADE:int = 1;	// How much energy is lost every time you fall.
+
+		// How much energy is lost every time you fall.
+		public static const ENERGY_DOWNGRADE:int = 1;
+		public static const GRAVITY:int = 5;
 	}
 
 }
