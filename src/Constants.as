@@ -63,11 +63,14 @@ package
 		 * ENERGY CONSTANTS
 		 * 
 		 */
+		// -15
+		public static const JUMP_VELOCITIES:Array = new Array(-20, -20, -23, -27, -30, -32, -35, -35, -45, -50);
+													  
 		
 
 		// How much energy is lost every time you fall.
 		public static const ENERGY_DOWNGRADE:int = 1;
-		public static const GRAVITY:int = 5;
+		public static const GRAVITY:Number = 1.6;
 	}
 
 }

@@ -53,7 +53,8 @@ package
 			player.character.height = (int) (level.tileSideLength * 3.0 / 4.0);
 			player.character.width = (int) (level.tileSideLength * 3.0 / 4.0);
 			player.character.x = playerStart.x;
-			player.character.y = playerStart.y + player.character.height;
+			player.character.y = playerStart.y + level.tileSideLength - player.character.height;
+			playerStart.y = player.character.y;
 			
 			
 			/*

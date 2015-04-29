@@ -6,7 +6,7 @@ package model.player
 	 * ...
 	 * @author Marc
 	 */
-	public class Player 
+	public class Player implements PhysicsObject 
 	{
 		[Embed(source = "../../../assets/art/player/pig.png")]
 		private var playerArt:Class;
@@ -19,9 +19,22 @@ package model.player
 		
 		public var startingHeight:int = 0;
 		
+		public var dy:Number = 0;
+		
 		public function Player() 
 		{
 			character = new playerArt();
+		}
+		
+		public function updatePosition():void
+		{
+			character.y = character.y + dy;
+			dy = dy + Constants.GRAVITY;
+		}
+		
+		public function set velocity(value:int):void
+		{
+			dy = value;
 		}
 		
 	}
