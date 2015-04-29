@@ -32,7 +32,7 @@ package
 		private var stage:Stage;
 		private var board:Board;
 		
-		private var gravity:int = 3;
+		private var count:int = 0;
 		
 		/**
 		 * Begins the game
@@ -57,29 +57,18 @@ package
 		 */
 		private function update(e:Event = null):void
 		{
-			var inAir:Boolean = true;
-			for each (var tile:IntPair in getTilesBelowPlayer()) {
-				var id:int = board.getTile(tile.x, tile.y);
-				// If one of the tiles below player is not empty, then player is not falling
-				if (id != Constants.EMPTY && id != Constants.START && id != Constants.END) {
-					//trace("1 :" + ((int) (tile.y * board.tileSideLength - player.character.height)));
-					//trace("2 :" + player.character.y);
-					//player.character.y = (int) (tile.y * board.tileSideLength - player.character.height);
-					inAir = false;
-					break;
-				}
-			}
+			var wasInAir:Boolean = player.inAir;
+			player.inAir = isPlayerInAir();
 			// Check if the player has started falling. If so, get his starting height in order to later calculate energy gained.
-			if (!player.inAir && inAir) {
+			if (!player.inAir && wasInAir) {
 				player.startingHeight = player.character.y / board.tileSideLength;
 				//trace("starting: " + player.startingHeight);
 			}
 			// Check if the player has stopped falling. If so, calculate his energy gained.
-			if (player.inAir && !inAir) {
+			if (player.inAir && !wasInAir) {
 				player.energy += (player.character.y / board.tileSideLength) - player.startingHeight - Constants.ENERGY_DOWNGRADE;
 				//trace("energy: " + player.energy)
 			}
-			player.inAir = inAir;
 			
 			// Process Keyboard controls
 			if (keyUp && !player.inAir) {
@@ -91,7 +80,7 @@ package
 					player.inAir ? player.character.x += player.airSpeedX : player.character.x += player.speedX
 					
 					// If you ran into a wall, keep the player in the previous square
-					for each (tile in getTilesOnPlayerRight()) {
+					for each (var tile:IntPair in getTilesOnPlayerRight()) {
 						if (board.getTile(tile.x, tile.y) == Constants.WALL) {
 							player.inAir ? player.character.x -= player.airSpeedX : player.character.x -= player.speedX;
 							break;
@@ -126,9 +115,30 @@ package
 				// NOTE:  This is actually just updatign the character based on their velocity
 				// The velocity never changes, which is not what we want.  In reality, we want the velocity to be changing at a constant rate,
 				// and the character's position changes based on what the velocity is at that moment.
-				//trace("here");
-				player.character.y += gravity;
+				player.character.y += Constants.GRAVITY;
+				
+				player.inAir = isPlayerInAir();
 			}
+		}
+		
+		/**
+		 * If player is in air, returns true.
+		 * If player is not in air, returns false. Additionally, if player is inside a wall, moves player to border of wall.
+		 * @return
+		 */
+		private function isPlayerInAir():Boolean
+		{
+			var inAir:Boolean = true;
+			for each (var tile:IntPair in getTilesBelowPlayer()) {
+				var id:int = board.getTile(tile.x, tile.y);
+				// If one of the tiles below player is not empty, then player is not falling
+				if (id != Constants.EMPTY && id != Constants.START && id != Constants.END) {
+					player.character.y = (int) (tile.y * board.tileSideLength - player.character.height);
+					inAir = false;
+					break;
+				}
+			}
+			return inAir;
 		}
 		
 		/**
@@ -252,7 +262,7 @@ package
 			} else {
 				result.push(new IntPair(lowX, lowY));
 				result.push(new IntPair(highX, lowY));
-				var id:int = board.getTile(highX, lowY);
+				//var id:int = board.getTile(highX, lowY);
 			}		
 			
 			return result;
