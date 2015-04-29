@@ -8,6 +8,7 @@ package
 	import flash.ui.ContextMenuClipboardItems;
 	import flash.ui.Keyboard;
 	import model.levelHandling.Board;
+	import model.levelHandling.LevelParser;
 	import model.player.Player;
 	import util.IntPair;
 	import view.BoardView;
@@ -40,15 +41,55 @@ package
 		 * Begins the game
 		 * @param	p - Player Object (added to stage in main)
 		 */
-		public function Game(stage:Stage, player:Player, board:Board, playerStart:IntPair, meter:MeterView) 
+		public function Game(stage:Stage) 
 		{
-			this.player = player;
+			
+			// Get the graphics for the meter
+			meter = new MeterView();
+			meter.x = Constants.METER_X;
+			meter.y = Constants.METER_Y;
+			
+			
+			// Create the Player
+			player = new Player();			
+			
 			this.stage = stage;
-			this.board = board;
-			this.meter = meter;
+			
+			
+			
+			
+		}
+		
+		/**
+		 * Starts the level with the given levelName
+		 * levelName must match the name of a specific level
+		 * @param	levelName
+		 */
+		public function startLevel(levelName:String):void
+		{
+			// Get the board for the test level
+			var levelReader:LevelParser = new LevelParser();
+			board = levelReader.parseLevel(levelName);
+			
+			// Get the graphics for the test level
+			var boardSprite:BoardView = new BoardView(board);
+			
+			// Position the player
+			var playerStart:IntPair = boardSprite.getPlayerStart(); // Top right of the square
+			player.character.height = (int) (board.tileSideLength * 3.0 / 4.0);
+			player.character.width = (int) (board.tileSideLength * 3.0 / 4.0);
+			player.character.x = playerStart.x;
+			player.character.y = playerStart.y + board.tileSideLength - player.character.height;
+			playerStart.y = player.character.y;
 			
 			this.playerStart = playerStart;
 			
+			// Add graphics
+			stage.addChild(boardSprite);
+			stage.addChild(meter);
+			stage.addChild(player.character);
+			
+			// Create Listeners
 			stage.addEventListener(KeyboardEvent.KEY_DOWN, onKeyDown);
 			stage.addEventListener(KeyboardEvent.KEY_UP, onKeyUp);
 			stage.addEventListener(Event.ENTER_FRAME, update);
