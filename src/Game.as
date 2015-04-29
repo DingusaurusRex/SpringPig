@@ -70,7 +70,7 @@ package
 			
 			// Process Keyboard controls
 			if (keyUp && !player.inAir) {
-				player.velocity = Constants.JUMP_VELOCITIES[0];
+				player.velocity = Constants.JUMP_VELOCITIES[1];
 				player.inAir = true;
 				player.startingHeight = getYPositionOfPlayer();
 			}
@@ -101,14 +101,19 @@ package
 					}
 			}
 			if (keySpace && !player.inAir) {
-				// Do something
+				player.velocity = Constants.JUMP_VELOCITIES[player.energy];
+				player.inAir = true;
+				player.startingHeight = getYPositionOfPlayer() + player.energy;
+				trace(player.energy);
+				player.energy = 0;
+				meter.energy = player.energy;
 			}
 			if (keyR) {
 				player.character.x = playerStart.x;
 				player.character.y = playerStart.y;
 				player.energy = 0;
 				player.velocity = 0;
-				meter.count = player.energy;
+				meter.energy = player.energy;
 			}
 			
 			if (player.inAir) {
@@ -119,12 +124,12 @@ package
 					player.velocity = 0;
 					var energy:int = player.startingHeight - getYPositionOfPlayer() - Constants.ENERGY_DOWNGRADE;
 					player.energy += Math.max(0, energy);
-					meter.count = player.energy;
+					meter.energy = player.energy;
 				}
 			}
 		}
 		
-		private function getYPositionOfPlayer()
+		private function getYPositionOfPlayer():int
 		{
 			return (board.boardHeightInPixels - player.character.y - player.character.height ) / board.tileSideLength;
 		}

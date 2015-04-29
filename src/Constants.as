@@ -63,13 +63,17 @@ package
 		 * ENERGY CONSTANTS
 		 * 
 		 */
-		// -.3
-		public static const JUMP_VELOCITIES:Array = new Array(-.3, -.375, -.45, -.5, -.56, -.61, -.66, -.7, -.74, -.78);
 		
-		public static const INITIAL_FALL_VELOCITY = .15	// The velocity given to an object when it starts falling
-		public static const ENERGY_DOWNGRADE:int = 1;	// How much energy is lost every time you fall.
-		public static const TERMINAL_VELOCITY:int = 1;	// Maximum Velocity (game might break if exceeded)
-		public static const GRAVITY:Number = .03;		// change in blocks / updates ^2
+		public static const NORMAL_JUMP_HEIGHT:int = 1;			// The height of a normal jump 
+		
+		public static const JUMP_VELOCITIES:Array = new Array(0, -.3, -.375, -.45, -.5, -.56, -.61, -.66, -.7, -.74, -.78);		// Jump velocities
+																																// Index in the array indicates the power of the jump (number of blocks the jump with go up)
+																																// units are blocks / update
+		
+		public static const INITIAL_FALL_VELOCITY:Number = .15	// The velocity given to an object when it starts falling
+		public static const ENERGY_DOWNGRADE:int = 1;			// How much energy is lost every time you fall.
+		public static const TERMINAL_VELOCITY:Number = 1;		// Maximum Velocity (game might break if exceeded)
+		public static const GRAVITY:Number = .03;				// change in blocks / update ^2
 	}
 
 }
