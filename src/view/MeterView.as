@@ -8,20 +8,20 @@ package view
 	public class MeterView extends Sprite
 	{	
 		
-		protected var m_count:int	// The level of this meter to display (a number between 0 and 10)
+		protected var m_energy:int	// The level of this meter to display (a number between 0 and 10)
 		
 		// Sprites
 		protected var m_cover:Sprite		// The cover
 		
 		public function MeterView() 
 		{
-			m_count = 0;
+			m_energy = 0;
 			draw();
 		}
 		
-		public function set count(val:int):void
+		public function set energy(val:int):void
 		{
-			m_count = val;
+			m_energy = val;
 			adjustCover();
 		}
 		
@@ -83,7 +83,7 @@ package view
 		**/
 		private function adjustCover():void
 		{
-			m_cover.height = Constants.METER_HEIGHT - m_count * Constants.METER_HEIGHT / 10
+			m_cover.height = Constants.METER_HEIGHT - m_energy * Constants.METER_HEIGHT / 10
 		}
 		
 	}

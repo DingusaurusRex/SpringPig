@@ -8,9 +8,11 @@ package
 	import flash.ui.ContextMenuClipboardItems;
 	import flash.ui.Keyboard;
 	import model.levelHandling.Board;
+	import model.levelHandling.LevelParser;
 	import model.player.Player;
 	import util.IntPair;
 	import view.BoardView;
+	import view.MeterView;
 	/**
 	 * ...
 	 * @author Marc
@@ -31,24 +33,71 @@ package
 		// Stage
 		private var stage:Stage;
 		private var board:Board;
+		private var meter:MeterView;
 		
 		private var count:int = 0;
+		
+		public var pause:Boolean;
 		
 		/**
 		 * Begins the game
 		 * @param	p - Player Object (added to stage in main)
 		 */
-		public function Game(stage:Stage, player:Player, board:Board, playerStart:IntPair) 
+		public function Game(stage:Stage) 
 		{
-			this.player = player;
+			
+			// Get the graphics for the meter
+			meter = new MeterView();
+			meter.x = Constants.METER_X;
+			meter.y = Constants.METER_Y;
+			
+			
+			// Create the Player
+			player = new Player();			
+			
 			this.stage = stage;
-			this.board = board;
+			
+			this.pause = false;
+			
+			
+		}
+		
+		/**
+		 * Starts the level with the given levelName
+		 * levelName must match the name of a specific level
+		 * @param	levelName
+		 */
+		public function startLevel(levelName:String):void
+		{
+			// Get the board for the test level
+			var levelReader:LevelParser = new LevelParser();
+			board = levelReader.parseLevel(levelName);
+			
+			// Get the graphics for the test level
+			var boardSprite:BoardView = new BoardView(board);
+			
+			// Position the player
+			var playerStart:IntPair = boardSprite.getPlayerStart(); // Top right of the square
+			player.character.height = (int) (board.tileSideLength * 3.0 / 4.0);
+			player.character.width = (int) (board.tileSideLength * 3.0 / 4.0);
+			player.character.x = playerStart.x;
+			player.character.y = playerStart.y + board.tileSideLength - player.character.height;
+			playerStart.y = player.character.y;
 			
 			this.playerStart = playerStart;
 			
+			// Add graphics
+			stage.addChild(boardSprite);
+			stage.addChild(meter);
+			stage.addChild(player.character);
+			
+			// Create Listeners
 			stage.addEventListener(KeyboardEvent.KEY_DOWN, onKeyDown);
 			stage.addEventListener(KeyboardEvent.KEY_UP, onKeyUp);
 			stage.addEventListener(Event.ENTER_FRAME, update);
+			
+			stage.focus = stage; // Needed to refocus back to the game
+			pause = false; // Reset pause
 		}
 		
 		/**
@@ -57,68 +106,80 @@ package
 		 */
 		private function update(e:Event = null):void
 		{
-			var wasInAir:Boolean = player.inAir;
-			player.inAir = isPlayerInAir();
-			// Check if the player has started falling. If so, get his starting height in order to later calculate energy gained.
-			if (!player.inAir && wasInAir) {
-				player.startingHeight = player.character.y / board.tileSideLength;
-				//trace("starting: " + player.startingHeight);
-			}
-			// Check if the player has stopped falling. If so, calculate his energy gained.
-			if (player.inAir && !wasInAir) {
-				player.energy += (player.character.y / board.tileSideLength) - player.startingHeight - Constants.ENERGY_DOWNGRADE;
-				//trace("energy: " + player.energy)
-			}
-			
-			// Process Keyboard controls
-			if (keyUp && !player.inAir) {
-				if (player.character.y < board.boardHeightInPixels)
-					player.character.y -= 1 * board.tileSideLength; // Jump one square
-			}
-			if (keyRight) {
-				if (player.character.x < board.boardWidthInPixels) {
-					player.inAir ? player.character.x += player.airSpeedX : player.character.x += player.speedX
-					
-					// If you ran into a wall, keep the player in the previous square
-					for each (var tile:IntPair in getTilesOnPlayerRight()) {
-						if (board.getTile(tile.x, tile.y) == Constants.WALL) {
-							player.inAir ? player.character.x -= player.airSpeedX : player.character.x -= player.speedX;
-							break;
+			if (!pause) {
+				var wasInAir:Boolean = player.inAir;
+				player.inAir = isPlayerInAir();
+				// Check if the player has started falling. If so, get his starting height in order to later calculate energy gained.
+				if (player.inAir && !wasInAir) {
+					player.startingHeight = getYPositionOfPlayer();
+					player.velocity = Constants.INITIAL_FALL_VELOCITY;
+				}
+				
+				// Process Keyboard controls
+				if (keyUp && !player.inAir) {
+					player.velocity = Constants.JUMP_VELOCITIES[1];
+					player.inAir = true;
+					player.startingHeight = getYPositionOfPlayer();
+				}
+				if (keyRight) {
+					if (player.character.x < board.boardWidthInPixels) {
+						player.inAir ? player.character.x += player.airSpeedX : player.character.x += player.speedX
+						
+						// If you ran into a wall, keep the player in the previous square
+						for each (var tile:IntPair in getTilesOnPlayerRight()) {
+							if (board.getTile(tile.x, tile.y) == Constants.WALL) {
+								player.inAir ? player.character.x -= player.airSpeedX : player.character.x -= player.speedX;
+								break;
+							}
 						}
+					}
+						
+				}
+				if (keyLeft) {
+					if (player.character.x > 0)
+						player.inAir ? player.character.x -= player.airSpeedX : player.character.x -= player.speedX;
+						
+						// If you ran into a wall, keep the player in the previous square
+						for each (tile in getTilesOnPlayerLeft()) {
+							if (board.getTile(tile.x, tile.y) == Constants.WALL) {
+								player.inAir ? player.character.x += player.airSpeedX : player.character.x += player.speedX;
+								break;
+							}
+						}
+				}
+				if (keySpace && !player.inAir) {
+					player.velocity = Constants.JUMP_VELOCITIES[player.energy];
+					player.inAir = true;
+					player.startingHeight = getYPositionOfPlayer() + player.energy;
+					trace(player.energy);
+					player.energy = 0;
+					meter.energy = player.energy;
+				}
+				if (keyR) {
+					player.character.x = playerStart.x;
+					player.character.y = playerStart.y;
+					player.energy = 0;
+					player.velocity = 0;
+					meter.energy = player.energy;
+				}
+				
+				if (player.inAir) {
+					player.updatePosition(board.tileSideLength);
+					
+					player.inAir = isPlayerInAir();
+					if (!player.inAir) {
+						player.velocity = 0;
+						var energy:int = player.startingHeight - getYPositionOfPlayer() - Constants.ENERGY_DOWNGRADE;
+						player.energy += Math.max(0, energy);
+						meter.energy = player.energy;
 					}
 				}
-					
 			}
-			if (keyLeft) {
-				if (player.character.x > 0)
-					player.inAir ? player.character.x -= player.airSpeedX : player.character.x -= player.speedX;
-					
-					// If you ran into a wall, keep the player in the previous square
-					for each (tile in getTilesOnPlayerLeft()) {
-						if (board.getTile(tile.x, tile.y) == Constants.WALL) {
-							player.inAir ? player.character.x += player.airSpeedX : player.character.x += player.speedX;
-							break;
-						}
-					}
-			}
-			if (keySpace && !player.inAir) {
-				// Do something
-			}
-			if (keyR) {
-				player.character.x = playerStart.x;
-				player.character.y = playerStart.y;
-				player.energy = 0;
-			}
-			
-			if (player.inAir) {
-				// Fall down, or keep going up based on accel
-				// NOTE:  This is actually just updatign the character based on their velocity
-				// The velocity never changes, which is not what we want.  In reality, we want the velocity to be changing at a constant rate,
-				// and the character's position changes based on what the velocity is at that moment.
-				player.character.y += Constants.GRAVITY;
-				
-				player.inAir = isPlayerInAir();
-			}
+		}
+		
+		private function getYPositionOfPlayer():int
+		{
+			return (board.boardHeightInPixels - player.character.y - player.character.height ) / board.tileSideLength;
 		}
 		
 		/**
@@ -166,6 +227,14 @@ package
 					break;
 				case Keyboard.R :
 					keyR = true;
+					break;
+				case Keyboard.ESCAPE :
+					pause = !pause;
+					if (pause) {
+						Menu.createPauseMenu();
+					} else {
+						Menu.removePauseMenu();
+					}
 					break;
 			}
 		}

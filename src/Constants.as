@@ -64,10 +64,90 @@ package
 		 * 
 		 */
 		
-
-		// How much energy is lost every time you fall.
-		public static const ENERGY_DOWNGRADE:int = 1;
-		public static const GRAVITY:int = 5;
+		public static const NORMAL_JUMP_HEIGHT:int = 1;			// The height of a normal jump 
+		
+		public static const JUMP_VELOCITIES:Array = new Array(0, -.3, -.375, -.45, -.5, -.56, -.61, -.66, -.7, -.74, -.78);		// Jump velocities
+																																// Index in the array indicates the power of the jump (number of blocks the jump with go up)
+																																// units are blocks / update
+		
+		public static const INITIAL_FALL_VELOCITY:Number = .15	// The velocity given to an object when it starts falling
+		public static const ENERGY_DOWNGRADE:int = 1;			// How much energy is lost every time you fall.
+		public static const TERMINAL_VELOCITY:Number = 1;		// Maximum Velocity (game might break if exceeded)
+		public static const GRAVITY:Number = .03;				// change in blocks / update ^2
+		
+		
+		/*
+		 * Menu Values
+		 * 
+		 */
+		public static const GAME_TITLE:String = "Spring Pig";
+		
+		// General menu
+		public static const MENU_FONT:String = "arial";
+		public static const MENU_TITLE_ALIGNMENT:String = "center";
+		
+		// General menu button
+		public static const MENU_BUTTON_COLOR:uint = 0xCCCCCC;
+		public static const MENU_BUTTON_WIDTH:int = 98;
+		public static const MENU_BUTTON_HEIGHT:int = 18;
+		public static const MENU_BUTTON_FONT_SIZE:int = 12;
+		public static const MENU_BUTTON_TEXT_ALIGNMENT:String = "center";
+		public static const MENU_BUTTON_BORDER_SIZE:int = 2;
+		public static const MENU_BUTTON_BORDER_COLOR:uint = 0x000000;
+		public static const MENU_BUTTON_PADDING_BETWEEN:int = 40;
+		
+		// Mute button
+		public static const MUTE_BUTTON_TEXT:String = "Mute: ";
+		public static const MUTE_BUTTON_TOP_PADDING:int = 20;
+		public static const MUTE_BUTTON_RIGHT_PADDING:int = 20;
+		
+		// Menus
+		public static const START_BUTTON_TEXT:String = "Start";
+		public static const LEVEL_SELECT_BUTTON_TEXT:String = "Select Level";
+		public static const CREDITS_BUTTON_TEXT:String = "Credits";
+		public static const MAIN_MENU_BUTTON_TEXT:String = "Main Menu";
+		public static const MAIN_MENU_BUTTON_TOP_PADDING:int = 20;
+		public static const MAIN_MENU_BUTTON_LEFT_PADDING:int = 20;
+		
+		// Main menu
+		public static const MAIN_TITLE_FONT_SIZE:int = 80;
+		public static const MAIN_TITLE_TOP_PADDING:int = 50;
+		
+		public static const INSTRUCTIONS:String = "How to play:\nMove Left\t: Left Arrow\nMove Right\t: Right Arrow\nJump\t\t: Up Arrow\nSpring\t\t: Space\nReset\t\t: R\nPause\t\t: Escape";
+		public static const INSTRUCTIONS_TOP_PADDING:int = 460;
+		public static const INSTRUCTIONS_LEFT_PADDING:int = 30;
+		public static const INSTRUCTIONS_HEIGHT:int = 500;
+		public static const INSTRUCTIONS_WIDTH:int = 400;
+		public static const INSTRUCTIONS_FONT_SIZE:int = 15;
+		
+		public static const MAIN_CREDITS_BUTTON_RIGHT_PADDING:int = 30;
+		public static const MAIN_CREDITS_BUTTON_BOTTOM_PADDING:int = 40;
+		
+		// Level select menu
+		public static const LEVEL_SELECT_TITLE_TEXT:String = "Level Select";
+		public static const LEVEL_SELECT_TITLE_TOP_PADDING:int = 50;
+		public static const LEVEL_SELECT_TITLE_FONT_SIZE:int = 80;
+		
+		// Credits menu
+		public static const CREDITS_TITLE_TEXT:String = "Credits";
+		public static const CREDITS_TITLE_TOP_PADDING:int = 50;
+		public static const CREDITS_TITLE_FONT_SIZE:int = 80;
+		
+		public static const CREDITS:String = "A game created for:\n\tUW CSE Games Capstone - Spring 2015\nBy:\n- Jack Fancher\n- Marc-Antoine Fontenelle\n- Panji Wisesa";
+		public static const CREDITS_TOP_PADDING:int = 250;
+		public static const CREDITS_HEIGHT:int = 500;
+		public static const CREDITS_WIDTH:int = 400;
+		public static const CREDITS_FONT_SIZE:int = 20;
+		
+		// Pause menu
+		public static const PAUSE_TITLE_TEXT:String = "Paused";
+		public static const PAUSE_TITLE_TOP_PADDING:int = 50;
+		public static const PAUSE_TITLE_FONT_SIZE:int = 80;
+		
+		public static const PAUSE_BACKGROUND_COLOR:uint = 0x000000;
+		public static const PAUSE_BACKGROUND_OPACITY:Number = 0.5;
+		
+		public static const PAUSE_RESUME_BUTTON_TEXT:String = "Resume";
 	}
 
 }

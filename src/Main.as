@@ -7,6 +7,7 @@ package
 	import model.levelHandling.Board;
 	import model.levelHandling.LevelParser;
 	import util.IntPair;
+	import util.Audio;
 	import view.BoardView;
 	import model.player.Player;
 	import view.MeterView;
@@ -33,47 +34,17 @@ package
 			removeEventListener(Event.ADDED_TO_STAGE, init);
 			// entry point
 			
-			// Get the board for the test level
-			var levelReader:LevelParser = new LevelParser();
-			var level:Board = levelReader.parseLevel();
+			// Menu Stuff Here!!!!!!!!!!!!!
+			var game:Game = new Game(stage);
+			Audio.Init();
+			Menu.Init(stage, game);
+			Menu.createMainMenu();
+			// Parse LevelProgression JSON, determine the first level, pass that string into startLevel()
 			
-			// Get the graphics for the test level
-			var boardSprite:BoardView = new BoardView(level);
-			stage.addChild(boardSprite);
-			
-			// Get the graphics for the meter
-			var meterSprite:MeterView = new MeterView();
-			meterSprite.x = Constants.METER_X;
-			meterSprite.y = Constants.METER_Y;
-			stage.addChild(meterSprite);
-			
-			// Add the player to the board
-			var player:Player = new Player();
-			var playerStart:IntPair = boardSprite.getPlayerStart(); // Top right of the square
-			player.character.height = (int) (level.tileSideLength * 3.0 / 4.0);
-			player.character.width = (int) (level.tileSideLength * 3.0 / 4.0);
-			player.character.x = playerStart.x;
-			player.character.y = playerStart.y + player.character.height;
-			
-			
-			/*
-			var circle:Sprite = new Sprite();
-			circle.graphics.beginFill(0x000000);
-			circle.graphics.drawCircle(player.character.x, player.character.y, 5);
-			circle.graphics.endFill();
-			stage.addChild(circle);
-			
-			var circle:Sprite = new Sprite();
-			circle.graphics.beginFill(0x000000);
-			circle.graphics.drawCircle(player.character.x, player.character.y + player.character.height, 5);
-			circle.graphics.endFill();
-			stage.addChild(circle);
-			*/
-			
-			stage.addChild(player.character);
 			
 			// start the game
-			new Game(stage, player, level, playerStart, meterSprite);
+			//var game:Game = new Game(stage);
+			//game.startLevel("");
 		}
 		
 	}
