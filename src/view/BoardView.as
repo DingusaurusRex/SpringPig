@@ -28,6 +28,8 @@ package view
 		
 		private var m_playerStart:IntPair;
 		
+		private var m_finishTile:IntPair;
+		
 		public function BoardView(board:Board) 
 		{
 			draw(board);
@@ -55,6 +57,8 @@ package view
 					var id:int = board.getTile(x, y);
 					if (id == Constants.START)
 						m_playerStart = new IntPair(x * tileSideLength, y * tileSideLength);
+					if (id == Constants.END)
+						m_finishTile = new IntPair(x * tileSideLength, y * tileSideLength);
 					var asset:Bitmap = getAssetBitmap(id);
 					if (asset)
 					{
@@ -125,6 +129,15 @@ package view
 		public function getPlayerStart():IntPair
 		{
 			return m_playerStart;
+		}
+		
+		/**
+		 * Returns the tile on which the player starts
+		 * @return
+		 */
+		public function getFinishTile():IntPair
+		{
+			return m_finishTile;
 		}
 	}
 

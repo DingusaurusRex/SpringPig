@@ -34,6 +34,7 @@ package
 		private var stage:Stage;
 		private var board:Board;
 		private var meter:MeterView;
+		private var finishTile:IntPair;
 		
 		private var count:int = 0;
 		
@@ -98,6 +99,7 @@ package
 			
 			stage.focus = stage; // Needed to refocus back to the game
 			pause = false; // Reset pause
+			this.finishTile = boardSprite.getFinishTile();
 		}
 		
 		/**
@@ -174,7 +176,22 @@ package
 						meter.energy = player.energy;
 					}
 				}
+				
+				if (isPlayerFinished()) {
+					pause = true;
+					Menu.createPauseMenu();
+				}
 			}
+		}
+		
+		private function isPlayerFinished():Boolean
+		{
+			var midX:int = player.character.x + board.tileSideLength / 2;
+			var midY:int = player.character.y + board.tileSideLength / 2;
+			return midX >= finishTile.x &&
+			midX <= finishTile.x + board.tileSideLength &&
+			midY >= finishTile.y &&
+			midY <= finishTile.y + board.tileSideLength;
 		}
 		
 		private function getYPositionOfPlayer():int
