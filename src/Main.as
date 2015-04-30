@@ -35,8 +35,8 @@ package
 			
 			// Menu Stuff Here!!!!!!!!!!!!!
 			var game:Game = new Game(stage);
-			var menu:Menu = new Menu(stage, game);
-			menu.createMainMenu();
+			Menu.Init(stage, game);
+			Menu.createMainMenu();
 			// Parse LevelProgression JSON, determine the first level, pass that string into startLevel()
 			
 			

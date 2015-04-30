@@ -82,21 +82,43 @@ package
 		 */
 		public static const GAME_TITLE:String = "Spring Pig";
 		
-		public static const MAIN_TITLE_FONT_SIZE:int = 80;
-		public static const MAIN_TITLE_ALIGNMENT:String = "center";
-		public static const MAIN_TITLE_TOP_PADDING:int = 50;
+		// General menu
+		public static const MENU_FONT:String = "arial";
+		public static const MENU_TITLE_ALIGNMENT:String = "center";
 		
-		
+		// General menu button
 		public static const MENU_BUTTON_COLOR:uint = 0xCCCCCC;
-		public static const MENU_BUTTON_WIDTH:int = 100;
-		public static const MENU_BUTTON_HEIGHT:int = 20;
+		public static const MENU_BUTTON_WIDTH:int = 98;
+		public static const MENU_BUTTON_HEIGHT:int = 18;
 		public static const MENU_BUTTON_FONT_SIZE:int = 12;
 		public static const MENU_BUTTON_TEXT_ALIGNMENT:String = "center";
-		public static const MENU_BUTTON_PADDING_BETWEEN:int = 30;
+		public static const MENU_BUTTON_BORDER_SIZE:int = 2;
+		public static const MENU_BUTTON_BORDER_COLOR:uint = 0x000000;
+		public static const MENU_BUTTON_PADDING_BETWEEN:int = 40;
 		
+		// Menus
 		public static const START_BUTTON_TEXT:String = "Start";
+		public static const LEVEL_SELECT_BUTTON_TEXT:String = "Select Level";
+		public static const CREDITS_BUTTON_TEXT:String = "Credits";
+		public static const MAIN_MENU_BUTTON_TEXT:String = "Main Menu";
 		
-		public static const MENU_FONT:String = "arial";
+		// Main menu
+		public static const MAIN_TITLE_FONT_SIZE:int = 80;
+		public static const MAIN_TITLE_TOP_PADDING:int = 50;
+		
+		public static const MAIN_CREDITS_BUTTON_RIGHT_PADDING:int = 30;
+		public static const MAIN_CREDITS_BUTTON_BOTTOM_PADDING:int = 40;
+		
+		// Credits Menu
+		public static const CREDITS_TITLE_TEXT:String = "Credits";
+		public static const CREDITS_TITLE_TOP_PADDING:int = 50;
+		public static const CREDITS_TITLE_FONT_SIZE:int = 80;
+		
+		public static const CREDITS:String = "A game created for:\n\tUW CSE Games Capstone - Spring 2015\nBy:\n- Jack Fancher\n- Marc-Antoine Fontenelle\n- Panji Wisesa";
+		public static const CREDITS_TOP_PADDING:int = 250;
+		public static const CREDITS_HEIGHT:int = 500;
+		public static const CREDITS_WIDTH:int = 400;
+		public static const CREDITS_FONT_SIZE:int = 20;
 	}
 
 }
