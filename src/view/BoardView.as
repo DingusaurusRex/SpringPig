@@ -23,6 +23,9 @@ package view
 		[Embed(source = "../../assets/art/tiles/end.png")]
 		private var EndArt:Class;
 		
+		[Embed(source="../../assets/art/tiles/ladder.png")]
+		private var LadderArt:Class;
+		
 		protected var m_boardViewWidth:int;		// The actual total width of the BoardView
 		protected var m_boardViewHeight:int;	// The actual total height of the BoardView
 		
@@ -112,6 +115,9 @@ package view
 					break;
 				case Constants.END:
 					result = new EndArt();
+					break;
+				case Constants.LADDER:
+					result = new LadderArt();
 					break;
 				default:
 					result = null;
