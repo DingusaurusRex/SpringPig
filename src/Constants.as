@@ -74,6 +74,29 @@ package
 		public static const ENERGY_DOWNGRADE:int = 1;			// How much energy is lost every time you fall.
 		public static const TERMINAL_VELOCITY:Number = 1;		// Maximum Velocity (game might break if exceeded)
 		public static const GRAVITY:Number = .03;				// change in blocks / update ^2
+		
+		
+		/*
+		 * Menu Values
+		 * 
+		 */
+		public static const GAME_TITLE:String = "Spring Pig";
+		
+		public static const MAIN_TITLE_FONT_SIZE:int = 80;
+		public static const MAIN_TITLE_ALIGNMENT:String = "center";
+		public static const MAIN_TITLE_TOP_PADDING:int = 50;
+		
+		
+		public static const MENU_BUTTON_COLOR:uint = 0xCCCCCC;
+		public static const MENU_BUTTON_WIDTH:int = 100;
+		public static const MENU_BUTTON_HEIGHT:int = 20;
+		public static const MENU_BUTTON_FONT_SIZE:int = 12;
+		public static const MENU_BUTTON_TEXT_ALIGNMENT:String = "center";
+		public static const MENU_BUTTON_PADDING_BETWEEN:int = 30;
+		
+		public static const START_BUTTON_TEXT:String = "Start";
+		
+		public static const MENU_FONT:String = "arial";
 	}
 
 }

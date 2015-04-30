@@ -34,13 +34,15 @@ package
 			// entry point
 			
 			// Menu Stuff Here!!!!!!!!!!!!!
-			
+			var game:Game = new Game(stage);
+			var menu:Menu = new Menu(stage, game);
+			menu.createMainMenu();
 			// Parse LevelProgression JSON, determine the first level, pass that string into startLevel()
 			
 			
 			// start the game
-			var game:Game = new Game(stage);
-			game.startLevel("");
+			//var game:Game = new Game(stage);
+			//game.startLevel("");
 		}
 		
 	}
