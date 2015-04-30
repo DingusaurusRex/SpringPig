@@ -127,9 +127,10 @@ package
 						
 						// If you ran into a wall, keep the player in the previous square
 						for each (tile in getTilesOnPlayerRight()) {
-							if (board.getTile(tile.x, tile.y) == Constants.WALL) {
-								player.inAir ? player.character.x -= player.airSpeedX : player.character.x -= player.speedX;
-								break;
+							var id:int = board.getTile(tile.x, tile.y);
+							checkLavaHit(id);
+							if (id == Constants.WALL) {
+								player.character.x = tile.x * board.tileSideLength - player.character.width;
 							}
 						}
 					}
@@ -141,9 +142,10 @@ package
 						
 						// If you ran into a wall, keep the player in the previous square
 						for each (tile in getTilesOnPlayerLeft()) {
-							if (board.getTile(tile.x, tile.y) == Constants.WALL) {
-								player.inAir ? player.character.x += player.airSpeedX : player.character.x += player.speedX;
-								break;
+							id = board.getTile(tile.x, tile.y);
+							checkLavaHit(id);
+							if (id == Constants.WALL) {
+								player.character.x = (tile.x + 1) * board.tileSideLength;
 							}
 						}
 				}
@@ -156,11 +158,7 @@ package
 					meter.energy = player.energy;
 				}
 				if (keyR) {
-					player.character.x = playerStart.x;
-					player.character.y = playerStart.y;
-					player.energy = 0;
-					player.velocity = 0;
-					meter.energy = player.energy;
+					resetPlayer();
 				}
 				
 				if (player.inAir) {
@@ -173,10 +171,11 @@ package
 					
 					//Check that the user has not crashed into a wall above him
 					for each (var tile:IntPair in getTilesAbovePlayer()) {
-						if (board.getTile(tile.x, tile.y) == Constants.WALL) {
+						id = board.getTile(tile.x, tile.y)
+						checkLavaHit(id);
+						if (id == Constants.WALL) {
 							player.character.y = (tile.y + 1) * board.tileSideLength;
 							player.velocity = Constants.INITIAL_FALL_VELOCITY;
-							break;
 						}
 					}
 					
@@ -206,11 +205,14 @@ package
 			var inAir:Boolean = true;
 			for each (var tile:IntPair in getTilesBelowPlayer()) {
 				var id:int = board.getTile(tile.x, tile.y);
+				if (checkLavaHit(id)) {
+					inAir = false;
+					break;
+				}
 				// If one of the tiles below player is not empty, then player is not falling
 				if (id != Constants.EMPTY && id != Constants.START && id != Constants.END) {
 					player.character.y = (int) (tile.y * board.tileSideLength - player.character.height);
 					inAir = false;
-					break;
 				}
 			}
 			return inAir;
@@ -411,6 +413,23 @@ package
 			}		
 			
 			return result;
+		}
+		
+		private function checkLavaHit(id:int):Boolean
+		{
+			if (id == Constants.LAVA) {
+				resetPlayer();
+			}
+			return id == Constants.LAVA;
+		}
+		
+		private function resetPlayer():void
+		{
+			player.character.x = playerStart.x;
+			player.character.y = playerStart.y;
+			player.energy = 0;
+			player.velocity = 0;
+			meter.energy = player.energy;
 		}
 	}
 
