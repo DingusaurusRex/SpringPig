@@ -57,15 +57,12 @@ package
 			meter.x = Constants.METER_X;
 			meter.y = Constants.METER_Y;
 			
-			
 			// Create the Player
-			player = new Player();			
+			player = new Player();
 			
 			this.stage = stage;
 			
-			this.pause = false;
-			
-			
+			this.pause = false;		
 		}
 		
 		/**
@@ -89,6 +86,8 @@ package
 			player.character.x = playerStart.x;
 			player.character.y = playerStart.y + board.tileSideLength - player.character.height;
 			playerStart.y = player.character.y;
+			player.energy = 0;
+			meter.energy = player.energy;
 			
 			this.playerStart = playerStart;
 			
@@ -197,10 +196,8 @@ package
 					if (tile.x * board.tileSideLength != player.character.x + player.character.width) {
 						checkLavaHit(id);
 						if (id == Constants.WALL) {
-							trace(player.character.y);
 							player.character.y = (tile.y + 1) * board.tileSideLength;
 							player.velocity = Constants.INITIAL_FALL_VELOCITY;
-							trace(player.character.y);
 						}
 					}
 				}
