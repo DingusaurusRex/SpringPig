@@ -40,6 +40,11 @@ package
 		
 		public var pause:Boolean;
 		
+		private static const RIGHT:int = 0;
+		private static const LEFT:int = 1;
+		private static const UP:int = 2;
+		private static const DOWN:int = 3;
+		
 		/**
 		 * Begins the game
 		 * @param	p - Player Object (added to stage in main)
@@ -110,7 +115,7 @@ package
 		{
 			if (!pause) {
 				var wasInAir:Boolean = player.inAir;
-				player.inAir = isPlayerInAir();
+				checkCollision(DOWN); // Sets player.inAir
 				// Check if the player has started falling. If so, get his starting height in order to later calculate energy gained.
 				if (player.inAir && !wasInAir) {
 					player.startingHeight = getYPositionOfPlayer();
@@ -125,31 +130,14 @@ package
 				}
 				if (keyRight) {
 					if (player.character.x < board.boardWidthInPixels) {
-						player.inAir ? player.character.x += player.airSpeedX : player.character.x += player.speedX
-						
-						// If you ran into a wall, keep the player in the previous square
-						for each (tile in getTilesOnPlayerRight()) {
-							var id:int = board.getTile(tile.x, tile.y);
-							checkLavaHit(id);
-							if (id == Constants.WALL) {
-								player.character.x = tile.x * board.tileSideLength - player.character.width;
-							}
-						}
-					}
-						
+						player.inAir ? player.character.x += player.airSpeedX : player.character.x += player.speedX;
+						checkCollision(RIGHT);
+					}						
 				}
 				if (keyLeft) {
 					if (player.character.x > 0)
 						player.inAir ? player.character.x -= player.airSpeedX : player.character.x -= player.speedX;
-						
-						// If you ran into a wall, keep the player in the previous square
-						for each (tile in getTilesOnPlayerLeft()) {
-							id = board.getTile(tile.x, tile.y);
-							checkLavaHit(id);
-							if (id == Constants.WALL) {
-								player.character.x = (tile.x + 1) * board.tileSideLength;
-							}
-						}
+						checkCollision(LEFT);
 				}
 				if (keySpace && !player.inAir) {
 					player.velocity = Constants.JUMP_VELOCITIES[player.energy];
@@ -171,22 +159,66 @@ package
 						player.velocity = Constants.INITIAL_FALL_VELOCITY;
 					}
 					
-					//Check that the user has not crashed into a wall above him
-					for each (var tile:IntPair in getTilesAbovePlayer()) {
-						id = board.getTile(tile.x, tile.y)
-						checkLavaHit(id);
-						if (id == Constants.WALL) {
-							player.character.y = (tile.y + 1) * board.tileSideLength;
-							player.velocity = Constants.INITIAL_FALL_VELOCITY;
-						}
-					}
-					
-					player.inAir = isPlayerInAir();
+					checkCollision(UP);
+					checkCollision(DOWN); // Sets player.inAir
 					if (!player.inAir) {
 						player.velocity = 0;
 						var energy:int = player.startingHeight - getYPositionOfPlayer() - Constants.ENERGY_DOWNGRADE;
 						player.energy += Math.max(0, energy);
 						meter.energy = player.energy;
+					}
+				}
+			}
+		}
+		
+		private function checkCollision(direction:int):void {
+			if (direction == RIGHT) {
+				// If you ran into a wall, keep the player in the previous square
+				for each (var tile:IntPair in getTilesOnPlayerRight()) {
+					var id:int = board.getTile(tile.x, tile.y);
+					checkLavaHit(id);
+					if (id == Constants.WALL) {
+						player.character.x = tile.x * board.tileSideLength - player.character.width;
+					}
+				}
+			} else if (direction == LEFT) {
+				// If you ran into a wall, keep the player in the previous square
+				for each (tile in getTilesOnPlayerLeft()) {
+					id = board.getTile(tile.x, tile.y);
+					checkLavaHit(id);
+					if (id == Constants.WALL) {
+						player.character.x = (tile.x + 1) * board.tileSideLength;
+					}
+				}
+			} else if (direction == UP) {
+				//Check that the user has not crashed into a wall above him
+				for each (tile in getTilesAbovePlayer()) {
+					id = board.getTile(tile.x, tile.y);
+					if (tile.x * board.tileSideLength != player.character.x + player.character.width) {
+						checkLavaHit(id);
+						if (id == Constants.WALL) {
+							trace(player.character.y);
+							player.character.y = (tile.y + 1) * board.tileSideLength;
+							player.velocity = Constants.INITIAL_FALL_VELOCITY;
+							trace(player.character.y);
+						}
+					}
+				}
+			} else if (direction == DOWN) {
+				player.inAir = true;
+				for each (tile in getTilesBelowPlayer()) {
+					id = board.getTile(tile.x, tile.y);
+					if (tile.x * board.tileSideLength != player.character.x + player.character.width) {
+						if (checkLavaHit(id)) {
+							player.inAir = false;
+							break;
+						}
+						// If one of the tiles below player is not empty, then player is not falling
+						if (id != Constants.EMPTY && id != Constants.START && id != Constants.END) {
+							player.character.y = (int) (tile.y * board.tileSideLength - player.character.height);
+							
+							player.inAir = false;
+						}
 					}
 				}
 				
@@ -210,29 +242,6 @@ package
 		private function getYPositionOfPlayer():int
 		{
 			return (board.boardHeightInPixels - player.character.y - player.character.height ) / board.tileSideLength;
-		}
-		
-		/**
-		 * If player is in air, returns true.
-		 * If player is not in air, returns false. Additionally, if player is inside a wall, moves player to border of wall.
-		 * @return
-		 */
-		private function isPlayerInAir():Boolean
-		{
-			var inAir:Boolean = true;
-			for each (var tile:IntPair in getTilesBelowPlayer()) {
-				var id:int = board.getTile(tile.x, tile.y);
-				if (checkLavaHit(id)) {
-					inAir = false;
-					break;
-				}
-				// If one of the tiles below player is not empty, then player is not falling
-				if (id != Constants.EMPTY && id != Constants.START && id != Constants.END) {
-					player.character.y = (int) (tile.y * board.tileSideLength - player.character.height);
-					inAir = false;
-				}
-			}
-			return inAir;
 		}
 		
 		/**
