@@ -126,7 +126,7 @@ package
 						player.inAir ? player.character.x += player.airSpeedX : player.character.x += player.speedX
 						
 						// If you ran into a wall, keep the player in the previous square
-						for each (var tile:IntPair in getTilesOnPlayerRight()) {
+						for each (tile in getTilesOnPlayerRight()) {
 							if (board.getTile(tile.x, tile.y) == Constants.WALL) {
 								player.inAir ? player.character.x -= player.airSpeedX : player.character.x -= player.speedX;
 								break;
@@ -165,6 +165,20 @@ package
 				
 				if (player.inAir) {
 					player.updatePosition(board.tileSideLength);
+					
+					if (player.character.y <= 0) {
+						player.character.y = 0;
+						player.velocity = Constants.INITIAL_FALL_VELOCITY;
+					}
+					
+					//Check that the user has not crashed into a wall above him
+					for each (var tile:IntPair in getTilesAbovePlayer()) {
+						if (board.getTile(tile.x, tile.y) == Constants.WALL) {
+							player.character.y = (tile.y + 1) * board.tileSideLength;
+							player.velocity = Constants.INITIAL_FALL_VELOCITY;
+							break;
+						}
+					}
 					
 					player.inAir = isPlayerInAir();
 					if (!player.inAir) {
@@ -317,21 +331,37 @@ package
 			var highX:int = (int) ((player.character.x + player.character.width) / board.tileSideLength);
 			var lowY:int = (int) ((player.character.y + player.character.height) / board.tileSideLength);
 			
-			// Determines if any of the above values are the same (Whether the player is located inside a square or in between two or more squares)
-			var oneX:Boolean = false;
-			if (lowX == highX) {
-				oneX = true;
-			}
-			
 			var result:Vector.<IntPair> = new Vector.<IntPair>();
 			
 			// Add the intPairs in which the player is located
-			if (oneX) {
+			if (lowX == highX) {
 				result.push(new IntPair(lowX, lowY));
 			} else {
 				result.push(new IntPair(lowX, lowY));
 				result.push(new IntPair(highX, lowY));
-				//var id:int = board.getTile(highX, lowY);
+			}		
+			
+			return result;
+		}
+		
+		/**
+		 * Gets the tile(s) to the right of the player, in the form of IntPairs
+		 * @return
+		 */
+		private function getTilesAbovePlayer():Vector.<IntPair>
+		{
+			var lowX:int = (int) (player.character.x / board.tileSideLength);
+			var highX:int = (int) ((player.character.x + player.character.width) / board.tileSideLength);
+			var highY:int = (int) (player.character.y / board.tileSideLength);
+			
+			var result:Vector.<IntPair> = new Vector.<IntPair>();
+			
+			// Add the intPairs in which the player is located
+			if (lowX == highX) {
+				result.push(new IntPair(lowX, highY));
+			} else {
+				result.push(new IntPair(lowX, highY));
+				result.push(new IntPair(highX, highY));
 			}		
 			
 			return result;
@@ -347,16 +377,10 @@ package
 			var lowY:int = (int) ((player.character.y + player.character.height - 1) / board.tileSideLength);
 			var highY:int = (int) (player.character.y / board.tileSideLength);
 		
-			// Determines if any of the above values are the same (Whether the player is located inside a square or in between two or more squares)
-			var oneY:Boolean = false;
-			if (lowY == highY) {
-				oneY = true;
-			}
-			
 			var result:Vector.<IntPair> = new Vector.<IntPair>();
 			
 			// Add the intPairs in which the player is located
-			if (oneY) {
+			if (lowY == highY) {
 				result.push(new IntPair(highX, lowY));
 			} else {
 				result.push(new IntPair(highX, lowY));
@@ -376,16 +400,10 @@ package
 			var lowY:int = (int) ((player.character.y + player.character.height - 1) / board.tileSideLength);
 			var highY:int = (int) (player.character.y / board.tileSideLength);
 			
-			// Determines if any of the above values are the same (Whether the player is located inside a square or in between two or more squares)
-			var oneY:Boolean = false;
-			if (lowY == highY) {
-				oneY = true;
-			}
-			
 			var result:Vector.<IntPair> = new Vector.<IntPair>();
 			
 			// Add the intPairs in which the player is located
-			if (oneY) {
+			if (lowY == highY) {
 				result.push(new IntPair(lowX, lowY));
 			} else {
 				result.push(new IntPair(lowX, lowY));
