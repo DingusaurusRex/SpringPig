@@ -37,6 +37,8 @@ package
 		
 		private var count:int = 0;
 		
+		public var pause:Boolean;
+		
 		/**
 		 * Begins the game
 		 * @param	p - Player Object (added to stage in main)
@@ -55,7 +57,7 @@ package
 			
 			this.stage = stage;
 			
-			
+			this.pause = false;
 			
 			
 		}
@@ -95,6 +97,7 @@ package
 			stage.addEventListener(Event.ENTER_FRAME, update);
 			
 			stage.focus = stage; // Needed to refocus back to the game
+			pause = false; // Reset pause
 		}
 		
 		/**
@@ -103,71 +106,73 @@ package
 		 */
 		private function update(e:Event = null):void
 		{
-			var wasInAir:Boolean = player.inAir;
-			player.inAir = isPlayerInAir();
-			// Check if the player has started falling. If so, get his starting height in order to later calculate energy gained.
-			if (player.inAir && !wasInAir) {
-				player.startingHeight = getYPositionOfPlayer();
-				player.velocity = Constants.INITIAL_FALL_VELOCITY;
-			}
-			
-			// Process Keyboard controls
-			if (keyUp && !player.inAir) {
-				player.velocity = Constants.JUMP_VELOCITIES[1];
-				player.inAir = true;
-				player.startingHeight = getYPositionOfPlayer();
-			}
-			if (keyRight) {
-				if (player.character.x < board.boardWidthInPixels) {
-					player.inAir ? player.character.x += player.airSpeedX : player.character.x += player.speedX
-					
-					// If you ran into a wall, keep the player in the previous square
-					for each (var tile:IntPair in getTilesOnPlayerRight()) {
-						if (board.getTile(tile.x, tile.y) == Constants.WALL) {
-							player.inAir ? player.character.x -= player.airSpeedX : player.character.x -= player.speedX;
-							break;
-						}
-					}
-				}
-					
-			}
-			if (keyLeft) {
-				if (player.character.x > 0)
-					player.inAir ? player.character.x -= player.airSpeedX : player.character.x -= player.speedX;
-					
-					// If you ran into a wall, keep the player in the previous square
-					for each (tile in getTilesOnPlayerLeft()) {
-						if (board.getTile(tile.x, tile.y) == Constants.WALL) {
-							player.inAir ? player.character.x += player.airSpeedX : player.character.x += player.speedX;
-							break;
-						}
-					}
-			}
-			if (keySpace && !player.inAir) {
-				player.velocity = Constants.JUMP_VELOCITIES[player.energy];
-				player.inAir = true;
-				player.startingHeight = getYPositionOfPlayer() + player.energy;
-				trace(player.energy);
-				player.energy = 0;
-				meter.energy = player.energy;
-			}
-			if (keyR) {
-				player.character.x = playerStart.x;
-				player.character.y = playerStart.y;
-				player.energy = 0;
-				player.velocity = 0;
-				meter.energy = player.energy;
-			}
-			
-			if (player.inAir) {
-				player.updatePosition(board.tileSideLength);
-				
+			if (!pause) {
+				var wasInAir:Boolean = player.inAir;
 				player.inAir = isPlayerInAir();
-				if (!player.inAir) {
-					player.velocity = 0;
-					var energy:int = player.startingHeight - getYPositionOfPlayer() - Constants.ENERGY_DOWNGRADE;
-					player.energy += Math.max(0, energy);
+				// Check if the player has started falling. If so, get his starting height in order to later calculate energy gained.
+				if (player.inAir && !wasInAir) {
+					player.startingHeight = getYPositionOfPlayer();
+					player.velocity = Constants.INITIAL_FALL_VELOCITY;
+				}
+				
+				// Process Keyboard controls
+				if (keyUp && !player.inAir) {
+					player.velocity = Constants.JUMP_VELOCITIES[1];
+					player.inAir = true;
+					player.startingHeight = getYPositionOfPlayer();
+				}
+				if (keyRight) {
+					if (player.character.x < board.boardWidthInPixels) {
+						player.inAir ? player.character.x += player.airSpeedX : player.character.x += player.speedX
+						
+						// If you ran into a wall, keep the player in the previous square
+						for each (var tile:IntPair in getTilesOnPlayerRight()) {
+							if (board.getTile(tile.x, tile.y) == Constants.WALL) {
+								player.inAir ? player.character.x -= player.airSpeedX : player.character.x -= player.speedX;
+								break;
+							}
+						}
+					}
+						
+				}
+				if (keyLeft) {
+					if (player.character.x > 0)
+						player.inAir ? player.character.x -= player.airSpeedX : player.character.x -= player.speedX;
+						
+						// If you ran into a wall, keep the player in the previous square
+						for each (tile in getTilesOnPlayerLeft()) {
+							if (board.getTile(tile.x, tile.y) == Constants.WALL) {
+								player.inAir ? player.character.x += player.airSpeedX : player.character.x += player.speedX;
+								break;
+							}
+						}
+				}
+				if (keySpace && !player.inAir) {
+					player.velocity = Constants.JUMP_VELOCITIES[player.energy];
+					player.inAir = true;
+					player.startingHeight = getYPositionOfPlayer() + player.energy;
+					trace(player.energy);
+					player.energy = 0;
 					meter.energy = player.energy;
+				}
+				if (keyR) {
+					player.character.x = playerStart.x;
+					player.character.y = playerStart.y;
+					player.energy = 0;
+					player.velocity = 0;
+					meter.energy = player.energy;
+				}
+				
+				if (player.inAir) {
+					player.updatePosition(board.tileSideLength);
+					
+					player.inAir = isPlayerInAir();
+					if (!player.inAir) {
+						player.velocity = 0;
+						var energy:int = player.startingHeight - getYPositionOfPlayer() - Constants.ENERGY_DOWNGRADE;
+						player.energy += Math.max(0, energy);
+						meter.energy = player.energy;
+					}
 				}
 			}
 		}
@@ -222,6 +227,14 @@ package
 					break;
 				case Keyboard.R :
 					keyR = true;
+					break;
+				case Keyboard.ESCAPE :
+					pause = !pause;
+					if (pause) {
+						Menu.createPauseMenu();
+					} else {
+						Menu.removePauseMenu();
+					}
 					break;
 			}
 		}

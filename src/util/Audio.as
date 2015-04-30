@@ -38,7 +38,7 @@ package util
 			muteButton.downState = muteButtonSprite;
 			muteButton.overState = muteButtonSprite;
 			muteButton.hitTestState = muteButtonSprite;
-			muteButton.x = Constants.MUTE_BUTTON_LEFT_PADDING;
+			muteButton.x = Constants.SCREEN_WIDTH - Constants.MENU_BUTTON_WIDTH - Constants.MUTE_BUTTON_RIGHT_PADDING;
 			muteButton.y = Constants.MUTE_BUTTON_TOP_PADDING;
 			
 			muteButton.addEventListener(MouseEvent.CLICK, onMuteClick);

@@ -99,7 +99,7 @@ package
 		// Mute button
 		public static const MUTE_BUTTON_TEXT:String = "Mute: ";
 		public static const MUTE_BUTTON_TOP_PADDING:int = 20;
-		public static const MUTE_BUTTON_LEFT_PADDING:int = 20;
+		public static const MUTE_BUTTON_RIGHT_PADDING:int = 20;
 		
 		// Menus
 		public static const START_BUTTON_TEXT:String = "Start";
@@ -113,8 +113,8 @@ package
 		public static const MAIN_TITLE_FONT_SIZE:int = 80;
 		public static const MAIN_TITLE_TOP_PADDING:int = 50;
 		
-		public static const INSTRUCTIONS:String = "How to play:\nMove Left\t: Left Arrow\nMove Right\t: Right Arrow\nJump\t\t: Up Arrow\nSpring\t\t: Space\nReset\t\t: R";
-		public static const INSTRUCTIONS_TOP_PADDING:int = 470;
+		public static const INSTRUCTIONS:String = "How to play:\nMove Left\t: Left Arrow\nMove Right\t: Right Arrow\nJump\t\t: Up Arrow\nSpring\t\t: Space\nReset\t\t: R\nPause\t\t: Escape";
+		public static const INSTRUCTIONS_TOP_PADDING:int = 460;
 		public static const INSTRUCTIONS_LEFT_PADDING:int = 30;
 		public static const INSTRUCTIONS_HEIGHT:int = 500;
 		public static const INSTRUCTIONS_WIDTH:int = 400;
@@ -128,7 +128,7 @@ package
 		public static const LEVEL_SELECT_TITLE_TOP_PADDING:int = 50;
 		public static const LEVEL_SELECT_TITLE_FONT_SIZE:int = 80;
 		
-		// Credits Menu
+		// Credits menu
 		public static const CREDITS_TITLE_TEXT:String = "Credits";
 		public static const CREDITS_TITLE_TOP_PADDING:int = 50;
 		public static const CREDITS_TITLE_FONT_SIZE:int = 80;
@@ -138,6 +138,16 @@ package
 		public static const CREDITS_HEIGHT:int = 500;
 		public static const CREDITS_WIDTH:int = 400;
 		public static const CREDITS_FONT_SIZE:int = 20;
+		
+		// Pause menu
+		public static const PAUSE_TITLE_TEXT:String = "Paused";
+		public static const PAUSE_TITLE_TOP_PADDING:int = 50;
+		public static const PAUSE_TITLE_FONT_SIZE:int = 80;
+		
+		public static const PAUSE_BACKGROUND_COLOR:uint = 0x000000;
+		public static const PAUSE_BACKGROUND_OPACITY:Number = 0.5;
+		
+		public static const PAUSE_RESUME_BUTTON_TEXT:String = "Resume";
 	}
 
 }

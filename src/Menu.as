@@ -20,8 +20,11 @@ package
 		public static var mainMenu:MainMenu;
 		public static var creditsMenu:CreditsMenu;
 		public static var levelSelectMenu:LevelSelectMenu;
+		public static var pauseMenu:PauseMenu;
 		private static var muteButton:SimpleButton;
+		private static var instructions:TextField;
 		
+		// TODO: Background
 		public static function Init(s:Stage, g:Game):void
 		{
 			stage = s;
@@ -29,41 +32,69 @@ package
 			mainMenu = new MainMenu();
 			creditsMenu = new CreditsMenu();
 			levelSelectMenu = new LevelSelectMenu();
+			pauseMenu = new PauseMenu();
 			muteButton = Audio.muteButton;
+			
+			// Instructions
+			instructions = Menu.getTextField(Constants.INSTRUCTIONS,
+			Constants.INSTRUCTIONS_HEIGHT,
+			Constants.INSTRUCTIONS_WIDTH,
+			Constants.INSTRUCTIONS_LEFT_PADDING,
+			Constants.INSTRUCTIONS_TOP_PADDING,
+			Constants.MENU_FONT,
+			Constants.INSTRUCTIONS_FONT_SIZE);
 		}
 		
-		// Menu creation functions
+		// Menu creation/deletion functions
 		public static function createMainMenu():void
 		{
-			clearStage();
+			stage.removeChildren();
 			mainMenu.addChild(muteButton);
+			mainMenu.addChild(instructions);
 			stage.addChild(mainMenu);
+		}
+		
+		public static function createPauseMenu():void
+		{
+			pauseMenu.addChild(muteButton);
+			pauseMenu.addChild(instructions);
+			stage.addChild(pauseMenu);
+		}
+		
+		public static function removePauseMenu():void
+		{
+			stage.removeChild(pauseMenu);
+			game.pause = false; // For leaving pause menu using button
+			stage.focus = stage;
 		}
 		
 		// Event functions
 		public static function onStartClick(event:MouseEvent):void
 		{
-			clearStage();
+			stage.removeChildren();
 			game.startLevel("");
 		}
 		
 		public static function onLevelSelectClick(event:MouseEvent):void
 		{
-			clearStage();
+			stage.removeChildren();
 			stage.addChild(levelSelectMenu);
 		}
 		
 		public static function onCreditsClick(event:MouseEvent):void
 		{
-			clearStage();
+			stage.removeChildren();
 			stage.addChild(creditsMenu);
 		}
 		
 		public static function onMainMenuClick(event:MouseEvent):void
 		{
-			clearStage();
-			mainMenu.addChild(muteButton);
-			stage.addChild(mainMenu);
+			createMainMenu();
+		}
+		
+		public static function onResumeClick(event:MouseEvent):void
+		{
+			removePauseMenu();
 		}
 		
 		// Util functions
@@ -144,14 +175,6 @@ package
 			
 			return textField;
 		}
-		
-		public static function clearStage():void
-		{
-			while(stage.numChildren > 0)
-			{
-				stage.removeChildAt(0);
-			}
-		}
 	}
 
 }
@@ -171,7 +194,6 @@ class MainMenu extends Sprite
 	private var startButton:SimpleButton;
 	private var levelSelectButton:SimpleButton;
 	private var creditsButton:SimpleButton;
-	private var instructions:TextField;
 	
 	public function MainMenu():void
 	{
@@ -198,21 +220,47 @@ class MainMenu extends Sprite
 		Constants.SCREEN_HEIGHT - Constants.MAIN_CREDITS_BUTTON_BOTTOM_PADDING,
 		Menu.onCreditsClick);
 		
-		// Instructions
-		instructions = Menu.getTextField(Constants.INSTRUCTIONS,
-		Constants.INSTRUCTIONS_HEIGHT,
-		Constants.INSTRUCTIONS_WIDTH,
-		Constants.INSTRUCTIONS_LEFT_PADDING,
-		Constants.INSTRUCTIONS_TOP_PADDING,
-		Constants.MENU_FONT,
-		Constants.INSTRUCTIONS_FONT_SIZE);
-
 		// Adding everything
 		addChild(title);
 		addChild(startButton);
 		addChild(levelSelectButton);
 		addChild(creditsButton);
-		addChild(instructions);
+	}
+}
+
+class PauseMenu extends Sprite
+{
+	private var title:TextField;
+	private var resumeButton:SimpleButton;
+	private var mainMenuButton:SimpleButton;
+	
+	public function PauseMenu():void
+	{
+		// Background
+		this.graphics.beginFill(Constants.PAUSE_BACKGROUND_COLOR, Constants.PAUSE_BACKGROUND_OPACITY);
+		this.graphics.drawRect(0, 0, Constants.SCREEN_WIDTH, Constants.SCREEN_HEIGHT);
+		this.graphics.endFill();
+		
+		// Pause title
+		title = Menu.getMenuTitle(Constants.PAUSE_TITLE_TEXT,
+		Constants.PAUSE_TITLE_TOP_PADDING,
+		Constants.PAUSE_TITLE_FONT_SIZE);
+		
+		// Resume button
+		resumeButton = Menu.getMenuButton(Constants.PAUSE_RESUME_BUTTON_TEXT,
+		(Constants.SCREEN_WIDTH - Constants.MENU_BUTTON_WIDTH) / 2,
+		Constants.SCREEN_HEIGHT / 2,
+		Menu.onResumeClick);
+		
+		// Main menu button
+		mainMenuButton = Menu.getMenuButton(Constants.MAIN_MENU_BUTTON_TEXT,
+		(Constants.SCREEN_WIDTH - Constants.MENU_BUTTON_WIDTH) / 2,
+		resumeButton.y + Constants.MENU_BUTTON_PADDING_BETWEEN,
+		Menu.onMainMenuClick);
+		
+		addChild(title);
+		addChild(resumeButton);
+		addChild(mainMenuButton);
 	}
 }
 
