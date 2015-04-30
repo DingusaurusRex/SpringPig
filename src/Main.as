@@ -7,6 +7,7 @@ package
 	import model.levelHandling.Board;
 	import model.levelHandling.LevelParser;
 	import util.IntPair;
+	import util.Audio;
 	import view.BoardView;
 	import model.player.Player;
 	import view.MeterView;
@@ -35,6 +36,7 @@ package
 			
 			// Menu Stuff Here!!!!!!!!!!!!!
 			var game:Game = new Game(stage);
+			Audio.Init();
 			Menu.Init(stage, game);
 			Menu.createMainMenu();
 			// Parse LevelProgression JSON, determine the first level, pass that string into startLevel()

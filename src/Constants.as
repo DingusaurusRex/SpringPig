@@ -96,18 +96,37 @@ package
 		public static const MENU_BUTTON_BORDER_COLOR:uint = 0x000000;
 		public static const MENU_BUTTON_PADDING_BETWEEN:int = 40;
 		
+		// Mute button
+		public static const MUTE_BUTTON_TEXT:String = "Mute: ";
+		public static const MUTE_BUTTON_TOP_PADDING:int = 20;
+		public static const MUTE_BUTTON_LEFT_PADDING:int = 20;
+		
 		// Menus
 		public static const START_BUTTON_TEXT:String = "Start";
 		public static const LEVEL_SELECT_BUTTON_TEXT:String = "Select Level";
 		public static const CREDITS_BUTTON_TEXT:String = "Credits";
 		public static const MAIN_MENU_BUTTON_TEXT:String = "Main Menu";
+		public static const MAIN_MENU_BUTTON_TOP_PADDING:int = 20;
+		public static const MAIN_MENU_BUTTON_LEFT_PADDING:int = 20;
 		
 		// Main menu
 		public static const MAIN_TITLE_FONT_SIZE:int = 80;
 		public static const MAIN_TITLE_TOP_PADDING:int = 50;
 		
+		public static const INSTRUCTIONS:String = "How to play:\nMove Left\t: Left Arrow\nMove Right\t: Right Arrow\nJump\t\t: Up Arrow\nSpring\t\t: Space\nReset\t\t: R";
+		public static const INSTRUCTIONS_TOP_PADDING:int = 470;
+		public static const INSTRUCTIONS_LEFT_PADDING:int = 30;
+		public static const INSTRUCTIONS_HEIGHT:int = 500;
+		public static const INSTRUCTIONS_WIDTH:int = 400;
+		public static const INSTRUCTIONS_FONT_SIZE:int = 15;
+		
 		public static const MAIN_CREDITS_BUTTON_RIGHT_PADDING:int = 30;
 		public static const MAIN_CREDITS_BUTTON_BOTTOM_PADDING:int = 40;
+		
+		// Level select menu
+		public static const LEVEL_SELECT_TITLE_TEXT:String = "Level Select";
+		public static const LEVEL_SELECT_TITLE_TOP_PADDING:int = 50;
+		public static const LEVEL_SELECT_TITLE_FONT_SIZE:int = 80;
 		
 		// Credits Menu
 		public static const CREDITS_TITLE_TEXT:String = "Credits";

@@ -7,6 +7,7 @@ package
 	import flash.events.MouseEvent;
 	import flash.display.SimpleButton;
 	import flash.display.Sprite;
+	import util.Audio;
 	import Constants;
 	/**
 	 * ...
@@ -18,6 +19,8 @@ package
 		public static var game:Game;
 		public static var mainMenu:MainMenu;
 		public static var creditsMenu:CreditsMenu;
+		public static var levelSelectMenu:LevelSelectMenu;
+		private static var muteButton:SimpleButton;
 		
 		public static function Init(s:Stage, g:Game):void
 		{
@@ -25,12 +28,15 @@ package
 			game = g;
 			mainMenu = new MainMenu();
 			creditsMenu = new CreditsMenu();
+			levelSelectMenu = new LevelSelectMenu();
+			muteButton = Audio.muteButton;
 		}
 		
 		// Menu creation functions
 		public static function createMainMenu():void
 		{
 			clearStage();
+			mainMenu.addChild(muteButton);
 			stage.addChild(mainMenu);
 		}
 		
@@ -39,6 +45,12 @@ package
 		{
 			clearStage();
 			game.startLevel("");
+		}
+		
+		public static function onLevelSelectClick(event:MouseEvent):void
+		{
+			clearStage();
+			stage.addChild(levelSelectMenu);
 		}
 		
 		public static function onCreditsClick(event:MouseEvent):void
@@ -50,6 +62,7 @@ package
 		public static function onMainMenuClick(event:MouseEvent):void
 		{
 			clearStage();
+			mainMenu.addChild(muteButton);
 			stage.addChild(mainMenu);
 		}
 		
@@ -113,6 +126,25 @@ package
 			return button;
 		}
 		
+		public static function getTextField(text:String, height:int, width:int, x:int, y:int, font:String, fontSize:int):TextField
+		{
+			var textField:TextField = new TextField();
+			textField = new TextField();
+			textField.text = text;
+			textField.height = height;
+			textField.width = width;
+			textField.x = x;
+			textField.y = y;
+			
+			var textFormat:TextFormat = new TextFormat();
+			textFormat.font = font;
+			textFormat.size = fontSize;
+			
+			textField.setTextFormat(textFormat);
+			
+			return textField;
+		}
+		
 		public static function clearStage():void
 		{
 			while(stage.numChildren > 0)
@@ -139,6 +171,7 @@ class MainMenu extends Sprite
 	private var startButton:SimpleButton;
 	private var levelSelectButton:SimpleButton;
 	private var creditsButton:SimpleButton;
+	private var instructions:TextField;
 	
 	public function MainMenu():void
 	{
@@ -157,19 +190,52 @@ class MainMenu extends Sprite
 		levelSelectButton = Menu.getMenuButton(Constants.LEVEL_SELECT_BUTTON_TEXT,
 		(Constants.SCREEN_WIDTH - Constants.MENU_BUTTON_WIDTH) / 2,
 		startButton.y + Constants.MENU_BUTTON_PADDING_BETWEEN,
-		Menu.onStartClick);
+		Menu.onLevelSelectClick);
 		
 		// Credits button		
 		creditsButton = Menu.getMenuButton(Constants.CREDITS_BUTTON_TEXT,
 		Constants.SCREEN_WIDTH - Constants.MENU_BUTTON_WIDTH - Constants.MAIN_CREDITS_BUTTON_RIGHT_PADDING,
 		Constants.SCREEN_HEIGHT - Constants.MAIN_CREDITS_BUTTON_BOTTOM_PADDING,
 		Menu.onCreditsClick);
+		
+		// Instructions
+		instructions = Menu.getTextField(Constants.INSTRUCTIONS,
+		Constants.INSTRUCTIONS_HEIGHT,
+		Constants.INSTRUCTIONS_WIDTH,
+		Constants.INSTRUCTIONS_LEFT_PADDING,
+		Constants.INSTRUCTIONS_TOP_PADDING,
+		Constants.MENU_FONT,
+		Constants.INSTRUCTIONS_FONT_SIZE);
 
 		// Adding everything
 		addChild(title);
 		addChild(startButton);
 		addChild(levelSelectButton);
 		addChild(creditsButton);
+		addChild(instructions);
+	}
+}
+
+class LevelSelectMenu extends Sprite
+{
+	private var mainMenuButton:SimpleButton;
+	private var title:TextField;
+	
+	public function LevelSelectMenu():void
+	{
+		// Main menu button
+		mainMenuButton = Menu.getMenuButton(Constants.MAIN_MENU_BUTTON_TEXT,
+		Constants.MAIN_MENU_BUTTON_TOP_PADDING,
+		Constants.MAIN_MENU_BUTTON_LEFT_PADDING,
+		Menu.onMainMenuClick);
+		
+		// Credits title
+		title = Menu.getMenuTitle(Constants.LEVEL_SELECT_TITLE_TEXT,
+		Constants.LEVEL_SELECT_TITLE_TOP_PADDING,
+		Constants.LEVEL_SELECT_TITLE_FONT_SIZE);
+		
+		addChild(mainMenuButton);
+		addChild(title);
 	}
 }
 
@@ -182,7 +248,10 @@ class CreditsMenu extends Sprite
 	public function CreditsMenu():void
 	{
 		// Main menu button
-		mainMenuButton = Menu.getMenuButton("Main Menu", 20, 20, Menu.onMainMenuClick);
+		mainMenuButton = Menu.getMenuButton(Constants.MAIN_MENU_BUTTON_TEXT,
+		Constants.MAIN_MENU_BUTTON_TOP_PADDING,
+		Constants.MAIN_MENU_BUTTON_LEFT_PADDING,
+		Menu.onMainMenuClick);
 		
 		// Credits title
 		title = Menu.getMenuTitle(Constants.CREDITS_TITLE_TEXT,
@@ -190,18 +259,13 @@ class CreditsMenu extends Sprite
 		Constants.CREDITS_TITLE_FONT_SIZE);
 		
 		// Credits
-		credits = new TextField();
-		credits.text = Constants.CREDITS;
-		credits.height = Constants.CREDITS_HEIGHT;
-		credits.width = Constants.CREDITS_WIDTH;
-		credits.x = (Constants.SCREEN_WIDTH - Constants.CREDITS_WIDTH) / 2;
-		credits.y = Constants.CREDITS_TOP_PADDING;
-		
-		var creditsFormat:TextFormat = new TextFormat();
-		creditsFormat.font = Constants.MENU_FONT;
-		creditsFormat.size = Constants.CREDITS_FONT_SIZE;
-		
-		credits.setTextFormat(creditsFormat);
+		credits = Menu.getTextField(Constants.CREDITS,
+		Constants.CREDITS_HEIGHT,
+		Constants.CREDITS_WIDTH,
+		(Constants.SCREEN_WIDTH - Constants.CREDITS_WIDTH) / 2,
+		Constants.CREDITS_TOP_PADDING,
+		Constants.MENU_FONT,
+		Constants.CREDITS_FONT_SIZE);
 		
 		addChild(mainMenuButton);
 		addChild(title);

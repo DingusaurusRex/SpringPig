@@ -93,6 +93,8 @@ package
 			stage.addEventListener(KeyboardEvent.KEY_DOWN, onKeyDown);
 			stage.addEventListener(KeyboardEvent.KEY_UP, onKeyUp);
 			stage.addEventListener(Event.ENTER_FRAME, update);
+			
+			stage.focus = stage; // Needed to refocus back to the game
 		}
 		
 		/**
