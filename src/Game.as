@@ -154,6 +154,7 @@ package
 					player.updatePosition(board.tileSideLength);
 					
 					if (player.character.y <= 0) {
+						player.startingHeight = getYPositionOfPlayer();
 						player.character.y = 0;
 						player.velocity = Constants.INITIAL_FALL_VELOCITY;
 					}
@@ -162,9 +163,13 @@ package
 					checkCollision(DOWN); // Sets player.inAir
 					if (!player.inAir) {
 						player.velocity = 0;
-						var energy:int = player.startingHeight - getYPositionOfPlayer() - Constants.ENERGY_DOWNGRADE;
-						player.energy += Math.max(0, energy);
-						meter.energy = player.energy;
+						if (!collidingWithLadder()) { // Dont add energy if you fall on ladder
+							var energy:int = player.startingHeight - getYPositionOfPlayer() - Constants.ENERGY_DOWNGRADE;
+							player.energy += Math.max(0, energy);
+							if (player.energy > 10) 
+								player.energy = 10;
+							meter.energy = player.energy;
+						}
 					}
 				}
 			}
@@ -224,6 +229,19 @@ package
 					Menu.createPauseMenu();
 				}
 			}
+		}
+		
+		/**
+		 * Returns whether the user is colliding with a ladder
+		 * @return
+		 */
+		private function collidingWithLadder():Boolean
+		{
+			for each (var tile:IntPair in getPlayerTiles()) {
+				if (board.getTile(tile.x, tile.y) == Constants.LADDER) 
+					return true;
+			}
+			return false;
 		}
 		
 		private function isPlayerFinished():Boolean
