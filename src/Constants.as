@@ -56,6 +56,7 @@ package
 		public static const LAVA:int = 2;
 		public static const TRAMP:int = 3;
 		public static const LADDER:int = 4;
+		public static const BUTTON:int = 5;
 		
 		public static const START:int = 10;
 		public static const END:int = 11;

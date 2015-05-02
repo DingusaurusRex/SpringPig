@@ -2,6 +2,7 @@ package view
 {
 	import flash.display.Bitmap;
 	import flash.display.Sprite;
+	import model.button.Button;
 	import model.levelHandling.Board;
 	import util.IntPair;
 	/**
@@ -147,7 +148,7 @@ package view
 		}
 		
 		/**
-		 * Returns the tile on which the player starts
+		 * Returns the tile on which the player ends
 		 * @return
 		 */
 		public function getFinishTile():IntPair

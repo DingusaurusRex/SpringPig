@@ -107,8 +107,7 @@ package
 			
 			this.playerStart = playerStart;
 			
-			// Add graphics
-			
+			// Add graphics			
 			stage.addChild(boardSprite);
 			stage.addChild(meter);
 			stage.addChild(player.character);
