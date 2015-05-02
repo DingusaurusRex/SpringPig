@@ -72,7 +72,7 @@ package
 		public static function onStartClick(event:MouseEvent):void
 		{
 			stage.removeChildren();
-			game.startLevel("");
+			game.startLevel("test1");
 		}
 		
 		public static function onLevelSelectClick(event:MouseEvent):void
