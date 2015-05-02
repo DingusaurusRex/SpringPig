@@ -4,6 +4,7 @@ package model.levelHandling
 	import flash.net.URLLoader;
 	import flash.net.URLRequest;
 	import flash.utils.ByteArray;
+	import flash.utils.Dictionary;
 	
 	
 
@@ -20,11 +21,27 @@ package model.levelHandling
 		 * 
 		**/
 		
-		[Embed(source="../../../assets/levels/testlevel.json", mimeType="application/octet-stream")]
-		private var testLevel:Class;
+		[Embed(source="../../../assets/levels/testlevel1.json", mimeType="application/octet-stream")]
+		private var testLevel1:Class;
+		
+		[Embed(source = "../../../assets/levels/testlevel2.json", mimeType = "application/octet-stream")]
+		private var testLevel2:Class;
+		
+		/**
+		 *	Level Names Dictionary
+		**/
+		
+		private var m_levelNames:Dictionary;
 		
 		public function LevelParser() 
 		{
+			m_levelNames = new Dictionary();
+			
+			/**
+			 * Add new level names here
+			**/
+			m_levelNames["test1"] = testLevel1;
+			m_levelNames["test2"] = testLevel2;
 			
 		}
 		
@@ -40,7 +57,8 @@ package model.levelHandling
 		 */
 		public function parseLevel(levelName:String):Board
 		{
-			var levelString:String = (new testLevel() as ByteArray).toString();
+			var levelClass:Class = m_levelNames[levelName];
+			var levelString:String = (new levelClass() as ByteArray).toString();
 			return new Board(JSON.parse(levelString));
 		}
 		
