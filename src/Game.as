@@ -88,6 +88,10 @@ package
 			board = levelReader.parseLevel(levelName);
 			
 			// Get the graphics for the test level
+			if (boardSprite)
+			{
+				stage.removeChild(boardSprite);
+			}
 			var boardSprite:BoardView = new BoardView(board);
 			
 			// Position the player
@@ -103,6 +107,7 @@ package
 			this.playerStart = playerStart;
 			
 			// Add graphics
+			
 			stage.addChild(boardSprite);
 			stage.addChild(meter);
 			stage.addChild(player.character);
@@ -245,8 +250,19 @@ package
 					}
 					
 					if (isPlayerFinished()) {
-						pause = true;
-						Menu.createPauseMenu();
+						// Should probably put up a congradulations page and continue on any button press
+						currLevelIndex++;
+						if (currLevelIndex < progression.length)
+						{
+							// Start the next level
+							startLevel(progression[currLevelIndex]);
+						}
+						else
+						{
+							// You've reached the end of the progression, roll credits
+							pause = true;
+							Menu.createPauseMenu();
+						}
 					}
 					break;
 				default:
