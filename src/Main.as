@@ -4,6 +4,7 @@ package
 	import flash.events.Event;
 	import flash.text.TextField;
 	import flash.ui.Keyboard;
+	import flash.utils.ByteArray;
 	import model.levelHandling.Board;
 	import model.levelHandling.LevelParser;
 	import util.IntPair;
@@ -21,6 +22,9 @@ package
 	
 	public class Main extends Sprite 
 	{
+		[Embed(source = "../assets/testProgression.json", mimeType = "application/octet-stream")]
+		private var Progression:Class;
+		
 		private var player:Player = new Player();
 		
 		public function Main():void 
@@ -34,14 +38,17 @@ package
 			removeEventListener(Event.ADDED_TO_STAGE, init);
 			// entry point
 			
+			// Parse LevelProgression JSON
+			var progressionString:String = (new Progression() as ByteArray).toString();
+			var prog:Object = JSON.parse(progressionString);
+			
 			// Menu Stuff Here!!!!!!!!!!!!!
-			var game:Game = new Game(stage);
+			var game:Game = new Game(stage, prog);
 			Audio.Init();
 			Menu.Init(stage, game);
 			Menu.createMainMenu();
-			// Parse LevelProgression JSON, determine the first level, pass that string into startLevel()
 			
-			
+
 			// start the game
 			//var game:Game = new Game(stage);
 			//game.startLevel("");

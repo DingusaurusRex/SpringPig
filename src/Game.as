@@ -36,6 +36,10 @@ package
 		private var meter:MeterView;
 		private var finishTile:IntPair;
 		
+		// Level Progression Variables
+		private var progression:Array;
+		public var currLevelIndex:int;
+		
 		private var count:int = 0;
 		
 		public var pause:Boolean;
@@ -49,7 +53,7 @@ package
 		 * Begins the game
 		 * @param	p - Player Object (added to stage in main)
 		 */
-		public function Game(stage:Stage) 
+		public function Game(stage:Stage, progObj:Object) 
 		{
 			
 			// Get the graphics for the meter
@@ -61,8 +65,15 @@ package
 			player = new Player();
 			
 			this.stage = stage;
+			this.progression = progObj.progression;
+			currLevelIndex = 0;
 			
 			this.pause = false;		
+		}
+		
+		public function getCurrentLevelName():String
+		{
+			return progression[currLevelIndex];
 		}
 		
 		/**
