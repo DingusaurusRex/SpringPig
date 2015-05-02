@@ -139,9 +139,13 @@ package
 				
 				// Process Keyboard controls
 				if (keyUp && !player.inAir) {
-					player.velocity = Constants.JUMP_VELOCITIES[1];
-					player.inAir = true;
-					player.startingHeight = getYPositionOfPlayer();
+					if (collidingWithLadder()) { // Go up the ladder
+						player.character.y -= player.speedY;
+					} else { // Jump
+						player.velocity = Constants.JUMP_VELOCITIES[1];
+						player.inAir = true;
+						player.startingHeight = getYPositionOfPlayer();
+					}
 				}
 				if (keyRight) {
 					if (player.character.x < board.boardWidthInPixels) {
@@ -240,8 +244,24 @@ package
 								player.inAir = false;
 								break;
 							}
+							if (id == Constants.LADDER) {
+								// If at the top of the ladder, make sure player falls back to top of ladder and not slightly inside ladder
+								var tileAboveLadder:int = board.getTile(tile.x, tile.y - 1);
+								
+								// Check that the player is close to the top of the ladder when they are climbing up
+								var closeToTop:Boolean = Math.abs(player.character.y + player.character.height - (tile.y * board.tileSideLength)) <= 10;
+								// only check if they are close to the top when they are climbing UP the ladder.
+								// When player is falling, he should fall on top of ladder every time.
+								if (player.dy > 0)
+									closeToTop = true;
+								if ((tileAboveLadder == Constants.EMPTY || tileAboveLadder == Constants.START || tileAboveLadder == Constants.END) && closeToTop)
+								{
+									player.character.y = (int) (tile.y * board.tileSideLength - player.character.height);
+								}
+								player.inAir = false;
+								break;								
+							}
 							// If one of the tiles below player is not empty, then player is not falling
-							if (id != Constants.EMPTY && id != Constants.START && id != Constants.END) {
 								player.character.y = (int) (tile.y * board.tileSideLength - player.character.height);
 								
 								player.inAir = false;
