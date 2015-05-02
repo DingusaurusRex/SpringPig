@@ -21,6 +21,7 @@ package
 	{
 		// Keys
 		private var keyUp:Boolean;
+		private var keyDown:Boolean;
 		private var keyRight:Boolean;
 		private var keyLeft:Boolean;
 		private var keySpace:Boolean;
@@ -140,12 +141,15 @@ package
 				// Process Keyboard controls
 				if (keyUp && !player.inAir) {
 					if (collidingWithLadder()) { // Go up the ladder
-						player.character.y -= player.speedY;
+						player.character.y -= player.upSpeedY;
 					} else { // Jump
 						player.velocity = Constants.JUMP_VELOCITIES[1];
 						player.inAir = true;
 						player.startingHeight = getYPositionOfPlayer();
 					}
+				}
+				if (keyDown && ladderBelowPlayer()) {
+					player.character.y += player.downSpeedY;
 				}
 				if (keyRight) {
 					if (player.character.x < board.boardWidthInPixels) {
@@ -249,12 +253,14 @@ package
 								var tileAboveLadder:int = board.getTile(tile.x, tile.y - 1);
 								
 								// Check that the player is close to the top of the ladder when they are climbing up
-								var closeToTop:Boolean = Math.abs(player.character.y + player.character.height - (tile.y * board.tileSideLength)) <= 10;
-								// only check if they are close to the top when they are climbing UP the ladder.
+								// Only check if they are close to the top when they are climbing UP the ladder.
 								// When player is falling, he should fall on top of ladder every time.
+								// When a player is deliberately pressing down, they should not get y position reset
+								var closeToTop:Boolean = Math.abs(player.character.y + player.character.height - (tile.y * board.tileSideLength)) <= player.downSpeedY;
 								if (player.dy > 0)
 									closeToTop = true;
-								if ((tileAboveLadder == Constants.EMPTY || tileAboveLadder == Constants.START || tileAboveLadder == Constants.END) && closeToTop)
+								if ((tileAboveLadder == Constants.EMPTY || tileAboveLadder == Constants.START || tileAboveLadder == Constants.END) 
+									&& closeToTop && !keyDown)
 								{
 									player.character.y = (int) (tile.y * board.tileSideLength - player.character.height);
 								}
@@ -262,6 +268,7 @@ package
 								break;								
 							}
 							// If one of the tiles below player is not empty, then player is not falling
+							else if (id != Constants.EMPTY && id != Constants.START && id != Constants.END) {
 								player.character.y = (int) (tile.y * board.tileSideLength - player.character.height);
 								
 								player.inAir = false;
@@ -303,6 +310,26 @@ package
 			return false;
 		}
 		
+		/**
+		 * Returns whether the user is on top of ONLY a ladder (EMPTY is okay)
+		 * @return
+		 */
+		private function ladderBelowPlayer():Boolean
+		{
+			var tiles:Vector.<IntPair> = getTilesBelowPlayer();
+			var result:Boolean = false;
+			for each (var tile:IntPair in tiles) {
+				var id:int = board.getTile(tile.x, tile.y);
+				if (id == Constants.LADDER) {
+					result = true;
+				} else if (id != Constants.EMPTY && id != Constants.START && id != Constants.END) {
+					result = false;
+					break;
+				}
+			}
+			return result;
+		}
+		
 		private function isPlayerFinished():Boolean
 		{
 			var midX:int = player.character.x + board.tileSideLength / 2;
@@ -328,6 +355,12 @@ package
 				case Keyboard.UP :
 					keyUp = true;
 					keySpace = false;
+					keyDown = false;
+					break;
+				case Keyboard.DOWN:
+					keyDown = true;
+					keyUp = false;
+					keySpace = false;
 					break;
 				case Keyboard.RIGHT :
 					keyRight = true;
@@ -340,6 +373,7 @@ package
 				case Keyboard.SPACE :
 					keySpace = true;
 					keyUp = false;
+					keyDown = false;
 					break;
 				case Keyboard.R :
 					keyR = true;
@@ -364,6 +398,9 @@ package
 			switch (key) {
 				case Keyboard.UP :
 					keyUp = false;
+					break;
+				case Keyboard.DOWN :
+					keyDown = false;
 					break;
 				case Keyboard.RIGHT :
 					keyRight = false;

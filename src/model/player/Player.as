@@ -14,7 +14,8 @@ package model.player
 		public var energy:int = 0;
 		public var character:Bitmap;
 		public var speedX:Number = 5;
-		public var speedY:Number = 8; // Speed on ladder
+		public var upSpeedY:Number = 8; // Speed on ladder
+		public var downSpeedY:Number = 5; // Speed on ladder
 		public var airSpeedX:Number = 5;
 		public var inAir:Boolean = false;
 		
