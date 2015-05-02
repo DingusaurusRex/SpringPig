@@ -162,13 +162,8 @@ package
 						player.inAir ? player.character.x -= player.airSpeedX : player.character.x -= player.speedX;
 						checkCollision(LEFT);
 				}
-				if (keySpace && !player.inAir) {
-					player.velocity = Constants.JUMP_VELOCITIES[player.energy];
-					player.inAir = true;
-					player.startingHeight = getYPositionOfPlayer() + player.energy;
-					trace(player.energy);
-					player.energy = 0;
-					meter.energy = player.energy;
+				if (keySpace && !player.inAir && !ladderBelowPlayer()) {
+					useEnergy();
 				}
 				if (keyR) {
 					resetPlayer();
@@ -185,7 +180,7 @@ package
 					
 					checkCollision(UP);
 					checkCollision(DOWN); // Sets player.inAir
-					if (!player.inAir) {
+					if (!player.inAir) { // If player was in air and no longer is, add energy
 						player.velocity = 0;
 						if (!collidingWithLadder()) { // Dont add energy if you fall on ladder
 							var energy:int = player.startingHeight - getYPositionOfPlayer() - Constants.ENERGY_DOWNGRADE;
@@ -193,6 +188,13 @@ package
 							if (player.energy > 10) 
 								player.energy = 10;
 							meter.energy = player.energy;
+							
+							if (trampBelowPlayer()) 
+							{
+								trace("here");
+								useEnergy();
+								player.updatePosition(board.tileSideLength);
+							}
 						}
 					}
 				}
@@ -264,8 +266,7 @@ package
 								{
 									player.character.y = (int) (tile.y * board.tileSideLength - player.character.height);
 								}
-								player.inAir = false;
-								break;								
+								player.inAir = false;				
 							}
 							// If one of the tiles below player is not empty, then player is not falling
 							else if (id != Constants.EMPTY && id != Constants.START && id != Constants.END) {
@@ -298,6 +299,20 @@ package
 		}
 		
 		/**
+		 * Uses up the player's energy, and makes him jump a value based on that energy.
+		 */
+		private function useEnergy(removeMeter:Boolean = true):void
+		{
+			player.velocity = Constants.JUMP_VELOCITIES[player.energy];
+			player.inAir = true;
+			player.startingHeight = getYPositionOfPlayer() + player.energy;
+			trace(player.energy);
+			player.energy = 0;
+			if (removeMeter)
+				meter.energy = player.energy;
+		}
+		
+		/**
 		 * Returns whether the user is colliding with a ladder
 		 * @return
 		 */
@@ -305,6 +320,15 @@ package
 		{
 			for each (var tile:IntPair in getPlayerTiles()) {
 				if (board.getTile(tile.x, tile.y) == Constants.LADDER) 
+					return true;
+			}
+			return false;
+		}
+		
+		private function trampBelowPlayer():Boolean
+		{
+			for each (var tile:IntPair in getTilesBelowPlayer()) {
+				if (board.getTile(tile.x, tile.y) == Constants.TRAMP) 
 					return true;
 			}
 			return false;
