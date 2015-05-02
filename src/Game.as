@@ -187,58 +187,70 @@ package
 		}
 		
 		private function checkCollision(direction:int):void {
-			if (direction == RIGHT) {
-				// If you ran into a wall, keep the player in the previous square
-				for each (var tile:IntPair in getTilesOnPlayerRight()) {
-					var id:int = board.getTile(tile.x, tile.y);
-					checkLavaHit(id);
-					if (id == Constants.WALL) {
-						player.character.x = tile.x * board.tileSideLength - player.character.width;
-					}
-				}
-			} else if (direction == LEFT) {
-				// If you ran into a wall, keep the player in the previous square
-				for each (tile in getTilesOnPlayerLeft()) {
-					id = board.getTile(tile.x, tile.y);
-					checkLavaHit(id);
-					if (id == Constants.WALL) {
-						player.character.x = (tile.x + 1) * board.tileSideLength;
-					}
-				}
-			} else if (direction == UP) {
-				//Check that the user has not crashed into a wall above him
-				for each (tile in getTilesAbovePlayer()) {
-					id = board.getTile(tile.x, tile.y);
-					if (tile.x * board.tileSideLength != player.character.x + player.character.width) {
+			switch(direction)
+			{
+				case RIGHT:
+					// If you ran into a wall, keep the player in the previous square
+					for each (var tile:IntPair in getTilesOnPlayerRight())
+					{
+						var id:int = board.getTile(tile.x, tile.y);
 						checkLavaHit(id);
-						if (id == Constants.WALL) {
-							player.character.y = (tile.y + 1) * board.tileSideLength;
-							player.velocity = Constants.INITIAL_FALL_VELOCITY;
+						if (id == Constants.WALL)
+						{
+							player.character.x = tile.x * board.tileSideLength - player.character.width;
 						}
 					}
-				}
-			} else if (direction == DOWN) {
-				player.inAir = true;
-				for each (tile in getTilesBelowPlayer()) {
-					id = board.getTile(tile.x, tile.y);
-					if (tile.x * board.tileSideLength != player.character.x + player.character.width) {
-						if (checkLavaHit(id)) {
-							player.inAir = false;
-							break;
-						}
-						// If one of the tiles below player is not empty, then player is not falling
-						if (id != Constants.EMPTY && id != Constants.START && id != Constants.END) {
-							player.character.y = (int) (tile.y * board.tileSideLength - player.character.height);
-							
-							player.inAir = false;
+					break;
+				case LEFT:
+					// If you ran into a wall, keep the player in the previous square
+					for each (tile in getTilesOnPlayerLeft())
+					{
+						id = board.getTile(tile.x, tile.y);
+						checkLavaHit(id);
+						if (id == Constants.WALL)
+						{
+							player.character.x = (tile.x + 1) * board.tileSideLength;
 						}
 					}
-				}
-				
-				if (isPlayerFinished()) {
-					pause = true;
-					Menu.createPauseMenu();
-				}
+					break;
+				case UP:
+					//Check that the user has not crashed into a wall above him
+					for each (tile in getTilesAbovePlayer()) {
+						id = board.getTile(tile.x, tile.y);
+						if (tile.x * board.tileSideLength != player.character.x + player.character.width) {
+							checkLavaHit(id);
+							if (id == Constants.WALL) {
+								player.startingHeight = getYPositionOfPlayer()
+								player.character.y = (tile.y + 1) * board.tileSideLength;
+								player.velocity = Constants.INITIAL_FALL_VELOCITY;
+							}
+						}
+					}
+				case DOWN:
+					player.inAir = true;
+					for each (tile in getTilesBelowPlayer()) {
+						id = board.getTile(tile.x, tile.y);
+						if (tile.x * board.tileSideLength != player.character.x + player.character.width) {
+							if (checkLavaHit(id)) {
+								player.inAir = false;
+								break;
+							}
+							// If one of the tiles below player is not empty, then player is not falling
+							if (id != Constants.EMPTY && id != Constants.START && id != Constants.END) {
+								player.character.y = (int) (tile.y * board.tileSideLength - player.character.height);
+								
+								player.inAir = false;
+							}
+						}
+					}
+					
+					if (isPlayerFinished()) {
+						pause = true;
+						Menu.createPauseMenu();
+					}
+					break;
+				default:
+					break;
 			}
 		}
 		
