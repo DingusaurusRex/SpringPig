@@ -261,8 +261,7 @@ package
 								var closeToTop:Boolean = Math.abs(player.character.y + player.character.height - (tile.y * board.tileSideLength)) <= player.downSpeedY;
 								if (player.dy > 0)
 									closeToTop = true;
-								if ((tileAboveLadder == Constants.EMPTY || tileAboveLadder == Constants.START || tileAboveLadder == Constants.END) 
-									&& closeToTop && !keyDown)
+								if (tileAboveLadder != Constants.LADDER && closeToTop && !keyDown)
 								{
 									player.character.y = (int) (tile.y * board.tileSideLength - player.character.height);
 								}
