@@ -22,8 +22,15 @@ package
 	
 	public class Main extends Sprite 
 	{
-		[Embed(source = "../assets/testProgression.json", mimeType = "application/octet-stream")]
-		private var Progression:Class;
+		/**
+		 * Embedded Progressions
+		 */
+		
+		[Embed(source = "../assets/progressions/testProgression.json", mimeType = "application/octet-stream")]
+		private var TestProgression:Class;
+		
+		[Embed(source = "../assets/progressions/progression1.json", mimeType = "application/octet-stream")]
+		private var Progression1:Class;
 		
 		private var player:Player = new Player();
 		
@@ -39,7 +46,8 @@ package
 			// entry point
 			
 			// Parse LevelProgression JSON
-			var progressionString:String = (new Progression() as ByteArray).toString();
+			//var progressionString:String = (new TestProgression() as ByteArray).toString();
+			var progressionString:String = (new Progression1() as ByteArray).toString();
 			var prog:Object = JSON.parse(progressionString);
 			
 			// Menu Stuff Here!!!!!!!!!!!!!

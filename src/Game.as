@@ -36,6 +36,7 @@ package
 		private var board:Board;
 		private var meter:MeterView;
 		private var finishTile:IntPair;
+		private var boardSprite:BoardView;
 		
 		// Level Progression Variables
 		private var progression:Array;
@@ -93,7 +94,7 @@ package
 			{
 				stage.removeChild(boardSprite);
 			}
-			var boardSprite:BoardView = new BoardView(board);
+			boardSprite = new BoardView(board);
 			
 			// Position the player
 			var playerStart:IntPair = boardSprite.getPlayerStart(); // Top right of the square
@@ -168,7 +169,7 @@ package
 					resetPlayer();
 				}
 				
-				if (player.inAir) {
+				if (player.inAir || collidingWithLadder()) {
 					player.updatePosition(board.tileSideLength);
 					
 					if (player.character.y <= 0) {
@@ -287,6 +288,7 @@ package
 						else
 						{
 							// You've reached the end of the progression, roll credits
+							currLevelIndex = 0;
 							pause = true;
 							Menu.createPauseMenu();
 						}

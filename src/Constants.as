@@ -6,6 +6,7 @@ package
 	 */
 	public class Constants 
 	{
+	
 		/**
 		 * Colors
 		**/

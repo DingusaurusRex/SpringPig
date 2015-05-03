@@ -22,10 +22,34 @@ package model.levelHandling
 		**/
 		
 		[Embed(source="../../../assets/levels/testlevel1.json", mimeType="application/octet-stream")]
-		private var testLevel1:Class;
+		private var TestLevel1:Class;
 		
 		[Embed(source = "../../../assets/levels/testlevel2.json", mimeType = "application/octet-stream")]
-		private var testLevel2:Class;
+		private var TestLevel2:Class;
+		
+		[Embed(source = "../../../assets/levels/level1.json", mimeType = "application/octet-stream")]
+		private var Level1:Class;
+		
+		[Embed(source = "../../../assets/levels/level2.json", mimeType = "application/octet-stream")]
+		private var Level2:Class;
+		
+		[Embed(source = "../../../assets/levels/level3.json", mimeType = "application/octet-stream")]
+		private var Level3:Class;
+		
+		[Embed(source = "../../../assets/levels/level4.json", mimeType = "application/octet-stream")]
+		private var Level4:Class;
+		
+		[Embed(source = "../../../assets/levels/level5.json", mimeType = "application/octet-stream")]
+		private var Level5:Class;
+		
+		[Embed(source = "../../../assets/levels/level6.json", mimeType = "application/octet-stream")]
+		private var Level6:Class;
+		
+		[Embed(source = "../../../assets/levels/level7.json", mimeType = "application/octet-stream")]
+		private var Level7:Class;
+		
+		[Embed(source = "../../../assets/levels/level8.json", mimeType = "application/octet-stream")]
+		private var Level8:Class;
 		
 		/**
 		 *	Level Names Dictionary
@@ -40,8 +64,16 @@ package model.levelHandling
 			/**
 			 * Add new level names here
 			**/
-			m_levelNames["test1"] = testLevel1;
-			m_levelNames["test2"] = testLevel2;
+			m_levelNames["test1"] = TestLevel1;
+			m_levelNames["test2"] = TestLevel2;
+			m_levelNames["level1"] = Level1;
+			m_levelNames["level2"] = Level2;
+			m_levelNames["level3"] = Level3;
+			m_levelNames["level4"] = Level4;
+			m_levelNames["level5"] = Level5;
+			m_levelNames["level6"] = Level6;
+			m_levelNames["level7"] = Level7;
+			m_levelNames["level8"] = Level8;
 			
 		}
 		
