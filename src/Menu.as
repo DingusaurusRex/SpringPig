@@ -8,6 +8,7 @@ package
 	import flash.display.SimpleButton;
 	import flash.display.Sprite;
 	import util.Audio;
+	import util.Stopwatch;
 	import Constants;
 	/**
 	 * ...
@@ -60,6 +61,7 @@ package
 		
 		public static function createPauseMenu():void
 		{
+			Stopwatch.pause();
 			pauseMenu.addChild(muteButton);
 			pauseMenu.addChild(instructions);
 			stage.addChild(pauseMenu);
@@ -69,11 +71,13 @@ package
 		{
 			stage.removeChild(pauseMenu);
 			game.pause = false; // For leaving pause menu using button
+			Stopwatch.start();
 			stage.focus = stage;
 		}
 		
 		public static function createEndLevelMenu():void
 		{
+			Stopwatch.pause();
 			stage.removeChildren();
 			endLevelMenu.addChild(muteButton);
 			stage.addChild(endLevelMenu);
@@ -81,6 +85,7 @@ package
 		
 		public static function createEndGameMenu():void
 		{
+			Stopwatch.pause();
 			stage.removeChildren();
 			stage.addChild(endGameMenu);
 		}
@@ -167,6 +172,7 @@ package
 		{
 			var buttonText:TextField = new TextField();
 			buttonText.text = text;
+			buttonText.width = Constants.MENU_BUTTON_WIDTH;
 			buttonText.height = Constants.MENU_BUTTON_HEIGHT + Constants.MENU_BUTTON_BORDER_SIZE;
 			buttonText.setTextFormat(Menu.getMenuButtonTextFormat());
 			

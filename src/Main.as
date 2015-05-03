@@ -9,6 +9,7 @@ package
 	import model.levelHandling.LevelParser;
 	import util.IntPair;
 	import util.Audio;
+	import util.Stopwatch;
 	import view.BoardView;
 	import model.player.Player;
 	import view.MeterView;
@@ -53,6 +54,7 @@ package
 			// Menu Stuff Here!!!!!!!!!!!!!
 			var game:Game = new Game(stage, prog);
 			Audio.Init();
+			Stopwatch.Init();
 			Menu.Init(stage, game);
 			Menu.createMainMenu();
 			

@@ -24,6 +24,7 @@ package util
 			mute = false;
 			muteButtonText = new TextField();
 			muteButtonText.text = Constants.MUTE_BUTTON_TEXT + "Off";
+			muteButtonText.width = Constants.MENU_BUTTON_WIDTH;
 			muteButtonTextFormat = Menu.getMenuButtonTextFormat();
 			muteButtonText.setTextFormat(muteButtonTextFormat);
 			

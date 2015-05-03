@@ -46,6 +46,11 @@ package
 		public static const METER_X:int = BOARD_WIDTH;
 		public static const METER_Y:int	= 20;
 		
+		// Stopwatch Values
+		public static const GAME_STOPWATCH_FONT:String = "arial";
+		public static const GAME_STOPWATCH_FONT_SIZE:int = 20;
+		public static const GAME_STOPWATCH_TOP_PADDING:int = 10;
+		
 		/**
 		 *
 		 * Tile Values
@@ -92,7 +97,7 @@ package
 		
 		// General menu button
 		public static const MENU_BUTTON_COLOR:uint = 0xCCCCCC;
-		public static const MENU_BUTTON_WIDTH:int = 98;
+		public static const MENU_BUTTON_WIDTH:int = 118;
 		public static const MENU_BUTTON_HEIGHT:int = 18;
 		public static const MENU_BUTTON_FONT_SIZE:int = 12;
 		public static const MENU_BUTTON_TEXT_ALIGNMENT:String = "center";
@@ -159,7 +164,7 @@ package
 		public static const END_LEVEL_TITLE_FONT_SIZE:int = 80;
 		
 		public static const END_LEVEL_NEXT_LEVEL_BUTTON_TEXT:String = "Next Level";
-		public static const END_LEVEL_RESTART_LEVEL_BUTTON_TEXT:String = "Restart";
+		public static const END_LEVEL_RESTART_LEVEL_BUTTON_TEXT:String = "Restart Last Level";
 		public static const END_LEVEL_MAIN_MENU_BUTTON_TEXT:String = "Main Menu";
 		
 		// End game menu

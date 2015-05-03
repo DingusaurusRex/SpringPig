@@ -5,12 +5,14 @@ package
 	import flash.display.Stage;
 	import flash.events.Event;
 	import flash.events.KeyboardEvent;
+	import flash.text.TextFormat;
 	import flash.ui.ContextMenuClipboardItems;
 	import flash.ui.Keyboard;
 	import model.levelHandling.Board;
 	import model.levelHandling.LevelParser;
 	import model.player.Player;
 	import util.IntPair;
+	import util.Stopwatch;
 	import view.BoardView;
 	import view.MeterView;
 	/**
@@ -107,9 +109,13 @@ package
 			
 			this.playerStart = playerStart;
 			
+			Stopwatch.stopwatchText.x = meter.x;
+			Stopwatch.stopwatchText.y = meter.y + meter.height + Constants.GAME_STOPWATCH_TOP_PADDING;
+			
 			// Add graphics			
 			stage.addChild(boardSprite);
 			stage.addChild(meter);
+			stage.addChild(Stopwatch.stopwatchText);
 			stage.addChild(player.character);
 			
 			// Create Listeners
@@ -120,6 +126,10 @@ package
 			stage.focus = stage; // Needed to refocus back to the game
 			pause = false; // Reset pause
 			this.finishTile = boardSprite.getFinishTile();
+			
+			// Reset and start timing
+			Stopwatch.reset();
+			Stopwatch.start();
 		}
 		
 		/**
@@ -129,6 +139,9 @@ package
 		private function update(e:Event = null):void
 		{
 			if (!pause) {
+				// Update the stopwatch
+				Stopwatch.updateStopwatchText();
+				
 				var wasInAir:Boolean = player.inAir;
 				checkCollision(DOWN); // Sets player.inAir
 				// Check if the player has started falling. If so, get his starting height in order to later calculate energy gained.
@@ -601,6 +614,9 @@ package
 			player.energy = 0;
 			player.velocity = 0;
 			meter.energy = player.energy;
+			
+			Stopwatch.reset();
+			Stopwatch.start();
 		}
 	}
 
