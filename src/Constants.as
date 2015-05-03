@@ -152,6 +152,27 @@ package
 		public static const PAUSE_BACKGROUND_OPACITY:Number = 0.5;
 		
 		public static const PAUSE_RESUME_BUTTON_TEXT:String = "Resume";
+		
+		// End level menu
+		public static const END_LEVEL_TITLE_TEXT:String = "Level Finished!";
+		public static const END_LEVEL_TITLE_TOP_PADDING:int = 50;
+		public static const END_LEVEL_TITLE_FONT_SIZE:int = 80;
+		
+		public static const END_LEVEL_NEXT_LEVEL_BUTTON_TEXT:String = "Next Level";
+		public static const END_LEVEL_RESTART_LEVEL_BUTTON_TEXT:String = "Restart";
+		public static const END_LEVEL_MAIN_MENU_BUTTON_TEXT:String = "Main Menu";
+		
+		// End game menu
+		public static const END_GAME_TITLE_TEXT:String = "Congratulations!";
+		public static const END_GAME_TITLE_TOP_PADDING:int = 50;
+		public static const END_GAME_TITLE_FONT_SIZE:int = 80;
+		
+		public static const END_GAME_SUBTITLE_TEXT:String = "You have beaten Spring Pig";
+		public static const END_GAME_SUBTITLE_TOP_PADDING:int = 150;
+		public static const END_GAME_SUBTITLE_FONT_SIZE:int = 50;
+		
+		public static const END_GAME_CREDITS_BUTTON_TEXT:String = "Credits";
+		public static const END_GAME_MAIN_MENU_BUTTON_TEXT:String = "Main Menu";
 	}
 
 }

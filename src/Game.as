@@ -46,6 +46,8 @@ package
 		
 		public var pause:Boolean;
 		
+		private var levelReader:LevelParser;
+		
 		private static const RIGHT:int = 0;
 		private static const LEFT:int = 1;
 		private static const UP:int = 2;
@@ -70,12 +72,10 @@ package
 			this.progression = progObj.progression;
 			currLevelIndex = 0;
 			
-			this.pause = false;		
-		}
-		
-		public function getCurrentLevelName():String
-		{
-			return progression[currLevelIndex];
+			this.pause = false;
+			
+			
+			this.levelReader = new LevelParser();
 		}
 		
 		/**
@@ -86,13 +86,12 @@ package
 		public function startLevel(levelName:String):void
 		{
 			// Get the board for the test level
-			var levelReader:LevelParser = new LevelParser();
 			board = levelReader.parseLevel(levelName);
 			
 			// Get the graphics for the test level
 			if (boardSprite)
 			{
-				stage.removeChild(boardSprite);
+				//stage.removeChild(boardSprite);
 			}
 			boardSprite = new BoardView(board);
 			
@@ -278,25 +277,34 @@ package
 					}
 					
 					if (isPlayerFinished()) {
-						// Should probably put up a congradulations page and continue on any button press
-						currLevelIndex++;
-						if (currLevelIndex < progression.length)
-						{
-							// Start the next level
-							startLevel(progression[currLevelIndex]);
-						}
-						else
-						{
-							// You've reached the end of the progression, roll credits
-							currLevelIndex = 0;
-							pause = true;
-							Menu.createPauseMenu();
+						pause = true; // So that player position is disregarded
+						if (currLevelIndex == progression.length - 1) {
+							Menu.createEndGameMenu();
+						} else {
+							Menu.createEndLevelMenu();
 						}
 					}
 					break;
 				default:
 					break;
 			}
+		}
+		
+		public function startFirstLevel():void {
+			currLevelIndex = 0;
+			startLevel(progression[currLevelIndex]);
+		}
+		
+		public function restartLevel():void {
+			startLevel(progression[currLevelIndex]);
+		}
+		
+		public function startNextLevel():void {
+			currLevelIndex++;
+			if (currLevelIndex == progression.length) {
+				currLevelIndex = 0;
+			}
+			startLevel(progression[currLevelIndex]);
 		}
 		
 		/**
