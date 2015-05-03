@@ -31,9 +31,9 @@ package model.levelHandling
 		public function getTile(x:int, y:int):int
 		{
 			var result:int;
-			if (x >= m_width || y >= m_height)
+			if (x >= m_width || y >= m_height || x < 0 || y < 0)
 			{
-				result = -1;
+				return -1;				
 			}
 			var index:int = y * m_width + x;
 			result = m_board[index];
