@@ -129,7 +129,7 @@ package view
 			if (id >= Constants.GATE1 && id <= Constants.GATE5) {
 				result = new GateArt();
 			} 
-			else if (id >= Constants.BUTTON1 && id <= Constants.BUTTON5)
+			else if (id >= Constants.BUTTON1 && id <= Constants.POPUP_BUTTON5)
 			{
 				result = new ButtonUpArt();
 				m_buttonArts[id] = result;

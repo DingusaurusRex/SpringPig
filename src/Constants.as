@@ -65,19 +65,26 @@ package
 		public static const START:int = 10;
 		public static const END:int = 11;
 		
-		// Buttons and Gates
+		// Gates (opens when button is down)
 		public static const GATE1:int = 20;
 		public static const GATE2:int = 21;
 		public static const GATE3:int = 22;
 		public static const GATE4:int = 23;
 		public static const GATE5:int = 24;
 		
-		public static const BUTTON1:int = 25;
-		public static const BUTTON2:int = 26;
-		public static const BUTTON3:int = 27;
-		public static const BUTTON4:int = 28;
-		public static const BUTTON5:int = 29;	
+		// Stay down buttons
+		public static const BUTTON1:int = 30;
+		public static const BUTTON2:int = 31;
+		public static const BUTTON3:int = 32;
+		public static const BUTTON4:int = 33;
+		public static const BUTTON5:int = 34;	
 
+		// popup buttons (buttons that pop up if you are not pressing them)
+		public static const POPUP_BUTTON1:int = 35;
+		public static const POPUP_BUTTON2:int = 36;
+		public static const POPUP_BUTTON3:int = 37;
+		public static const POPUP_BUTTON4:int = 38;
+		public static const POPUP_BUTTON5:int = 39;	
 		
 		/**
 		 * 

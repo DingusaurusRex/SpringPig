@@ -8,6 +8,7 @@ package
 	import flash.text.TextFormat;
 	import flash.ui.ContextMenuClipboardItems;
 	import flash.ui.Keyboard;
+	import flash.utils.Dictionary;
 	import model.button.Button;
 	import model.button.Gate;
 	import model.levelHandling.Board;
@@ -49,6 +50,7 @@ package
 		// Gates and Buttons
 		public var gates:Vector.<Gate>;
 		public var buttons:Vector.<int>;
+		public var popupButtons:Dictionary;
 		
 		public var pause:Boolean;
 		
@@ -132,6 +134,7 @@ package
 			this.finishTile = boardSprite.getFinishTile();
 			
 			buttons = board.getButtons();
+			popupButtons = board.getPopupButtons();
 			//gates = board.getGates();
 			
 			// Reset and start timing
@@ -149,6 +152,7 @@ package
 				// Update the stopwatch
 				Stopwatch.updateStopwatchText();
 				
+				popButtonsUp();
 				var wasInAir:Boolean = player.inAir;
 				checkCollision(DOWN); // Sets player.inAir
 				// Check if the player has started falling. If so, get his starting height in order to later calculate energy gained.
@@ -178,9 +182,10 @@ package
 					}						
 				}
 				if (keyLeft) {
-					if (player.character.x > 0)
+					if (player.character.x > 0) {
 						player.inAir ? player.character.x -= player.airSpeedX : player.character.x -= player.speedX;
 						checkCollision(LEFT);
+					}
 				}
 				if (keySpace && !player.inAir && !ladderBelowPlayer()) {
 					useEnergy();
@@ -221,7 +226,8 @@ package
 			}
 		}
 		
-		private function checkCollision(direction:int):void {
+		private function checkCollision(direction:int):void
+		{
 			switch(direction)
 			{
 				case RIGHT:
@@ -231,7 +237,7 @@ package
 						var id:int = board.getTile(tile.x, tile.y);
 						checkLavaHit(id);
 						if (isButton(id) && collidingWithButton(tile)) {
-							boardSprite.setButtonDown(board, id);
+							setButtonDown(board, id);
 						}
 						if (id == Constants.WALL || isGate(id))
 						{
@@ -246,7 +252,7 @@ package
 						id = board.getTile(tile.x, tile.y);
 						checkLavaHit(id);
 						if (isButton(id) && collidingWithButton(tile)) {
-							boardSprite.setButtonDown(board, id);
+							setButtonDown(board, id);
 						}
 						if (id == Constants.WALL || isGate(id))
 						{
@@ -277,8 +283,7 @@ package
 								break;
 							}
 							if (isButton(id) && collidingWithButton(tile)) {
-								boardSprite.setButtonDown(board, id);
-								//trace("here");
+								setButtonDown(board, id);
 							}
 							else if (id == Constants.LADDER) {
 								// If at the top of the ladder, make sure player falls back to top of ladder and not slightly inside ladder
@@ -297,7 +302,6 @@ package
 									player.character.y = (int) (tile.y * board.tileSideLength - player.character.height);
 								}
 								player.inAir = false;
-								trace(2);
 							}
 							// If one of the tiles below player is not empty, then player is not falling
 							else if (id != Constants.EMPTY && id != Constants.START && id != Constants.END && !isButton(id)) {
@@ -380,6 +384,53 @@ package
 		}
 		
 		/**
+		 * Sets the given button down, and if it is a popupButton, sets its value to 0 (DOWN)
+		 * @param	board
+		 * @param	id
+		 */
+		public function setButtonDown(board:Board, id:int):void
+		{
+			boardSprite.setButtonDown(board, id);
+			if (isPopupButton(id)) {
+				popupButtons[id] = 0;
+			}
+		}
+		
+		/**
+		 * Sets the given button up, and if it is a popupButton, sets its value to 1 (UP)
+		 * @param	board
+		 * @param	id
+		 */
+		public function setButtonUp(board:Board, id:int):void
+		{
+			boardSprite.setButtonUp(board, id);
+			if (isPopupButton(id)) {
+				popupButtons[id] = 1;
+			}
+		}		
+		
+		/**
+		 * Pops up all the popup buttons that are not collided with by player
+		 */
+		public function popButtonsUp():void
+		{
+			var popupButtonsTouched:Vector.<int> = new Vector.<int>();
+			for each (var tile:IntPair in getPlayerTiles()) {
+				var id:int = board.getTile(tile.x, tile.y);
+				if (isPopupButton(id) && collidingWithButton(tile)) {
+					popupButtonsTouched.push(id);
+				}
+			}
+			
+			for (var key:String in popupButtons) {
+				id = int(key);
+				if (popupButtons[id] == 0 && popupButtonsTouched.indexOf(id) == -1) { // Buttons is DOWN and not being touched by player
+					setButtonUp(board, id);
+				}
+			}
+		}
+		
+		/**
 		 * ASSUMES THE TILE IS A BUTTON. 
 		 * Returns true if the player is colliding with the button 
 		 * (ignoring the white space around the button)
@@ -442,7 +493,8 @@ package
 		 * Test if keys are pressed down
 		 * @param	event
 		 */
-		private function onKeyDown(event:KeyboardEvent):void {
+		private function onKeyDown(event:KeyboardEvent):void 
+		{
 			var key:uint = event.keyCode;
 			switch (key) {
 				case Keyboard.UP :
@@ -486,7 +538,8 @@ package
 		 * Test if keys are up
 		 * @param	event
 		 */
-		private function onKeyUp(event:KeyboardEvent):void {
+		private function onKeyUp(event:KeyboardEvent):void 
+		{
 			var key:uint = event.keyCode;
 			switch (key) {
 				case Keyboard.UP :
@@ -515,8 +568,8 @@ package
 		 * Returns the tile(s) in which the player is located in terms of intpairs
 		 * @return
 		 */
-		private function getPlayerTiles():Vector.<IntPair>
-		{
+		private function getPlayerTiles():Vector.<IntPair> 		
+		{			
 			var lowX:int = (int) (player.character.x / board.tileSideLength);
 			var highX:int = (int) ((player.character.x + player.character.width) / board.tileSideLength);
 			var highY:int = (int) (player.character.y / board.tileSideLength);
@@ -662,7 +715,7 @@ package
 			meter.energy = player.energy;
 			// Reset the buttons
 			for each (var id:int in buttons) {
-				boardSprite.setButtonUp(board, id);
+				setButtonUp(board, id);
 			}
 			
 			Stopwatch.reset();
@@ -676,7 +729,12 @@ package
 		
 		private function isButton(id:int):Boolean
 		{
-			return id >= Constants.BUTTON1 && id <= Constants.BUTTON5;
+			return id >= Constants.BUTTON1 && id <= Constants.POPUP_BUTTON5;
+		}
+		
+		private function isPopupButton(id:int):Boolean
+		{
+			return id >= Constants.POPUP_BUTTON1 && id <= Constants.POPUP_BUTTON5;
 		}
 	}
 

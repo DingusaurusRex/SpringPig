@@ -1,5 +1,6 @@
 package model.levelHandling 
 {
+	import flash.utils.Dictionary;
 	import model.button.Button;
 	import model.button.Gate;
 	/**
@@ -79,7 +80,7 @@ package model.levelHandling
 		{
 			return m_boardHeightInPixels
 		}
-		
+
 		public function getGates():Vector.<Gate>
 		{
 			var gates:Vector.<Gate> = new Vector.<Gate>();
@@ -110,6 +111,10 @@ package model.levelHandling
 			return gates;
 		}
 		
+		/**
+		 * Returns all the buttons' ids
+		 * @return
+		 */
 		public function getButtons():Vector.<int>
 		{
 			var buttons:Vector.<int> = new Vector.<int>();
@@ -118,9 +123,28 @@ package model.levelHandling
 				for (var x:int = 0; x < width; x++)
 				{
 					var id:int = getTile(x, y);
-					if (id >= Constants.BUTTON1 && id <= Constants.BUTTON5) {
+					if (id >= Constants.BUTTON1 && id <= Constants.POPUP_BUTTON5) {
 						buttons.push(id);
-						trace(id);
+					}
+				}
+			}
+			return buttons;
+		}
+		
+		/**
+		 * Returns a dictionary of popup buttons to their state (Up (1) or Down (0))
+		 * @return
+		 */
+		public function getPopupButtons():Dictionary
+		{
+			var buttons:Dictionary = new Dictionary();
+			for (var y:int = 0; y < height; y++)
+			{
+				for (var x:int = 0; x < width; x++)
+				{
+					var id:int = getTile(x, y);
+					if (id >= Constants.POPUP_BUTTON1 && id <= Constants.POPUP_BUTTON5) {
+						buttons[id] = 1;
 					}
 				}
 			}
