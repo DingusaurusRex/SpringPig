@@ -63,6 +63,7 @@ package
 		public static const TRAMP:int = 3;
 		public static const LADDER:int = 4;
 		public static const BUTTON:int = 5;
+		public static const GATE:int = 6;
 		
 		public static const START:int = 10;
 		public static const END:int = 11;

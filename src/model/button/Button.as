@@ -16,17 +16,26 @@ package model.button
 		private var upButton:Sprite;
 		private var downButton:Sprite;
 		
-		public function Button()
+		private var buttonNum:int;
+		
+		public function Button(num:int)
 		{
 			upButton = new buttonUpArt();
 			downButton = new buttonDownArt();
 			character = upButton;
+			
+			buttonNum = num;
+		}
+		
+		public function get num():int
+		{
+			return buttonNum;
 		}
 		
 		/**
 		 * Set the button to its upstate
 		 */
-		public function setUp()
+		public function setUp():void
 		{
 			if (character != upButton) {
 				character = upButton;
@@ -36,7 +45,7 @@ package model.button
 		/**
 		 * Set the button to its downstate
 		 */
-		public function setDown()
+		public function setDown():void
 		{
 			if (character != downButton) {
 				character = downButton;

@@ -1,5 +1,7 @@
 package model.levelHandling 
 {
+	import model.button.Button;
+	import model.button.Gate;
 	/**
 	 * The class containing access to the board, including width, height as well as model information on what tiles are where
 	 * @author Jack
@@ -78,6 +80,36 @@ package model.levelHandling
 			return m_boardHeightInPixels
 		}
 		
+		public function getGates():Vector.<Gate>
+		{
+			var gates:Vector.<Gate> = new Vector.<Gate>();
+			for (var y:int = 0; y < height; y++)
+			{
+				for (var x:int = 0; x < width; x++)
+				{
+					var id:int = getTile(x, y);
+					if (id == Constants.GATE) {
+						gates.push(new Gate(0));
+					}
+				}
+			}
+			return gates;
+		}
 		
+		public function getButtons():Vector.<Button>
+		{
+			var buttons:Vector.<Button> = new Vector.<Button>();
+			for (var y:int = 0; y < height; y++)
+			{
+				for (var x:int = 0; x < width; x++)
+				{
+					var id:int = getTile(x, y);
+					if (id == Constants.BUTTON) {
+						buttons.push(new Button(0));
+					}
+				}
+			}
+			return buttons;
+		}
 	}
 }

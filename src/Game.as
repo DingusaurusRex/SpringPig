@@ -8,6 +8,8 @@ package
 	import flash.text.TextFormat;
 	import flash.ui.ContextMenuClipboardItems;
 	import flash.ui.Keyboard;
+	import model.button.Button;
+	import model.button.Gate;
 	import model.levelHandling.Board;
 	import model.levelHandling.LevelParser;
 	import model.player.Player;
@@ -44,7 +46,9 @@ package
 		private var progression:Array;
 		public var currLevelIndex:int;
 		
-		private var count:int = 0;
+		// Gates and Buttons
+		public var gates:Vector.<Gate>;
+		public var buttons:Vector.<Button>;
 		
 		public var pause:Boolean;
 		
@@ -126,6 +130,9 @@ package
 			stage.focus = stage; // Needed to refocus back to the game
 			pause = false; // Reset pause
 			this.finishTile = boardSprite.getFinishTile();
+			
+			buttons = board.getButtons();
+			gates = board.getGates();
 			
 			// Reset and start timing
 			Stopwatch.reset();
@@ -223,7 +230,7 @@ package
 					{
 						var id:int = board.getTile(tile.x, tile.y);
 						checkLavaHit(id);
-						if (id == Constants.WALL)
+						if (id == Constants.WALL || id == Constants.GATE)
 						{
 							player.character.x = tile.x * board.tileSideLength - player.character.width;
 						}
@@ -235,7 +242,7 @@ package
 					{
 						id = board.getTile(tile.x, tile.y);
 						checkLavaHit(id);
-						if (id == Constants.WALL)
+						if (id == Constants.WALL || id == Constants.GATE)
 						{
 							player.character.x = (tile.x + 1) * board.tileSideLength;
 						}
@@ -247,7 +254,7 @@ package
 						id = board.getTile(tile.x, tile.y);
 						if (tile.x * board.tileSideLength != player.character.x + player.character.width) {
 							checkLavaHit(id);
-							if (id == Constants.WALL) {
+							if (id == Constants.WALL || id == Constants.GATE) {
 								player.startingHeight = getYPositionOfPlayer()
 								player.character.y = (tile.y + 1) * board.tileSideLength;
 								player.velocity = Constants.INITIAL_FALL_VELOCITY;

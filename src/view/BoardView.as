@@ -33,6 +33,10 @@ package view
 		[Embed(source = "../../assets/art/tiles/trampoline.png")]
 		private var TrampolineArt:Class;
 		
+		[Embed(source = "../../assets/art/tiles/gate.png")]
+		private var GateArt:Class;
+		
+		
 		protected var m_boardViewWidth:int;		// The actual total width of the BoardView
 		protected var m_boardViewHeight:int;	// The actual total height of the BoardView
 		
@@ -128,6 +132,9 @@ package view
 					break;
 				case Constants.TRAMP:
 					result = new TrampolineArt();
+					break;
+				case Constants.GATE:
+					result = new GateArt();
 					break;
 				default:
 					result = null;
