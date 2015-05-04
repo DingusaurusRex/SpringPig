@@ -62,11 +62,22 @@ package
 		public static const LAVA:int = 2;
 		public static const TRAMP:int = 3;
 		public static const LADDER:int = 4;
-		public static const BUTTON:int = 5;
-		public static const GATE:int = 6;
-		
 		public static const START:int = 10;
 		public static const END:int = 11;
+		
+		// Buttons and Gates
+		public static const GATE1:int = 20;
+		public static const GATE2:int = 21;
+		public static const GATE3:int = 22;
+		public static const GATE4:int = 23;
+		public static const GATE5:int = 24;
+		
+		public static const BUTTON1:int = 25;
+		public static const BUTTON2:int = 26;
+		public static const BUTTON3:int = 27;
+		public static const BUTTON4:int = 28;
+		public static const BUTTON5:int = 29;	
+
 		
 		/**
 		 * 

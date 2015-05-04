@@ -7,10 +7,13 @@ package model.button
 	 */
 	public class Button 
 	{
+		/*
 		[Embed(source = "../../../assets/art/tiles/buttonDOWN.png")]
 		private var buttonDownArt:Class;
+		
 		[Embed(source = "../../../assets/art/tiles/buttonUP.png")]
 		private var buttonUpArt:Class;
+		*/
 		
 		private var character:Sprite;
 		private var upButton:Sprite;
@@ -20,9 +23,9 @@ package model.button
 		
 		public function Button(num:int)
 		{
-			upButton = new buttonUpArt();
-			downButton = new buttonDownArt();
-			character = upButton;
+			//upButton = new buttonUpArt();
+			//downButton = new buttonDownArt();
+			//character = upButton;
 			
 			buttonNum = num;
 		}

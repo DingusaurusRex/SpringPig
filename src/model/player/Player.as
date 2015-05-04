@@ -11,6 +11,9 @@ package model.player
 		[Embed(source = "../../../assets/art/player/pig.png")]
 		private var playerArt:Class;
 		
+		[Embed(source = "../../../assets/art/player/player2.png")]
+		private var player2Art:Class;
+		
 		public var energy:int = 0;
 		public var character:Bitmap;
 		public var speedX:Number = 5;
@@ -39,6 +42,10 @@ package model.player
 			dy = Math.min(value, Constants.TERMINAL_VELOCITY);
 		}
 		
+		public function changeCharacter():void
+		{
+			character = new player2Art();
+		}
 	}
 
 }

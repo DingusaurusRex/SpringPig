@@ -48,7 +48,7 @@ package
 		
 		// Gates and Buttons
 		public var gates:Vector.<Gate>;
-		public var buttons:Vector.<Button>;
+		public var buttons:Vector.<int>;
 		
 		public var pause:Boolean;
 		
@@ -132,7 +132,7 @@ package
 			this.finishTile = boardSprite.getFinishTile();
 			
 			buttons = board.getButtons();
-			gates = board.getGates();
+			//gates = board.getGates();
 			
 			// Reset and start timing
 			Stopwatch.reset();
@@ -191,6 +191,7 @@ package
 				
 				if (player.inAir || collidingWithLadder()) {
 					player.updatePosition(board.tileSideLength);
+					//trace(player.character.y)
 					
 					if (player.character.y <= 0) {
 						player.startingHeight = getYPositionOfPlayer();
@@ -211,7 +212,6 @@ package
 							
 							if (trampBelowPlayer()) 
 							{
-								trace("here");
 								useEnergy();
 								player.updatePosition(board.tileSideLength);
 							}
@@ -230,7 +230,10 @@ package
 					{
 						var id:int = board.getTile(tile.x, tile.y);
 						checkLavaHit(id);
-						if (id == Constants.WALL || id == Constants.GATE)
+						if (isButton(id) && collidingWithButton(tile)) {
+							boardSprite.setButtonDown(board, id);
+						}
+						if (id == Constants.WALL || isGate(id))
 						{
 							player.character.x = tile.x * board.tileSideLength - player.character.width;
 						}
@@ -242,7 +245,10 @@ package
 					{
 						id = board.getTile(tile.x, tile.y);
 						checkLavaHit(id);
-						if (id == Constants.WALL || id == Constants.GATE)
+						if (isButton(id) && collidingWithButton(tile)) {
+							boardSprite.setButtonDown(board, id);
+						}
+						if (id == Constants.WALL || isGate(id))
 						{
 							player.character.x = (tile.x + 1) * board.tileSideLength;
 						}
@@ -254,7 +260,7 @@ package
 						id = board.getTile(tile.x, tile.y);
 						if (tile.x * board.tileSideLength != player.character.x + player.character.width) {
 							checkLavaHit(id);
-							if (id == Constants.WALL || id == Constants.GATE) {
+							if (id == Constants.WALL || isGate(id)) {
 								player.startingHeight = getYPositionOfPlayer()
 								player.character.y = (tile.y + 1) * board.tileSideLength;
 								player.velocity = Constants.INITIAL_FALL_VELOCITY;
@@ -270,7 +276,11 @@ package
 								player.inAir = false;
 								break;
 							}
-							if (id == Constants.LADDER) {
+							if (isButton(id) && collidingWithButton(tile)) {
+								boardSprite.setButtonDown(board, id);
+								//trace("here");
+							}
+							else if (id == Constants.LADDER) {
 								// If at the top of the ladder, make sure player falls back to top of ladder and not slightly inside ladder
 								var tileAboveLadder:int = board.getTile(tile.x, tile.y - 1);
 
@@ -286,10 +296,11 @@ package
 								{
 									player.character.y = (int) (tile.y * board.tileSideLength - player.character.height);
 								}
-								player.inAir = false;				
+								player.inAir = false;
+								trace(2);
 							}
 							// If one of the tiles below player is not empty, then player is not falling
-							else if (id != Constants.EMPTY && id != Constants.START && id != Constants.END) {
+							else if (id != Constants.EMPTY && id != Constants.START && id != Constants.END && !isButton(id)) {
 								player.character.y = (int) (tile.y * board.tileSideLength - player.character.height);
 								
 								player.inAir = false;
@@ -355,6 +366,10 @@ package
 			return false;
 		}
 		
+		/**
+		 * Returns true if players is standing on a trampoline
+		 * @return
+		 */
 		private function trampBelowPlayer():Boolean
 		{
 			for each (var tile:IntPair in getTilesBelowPlayer()) {
@@ -362,6 +377,30 @@ package
 					return true;
 			}
 			return false;
+		}
+		
+		/**
+		 * ASSUMES THE TILE IS A BUTTON. 
+		 * Returns true if the player is colliding with the button 
+		 * (ignoring the white space around the button)
+		 * @param	tile
+		 * @return
+		 */
+		private function collidingWithButton(tile:IntPair):Boolean
+		{
+			var result:Boolean = false;
+			var playerLeft:Number = player.character.x + player.character.width * .25;
+			var playerRight:Number = player.character.x + player.character.width * .75;
+			var tileLeft:Number = tile.x * board.tileSideLength + board.tileSideLength * .15;
+			var tileRight:Number = tile.x * board.tileSideLength + board.tileSideLength * .85;
+			//trace("tile left: " + tileLeft);
+			//trace("tile right: " + tileRight);
+			//trace("player left: " + playerLeft);
+			//trace("player right: " + playerRight);
+			if (playerLeft <= tileRight && playerRight >= tileLeft) {
+				result = true;
+			}
+			return result;
 		}
 		
 		/**
@@ -621,9 +660,23 @@ package
 			player.energy = 0;
 			player.velocity = 0;
 			meter.energy = player.energy;
+			// Reset the buttons
+			for each (var id:int in buttons) {
+				boardSprite.setButtonUp(board, id);
+			}
 			
 			Stopwatch.reset();
 			Stopwatch.start();
+		}
+		
+		private function isGate(id:int):Boolean
+		{
+			return id >= Constants.GATE1 && id <= Constants.GATE5;
+		}
+		
+		private function isButton(id:int):Boolean
+		{
+			return id >= Constants.BUTTON1 && id <= Constants.BUTTON5;
 		}
 	}
 

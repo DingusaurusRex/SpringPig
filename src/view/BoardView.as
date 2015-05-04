@@ -2,6 +2,7 @@ package view
 {
 	import flash.display.Bitmap;
 	import flash.display.Sprite;
+	import flash.utils.Dictionary;
 	import model.button.Button;
 	import model.levelHandling.Board;
 	import util.IntPair;
@@ -36,6 +37,11 @@ package view
 		[Embed(source = "../../assets/art/tiles/gate.png")]
 		private var GateArt:Class;
 		
+		[Embed(source = "../../assets/art/tiles/buttonUP.png")]
+		private var ButtonUpArt:Class;
+		
+		[Embed(source = "../../assets/art/tiles/buttonDown.png")]
+		private var ButtonDownArt:Class;
 		
 		protected var m_boardViewWidth:int;		// The actual total width of the BoardView
 		protected var m_boardViewHeight:int;	// The actual total height of the BoardView
@@ -44,8 +50,12 @@ package view
 		
 		private var m_finishTile:IntPair;
 		
+		private var m_buttonArts:Dictionary;
+		
 		public function BoardView(board:Board) 
 		{
+			m_buttonArts = new Dictionary();
+			
 			draw(board);
 		}
 		
@@ -116,33 +126,39 @@ package view
 		private function getAssetBitmap(id:int):Bitmap
 		{
 			var result:Bitmap = null;
-			switch (id)
+			if (id >= Constants.GATE1 && id <= Constants.GATE5) {
+				result = new GateArt();
+			} 
+			else if (id >= Constants.BUTTON1 && id <= Constants.BUTTON5)
 			{
-				case Constants.WALL:
-					result = new WallArt();
-					break;
-				case Constants.LAVA:
-					result = new LavaArt();
-					break;
-				case Constants.END:
-					result = new EndArt();
-					break;
-				case Constants.LADDER:
-					result = new LadderArt();
-					break;
-				case Constants.TRAMP:
-					result = new TrampolineArt();
-					break;
-				case Constants.GATE:
-					result = new GateArt();
-					break;
-				default:
-					result = null;
-					break;
+				result = new ButtonUpArt();
+				m_buttonArts[id] = result;
+			}		
+			else {
+				switch (id)
+				{
+					case Constants.WALL:
+						result = new WallArt();
+						break;
+					case Constants.LAVA:
+						result = new LavaArt();
+						break;
+					case Constants.END:
+						result = new EndArt();
+						break;
+					case Constants.LADDER:
+						result = new LadderArt();
+						break;
+					case Constants.TRAMP:
+						result = new TrampolineArt();
+						break;
+					default:
+						result = null;
+						break;
+				}
 			}
 			
 			return result;
-				
 		}
 		
 		/**
@@ -161,6 +177,51 @@ package view
 		public function getFinishTile():IntPair
 		{
 			return m_finishTile;
+		}
+		
+		public function get buttonArts():Dictionary
+		{
+			return m_buttonArts;
+		}
+		
+		/**
+		 * Takes a button, and changes its art to be down
+		 * @param	board
+		 * @param	id - ID of the button (Constants #)
+		 */
+		public function setButtonDown(board:Board, id:int):void
+		{
+			var prevX:Number = m_buttonArts[id].x;
+			var prevY:Number = m_buttonArts[id].y;
+			
+			removeChild(m_buttonArts[id]);
+			m_buttonArts[id] = new ButtonDownArt();
+			
+			m_buttonArts[id].width = board.tileSideLength;
+			m_buttonArts[id].height = board.tileSideLength;
+			m_buttonArts[id].x = prevX;
+			m_buttonArts[id].y = prevY;
+			addChild(m_buttonArts[id]);
+		}
+		
+		/**
+		 * Takes a button and changes its art to be up
+		 * @param	board
+		 * @param	id - ID of the button (Constants #)
+		 */
+		public function setButtonUp(board:Board, id:int):void
+		{
+			var prevX:Number = m_buttonArts[id].x;
+			var prevY:Number = m_buttonArts[id].y;
+			
+			removeChild(m_buttonArts[id]);
+			m_buttonArts[id] = new ButtonUpArt();
+			
+			m_buttonArts[id].width = board.tileSideLength;
+			m_buttonArts[id].height = board.tileSideLength;
+			m_buttonArts[id].x = prevX;
+			m_buttonArts[id].y = prevY;
+			addChild(m_buttonArts[id]);
 		}
 	}
 

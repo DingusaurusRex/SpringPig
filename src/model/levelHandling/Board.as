@@ -88,24 +88,39 @@ package model.levelHandling
 				for (var x:int = 0; x < width; x++)
 				{
 					var id:int = getTile(x, y);
-					if (id == Constants.GATE) {
-						gates.push(new Gate(0));
+					switch (id) {
+						case Constants.GATE1:
+							gates.push(new Gate(1));
+							break;
+						case Constants.GATE2:
+							gates.push(new Gate(2));
+							break;
+						case Constants.GATE3:
+							gates.push(new Gate(3));
+							break;
+						case Constants.GATE4:
+							gates.push(new Gate(4));
+							break;
+						case Constants.GATE5:
+							gates.push(new Gate(5));
+							break;
 					}
 				}
 			}
 			return gates;
 		}
 		
-		public function getButtons():Vector.<Button>
+		public function getButtons():Vector.<int>
 		{
-			var buttons:Vector.<Button> = new Vector.<Button>();
+			var buttons:Vector.<int> = new Vector.<int>();
 			for (var y:int = 0; y < height; y++)
 			{
 				for (var x:int = 0; x < width; x++)
 				{
 					var id:int = getTile(x, y);
-					if (id == Constants.BUTTON) {
-						buttons.push(new Button(0));
+					if (id >= Constants.BUTTON1 && id <= Constants.BUTTON5) {
+						buttons.push(id);
+						trace(id);
 					}
 				}
 			}
