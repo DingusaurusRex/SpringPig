@@ -47,7 +47,8 @@ package
 			Constants.INSTRUCTIONS_LEFT_PADDING,
 			Constants.INSTRUCTIONS_TOP_PADDING,
 			Constants.MENU_FONT,
-			Constants.INSTRUCTIONS_FONT_SIZE);
+			Constants.INSTRUCTIONS_FONT_SIZE,
+			Constants.INSTRUCTIONS_ALIGNMENT);
 		}
 		
 		// Menu creation/deletion functions
@@ -81,6 +82,9 @@ package
 			stage.removeChildren();
 			endLevelMenu.addChild(muteButton);
 			stage.addChild(endLevelMenu);
+			Stopwatch.stopwatchMenuText.x = Constants.END_LEVEL_STOPWATCH_LEFT_PADDING;
+			Stopwatch.stopwatchMenuText.y = Constants.END_LEVEL_STOPWATCH_TOP_PADDING;
+			stage.addChild(Stopwatch.stopwatchMenuText);
 		}
 		
 		public static function createEndGameMenu():void
@@ -88,6 +92,9 @@ package
 			Stopwatch.pause();
 			stage.removeChildren();
 			stage.addChild(endGameMenu);
+			Stopwatch.stopwatchMenuText.x = Constants.END_GAME_STOPWATCH_LEFT_PADDING;
+			Stopwatch.stopwatchMenuText.y = Constants.END_GAME_STOPWATCH_TOP_PADDING;
+			stage.addChild(Stopwatch.stopwatchMenuText);
 		}
 		
 		// Event functions
@@ -193,7 +200,7 @@ package
 			return button;
 		}
 		
-		public static function getTextField(text:String, height:int, width:int, x:int, y:int, font:String, fontSize:int):TextField
+		public static function getTextField(text:String, height:int, width:int, x:int, y:int, font:String, fontSize:int, align:String):TextField
 		{
 			var textField:TextField = new TextField();
 			textField = new TextField();
@@ -206,6 +213,7 @@ package
 			var textFormat:TextFormat = new TextFormat();
 			textFormat.font = font;
 			textFormat.size = fontSize;
+			textFormat.align = align;
 			
 			textField.setTextFormat(textFormat);
 			
@@ -221,8 +229,9 @@ import flash.events.MouseEvent;
 import flash.geom.Rectangle;
 import flash.text.TextField;
 import flash.text.TextFormat;
-import Constants;
 import flash.display.Sprite;
+import Constants;
+import util.Stopwatch;
 
 class MainMenu extends Sprite
 {
@@ -426,7 +435,8 @@ class CreditsMenu extends Sprite
 		(Constants.SCREEN_WIDTH - Constants.CREDITS_WIDTH) / 2,
 		Constants.CREDITS_TOP_PADDING,
 		Constants.MENU_FONT,
-		Constants.CREDITS_FONT_SIZE);
+		Constants.CREDITS_FONT_SIZE,
+		Constants.CREDITS_ALIGNMENT);
 		
 		addChild(mainMenuButton);
 		addChild(title);

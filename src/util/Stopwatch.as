@@ -17,6 +17,9 @@ package util
 		public static var stopwatchText:TextField = new TextField();
 		private static var stopwatchDefaultTextFormat:TextFormat = new TextFormat();
 		
+		public static var stopwatchMenuText:TextField = new TextField();
+		private static var stopwatchMenuTextFormat:TextFormat = new TextFormat();
+		
 		/**
 		 * Initialize the Stopwatch
 		 */
@@ -26,10 +29,19 @@ package util
 			splitStartTime = getTimer();
 			started = false;
 			paused = false;
-			stopwatchText.text = "00:00.000";
+			stopwatchText.text = Constants.STOPWATCH_DEFAULT_TEXT;
 			stopwatchDefaultTextFormat.font = Constants.GAME_STOPWATCH_FONT;
 			stopwatchDefaultTextFormat.size = Constants.GAME_STOPWATCH_FONT_SIZE;
 			stopwatchText.setTextFormat(stopwatchDefaultTextFormat);
+			
+			stopwatchMenuText.text = Constants.MENU_STOPWATCH_TEXT + Constants.STOPWATCH_DEFAULT_TEXT;
+			stopwatchMenuText.height = Constants.MENU_STOPWATCH_HEIGHT;
+			stopwatchMenuText.width = Constants.SCREEN_WIDTH;
+			
+			stopwatchMenuTextFormat.font = Constants.MENU_FONT;
+			stopwatchMenuTextFormat.size = Constants.MENU_STOPWATCH_FONT_SIZE;
+			stopwatchMenuTextFormat.align = Constants.MENU_STOPWATCH_TEXT_ALIGNMENT;
+			stopwatchMenuText.setTextFormat(stopwatchMenuTextFormat);
 		}
 		
 		/**
@@ -57,6 +69,7 @@ package util
 				totalTime += getTimer() - splitStartTime;
 				paused = true;
 				stopwatchText.text = formatTiming(getCurrentTiming());
+				stopwatchText.setTextFormat(stopwatchDefaultTextFormat);
 			}
 		}
 		
@@ -69,7 +82,7 @@ package util
 			totalTime = 0;
 			started = false;
 			paused = false;
-			stopwatchText.text = "00:00.000";
+			stopwatchText.text = Constants.STOPWATCH_DEFAULT_TEXT;
 			stopwatchText.setTextFormat(stopwatchDefaultTextFormat);
 		}
 		
@@ -93,10 +106,12 @@ package util
 		
 		public static function updateStopwatchText():void
 		{
-			if (started && !paused)
+			if (started)
 			{
 				stopwatchText.text = formatTiming(getCurrentTiming());
 				stopwatchText.setTextFormat(stopwatchDefaultTextFormat);
+				stopwatchMenuText.text = Constants.MENU_STOPWATCH_TEXT + stopwatchText.text;
+				stopwatchMenuText.setTextFormat(stopwatchMenuTextFormat);
 			}
 		}
 		

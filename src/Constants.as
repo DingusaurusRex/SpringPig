@@ -47,9 +47,16 @@ package
 		public static const METER_Y:int	= 20;
 		
 		// Stopwatch Values
+		public static const STOPWATCH_DEFAULT_TEXT:String = "00:00.000";
+		
 		public static const GAME_STOPWATCH_FONT:String = "arial";
 		public static const GAME_STOPWATCH_FONT_SIZE:int = 20;
 		public static const GAME_STOPWATCH_TOP_PADDING:int = 10;
+		
+		public static const MENU_STOPWATCH_TEXT:String = "Your Time: ";
+		public static const MENU_STOPWATCH_HEIGHT:int = 30;
+		public static const MENU_STOPWATCH_FONT_SIZE:int = 25;
+		public static const MENU_STOPWATCH_TEXT_ALIGNMENT:String = "center";
 		
 		/**
 		 *
@@ -147,6 +154,7 @@ package
 		public static const INSTRUCTIONS_HEIGHT:int = 500;
 		public static const INSTRUCTIONS_WIDTH:int = 400;
 		public static const INSTRUCTIONS_FONT_SIZE:int = 15;
+		public static const INSTRUCTIONS_ALIGNMENT:String = "left";
 		
 		public static const MAIN_CREDITS_BUTTON_RIGHT_PADDING:int = 30;
 		public static const MAIN_CREDITS_BUTTON_BOTTOM_PADDING:int = 40;
@@ -166,6 +174,7 @@ package
 		public static const CREDITS_HEIGHT:int = 500;
 		public static const CREDITS_WIDTH:int = 400;
 		public static const CREDITS_FONT_SIZE:int = 20;
+		public static const CREDITS_ALIGNMENT:String = "left";
 		
 		// Pause menu
 		public static const PAUSE_TITLE_TEXT:String = "Paused";
@@ -182,6 +191,9 @@ package
 		public static const END_LEVEL_TITLE_TOP_PADDING:int = 50;
 		public static const END_LEVEL_TITLE_FONT_SIZE:int = 80;
 		
+		public static const END_LEVEL_STOPWATCH_TOP_PADDING:int = 150;
+		public static const END_LEVEL_STOPWATCH_LEFT_PADDING:int = 0;
+		
 		public static const END_LEVEL_NEXT_LEVEL_BUTTON_TEXT:String = "Next Level";
 		public static const END_LEVEL_RESTART_LEVEL_BUTTON_TEXT:String = "Restart Last Level";
 		public static const END_LEVEL_MAIN_MENU_BUTTON_TEXT:String = "Main Menu";
@@ -190,6 +202,9 @@ package
 		public static const END_GAME_TITLE_TEXT:String = "Congratulations!";
 		public static const END_GAME_TITLE_TOP_PADDING:int = 50;
 		public static const END_GAME_TITLE_FONT_SIZE:int = 80;
+		
+		public static const END_GAME_STOPWATCH_TOP_PADDING:int = 220;
+		public static const END_GAME_STOPWATCH_LEFT_PADDING:int = 0;
 		
 		public static const END_GAME_SUBTITLE_TEXT:String = "You have beaten Spring Pig";
 		public static const END_GAME_SUBTITLE_TOP_PADDING:int = 150;
