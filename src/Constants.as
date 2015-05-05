@@ -58,6 +58,15 @@ package
 		public static const MENU_STOPWATCH_FONT_SIZE:int = 25;
 		public static const MENU_STOPWATCH_TEXT_ALIGNMENT:String = "center";
 		
+		// Directions
+		public static const RIGHT:int = 0;
+		public static const LEFT:int = 1;
+		public static const UP:int = 2;
+		public static const DOWN:int = 3;
+		
+		// Platforms
+		public static const PLATFORM_SPEED:int = 3;
+		
 		/**
 		 *
 		 * Tile Values
@@ -69,6 +78,7 @@ package
 		public static const LAVA:int = 2;
 		public static const TRAMP:int = 3;
 		public static const LADDER:int = 4;
+		
 		public static const START:int = 10;
 		public static const END:int = 11;
 		
@@ -92,6 +102,20 @@ package
 		public static const POPUP_BUTTON3:int = 37;
 		public static const POPUP_BUTTON4:int = 38;
 		public static const POPUP_BUTTON5:int = 39;
+		
+		// platforms
+		public static const MOVING_PLATFORM_START1:int = 40;
+		public static const MOVING_PLATFORM_START2:int = 41;
+		public static const MOVING_PLATFORM_START3:int = 42;
+		public static const MOVING_PLATFORM_START4:int = 43;
+		public static const MOVING_PLATFORM_START5:int = 44;
+		
+		public static const MOVING_PLATFORM_END1:int = 45;
+		public static const MOVING_PLATFORM_END2:int = 46;
+		public static const MOVING_PLATFORM_END3:int = 47;
+		public static const MOVING_PLATFORM_END4:int = 48;
+		public static const MOVING_PLATFORM_END5:int = 49;
+		
 		
 		/**
 		 * 

@@ -3,6 +3,7 @@ package model.levelHandling
 	import flash.utils.Dictionary;
 	import model.button.Button;
 	import model.button.Gate;
+	import util.IntPair;
 	/**
 	 * The class containing access to the board, including width, height as well as model information on what tiles are where
 	 * @author Jack

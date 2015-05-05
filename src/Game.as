@@ -4,6 +4,7 @@ package
 	import flash.display.IDrawCommand;
 	import flash.display.Sprite;
 	import flash.display.Stage;
+	import flash.events.AccelerometerEvent;
 	import flash.events.Event;
 	import flash.events.KeyboardEvent;
 	import flash.text.TextFormat;
@@ -54,15 +55,13 @@ package
 		public var buttons:Vector.<int>;
 		public var popupButtons:Dictionary;
 		public var buttonToGate:Dictionary; // Buttons map to the gate they open
-		
+				
 		public var pause:Boolean;
 		
 		private var levelReader:LevelParser;
 		
-		private static const RIGHT:int = 0;
-		private static const LEFT:int = 1;
-		private static const UP:int = 2;
-		private static const DOWN:int = 3;
+		// Platforms
+		private var platforms:Vector.<Bitmap>;
 		
 		/**
 		 * Begins the game
@@ -136,6 +135,7 @@ package
 			pause = false; // Reset pause
 			this.finishTile = boardSprite.getFinishTile();
 			
+			// Buttons and Gates
 			buttons = board.getButtons();
 			popupButtons = board.getPopupButtons();
 			gates = board.getGates();
@@ -160,9 +160,12 @@ package
 				// Update the stopwatch
 				Stopwatch.updateStopwatchText();
 				
+				boardSprite.movePlatforms(board);
+				platforms = boardSprite.platforms;
+				
 				popButtonsUp();
 				var wasInAir:Boolean = player.inAir;
-				checkCollision(DOWN); // Sets player.inAir
+				checkCollision(Constants.DOWN); // Sets player.inAir
 				// Check if the player has started falling. If so, get his starting height in order to later calculate energy gained.
 				if (player.inAir && !wasInAir) {
 					player.startingHeight = getYPositionOfPlayer();
@@ -173,7 +176,7 @@ package
 				if (keyUp && !player.inAir) {
 					if (collidingWithLadder()) { // Go up the ladder
 						player.character.y -= player.upSpeedY;
-						checkCollision(UP);
+						checkCollision(Constants.UP);
 					} else { // Jump
 						player.velocity = Constants.JUMP_VELOCITIES[1];
 						player.inAir = true;
@@ -186,13 +189,13 @@ package
 				if (keyRight) {
 					if (player.character.x < board.boardWidthInPixels) {
 						player.inAir ? player.character.x += player.airSpeedX : player.character.x += player.speedX;
-						checkCollision(RIGHT);
+						checkCollision(Constants.RIGHT);
 					}						
 				}
 				if (keyLeft) {
 					if (player.character.x > 0) {
 						player.inAir ? player.character.x -= player.airSpeedX : player.character.x -= player.speedX;
-						checkCollision(LEFT);
+						checkCollision(Constants.LEFT);
 					}
 				}
 				if (keySpace && !player.inAir && !ladderBelowPlayer()) {
@@ -212,8 +215,8 @@ package
 						player.velocity = Constants.INITIAL_FALL_VELOCITY;
 					}
 					
-					checkCollision(UP);
-					checkCollision(DOWN); // Sets player.inAir
+					checkCollision(Constants.UP);
+					checkCollision(Constants.DOWN); // Sets player.inAir
 					if (!player.inAir) { // If player was in air and no longer is, add energy
 						player.velocity = 0;
 						if (!collidingWithLadder()) { // Dont add energy if you fall on ladder
@@ -238,7 +241,7 @@ package
 		{
 			switch(direction)
 			{
-				case RIGHT:
+				case Constants.RIGHT:
 					// If you ran into a wall, keep the player in the previous square
 					for each (var tile:IntPair in getTilesOnPlayerRight())
 					{
@@ -253,7 +256,7 @@ package
 						}
 					}
 					break;
-				case LEFT:
+				case Constants.LEFT:
 					// If you ran into a wall, keep the player in the previous square
 					for each (tile in getTilesOnPlayerLeft())
 					{
@@ -268,7 +271,7 @@ package
 						}
 					}
 					break;
-				case UP:
+				case Constants.UP:
 					//Check that the user has not crashed into a wall above him
 					for each (tile in getTilesAbovePlayer()) {
 						id = board.getTile(tile.x, tile.y);
@@ -281,7 +284,7 @@ package
 							}
 						}
 					}
-				case DOWN:
+				case Constants.DOWN:
 					player.inAir = true;
 					for each (tile in getTilesBelowPlayer()) {
 						id = board.getTile(tile.x, tile.y);
@@ -312,7 +315,8 @@ package
 								player.inAir = false;
 							}
 							// If one of the tiles below player is not empty, then player is not falling
-							else if (id != Constants.EMPTY && id != Constants.START && id != Constants.END && !isButton(id) && !isOpenGate(id)) {
+							else if (id != Constants.EMPTY && id != Constants.START && id != Constants.END && !isButton(id) && 
+									!isOpenGate(id) && !isMovingPlatformStartOrEnd(id)) {
 								player.character.y = (int) (tile.y * board.tileSideLength - player.character.height);
 								
 								player.inAir = false;
@@ -363,6 +367,16 @@ package
 			player.energy = 0;
 			if (removeMeter)
 				meter.energy = player.energy;
+		}
+		
+		private function collidingWithPlatform():Boolean
+		{
+			/*
+			for each (var plat:Bitmap in platforms) {
+				if (player.character.y 
+			}
+			*/
+			return true;
 		}
 		
 		/**
@@ -772,6 +786,11 @@ package
 		private function isPopupButton(id:int):Boolean
 		{
 			return id >= Constants.POPUP_BUTTON1 && id <= Constants.POPUP_BUTTON5;
+		}
+		
+		private function isMovingPlatformStartOrEnd(id:int):Boolean
+		{
+			return id >= Constants.MOVING_PLATFORM_START1 && id <= Constants.MOVING_PLATFORM_END5;
 		}
 		
 		/**
