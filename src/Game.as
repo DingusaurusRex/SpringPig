@@ -164,6 +164,7 @@ package
 				platforms = boardSprite.platforms;
 				
 				popButtonsUp();
+				displaySign();
 				var wasInAir:Boolean = player.inAir;
 				checkCollision(Constants.DOWN); // Sets player.inAir
 				// Check if the player has started falling. If so, get his starting height in order to later calculate energy gained.
@@ -466,7 +467,18 @@ package
 				boardSprite.closeGate(board, gateId);
 				gateStatus[gateId] = 0; // CLOSED
 			}
-		}		
+		}
+		
+		public function displaySign():void
+		{
+			for each (var tile:IntPair in getPlayerTiles()) {
+				var id:int = board.getTile(tile.x, tile.y);
+				if (id >= Constants.SIGN1 && id <= Constants.SIGN5)
+				{
+					trace(board.getSignText(id));
+				}
+			}
+		}
 		
 		/**
 		 * Pops up all the popup buttons that are not collided with by player

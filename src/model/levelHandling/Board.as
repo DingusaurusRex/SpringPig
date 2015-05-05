@@ -13,6 +13,7 @@ package model.levelHandling
 		private var m_width:int;
 		private var m_height:int;
 		private var m_board:Array;
+		private var m_signs:Array;
 		
 		private var m_tileSideLength:int;			// The length of the side of a single tile (in pixels)
 		private var m_boardWidthInPixels:int;		// The total width of the board portion of the screen (in pixels)
@@ -23,6 +24,7 @@ package model.levelHandling
 			m_width = level.width;
 			m_height = level.height;
 			m_board = level.board_array;
+			m_signs = level.signs;
 			
 			var tileWidth:int = Constants.BOARD_WIDTH / m_width;
 			var tileHeight:int = Constants.BOARD_HEIGHT / m_height;
@@ -141,6 +143,19 @@ package model.levelHandling
 				}
 			}
 			return buttons;
+		}
+		
+		public function getSignText(id:int):String
+		{
+			for (var i:int = 0; i < m_signs.length; i++)
+			{
+				var signObj:Object = m_signs[i];
+				if (signObj.id == id)
+				{
+					return signObj.text;
+				}
+			}
+			return "";
 		}
 	}
 }
