@@ -47,7 +47,14 @@ package view
 		private var ButtonDownArt:Class;
 		
 		[Embed(source = "../../assets/art/tiles/platform.png")]
-		private var PlatformArt:Class;		
+		private var PlatformArt:Class;
+		
+		[Embed(source = "../../assets/art/tiles/sign.png")]
+		private var SignArt:Class;
+		
+		
+		
+		
 
 		protected var m_boardViewWidth:int;		// The actual total width of the BoardView
 		protected var m_boardViewHeight:int;	// The actual total height of the BoardView
@@ -173,6 +180,10 @@ package view
 			{
 				result = new PlatformArt();
 				m_platformArts[id] = result;
+			}
+			else if (id >= Constants.SIGN1 && id <= Constants.SIGN5)
+			{
+				result = new SignArt();
 			}
 			else {
 				switch (id)

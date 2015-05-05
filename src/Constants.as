@@ -116,6 +116,13 @@ package
 		public static const MOVING_PLATFORM_END4:int = 48;
 		public static const MOVING_PLATFORM_END5:int = 49;
 		
+		// Signs
+		public static const SIGN1:int = 50;
+		public static const SIGN2:int = 51;
+		public static const SIGN3:int = 52;
+		public static const SIGN4:int = 53;
+		public static const SIGN5:int = 54;
+		
 		
 		/**
 		 * 
