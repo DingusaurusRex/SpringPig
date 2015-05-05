@@ -431,7 +431,6 @@ package
 		}
 		
 		/**
-		 * ASSUMES THE TILE IS A BUTTON. 
 		 * Returns true if the player is colliding with the button 
 		 * (ignoring the white space around the button)
 		 * @param	tile
@@ -442,13 +441,19 @@ package
 			var result:Boolean = false;
 			var playerLeft:Number = player.character.x + player.character.width * .25;
 			var playerRight:Number = player.character.x + player.character.width * .75;
+			var playerY:Number = player.character.y + player.character.height;
 			var tileLeft:Number = tile.x * board.tileSideLength + board.tileSideLength * .15;
 			var tileRight:Number = tile.x * board.tileSideLength + board.tileSideLength * .85;
+			var tileTop:Number = tile.y * board.tileSideLength + board.tileSideLength * .85;
+			var tileBottom:Number = tile.y * board.tileSideLength + board.tileSideLength;
 			//trace("tile left: " + tileLeft);
 			//trace("tile right: " + tileRight);
 			//trace("player left: " + playerLeft);
 			//trace("player right: " + playerRight);
-			if (playerLeft <= tileRight && playerRight >= tileLeft) {
+			trace("player Y: " + playerY);
+			trace("tile top: " + tileTop);
+			trace("tile bottom: " + tileBottom);
+			if (playerLeft <= tileRight && playerRight >= tileLeft && playerY >= tileTop && playerY <= tileBottom) {
 				result = true;
 			}
 			return result;
