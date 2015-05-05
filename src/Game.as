@@ -404,8 +404,11 @@ package
 			}
 			
 			var gateId:int = buttonToGate[id];
-			boardSprite.openGate(board, gateId);
-			gateStatus[gateId] = 1; // OPEN
+			if (gateStatus[gateId] == 0) 
+			{
+				boardSprite.openGate(board, gateId);
+				gateStatus[gateId] = 1; // OPEN
+			}
 		}
 		
 		/**
@@ -421,8 +424,11 @@ package
 			}
 			
 			var gateId:int = buttonToGate[id];
-			boardSprite.closeGate(board, gateId);
-			gateStatus[gateId] = 0; // CLOSED
+			if (gateStatus[gateId] == 1) 
+			{
+				boardSprite.closeGate(board, gateId);
+				gateStatus[gateId] = 0; // CLOSED
+			}
 		}		
 		
 		/**

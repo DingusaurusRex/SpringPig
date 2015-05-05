@@ -61,6 +61,9 @@ package view
 		{
 			m_buttonArts = new Dictionary();
 			m_gateArts = new Dictionary();
+			for (var i:int = Constants.GATE1; i <= Constants.GATE5; i++) {
+				m_gateArts[i] = new Vector.<Bitmap>();
+			}
 			
 			draw(board);
 		}
@@ -134,7 +137,7 @@ package view
 			var result:Bitmap = null;
 			if (id >= Constants.GATE1 && id <= Constants.GATE5) {
 				result = new ClosedGateArt();
-				m_gateArts[id] = result;
+				m_gateArts[id].push(result);
 			} 
 			else if (id >= Constants.BUTTON1 && id <= Constants.POPUP_BUTTON5)
 			{
@@ -186,16 +189,6 @@ package view
 			return m_finishTile;
 		}
 		
-		public function get buttonArts():Dictionary
-		{
-			return m_buttonArts;
-		}
-		
-		public function get gateArts():Dictionary
-		{
-			return m_gateArts;
-		}
-		
 		/**
 		 * Takes a button, and changes its art to be down
 		 * @param	board
@@ -243,17 +236,7 @@ package view
 		 */
 		public function openGate(board:Board, id:int):void
 		{
-			var prevX:Number = m_gateArts[id].x;
-			var prevY:Number = m_gateArts[id].y;
-			
-			removeChild(m_gateArts[id]);
-			m_gateArts[id] = new OpenGateArt();
-			
-			m_gateArts[id].width = board.tileSideLength;
-			m_gateArts[id].height = board.tileSideLength;
-			m_gateArts[id].x = prevX;
-			m_gateArts[id].y = prevY;
-			addChild(m_gateArts[id]);
+			replaceGate(board, id, OpenGateArt);
 		}
 		
 		/**
@@ -263,17 +246,35 @@ package view
 		 */
 		public function closeGate(board:Board, id:int):void
 		{
-			var prevX:Number = m_gateArts[id].x;
-			var prevY:Number = m_gateArts[id].y;
+			replaceGate(board, id, ClosedGateArt);
+		}
+		
+		private function replaceGate(board:Board, id:int, art:Class):void
+		{
+			var newGates:Vector.<Bitmap> = new Vector.<Bitmap>();
+			for each (var gate:Bitmap in m_gateArts[id]) 
+			{
+				var prevX:Number = gate.x;
+				var prevY:Number = gate.y;
+				
+				try {
+					removeChild(gate);
+				} 
+				catch (error:Error) {
+					trace(error);
+				}
+				var newGate:Bitmap = new art();
+				
+				newGate.width = board.tileSideLength;
+				newGate.height = board.tileSideLength;
+				newGate.x = prevX;
+				newGate.y = prevY;
+				newGates.push(newGate);		
+				
+				addChild(newGate);
+			}
 			
-			removeChild(m_gateArts[id]);
-			m_gateArts[id] = new ClosedGateArt();
-			
-			m_gateArts[id].width = board.tileSideLength;
-			m_gateArts[id].height = board.tileSideLength;
-			m_gateArts[id].x = prevX;
-			m_gateArts[id].y = prevY;
-			addChild(m_gateArts[id]);
+			m_gateArts[id] = newGates;
 		}
 	}
 
