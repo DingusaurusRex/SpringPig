@@ -84,7 +84,7 @@ package
 		public static const POPUP_BUTTON2:int = 36;
 		public static const POPUP_BUTTON3:int = 37;
 		public static const POPUP_BUTTON4:int = 38;
-		public static const POPUP_BUTTON5:int = 39;	
+		public static const POPUP_BUTTON5:int = 39;
 		
 		/**
 		 * 

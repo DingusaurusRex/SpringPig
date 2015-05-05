@@ -1,6 +1,7 @@
 package 
 {
 	import flash.display.Bitmap;
+	import flash.display.IDrawCommand;
 	import flash.display.Sprite;
 	import flash.display.Stage;
 	import flash.events.Event;
@@ -48,9 +49,11 @@ package
 		public var currLevelIndex:int;
 		
 		// Gates and Buttons
-		public var gates:Vector.<Gate>;
+		public var gates:Vector.<int>;
+		public var gateStatus:Dictionary;
 		public var buttons:Vector.<int>;
 		public var popupButtons:Dictionary;
+		public var buttonToGate:Dictionary; // Buttons map to the gate they open
 		
 		public var pause:Boolean;
 		
@@ -135,7 +138,12 @@ package
 			
 			buttons = board.getButtons();
 			popupButtons = board.getPopupButtons();
-			//gates = board.getGates();
+			gates = board.getGates();
+			gateStatus = new Dictionary();
+			for each (var id:int in gates) {
+				gateStatus[id] = 0; // CLOSED
+			}
+			initButtonGateDict();
 			
 			// Reset and start timing
 			Stopwatch.reset();
@@ -239,7 +247,7 @@ package
 						if (isButton(id) && collidingWithButton(tile)) {
 							setButtonDown(board, id);
 						}
-						if (id == Constants.WALL || isGate(id))
+						if (id == Constants.WALL || isClosedGate(id))
 						{
 							player.character.x = tile.x * board.tileSideLength - player.character.width;
 						}
@@ -254,7 +262,7 @@ package
 						if (isButton(id) && collidingWithButton(tile)) {
 							setButtonDown(board, id);
 						}
-						if (id == Constants.WALL || isGate(id))
+						if (id == Constants.WALL || isClosedGate(id))
 						{
 							player.character.x = (tile.x + 1) * board.tileSideLength;
 						}
@@ -266,7 +274,7 @@ package
 						id = board.getTile(tile.x, tile.y);
 						if (tile.x * board.tileSideLength != player.character.x + player.character.width) {
 							checkLavaHit(id);
-							if (id == Constants.WALL || isGate(id)) {
+							if (id == Constants.WALL || isClosedGate(id)) {
 								player.startingHeight = getYPositionOfPlayer()
 								player.character.y = (tile.y + 1) * board.tileSideLength;
 								player.velocity = Constants.INITIAL_FALL_VELOCITY;
@@ -304,7 +312,7 @@ package
 								player.inAir = false;
 							}
 							// If one of the tiles below player is not empty, then player is not falling
-							else if (id != Constants.EMPTY && id != Constants.START && id != Constants.END && !isButton(id)) {
+							else if (id != Constants.EMPTY && id != Constants.START && id != Constants.END && !isButton(id) && !isOpenGate(id)) {
 								player.character.y = (int) (tile.y * board.tileSideLength - player.character.height);
 								
 								player.inAir = false;
@@ -394,6 +402,10 @@ package
 			if (isPopupButton(id)) {
 				popupButtons[id] = 0;
 			}
+			
+			var gateId:int = buttonToGate[id];
+			boardSprite.openGate(board, gateId);
+			gateStatus[gateId] = 1; // OPEN
 		}
 		
 		/**
@@ -407,6 +419,10 @@ package
 			if (isPopupButton(id)) {
 				popupButtons[id] = 1;
 			}
+			
+			var gateId:int = buttonToGate[id];
+			boardSprite.closeGate(board, gateId);
+			gateStatus[gateId] = 0; // CLOSED
 		}		
 		
 		/**
@@ -450,9 +466,9 @@ package
 			//trace("tile right: " + tileRight);
 			//trace("player left: " + playerLeft);
 			//trace("player right: " + playerRight);
-			trace("player Y: " + playerY);
-			trace("tile top: " + tileTop);
-			trace("tile bottom: " + tileBottom);
+			//trace("player Y: " + playerY);
+			//trace("tile top: " + tileTop);
+			//trace("tile bottom: " + tileBottom);
 			if (playerLeft <= tileRight && playerRight >= tileLeft && playerY >= tileTop && playerY <= tileBottom) {
 				result = true;
 			}
@@ -723,13 +739,23 @@ package
 				setButtonUp(board, id);
 			}
 			
+			for each (id in gates) {
+				boardSprite.closeGate(board, id);
+				gateStatus[id] = 0; // CLOSED
+			}
+			
 			Stopwatch.reset();
 			Stopwatch.start();
 		}
 		
-		private function isGate(id:int):Boolean
+		private function isClosedGate(id:int):Boolean
 		{
-			return id >= Constants.GATE1 && id <= Constants.GATE5;
+			return id >= Constants.GATE1 && id <= Constants.GATE5 && gateStatus[id] == 0;
+		}
+		
+		private function isOpenGate(id:int):Boolean
+		{
+			return id >= Constants.GATE1 && id <= Constants.GATE5 && gateStatus[id] == 1;
 		}
 		
 		private function isButton(id:int):Boolean
@@ -740,6 +766,28 @@ package
 		private function isPopupButton(id:int):Boolean
 		{
 			return id >= Constants.POPUP_BUTTON1 && id <= Constants.POPUP_BUTTON5;
+		}
+		
+		/**
+		 * Describes relationship between the buttons and which gate they open.
+		 */
+		private function initButtonGateDict():void
+		{
+			buttonToGate = new Dictionary();
+			
+			// Normal buttons
+			buttonToGate[Constants.BUTTON1] = Constants.GATE1;
+			buttonToGate[Constants.BUTTON2] = Constants.GATE2;
+			buttonToGate[Constants.BUTTON3] = Constants.GATE3;
+			buttonToGate[Constants.BUTTON4] = Constants.GATE4;
+			buttonToGate[Constants.BUTTON5] = Constants.GATE5;
+			
+			// Popup buttons
+			buttonToGate[Constants.POPUP_BUTTON1] = Constants.GATE1;
+			buttonToGate[Constants.POPUP_BUTTON2] = Constants.GATE2;
+			buttonToGate[Constants.POPUP_BUTTON3] = Constants.GATE3;
+			buttonToGate[Constants.POPUP_BUTTON4] = Constants.GATE4;
+			buttonToGate[Constants.POPUP_BUTTON5] = Constants.GATE5;
 		}
 	}
 

@@ -80,35 +80,26 @@ package model.levelHandling
 		{
 			return m_boardHeightInPixels
 		}
-
-		public function getGates():Vector.<Gate>
+		
+		/**
+		 * Returns all the gates' ids
+		 * @return
+		 */
+		public function getGates():Vector.<int>
 		{
-			var gates:Vector.<Gate> = new Vector.<Gate>();
+			var gates:Vector.<int> = new Vector.<int>();
 			for (var y:int = 0; y < height; y++)
 			{
 				for (var x:int = 0; x < width; x++)
 				{
 					var id:int = getTile(x, y);
-					switch (id) {
-						case Constants.GATE1:
-							gates.push(new Gate(1));
-							break;
-						case Constants.GATE2:
-							gates.push(new Gate(2));
-							break;
-						case Constants.GATE3:
-							gates.push(new Gate(3));
-							break;
-						case Constants.GATE4:
-							gates.push(new Gate(4));
-							break;
-						case Constants.GATE5:
-							gates.push(new Gate(5));
-							break;
+					if (id >= Constants.GATE1 && id <= Constants.GATE5) {
+						gates.push(id);
 					}
 				}
 			}
 			return gates;
+			
 		}
 		
 		/**

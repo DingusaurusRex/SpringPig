@@ -35,7 +35,10 @@ package view
 		private var TrampolineArt:Class;
 		
 		[Embed(source = "../../assets/art/tiles/gate.png")]
-		private var GateArt:Class;
+		private var ClosedGateArt:Class;
+		
+		[Embed(source = "../../assets/art/tiles/openGate.png")]
+		private var OpenGateArt:Class;
 		
 		[Embed(source = "../../assets/art/tiles/buttonUP.png")]
 		private var ButtonUpArt:Class;
@@ -43,6 +46,7 @@ package view
 		[Embed(source = "../../assets/art/tiles/buttonDown.png")]
 		private var ButtonDownArt:Class;
 		
+
 		protected var m_boardViewWidth:int;		// The actual total width of the BoardView
 		protected var m_boardViewHeight:int;	// The actual total height of the BoardView
 		
@@ -51,10 +55,12 @@ package view
 		private var m_finishTile:IntPair;
 		
 		private var m_buttonArts:Dictionary;
+		private var m_gateArts:Dictionary;
 		
 		public function BoardView(board:Board) 
 		{
 			m_buttonArts = new Dictionary();
+			m_gateArts = new Dictionary();
 			
 			draw(board);
 		}
@@ -127,7 +133,8 @@ package view
 		{
 			var result:Bitmap = null;
 			if (id >= Constants.GATE1 && id <= Constants.GATE5) {
-				result = new GateArt();
+				result = new ClosedGateArt();
+				m_gateArts[id] = result;
 			} 
 			else if (id >= Constants.BUTTON1 && id <= Constants.POPUP_BUTTON5)
 			{
@@ -184,6 +191,11 @@ package view
 			return m_buttonArts;
 		}
 		
+		public function get gateArts():Dictionary
+		{
+			return m_gateArts;
+		}
+		
 		/**
 		 * Takes a button, and changes its art to be down
 		 * @param	board
@@ -222,6 +234,46 @@ package view
 			m_buttonArts[id].x = prevX;
 			m_buttonArts[id].y = prevY;
 			addChild(m_buttonArts[id]);
+		}
+		
+		/**
+		 * Sets gate with given id visible
+		 * @param	board
+		 * @param	id
+		 */
+		public function openGate(board:Board, id:int):void
+		{
+			var prevX:Number = m_gateArts[id].x;
+			var prevY:Number = m_gateArts[id].y;
+			
+			removeChild(m_gateArts[id]);
+			m_gateArts[id] = new OpenGateArt();
+			
+			m_gateArts[id].width = board.tileSideLength;
+			m_gateArts[id].height = board.tileSideLength;
+			m_gateArts[id].x = prevX;
+			m_gateArts[id].y = prevY;
+			addChild(m_gateArts[id]);
+		}
+		
+		/**
+		 * Sets gate with given id invisible
+		 * @param	board
+		 * @param	id
+		 */
+		public function closeGate(board:Board, id:int):void
+		{
+			var prevX:Number = m_gateArts[id].x;
+			var prevY:Number = m_gateArts[id].y;
+			
+			removeChild(m_gateArts[id]);
+			m_gateArts[id] = new ClosedGateArt();
+			
+			m_gateArts[id].width = board.tileSideLength;
+			m_gateArts[id].height = board.tileSideLength;
+			m_gateArts[id].x = prevX;
+			m_gateArts[id].y = prevY;
+			addChild(m_gateArts[id]);
 		}
 	}
 
