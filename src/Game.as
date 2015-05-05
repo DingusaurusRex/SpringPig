@@ -4,9 +4,11 @@ package
 	import flash.display.IDrawCommand;
 	import flash.display.Sprite;
 	import flash.display.Stage;
+	import flash.display3D.textures.Texture;
 	import flash.events.AccelerometerEvent;
 	import flash.events.Event;
 	import flash.events.KeyboardEvent;
+	import flash.text.TextField;
 	import flash.text.TextFormat;
 	import flash.ui.ContextMenuClipboardItems;
 	import flash.ui.Keyboard;
@@ -20,6 +22,7 @@ package
 	import util.Stopwatch;
 	import view.BoardView;
 	import view.MeterView;
+	import flash.text.TextFieldAutoSize;
 	/**
 	 * ...
 	 * @author Marc
@@ -62,6 +65,9 @@ package
 		
 		// Platforms
 		private var platforms:Vector.<Bitmap>;
+		
+		// Signs
+		private var signText:TextField;
 		
 		/**
 		 * Begins the game
@@ -208,7 +214,6 @@ package
 				
 				if (player.inAir || collidingWithLadder()) {
 					player.updatePosition(board.tileSideLength);
-					//trace(player.character.y)
 					
 					if (player.character.y <= 0) {
 						player.startingHeight = getYPositionOfPlayer();
@@ -374,7 +379,6 @@ package
 			player.velocity = Constants.JUMP_VELOCITIES[player.energy];
 			player.inAir = true;
 			player.startingHeight = getYPositionOfPlayer() + player.energy;
-			trace(player.energy);
 			player.energy = 0;
 			if (removeMeter)
 				meter.energy = player.energy;
@@ -471,12 +475,32 @@ package
 		
 		public function displaySign():void
 		{
+			var found:Boolean = false;
 			for each (var tile:IntPair in getPlayerTiles()) {
 				var id:int = board.getTile(tile.x, tile.y);
 				if (id >= Constants.SIGN1 && id <= Constants.SIGN5)
 				{
-					trace(board.getSignText(id));
+					found = true;
+					if (!signText)
+					{
+						signText = new TextField();
+						signText.text = board.getSignText(id);
+						signText.x = tile.x * board.tileSideLength;
+						signText.y = (tile.y - 1) * board.tileSideLength;
+						signText.background = true;
+						signText.backgroundColor = Constants.SIGN_BACKGROUND_COLOR;
+						signText.border = true;
+						signText.borderColor = Constants.SIGN_BORDER_COLOR;
+						signText.wordWrap = true;
+						signText.autoSize = TextFieldAutoSize.LEFT
+						stage.addChild(signText);
+					}
 				}
+			}
+			if (!found && signText)
+			{
+				stage.removeChild(signText);
+				signText = null;
 			}
 		}
 		
@@ -517,13 +541,6 @@ package
 			var tileRight:Number = tile.x * board.tileSideLength + board.tileSideLength * .85;
 			var tileTop:Number = tile.y * board.tileSideLength + board.tileSideLength * .85;
 			var tileBottom:Number = tile.y * board.tileSideLength + board.tileSideLength;
-			//trace("tile left: " + tileLeft);
-			//trace("tile right: " + tileRight);
-			//trace("player left: " + playerLeft);
-			//trace("player right: " + playerRight);
-			//trace("player Y: " + playerY);
-			//trace("tile top: " + tileTop);
-			//trace("tile bottom: " + tileBottom);
 			if (playerLeft <= tileRight && playerRight >= tileLeft && playerY >= tileTop && playerY <= tileBottom) {
 				result = true;
 			}

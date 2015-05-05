@@ -25,6 +25,10 @@ package
 		public static const METER_LINES_COLOR:uint = 0x000000;
 		public static const METER_LINES_TICKNESS:uint = 1;
 		
+		// Sign Colors
+		public static const SIGN_BORDER_COLOR:uint = 0x000000;
+		public static const SIGN_BACKGROUND_COLOR:uint = 0xffffff;
+		
 		/**
 		 * Screen Values
 		**/
