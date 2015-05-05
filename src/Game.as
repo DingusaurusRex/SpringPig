@@ -316,8 +316,13 @@ package
 								player.inAir = false;
 							}
 							// If one of the tiles below player is not empty, then player is not falling
-							else if (id != Constants.EMPTY && id != Constants.START && id != Constants.END && !isButton(id) && 
-									!isOpenGate(id) && !isMovingPlatformStartOrEnd(id)) {
+							else if (id != Constants.EMPTY &&
+									 id != Constants.START &&
+									 id != Constants.END &&
+									 !(id >= Constants.SIGN1 && id <= Constants.SIGN5) &&
+									 !isButton(id) && 
+									!isOpenGate(id) &&
+									!isMovingPlatformStartOrEnd(id)) {
 								player.character.y = (int) (tile.y * board.tileSideLength - player.character.height);
 								
 								player.inAir = false;
@@ -376,7 +381,6 @@ package
 		
 		private function collideWithPlatform(direction:int):void
 		{
-			trace("here");
 			for each (var plat:Bitmap in platforms) {
 				if (direction == Constants.UP) {
 					var topPlat:int = plat.y + plat.height * .35;
