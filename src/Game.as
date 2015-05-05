@@ -284,6 +284,7 @@ package
 							}
 						}
 					}
+					collideWithPlatform(Constants.UP);
 				case Constants.DOWN:
 					player.inAir = true;
 					for each (tile in getTilesBelowPlayer()) {
@@ -373,14 +374,28 @@ package
 				meter.energy = player.energy;
 		}
 		
-		private function collidingWithPlatform():Boolean
+		private function collideWithPlatform(direction:int):void
 		{
-			/*
+			trace("here");
 			for each (var plat:Bitmap in platforms) {
-				if (player.character.y 
+				if (direction == Constants.UP) {
+					var topPlat:int = plat.y + plat.height * .35;
+					var bottomPlat:int = plat.y + plat.height * .6;
+					var rightPlat:int = plat.x + plat.width;
+					var leftPlat:int = plat.x;
+					trace("player.y: " + player.character.y);
+					trace("topPlat: " + topPlat);
+					trace("bottomPlat: " + bottomPlat);
+					
+					if (player.character.y <= bottomPlat && player.character.y >= topPlat && 
+						player.character.x >= leftPlat && player.character.x <= rightPlat) {
+						// bounce player off
+						player.startingHeight = getYPositionOfPlayer()
+						player.character.y = plat.y + plat.height * .6;
+						player.velocity = Constants.INITIAL_FALL_VELOCITY;
+					}
+				}
 			}
-			*/
-			return true;
 		}
 		
 		/**
