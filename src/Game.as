@@ -46,7 +46,7 @@ package
 		private var boardSprite:BoardView;
 		
 		// Level Progression Variables
-		private var progression:Array;
+		public var progression:Array;
 		public var currLevelIndex:int;
 		
 		// Gates and Buttons
@@ -339,8 +339,7 @@ package
 		}
 		
 		public function startFirstLevel():void {
-			currLevelIndex = 0;
-			startLevel(progression[currLevelIndex]);
+			startAtLevel(0);
 		}
 		
 		public function restartLevel():void {
@@ -352,6 +351,11 @@ package
 			if (currLevelIndex == progression.length) {
 				currLevelIndex = 0;
 			}
+			startLevel(progression[currLevelIndex]);
+		}
+		
+		public function startAtLevel(l:int):void {
+			currLevelIndex = l;
 			startLevel(progression[currLevelIndex]);
 		}
 		

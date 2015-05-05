@@ -138,6 +138,12 @@ package
 			game.restartLevel();
 		}
 		
+		public static function onLevelClick(event:MouseEvent):void
+		{
+			stage.removeChild(levelSelectMenu);
+			game.startAtLevel(int(event.target.name));
+		}
+		
 		// Util functions
 		public static function getMenuTitle(text:String, topPadding:int, size:int):TextField
 		{
@@ -232,6 +238,7 @@ import flash.text.TextFormat;
 import flash.display.Sprite;
 import Constants;
 import util.Stopwatch;
+import Menu;
 
 class MainMenu extends Sprite
 {
@@ -391,6 +398,13 @@ class LevelSelectMenu extends Sprite
 	private var mainMenuButton:SimpleButton;
 	private var title:TextField;
 	
+	private var previousPageButton:SimpleButton;
+	private var nextPageButton:SimpleButton;
+	
+	private var pages:Array;
+	private var currentPage:int;
+	private var totalPages:int;
+	
 	public function LevelSelectMenu():void
 	{
 		// Main menu button
@@ -399,13 +413,107 @@ class LevelSelectMenu extends Sprite
 		Constants.MAIN_MENU_BUTTON_LEFT_PADDING,
 		Menu.onMainMenuClick);
 		
-		// Credits title
+		// Level Select title
 		title = Menu.getMenuTitle(Constants.LEVEL_SELECT_TITLE_TEXT,
 		Constants.LEVEL_SELECT_TITLE_TOP_PADDING,
 		Constants.LEVEL_SELECT_TITLE_FONT_SIZE);
 		
+		// Page buttons
+		previousPageButton = Menu.getMenuButton(Constants.LEVEL_SELECT_PREVIOUS_PAGE_BUTTON_TEXT,
+		Constants.SCREEN_WIDTH / Constants.LEVEL_SELECT_COLUMNS - Constants.MENU_BUTTON_WIDTH / 2,
+		Constants.SCREEN_HEIGHT - Constants.LEVEL_SELECT_PAGE_BUTTON_BOTTOM_PADDING,
+		onPreviousPageClick);
+		
+		nextPageButton = Menu.getMenuButton(Constants.LEVEL_SELECT_NEXT_PAGE_BUTTON_TEXT,
+		Constants.SCREEN_WIDTH * (Constants.LEVEL_SELECT_COLUMNS - 1) / Constants.LEVEL_SELECT_COLUMNS - Constants.MENU_BUTTON_WIDTH / 2,
+		Constants.SCREEN_HEIGHT - Constants.LEVEL_SELECT_PAGE_BUTTON_BOTTOM_PADDING,
+		onNextPageClick);
+		
+		var levels:int = Menu.game.progression.length;
+		var levelsPerPage:int = Constants.LEVEL_SELECT_ROWS * Constants.LEVEL_SELECT_COLUMNS;
+		totalPages = levels / levelsPerPage;
+		if (levels % levelsPerPage != 0)
+		{
+			totalPages++;
+		}
+		
+		var pageHeight:int = Constants.SCREEN_HEIGHT - Constants.LEVEL_SELECT_PAGE_TOP_PADDING - Constants.LEVEL_SELECT_PAGE_BUTTON_BOTTOM_PADDING;
+		pages = new Array();
+		
+		var l:int = 0;
+		var p:int;
+		var r:int;
+		var c:int;
+		PageCreation: for (p = 0; p < totalPages; p++)
+		{
+			var page:Sprite = new Sprite();
+			LevelAddition:for (r = 0; r < Constants.LEVEL_SELECT_ROWS; r++)
+			{
+				for (c = 0; c < Constants.LEVEL_SELECT_COLUMNS; c++)
+				{
+					var levelButton:SimpleButton = Menu.getMenuButton(Menu.game.progression[l],
+					Constants.SCREEN_WIDTH * (c + 1) / (Constants.LEVEL_SELECT_COLUMNS + 1) - Constants.MENU_BUTTON_WIDTH / 2,
+					Constants.LEVEL_SELECT_PAGE_TOP_PADDING + pageHeight * r / Constants.LEVEL_SELECT_ROWS,
+					Menu.onLevelClick);
+					levelButton.name = String(l);
+					
+					page.addChild(levelButton);
+					l++;
+					if (l == levels)
+					{
+						break LevelAddition;
+					}
+				}
+			}
+			pages.push(page);
+			if (l == levels)
+			{
+				break PageCreation;
+			}
+		}
+		
 		addChild(mainMenuButton);
 		addChild(title);
+		
+		currentPage = 0;
+		if (pages.length == 1)
+		{
+			addChild(pages[currentPage]);
+		} else if (pages.length > 1)
+		{
+			addChild(pages[currentPage]);
+			addChild(nextPageButton);
+		}
+	}
+	
+	private function onPreviousPageClick(event:MouseEvent):void
+	{
+		removeChild(pages[currentPage]);
+		if (currentPage == totalPages - 1)
+		{
+			addChild(nextPageButton);
+		}
+		currentPage--;
+		if (currentPage == 0)
+		{
+			removeChild(previousPageButton);
+		}
+		addChild(pages[currentPage]);
+	}
+	
+	private function onNextPageClick(event:MouseEvent):void
+	{
+		removeChild(pages[currentPage]);
+		if (currentPage == 0)
+		{
+			addChild(previousPageButton);
+		}
+		currentPage++;
+		if (currentPage == totalPages - 1)
+		{
+			removeChild(nextPageButton);
+		}
+		addChild(pages[currentPage]);
 	}
 }
 

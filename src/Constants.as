@@ -188,6 +188,15 @@ package
 		public static const LEVEL_SELECT_TITLE_TOP_PADDING:int = 50;
 		public static const LEVEL_SELECT_TITLE_FONT_SIZE:int = 80;
 		
+		public static const LEVEL_SELECT_ROWS:int = 3;
+		public static const LEVEL_SELECT_COLUMNS:int = 3;
+		
+		public static const LEVEL_SELECT_PREVIOUS_PAGE_BUTTON_TEXT:String = "Previous Page";
+		public static const LEVEL_SELECT_NEXT_PAGE_BUTTON_TEXT:String = "Next Page";
+		public static const LEVEL_SELECT_PAGE_BUTTON_BOTTOM_PADDING:int = 50;
+		
+		public static const LEVEL_SELECT_PAGE_TOP_PADDING:int = 200;
+		
 		// Credits menu
 		public static const CREDITS_TITLE_TEXT:String = "Credits";
 		public static const CREDITS_TITLE_TOP_PADDING:int = 50;

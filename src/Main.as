@@ -33,6 +33,9 @@ package
 		[Embed(source = "../assets/progressions/progression1.json", mimeType = "application/octet-stream")]
 		private var Progression1:Class;
 		
+		[Embed(source = "../assets/progressions/progression2.json", mimeType = "application/octet-stream")]
+		private var Progression2:Class;
+		
 		private var player:Player = new Player();
 		
 		public function Main():void 
@@ -48,7 +51,7 @@ package
 			
 			// Parse LevelProgression JSON
 			//var progressionString:String = (new Progression1() as ByteArray).toString();
-			var progressionString:String = (new TestProgression() as ByteArray).toString();
+			var progressionString:String = (new Progression1() as ByteArray).toString();
 			var prog:Object = JSON.parse(progressionString);
 			
 			// Menu Stuff Here!!!!!!!!!!!!!
