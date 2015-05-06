@@ -601,8 +601,8 @@ package
 			player.onPlatform = false;
 			if (isPlatformInPlayerTile()) { // Check that a platform is in a player's tile
 				for each (var plat:Bitmap in platforms) {
-					var topPlat:int = plat.y + plat.height * .35;
-					var bottomPlat:int = plat.y + plat.height * .6;
+					var topPlat:int = plat.y;
+					var bottomPlat:int = plat.y + plat.height * .35;
 					var rightPlat:int = plat.x + plat.width;
 					var leftPlat:int = plat.x;
 					var playerLeft:int = player.asset.x + player.asset.width * .25;
