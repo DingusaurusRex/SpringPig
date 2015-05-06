@@ -554,12 +554,15 @@ package
 						}
 					} 
 					else if (direction == Constants.DOWN)
-					{
-						trace("player.y: " + playerBottom);
+					{						
 						if (playerBottom >= topPlat && playerTop <= bottomPlat &&
 							playerRight >= leftPlat && playerLeft <= rightPlat) {
-							player.character.y = plat.y - plat.height;
+							player.character.y = topPlat - player.character.height;
 							player.inAir = false;
+							
+							circle.graphics.drawCircle(playerLeft, player.character.y, 2);
+							circle.graphics.endFill();
+							stage. addChild(circle);
 						}
 					}
 				}
