@@ -511,7 +511,7 @@ package
 			{
 				case Constants.RIGHT:
 					// If colliding with a crate, move the crate
-					if (collidingWithCrate(crate) || crate.asset.x + crate.asset.width >= board.boardWidthInPixels)
+					if (crateAbove(crate) || crate.asset.x + crate.asset.width >= board.boardWidthInPixels)
 					{
 						return true;
 					}
@@ -536,7 +536,7 @@ package
 					break;
 				case Constants.LEFT:
 					// If colliding with a crate, move the crate
-					if (collidingWithCrate(crate) || crate.asset.x <= 0)
+					if (crateAbove(crate) || crate.asset.x <= 0)
 					{
 						return true;
 					}
@@ -701,6 +701,33 @@ package
 			var objRight:Number = obj.asset.x + obj.asset.width - 1;
 			var objTop:Number = obj.asset.y;
 			var objBottom:Number = obj.asset.y + obj.asset.height;
+			
+			for each (var crate:Crate in board.crates)
+			{
+				if (obj != crate)
+				{
+					var crateLeft:Number = crate.asset.x;
+					var crateRight:Number = crate.asset.x + crate.asset.width;
+					var crateTop:Number = crate.asset.y;
+					var crateBottom:Number = crate.asset.y + crate.asset.height;
+					if ((objLeft >= crateLeft && objLeft <= crateRight ||
+						objRight >= crateLeft && objRight <= crateRight) &&
+						(objTop >= crateTop && objTop <= crateBottom ||
+						objBottom >= crateTop && objBottom <= crateBottom))
+						{
+							return true;
+						}
+				}
+			}
+			return false;
+		}
+		
+		private function crateAbove(obj:PhysicsObject):Boolean
+		{
+			var objLeft:Number = obj.asset.x + 1;
+			var objRight:Number = obj.asset.x + obj.asset.width - 1;
+			var objTop:Number = obj.asset.y;
+			var objBottom:Number = obj.asset.y + obj.asset.height - 1;
 			
 			for each (var crate:Crate in board.crates)
 			{
