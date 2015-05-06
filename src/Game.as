@@ -153,7 +153,7 @@ package
 				gateStatus[id] = 0; // CLOSED
 			}
 			initButtonGateDict();
-			
+			GameState.currentLevelSave();
 			// Reset and start timing
 			Stopwatch.reset();
 			Stopwatch.start();
@@ -359,7 +359,7 @@ package
 					
 					if (isPlayerFinished()) {
 						pause = true; // So that player position is disregarded
-                        GameState.save();
+                        GameState.openNextLevelSave();
 						if (currLevelIndex == progression.length - 1) {
 							Menu.createEndGameMenu();
 						} else {

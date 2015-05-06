@@ -174,8 +174,6 @@ package
 		public static const MUTE_BUTTON_RIGHT_PADDING:int = 20;
 		
 		// Menus
-		public static const START_BUTTON_TEXT:String = "Start";
-		public static const LEVEL_SELECT_BUTTON_TEXT:String = "Select Level";
 		public static const CREDITS_BUTTON_TEXT:String = "Credits";
 		public static const MAIN_MENU_BUTTON_TEXT:String = "Main Menu";
 		public static const MAIN_MENU_BUTTON_TOP_PADDING:int = 20;
@@ -184,6 +182,13 @@ package
 		// Main menu
 		public static const MAIN_TITLE_FONT_SIZE:int = 80;
 		public static const MAIN_TITLE_TOP_PADDING:int = 50;
+
+        public static const CONTINUE_BUTTON_TEXT:String = "Continue";
+        public static const CONTINUE_BUTTON_COVER_COLOR:uint = 0xFFFFFF;
+        public static const CONTINUE_BUTTON_COVER_OPACITY:Number = 0.5;
+
+        public static const START_BUTTON_TEXT:String = "Start";
+        public static const LEVEL_SELECT_BUTTON_TEXT:String = "Select Level";
 		
 		public static const INSTRUCTIONS:String = "How to play:\nMove Left\t: Left Arrow\nMove Right\t: Right Arrow\nJump\t\t: Up Arrow\nSpring\t\t: Space\nReset\t\t: R\nPause\t\t: Escape";
 		public static const INSTRUCTIONS_TOP_PADDING:int = 460;

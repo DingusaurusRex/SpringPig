@@ -10,6 +10,7 @@ import flash.text.TextFormat;
 import flash.ui.Keyboard;
 
 import util.Audio;
+import util.GameState;
 import util.Stopwatch;
 
 /**
@@ -105,8 +106,14 @@ public class Menu {
     }
 
     // Event functions
+    public static function onContinueClick(event:MouseEvent):void {
+        stage.removeChildren();
+        game.startAtLevel(GameState.getPlayerLetestProgress());
+    }
+
     public static function onStartClick(event:MouseEvent):void {
         stage.removeChildren();
+        mainMenu.enableContinue();
         game.startFirstLevel();
     }
 
@@ -232,12 +239,16 @@ public class Menu {
 import flash.display.SimpleButton;
 import flash.display.Sprite;
 import flash.events.MouseEvent;
+import flash.filters.ColorMatrixFilter;
 import flash.text.TextField;
 
 import util.GameState;
 
 class MainMenu extends Sprite {
     private var title:TextField;
+    private var continueButton:SimpleButton;
+    private var continueButtonCover:Sprite;
+    private var blocked:Boolean;
     private var startButton:SimpleButton;
     private var levelSelectButton:SimpleButton;
     private var creditsButton:SimpleButton;
@@ -248,10 +259,26 @@ class MainMenu extends Sprite {
                 Constants.MAIN_TITLE_TOP_PADDING,
                 Constants.MAIN_TITLE_FONT_SIZE);
 
+        // Continue button
+        continueButton = Menu.getMenuButton(Constants.CONTINUE_BUTTON_TEXT,
+                        (Constants.SCREEN_WIDTH - Constants.MENU_BUTTON_WIDTH) / 2,
+                        Constants.SCREEN_HEIGHT / 2,
+                Menu.onContinueClick);
+
+        // Cover for the continue button
+        continueButtonCover = new Sprite();
+        continueButtonCover.graphics.beginFill(Constants.CONTINUE_BUTTON_COVER_COLOR, Constants.CONTINUE_BUTTON_COVER_OPACITY);
+        continueButtonCover.graphics.drawRect(0, 0, continueButton.width, continueButton.height);
+        continueButtonCover.graphics.endFill();
+        continueButtonCover.x = continueButton.x - Constants.MENU_BUTTON_BORDER_SIZE;
+        continueButtonCover.y = continueButton.y - Constants.MENU_BUTTON_BORDER_SIZE;
+        continueButtonCover.height = continueButton.height;
+        continueButtonCover.width = continueButton.width;
+
         // Start button
         startButton = Menu.getMenuButton(Constants.START_BUTTON_TEXT,
                         (Constants.SCREEN_WIDTH - Constants.MENU_BUTTON_WIDTH) / 2,
-                        Constants.SCREEN_HEIGHT / 2,
+                        continueButton.y + Constants.MENU_BUTTON_PADDING_BETWEEN,
                 Menu.onStartClick);
 
         // Level select button
@@ -268,9 +295,26 @@ class MainMenu extends Sprite {
 
         // Adding everything
         addChild(title);
+        addChild(continueButton);
         addChild(startButton);
         addChild(levelSelectButton);
         addChild(creditsButton);
+
+        if (GameState.getPlayerLetestProgress() == 0) {
+            continueButton.enabled = false;
+            continueButton.mouseEnabled = false;
+            addChild(continueButtonCover);
+            blocked = true;
+        }
+    }
+
+    public function enableContinue():void {
+        if (blocked) {
+            continueButton.enabled = true;
+            continueButton.mouseEnabled = true;
+            removeChild(continueButtonCover);
+            blocked = false;
+        }
     }
 }
 

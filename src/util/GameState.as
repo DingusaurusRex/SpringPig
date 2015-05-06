@@ -23,7 +23,7 @@ public class GameState {
         game = g;
     }
 
-    public static function save():void {
+    public static function openNextLevelSave():void {
         if (saveable) {
             playerData.data.progress = game.currLevelIndex + 1;
             if (playerData.data.progress == game.progression.length) {
@@ -32,6 +32,21 @@ public class GameState {
             if (playerData.data.unlocked < playerData.data.progress + 1) {
                 playerData.data.unlocked = playerData.data.progress + 1;
             }
+            //trace("onl cl:" + playerData.data.progress + "; op:" + playerData.data.unlocked);
+            playerData.flush();
+        }
+    }
+
+    public static function currentLevelSave():void {
+        if (saveable) {
+            playerData.data.progress = game.currLevelIndex;
+            if (playerData.data.progress == game.progression.length) {
+                playerData.data.progress--;
+            }
+            if (playerData.data.unlocked < playerData.data.progress + 1) {
+                playerData.data.unlocked = playerData.data.progress + 1;
+            }
+            //trace("cls cl:" + playerData.data.progress + "; op:" + playerData.data.unlocked);
             playerData.flush();
         }
     }
