@@ -5,3 +5,9 @@ Games Capstone Project
 Jack Fancher -- DingusaurusRex
 Marc-Antoine Fontenelle -- BeljunWaffel
 Panji Wisesa -- panjiw
+
+TODO:
+	
+	crates land on moving platforms (?)
+	better meter art
+	art assets
