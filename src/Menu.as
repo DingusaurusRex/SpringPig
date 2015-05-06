@@ -1,6 +1,7 @@
 package 
 {
 	import flash.display.Stage;
+	import flash.events.KeyboardEvent;
 	import flash.text.TextField;
 	import flash.text.TextFormat;
 	import flash.display.Shape;
@@ -10,6 +11,7 @@ package
 	import util.Audio;
 	import util.Stopwatch;
 	import Constants;
+	import flash.ui.Keyboard;
 	/**
 	 * ...
 	 * @author Panji Wisesa
@@ -85,6 +87,19 @@ package
 			Stopwatch.stopwatchMenuText.x = Constants.END_LEVEL_STOPWATCH_LEFT_PADDING;
 			Stopwatch.stopwatchMenuText.y = Constants.END_LEVEL_STOPWATCH_TOP_PADDING;
 			stage.addChild(Stopwatch.stopwatchMenuText);
+			stage.addEventListener(KeyboardEvent.KEY_DOWN, Menu.onKeyDown);
+		}
+		
+		private static function onKeyDown(event:KeyboardEvent):void
+		{
+			var key:uint = event.keyCode;
+			switch (key)
+			{
+				case Keyboard.SPACE:
+					stage.removeChild(endLevelMenu);
+					game.startNextLevel();
+					break;
+			}
 		}
 		
 		public static function createEndGameMenu():void
