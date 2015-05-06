@@ -290,9 +290,11 @@ package
 							}
 						}
 					}
-					collideWithPlatform(Constants.UP);
+					collideWithPlatform(direction);
 				case Constants.DOWN:
 					player.inAir = true;
+					if (collideWithPlatform(direction))
+						break;
 					for each (tile in getTilesBelowPlayer()) {
 						id = board.getTile(tile.x, tile.y);
 						if (tile.x * board.tileSideLength != player.character.x + player.character.width) {
@@ -382,29 +384,6 @@ package
 			player.energy = 0;
 			if (removeMeter)
 				meter.energy = player.energy;
-		}
-		
-		private function collideWithPlatform(direction:int):void
-		{
-			for each (var plat:Bitmap in platforms) {
-				if (direction == Constants.UP) {
-					var topPlat:int = plat.y + plat.height * .35;
-					var bottomPlat:int = plat.y + plat.height * .6;
-					var rightPlat:int = plat.x + plat.width;
-					var leftPlat:int = plat.x;
-					trace("player.y: " + player.character.y);
-					trace("topPlat: " + topPlat);
-					trace("bottomPlat: " + bottomPlat);
-					
-					if (player.character.y <= bottomPlat && player.character.y >= topPlat && 
-						player.character.x >= leftPlat && player.character.x <= rightPlat) {
-						// bounce player off
-						player.startingHeight = getYPositionOfPlayer()
-						player.character.y = plat.y + plat.height * .6;
-						player.velocity = Constants.INITIAL_FALL_VELOCITY;
-					}
-				}
-			}
 		}
 		
 		/**
@@ -545,6 +524,46 @@ package
 				result = true;
 			}
 			return result;
+		}
+		
+		/**
+		 * Collide with a platform, given a direction
+		 * @param	direction
+		 */
+		private function collideWithPlatform(direction:int):void
+		{
+			if (isPlatformInPlayerTile()) { // Check that a platform is in a player's tile
+				for each (var plat:Bitmap in platforms) {
+					var topPlat:int = plat.y + plat.height * .35;
+					var bottomPlat:int = plat.y + plat.height * .6;
+					var rightPlat:int = plat.x + plat.width;
+					var leftPlat:int = plat.x;
+					var playerLeft:int = player.character.x + player.character.width * .25;
+					var playerRight:int = player.character.x + player.character.width * .75;
+					var playerTop:int = player.character.y;
+					var playerBottom:int = player.character.y + player.character.height;
+					
+					if (direction == Constants.UP)
+					{					
+						if (player.character.y <= bottomPlat && player.character.y >= topPlat && 
+							playerRight >= leftPlat && playerLeft <= rightPlat) {
+							// bounce player off
+							player.startingHeight = getYPositionOfPlayer()
+							player.character.y = plat.y + plat.height * .6;
+							player.velocity = Constants.INITIAL_FALL_VELOCITY;
+						}
+					} 
+					else if (direction == Constants.DOWN)
+					{
+						trace("player.y: " + playerBottom);
+						if (playerBottom >= topPlat && playerTop <= bottomPlat &&
+							playerRight >= leftPlat && playerLeft <= rightPlat) {
+							player.character.y = plat.y - plat.height;
+							player.inAir = false;
+						}
+					}
+				}
+			}
 		}
 		
 		/**
@@ -789,6 +808,19 @@ package
 			}		
 			
 			return result;
+		}
+		
+		private function isPlatformInPlayerTile():Boolean
+		{
+			for each (var tile:IntPair in getPlayerTiles())
+			{
+				for each (var platform:Bitmap in platforms) {
+					if (platform.x >= tile.x * board.tileSideLength && platform.x <= (tile.x + 1) * board.tileSideLength &&
+						platform.y >= tile.y * board.tileSideLength && platform.y <= (tile.y + 1) * board.tileSideLength)
+						return true;
+				}
+			}
+			return false;
 		}
 		
 		private function checkLavaHit(id:int):Boolean
