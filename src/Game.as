@@ -256,7 +256,7 @@ package
 					{
 						var id:int = board.getTile(tile.x, tile.y);
 						checkLavaHit(id);
-						if (isButton(id) && collidingWithButton(tile)) {
+						if (isButton(id) && collidingWithButton(player, tile)) {
 							setButtonDown(board, id);
 						}
 						if (id == Constants.WALL || isClosedGate(id))
@@ -271,7 +271,7 @@ package
 					{
 						id = board.getTile(tile.x, tile.y);
 						checkLavaHit(id);
-						if (isButton(id) && collidingWithButton(tile)) {
+						if (isButton(id) && collidingWithButton(player, tile)) {
 							setButtonDown(board, id);
 						}
 						if (id == Constants.WALL || isClosedGate(id))
@@ -305,7 +305,7 @@ package
 								player.inAir = false;
 								break;
 							}
-							if (isButton(id) && collidingWithButton(tile)) {
+							if (isButton(id) && collidingWithButton(player, tile)) {
 								setButtonDown(board, id);
 							}
 							else if (id == Constants.LADDER) {
@@ -460,11 +460,42 @@ package
 			for each (var crate:Crate in board.crates)
 			{
 				crate.updatePosition(board.tileSideLength);
-				//checkCrateCollision(crate, Constants.DOWN);
+				checkCrateCollision(crate, Constants.DOWN);
 			}
 		}
 		
-		
+		public function checkCrateCollision(crate:Crate, direction:int):void
+		{
+			switch (direction)
+			{
+				case Constants.DOWN:
+					crate.inAir = true;
+					if (collideWithPlatform(direction))
+						break;
+					for each (var tile:IntPair in getTilesInDirection(crate, Constants.DOWN)) {
+						var id:int = board.getTile(tile.x, tile.y);
+						if (tile.x * board.tileSideLength != crate.asset.x + crate.asset.width) {
+							if (isButton(id) && collidingWithButton(crate, tile)) {
+								setButtonDown(board, id);
+							}
+							// If one of the tiles below player is not empty, then player is not falling
+							else if (id != Constants.EMPTY &&
+									 id != Constants.START &&
+									 id != Constants.END &&
+									 !isButton(id) && 
+									!isOpenGate(id) &&
+									!isMovingPlatformStartOrEnd(id)) {
+								crate.asset.y = (int) (tile.y * board.tileSideLength - crate.asset.height);
+								crate.velocity = 0;
+								crate.inAir = false;
+							}
+						}
+					}
+					break;
+				default:
+					break;
+			}
+		}
 		
 		/**
 		 * Determines if the player is on any signs and displays thier text if so.
@@ -512,8 +543,22 @@ package
 			var popupButtonsTouched:Vector.<int> = new Vector.<int>();
 			for each (var tile:IntPair in getPlayerTiles()) {
 				var id:int = board.getTile(tile.x, tile.y);
-				if (isPopupButton(id) && collidingWithButton(tile)) {
-					popupButtonsTouched.push(id);
+				if (isPopupButton(id))
+				{
+					if (collidingWithButton(player, tile)) {
+						popupButtonsTouched.push(id);
+					}
+					else
+					{
+						for each (var crate:Crate in board.crates)
+						{
+							if (collidingWithButton(crate, tile))
+							{
+								popupButtonsTouched.push(id);
+								break;
+							}
+						}
+					}
 				}
 			}
 			
@@ -531,17 +576,17 @@ package
 		 * @param	tile
 		 * @return
 		 */
-		private function collidingWithButton(tile:IntPair):Boolean
+		private function collidingWithButton(obj:PhysicsObject, tile:IntPair):Boolean
 		{
 			var result:Boolean = false;
-			var playerLeft:Number = player.asset.x + player.asset.width * .25;
-			var playerRight:Number = player.asset.x + player.asset.width * .75;
-			var playerY:Number = player.asset.y + player.asset.height;
+			var objLeft:Number = obj.asset.x + obj.asset.width * .25;
+			var objRight:Number = obj.asset.x + obj.asset.width * .75;
+			var objY:Number = obj.asset.y + obj.asset.height;
 			var tileLeft:Number = tile.x * board.tileSideLength + board.tileSideLength * .15;
 			var tileRight:Number = tile.x * board.tileSideLength + board.tileSideLength * .85;
 			var tileTop:Number = tile.y * board.tileSideLength + board.tileSideLength * .85;
 			var tileBottom:Number = tile.y * board.tileSideLength + board.tileSideLength;
-			if (playerLeft <= tileRight && playerRight >= tileLeft && playerY >= tileTop && playerY <= tileBottom) {
+			if (objLeft <= tileRight && objRight >= tileLeft && objY >= tileTop && objY <= tileBottom) {
 				result = true;
 			}
 			return result;
@@ -770,8 +815,8 @@ package
 		private function getTilesBelowObject(obj:PhysicsObject):Vector.<IntPair>
 		{
 			var lowX:int = (int) (obj.asset.x / board.tileSideLength);
-			var highX:int = (int) ((obj.asset.x + player.asset.width) / board.tileSideLength);
-			var lowY:int = (int) ((obj.asset.y + player.asset.height) / board.tileSideLength);
+			var highX:int = (int) ((obj.asset.x + obj.asset.width) / board.tileSideLength);
+			var lowY:int = (int) ((obj.asset.y + obj.asset.height) / board.tileSideLength);
 			
 			var result:Vector.<IntPair> = new Vector.<IntPair>();
 			
@@ -793,7 +838,7 @@ package
 		private function getTilesAboveObject(obj:PhysicsObject):Vector.<IntPair>
 		{
 			var lowX:int = (int) (obj.asset.x / board.tileSideLength);
-			var highX:int = (int) ((obj.asset.x + player.asset.width) / board.tileSideLength);
+			var highX:int = (int) ((obj.asset.x + obj.asset.width) / board.tileSideLength);
 			var highY:int = (int) (obj.asset.y / board.tileSideLength);
 			
 			var result:Vector.<IntPair> = new Vector.<IntPair>();
@@ -815,8 +860,8 @@ package
 		 */
 		private function getTilesOnObjectRight(obj:PhysicsObject):Vector.<IntPair>
 		{
-			var highX:int = (int) ((obj.asset.x + player.asset.width) / board.tileSideLength);
-			var lowY:int = (int) ((obj.asset.y + player.asset.height - 1) / board.tileSideLength);
+			var highX:int = (int) ((obj.asset.x + obj.asset.width) / board.tileSideLength);
+			var lowY:int = (int) ((obj.asset.y + obj.asset.height - 1) / board.tileSideLength);
 			var highY:int = (int) (obj.asset.y / board.tileSideLength);
 		
 			var result:Vector.<IntPair> = new Vector.<IntPair>();
@@ -839,7 +884,7 @@ package
 		private function getTilesOnObjectLeft(obj:PhysicsObject):Vector.<IntPair>
 		{
 			var lowX:int = (int) (obj.asset.x / board.tileSideLength);
-			var lowY:int = (int) ((obj.asset.y + player.asset.height - 1) / board.tileSideLength);
+			var lowY:int = (int) ((obj.asset.y + obj.asset.height - 1) / board.tileSideLength);
 			var highY:int = (int) (obj.asset.y / board.tileSideLength);
 			
 			var result:Vector.<IntPair> = new Vector.<IntPair>();
