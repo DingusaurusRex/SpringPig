@@ -302,10 +302,18 @@ package
 						}
 					}
 					collideWithPlatform(direction);
+					break;
 				case Constants.DOWN:
 					player.inAir = true;
 					if (collideWithPlatform(direction))
 						break;
+					else if (collidingWithCrate(player))
+					{
+						var crate:Crate = getCollidingCrate(player);
+						player.asset.y = (int) (crate.asset.y - player.asset.height);
+						player.velocity = 0;
+						player.inAir = false;
+					}
 					for each (tile in getTilesInDirection(player, Constants.DOWN)) {
 						id = board.getTile(tile.x, tile.y);
 						if (tile.x * board.tileSideLength != player.asset.x + player.asset.width) {
@@ -334,12 +342,6 @@ package
 								}
 								player.inAir = false;
 							}
-							// Check if the player is on a crate
-							else if (collidingWithCrate(player))
-							{
-								player.asset.y = (int) (tile.y * board.tileSideLength - player.asset.height);
-								player.inAir = false;
-							}
 							// If one of the tiles below player is not empty, then player is not falling
 							else if (id != Constants.EMPTY &&
 									 id != Constants.START &&
@@ -350,7 +352,7 @@ package
 									!isOpenGate(id) &&
 									!isMovingPlatformStartOrEnd(id)) {
 								player.asset.y = (int) (tile.y * board.tileSideLength - player.asset.height);
-								
+								player.velocity = 0;
 								player.inAir = false;
 							}
 						}
@@ -622,8 +624,8 @@ package
 		{
 			var objLeft:Number = obj.asset.x + 1;
 			var objRight:Number = obj.asset.x + obj.asset.width - 1;
-			var objTop:Number = obj.asset.y + 1;
-			var objBottom:Number = obj.asset.y + obj.asset.height - 1;
+			var objTop:Number = obj.asset.y;
+			var objBottom:Number = obj.asset.y + obj.asset.height;
 			
 			for each (var crate:Crate in board.crates)
 			{
