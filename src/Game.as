@@ -197,7 +197,7 @@ package
 					player.asset.y += player.downSpeedY;
 				}
 				if (keyRight) {
-					if (player.asset.x < board.boardWidthInPixels) {
+					if (player.asset.x < board.boardWidthInPixels - player.asset.width - 5) {
 						player.inAir ? player.asset.x += player.airSpeedX : player.asset.x += player.speedX;
 						checkPlayerCollision(Constants.RIGHT);
 					}						
