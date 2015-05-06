@@ -168,7 +168,7 @@ package
 				// Update the stopwatch
 				Stopwatch.updateStopwatchText();
 				
-				boardSprite.movePlatforms(board);
+				boardSprite.movePlatforms(player, board);
 				platforms = boardSprite.platforms;
 				
 				popButtonsUp();
@@ -598,6 +598,7 @@ package
 		 */
 		private function collideWithPlatform(direction:int):void
 		{
+			player.onPlatform = false;
 			if (isPlatformInPlayerTile()) { // Check that a platform is in a player's tile
 				for each (var plat:Bitmap in platforms) {
 					var topPlat:int = plat.y + plat.height * .35;
@@ -610,7 +611,7 @@ package
 					var playerBottom:int = player.asset.y + player.asset.height;
 					
 					if (direction == Constants.UP)
-					{					
+					{
 						if (player.asset.y <= bottomPlat && player.asset.y >= topPlat && 
 							playerRight >= leftPlat && playerLeft <= rightPlat) {
 							// bounce player off
@@ -621,11 +622,11 @@ package
 					} 
 					else if (direction == Constants.DOWN)
 					{
-						trace("player.y: " + playerBottom);
 						if (playerBottom >= topPlat && playerTop <= bottomPlat &&
 							playerRight >= leftPlat && playerLeft <= rightPlat) {
-							player.asset.y = plat.y - plat.height;
+							player.asset.y = topPlat - player.asset.height;
 							player.inAir = false;
+							player.onPlatform = true;
 						}
 					}
 				}
@@ -904,8 +905,8 @@ package
 		{
 			for each (var tile:IntPair in getPlayerTiles())
 			{
-				for each (var platform:Bitmap in platforms) {
-					if (platform.x >= tile.x * board.tileSideLength && platform.x <= (tile.x + 1) * board.tileSideLength &&
+				for each (var platform:Bitmap in platforms) {					
+					if ((platform.x >= tile.x * board.tileSideLength || platform.x <= (tile.x + 1) * board.tileSideLength) &&
 						platform.y >= tile.y * board.tileSideLength && platform.y <= (tile.y + 1) * board.tileSideLength)
 						return true;
 				}
