@@ -11,11 +11,8 @@ package model.player
 		[Embed(source = "../../../assets/art/player/pig.png")]
 		private var playerArt:Class;
 		
-		[Embed(source = "../../../assets/art/player/player2.png")]
-		private var player2Art:Class;
-		
 		public var energy:int = 0;
-		public var character:Bitmap;
+		private var m_asset:Bitmap;
 		public var speedX:Number = 5;
 		public var upSpeedY:Number = 8; // Speed on ladder
 		public var downSpeedY:Number = 5; // Speed on ladder
@@ -24,16 +21,17 @@ package model.player
 		
 		public var startingHeight:int = 0;
 		
-		public var dy:Number = 0;
+		public var dy:Number;
 		
 		public function Player() 
 		{
-			character = new playerArt();
+			m_asset = new playerArt();
+			dy = 0;
 		}
 		
 		public function updatePosition(tileSize:int):void
 		{
-			character.y = character.y + dy * tileSize;
+			m_asset.y = m_asset.y + dy * tileSize;
 			dy = Math.min(dy + Constants.GRAVITY, Constants.TERMINAL_VELOCITY);
 		}
 		
@@ -42,10 +40,9 @@ package model.player
 			dy = Math.min(value, Constants.TERMINAL_VELOCITY);
 		}
 		
-		public function changeCharacter():void
+		public function get asset():Bitmap
 		{
-			character = new player2Art();
+			return m_asset;
 		}
 	}
-
 }

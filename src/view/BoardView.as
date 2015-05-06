@@ -5,6 +5,7 @@ package view
 	import flash.utils.Dictionary;
 	import model.button.Button;
 	import model.levelHandling.Board;
+	import model.player.Crate;
 	import util.IntPair;
 	/**
 	 * A Sprite containing all the static tiles
@@ -121,7 +122,16 @@ package view
 					{
 						m_platformEnd[id] = new IntPair(x, y);
 					}
-					var asset:Bitmap = getAssetBitmap(id);
+					if (id == Constants.CRATE)
+					{
+						var crate:Crate = new Crate();
+						board.crates.push(crate);
+						var asset:Bitmap = crate.asset;
+					}
+					else
+					{
+						asset = getAssetBitmap(id);
+					}
 					if (asset)
 					{
 						asset.width = tileSideLength;

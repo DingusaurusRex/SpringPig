@@ -14,6 +14,7 @@ package model.levelHandling
 		private var m_height:int;
 		private var m_board:Array;
 		private var m_signs:Array;
+		public var crates:Array;
 		
 		private var m_tileSideLength:int;			// The length of the side of a single tile (in pixels)
 		private var m_boardWidthInPixels:int;		// The total width of the board portion of the screen (in pixels)
@@ -25,6 +26,7 @@ package model.levelHandling
 			m_height = level.height;
 			m_board = level.board_array;
 			m_signs = level.signs;
+			crates = new Array();
 			
 			var tileWidth:int = Constants.BOARD_WIDTH / m_width;
 			var tileHeight:int = Constants.BOARD_HEIGHT / m_height;
@@ -102,7 +104,6 @@ package model.levelHandling
 				}
 			}
 			return gates;
-			
 		}
 		
 		/**
