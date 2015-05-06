@@ -234,6 +234,8 @@ import flash.display.Sprite;
 import flash.events.MouseEvent;
 import flash.text.TextField;
 
+import util.GameState;
+
 class MainMenu extends Sprite {
     private var title:TextField;
     private var startButton:SimpleButton;
@@ -429,7 +431,7 @@ class LevelSelectMenu extends Sprite {
     public function regeneratePages():void {
         removeChildren();
 
-        var levels:int = Menu.game.progression.length;
+        var levels:int = GameState.getPlayerOverallProgress();
         var levelsPerPage:int = Constants.LEVEL_SELECT_ROWS * Constants.LEVEL_SELECT_COLUMNS;
         totalPages = levels / levelsPerPage;
         if (levels % levelsPerPage != 0) {
