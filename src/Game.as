@@ -175,7 +175,7 @@ package
 				displaySign();
 				updateCrates();
 				var wasInAir:Boolean = player.inAir;
-				checkCollision(Constants.DOWN); // Sets player.inAir
+				checkPlayerCollision(Constants.DOWN); // Sets player.inAir
 				// Check if the player has started falling. If so, get his starting height in order to later calculate energy gained.
 				if (player.inAir && !wasInAir) {
 					player.startingHeight = getYPositionOfPlayer();
@@ -186,7 +186,7 @@ package
 				if (keyUp && !player.inAir) {
 					if (collidingWithLadder()) { // Go up the ladder
 						player.asset.y -= player.upSpeedY;
-						checkCollision(Constants.UP);
+						checkPlayerCollision(Constants.UP);
 					} else { // Jump
 						player.velocity = Constants.JUMP_VELOCITIES[1];
 						player.inAir = true;
@@ -199,13 +199,13 @@ package
 				if (keyRight) {
 					if (player.asset.x < board.boardWidthInPixels) {
 						player.inAir ? player.asset.x += player.airSpeedX : player.asset.x += player.speedX;
-						checkCollision(Constants.RIGHT);
+						checkPlayerCollision(Constants.RIGHT);
 					}						
 				}
 				if (keyLeft) {
 					if (player.asset.x > 0) {
 						player.inAir ? player.asset.x -= player.airSpeedX : player.asset.x -= player.speedX;
-						checkCollision(Constants.LEFT);
+						checkPlayerCollision(Constants.LEFT);
 					}
 				}
 				if (keySpace && !player.inAir && !ladderBelowPlayer()) {
@@ -225,8 +225,8 @@ package
 						player.velocity = Constants.INITIAL_FALL_VELOCITY;
 					}
 					
-					checkCollision(Constants.UP);
-					checkCollision(Constants.DOWN); // Sets player.inAir
+					checkPlayerCollision(Constants.UP);
+					checkPlayerCollision(Constants.DOWN); // Sets player.inAir
 					if (!player.inAir) { // If player was in air and no longer is, add energy
 						player.velocity = 0;
 						if (!collidingWithLadder()) { // Dont add energy if you fall on ladder
@@ -247,7 +247,7 @@ package
 			}
 		}
 		
-		private function checkCollision(direction:int):void
+		private function checkPlayerCollision(direction:int):void
 		{
 			switch(direction)
 			{
@@ -471,8 +471,8 @@ package
 			{
 				case Constants.DOWN:
 					crate.inAir = true;
-					if (collideWithPlatform(direction))
-						break;
+					//if (collideWithPlatform(direction))
+						//break;
 					for each (var tile:IntPair in getTilesInDirection(crate, Constants.DOWN)) {
 						var id:int = board.getTile(tile.x, tile.y);
 						if (tile.x * board.tileSideLength != crate.asset.x + crate.asset.width) {
@@ -919,6 +919,7 @@ package
 		{
 			if (id == Constants.LAVA) {
 				resetPlayer();
+				resetCrates();
 			}
 			return id == Constants.LAVA;
 		}
