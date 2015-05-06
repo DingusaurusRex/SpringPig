@@ -1,6 +1,7 @@
 package model.player 
 {
 	import flash.display.Bitmap;
+	import util.IntPair;
 	/**
 	 * ...
 	 * @author Jack
@@ -13,6 +14,7 @@ package model.player
 		private var m_asset:Bitmap;
 		public var inAir:Boolean = false;
 		public var dy:Number = 0;
+		public var startingPos:IntPair;
 		
 		public function Crate() 
 		{
@@ -35,6 +37,13 @@ package model.player
 		public function get asset():Bitmap
 		{
 			return m_asset;
+		}
+		
+		public function reset():void
+		{
+			asset.x = startingPos.x;
+			asset.y = startingPos.y;
+			dy = 0;
 		}
 		
 	}

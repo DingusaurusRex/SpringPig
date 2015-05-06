@@ -126,6 +126,7 @@ package view
 					if (id == Constants.CRATE)
 					{
 						var crate:Crate = new Crate();
+						crate.startingPos = new IntPair(x * tileSideLength, y * tileSideLength);
 						board.crates.push(crate);
 						var asset:Bitmap = crate.asset;
 					}

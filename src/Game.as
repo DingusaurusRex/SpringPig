@@ -213,6 +213,7 @@ package
 				}
 				if (keyR) {
 					resetPlayer();
+					resetCrates();
 				}
 				
 				if (player.inAir || collidingWithLadder()) {
@@ -941,6 +942,14 @@ package
 			
 			Stopwatch.reset();
 			Stopwatch.start();
+		}
+		
+		private function resetCrates():void
+		{
+			for each (var crate:Crate in board.crates)
+			{
+				crate.reset();
+			}
 		}
 		
 		private function isClosedGate(id:int):Boolean
