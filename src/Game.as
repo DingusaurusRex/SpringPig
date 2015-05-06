@@ -511,7 +511,7 @@ package
 			{
 				case Constants.RIGHT:
 					// If colliding with a crate, move the crate
-					if (collidingWithCrate(crate))
+					if (collidingWithCrate(crate) || crate.asset.x + crate.asset.width >= board.boardWidthInPixels)
 					{
 						return true;
 					}
@@ -536,7 +536,7 @@ package
 					break;
 				case Constants.LEFT:
 					// If colliding with a crate, move the crate
-					if (collidingWithCrate(crate))
+					if (collidingWithCrate(crate) || crate.asset.x <= 0)
 					{
 						return true;
 					}
