@@ -263,7 +263,13 @@ package
 					if (collidingWithCrate(player))
 					{
 						var crate:Crate = getCollidingCrate(player);
-						crate.asset.x += Constants.PLAYERX;
+						crate.asset.x += Constants.CRATEX;
+						player.inAir ? player.asset.x -= player.airSpeedX - Constants.CRATEX : player.asset.x -= player.speedX - Constants.CRATEX;
+						if (checkCrateCollision(crate, Constants.RIGHT))
+						{
+							crate.asset.x -= Constants.CRATEX;
+							player.asset.x -= Constants.CRATEX;
+						}
 					}
 					// If you ran into a wall, keep the player in the previous square
 					for each (var tile:IntPair in getTilesInDirection(player, Constants.RIGHT))
@@ -284,7 +290,13 @@ package
 					if (collidingWithCrate(player))
 					{
 						crate = getCollidingCrate(player);
-						crate.asset.x -= Constants.PLAYERX;
+						crate.asset.x -= Constants.CRATEX;
+						player.inAir ? player.asset.x += player.airSpeedX - Constants.CRATEX : player.asset.x += player.speedX - Constants.CRATEX;
+						if (checkCrateCollision(crate, Constants.LEFT))
+						{
+							crate.asset.x += Constants.CRATEX;
+							player.asset.x += Constants.CRATEX;
+						}
 					}
 					// If you ran into a wall, keep the player in the previous square
 					for each (tile in getTilesInDirection(player, Constants.LEFT))
@@ -493,16 +505,66 @@ package
 			}
 		}
 		
-		public function checkCrateCollision(crate:Crate, direction:int):void
+		public function checkCrateCollision(crate:Crate, direction:int):Boolean
 		{
 			switch (direction)
 			{
+				case Constants.RIGHT:
+					// If colliding with a crate, move the crate
+					if (collidingWithCrate(crate))
+					{
+						return true;
+					}
+					// If you ran into a wall, keep the player in the previous square
+					for each (var tile:IntPair in getTilesInDirection(crate, Constants.RIGHT))
+					{
+						var id:int = board.getTile(tile.x, tile.y);
+						if (isButton(id) && collidingWithButton(crate, tile))
+						{
+							setButtonDown(board, id);
+						}
+						if (id == Constants.WALL ||
+						    id == Constants.LADDER ||
+							id == Constants.LAVA ||
+							id == Constants.END ||
+							id == Constants.TRAMP ||
+							isClosedGate(id))
+						{
+							return true;
+						}
+					}
+					break;
+				case Constants.LEFT:
+					// If colliding with a crate, move the crate
+					if (collidingWithCrate(crate))
+					{
+						return true;
+					}
+					// If you ran into a wall, keep the player in the previous square
+					for each (tile in getTilesInDirection(crate, Constants.LEFT))
+					{
+						id = board.getTile(tile.x, tile.y);
+						if (isButton(id) && collidingWithButton(crate, tile))
+						{
+							setButtonDown(board, id);
+						}
+						if (id == Constants.WALL ||
+						    id == Constants.LADDER ||
+							id == Constants.LAVA ||
+							id == Constants.END ||
+							id == Constants.TRAMP ||
+							isClosedGate(id))
+						{
+							return true;
+						}
+					}
+					break;
 				case Constants.DOWN:
 					crate.inAir = true;
 					//if (collideWithPlatform(direction))
 						//break;
-					for each (var tile:IntPair in getTilesInDirection(crate, Constants.DOWN)) {
-						var id:int = board.getTile(tile.x, tile.y);
+					for each (tile in getTilesInDirection(crate, Constants.DOWN)) {
+						id = board.getTile(tile.x, tile.y);
 						if (tile.x * board.tileSideLength != crate.asset.x + crate.asset.width) {
 							if (isButton(id) && collidingWithButton(crate, tile)) {
 								setButtonDown(board, id);
@@ -530,6 +592,7 @@ package
 				default:
 					break;
 			}
+			return false;
 		}
 		
 		/**

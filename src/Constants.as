@@ -148,6 +148,7 @@ package
 		public static const GRAVITY:Number = .03;				// change in blocks / update ^2
 		
 		public static const PLAYERX:Number = 5;
+		public static const CRATEX:Number = 2;
 		
 		
 		/*
