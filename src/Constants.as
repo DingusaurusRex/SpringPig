@@ -147,6 +147,8 @@ package
 		public static const TERMINAL_VELOCITY:Number = 1;		// Maximum Velocity (game might break if exceeded)
 		public static const GRAVITY:Number = .03;				// change in blocks / update ^2
 		
+		public static const PLAYERX:Number = 5;
+		
 		
 		/*
 		 * Menu Values

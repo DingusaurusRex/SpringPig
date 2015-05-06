@@ -259,6 +259,12 @@ package
 			switch(direction)
 			{
 				case Constants.RIGHT:
+					// If colliding with a crate, move the crate
+					if (collidingWithCrate(player))
+					{
+						var crate:Crate = getCollidingCrate(player);
+						crate.asset.x += Constants.PLAYERX;
+					}
 					// If you ran into a wall, keep the player in the previous square
 					for each (var tile:IntPair in getTilesInDirection(player, Constants.RIGHT))
 					{
@@ -274,6 +280,12 @@ package
 					}
 					break;
 				case Constants.LEFT:
+					// If colliding with a crate, move the crate
+					if (collidingWithCrate(player))
+					{
+						crate = getCollidingCrate(player);
+						crate.asset.x -= Constants.PLAYERX;
+					}
 					// If you ran into a wall, keep the player in the previous square
 					for each (tile in getTilesInDirection(player, Constants.LEFT))
 					{
@@ -307,9 +319,9 @@ package
 					player.inAir = true;
 					if (collideWithPlatform(direction))
 						break;
-					else if (collidingWithCrate(player))
+					else if (standingOnCrate(player))
 					{
-						var crate:Crate = getCollidingCrate(player);
+						crate = getCollidingCrate(player);
 						player.asset.y = (int) (crate.asset.y - player.asset.height);
 						player.velocity = 0;
 						player.inAir = false;
@@ -616,6 +628,38 @@ package
 		}
 		
 		/**
+		 * Returns whether the given object is standing on a crate
+		 * @param	obj
+		 * @return
+		 */
+		private function standingOnCrate(obj:PhysicsObject):Boolean
+		{
+			var objLeft:Number = obj.asset.x + 1;
+			var objRight:Number = obj.asset.x + obj.asset.width - 1;
+			var objTop:Number = obj.asset.y;
+			var objBottom:Number = obj.asset.y + obj.asset.height;
+			
+			for each (var crate:Crate in board.crates)
+			{
+				if (obj != crate)
+				{
+					var crateLeft:Number = crate.asset.x;
+					var crateRight:Number = crate.asset.x + crate.asset.width;
+					var crateTop:Number = crate.asset.y;
+					var crateBottom:Number = crate.asset.y + crate.asset.height;
+					if ((objLeft >= crateLeft && objLeft <= crateRight ||
+						objRight >= crateLeft && objRight <= crateRight) &&
+						(objTop >= crateTop && objTop <= crateBottom ||
+						objBottom >= crateTop && objBottom <= crateBottom))
+						{
+							return true;
+						}
+				}
+			}
+			return false;
+		}
+		
+		/**
 		 * Returns whether the given object is colliding with a crate
 		 * @param	obj
 		 * @return
@@ -624,8 +668,8 @@ package
 		{
 			var objLeft:Number = obj.asset.x + 1;
 			var objRight:Number = obj.asset.x + obj.asset.width - 1;
-			var objTop:Number = obj.asset.y;
-			var objBottom:Number = obj.asset.y + obj.asset.height;
+			var objTop:Number = obj.asset.y + 1;
+			var objBottom:Number = obj.asset.y + obj.asset.height - 1;
 			
 			for each (var crate:Crate in board.crates)
 			{
