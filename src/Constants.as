@@ -28,6 +28,7 @@ package
 		// Sign Colors
 		public static const SIGN_BORDER_COLOR:uint = 0x000000;
 		public static const SIGN_BACKGROUND_COLOR:uint = 0xffffff;
+		public static const SIGN_FONT_SIZE:int = 15;
 		
 		/**
 		 * Screen Values
@@ -82,6 +83,7 @@ package
 		public static const LAVA:int = 2;
 		public static const TRAMP:int = 3;
 		public static const LADDER:int = 4;
+		public static const CRATE:int = 5;
 		
 		public static const START:int = 10;
 		public static const END:int = 11;

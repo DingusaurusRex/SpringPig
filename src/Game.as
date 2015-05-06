@@ -17,6 +17,8 @@ package
 	import model.button.Gate;
 	import model.levelHandling.Board;
 	import model.levelHandling.LevelParser;
+	import model.player.Crate;
+	import model.player.PhysicsObject;
 	import model.player.Player;
 	import util.IntPair;
 	import util.Stopwatch;
@@ -113,11 +115,11 @@ package
 			
 			// Position the player
 			var playerStart:IntPair = boardSprite.getPlayerStart(); // Top right of the square
-			player.character.height = (int) (board.tileSideLength * 3.0 / 4.0);
-			player.character.width = (int) (board.tileSideLength * 3.0 / 4.0);
-			player.character.x = playerStart.x;
-			player.character.y = playerStart.y + board.tileSideLength - player.character.height;
-			playerStart.y = player.character.y;
+			player.asset.height = (int) (board.tileSideLength * 3.0 / 4.0);
+			player.asset.width = (int) (board.tileSideLength * 3.0 / 4.0);
+			player.asset.x = playerStart.x;
+			player.asset.y = playerStart.y + board.tileSideLength - player.asset.height;
+			playerStart.y = player.asset.y;
 			player.energy = 0;
 			meter.energy = player.energy;
 			
@@ -130,7 +132,7 @@ package
 			stage.addChild(boardSprite);
 			stage.addChild(meter);
 			stage.addChild(Stopwatch.stopwatchText);
-			stage.addChild(player.character);
+			stage.addChild(player.asset);
 			
 			// Create Listeners
 			stage.addEventListener(KeyboardEvent.KEY_DOWN, onKeyDown);
@@ -166,11 +168,12 @@ package
 				// Update the stopwatch
 				Stopwatch.updateStopwatchText();
 				
-				boardSprite.movePlatforms(board);
+				boardSprite.movePlatforms(player, board);
 				platforms = boardSprite.platforms;
 				
 				popButtonsUp();
 				displaySign();
+				updateCrates();
 				var wasInAir:Boolean = player.inAir;
 				checkCollision(Constants.DOWN); // Sets player.inAir
 				// Check if the player has started falling. If so, get his starting height in order to later calculate energy gained.
@@ -182,7 +185,7 @@ package
 				// Process Keyboard controls
 				if (keyUp && !player.inAir) {
 					if (collidingWithLadder()) { // Go up the ladder
-						player.character.y -= player.upSpeedY;
+						player.asset.y -= player.upSpeedY;
 						checkCollision(Constants.UP);
 					} else { // Jump
 						player.velocity = Constants.JUMP_VELOCITIES[1];
@@ -191,17 +194,17 @@ package
 					}
 				}
 				if (keyDown && ladderBelowPlayer()) {
-					player.character.y += player.downSpeedY;
+					player.asset.y += player.downSpeedY;
 				}
 				if (keyRight) {
-					if (player.character.x < board.boardWidthInPixels) {
-						player.inAir ? player.character.x += player.airSpeedX : player.character.x += player.speedX;
+					if (player.asset.x < board.boardWidthInPixels) {
+						player.inAir ? player.asset.x += player.airSpeedX : player.asset.x += player.speedX;
 						checkCollision(Constants.RIGHT);
 					}						
 				}
 				if (keyLeft) {
-					if (player.character.x > 0) {
-						player.inAir ? player.character.x -= player.airSpeedX : player.character.x -= player.speedX;
+					if (player.asset.x > 0) {
+						player.inAir ? player.asset.x -= player.airSpeedX : player.asset.x -= player.speedX;
 						checkCollision(Constants.LEFT);
 					}
 				}
@@ -215,9 +218,9 @@ package
 				if (player.inAir || collidingWithLadder()) {
 					player.updatePosition(board.tileSideLength);
 					
-					if (player.character.y <= 0) {
+					if (player.asset.y <= 0) {
 						player.startingHeight = getYPositionOfPlayer();
-						player.character.y = 0;
+						player.asset.y = 0;
 						player.velocity = Constants.INITIAL_FALL_VELOCITY;
 					}
 					
@@ -249,58 +252,60 @@ package
 			{
 				case Constants.RIGHT:
 					// If you ran into a wall, keep the player in the previous square
-					for each (var tile:IntPair in getTilesOnPlayerRight())
+					for each (var tile:IntPair in getTilesInDirection(player, Constants.RIGHT))
 					{
 						var id:int = board.getTile(tile.x, tile.y);
 						checkLavaHit(id);
-						if (isButton(id) && collidingWithButton(tile)) {
+						if (isButton(id) && collidingWithButton(player, tile)) {
 							setButtonDown(board, id);
 						}
 						if (id == Constants.WALL || isClosedGate(id))
 						{
-							player.character.x = tile.x * board.tileSideLength - player.character.width;
+							player.asset.x = tile.x * board.tileSideLength - player.asset.width;
 						}
 					}
 					break;
 				case Constants.LEFT:
 					// If you ran into a wall, keep the player in the previous square
-					for each (tile in getTilesOnPlayerLeft())
+					for each (tile in getTilesInDirection(player, Constants.LEFT))
 					{
 						id = board.getTile(tile.x, tile.y);
 						checkLavaHit(id);
-						if (isButton(id) && collidingWithButton(tile)) {
+						if (isButton(id) && collidingWithButton(player, tile)) {
 							setButtonDown(board, id);
 						}
 						if (id == Constants.WALL || isClosedGate(id))
 						{
-							player.character.x = (tile.x + 1) * board.tileSideLength;
+							player.asset.x = (tile.x + 1) * board.tileSideLength;
 						}
 					}
 					break;
 				case Constants.UP:
 					//Check that the user has not crashed into a wall above him
-					for each (tile in getTilesAbovePlayer()) {
+					for each (tile in getTilesInDirection(player, Constants.UP)) {
 						id = board.getTile(tile.x, tile.y);
-						if (tile.x * board.tileSideLength != player.character.x + player.character.width) {
+						if (tile.x * board.tileSideLength != player.asset.x + player.asset.width) {
 							checkLavaHit(id);
 							if (id == Constants.WALL || isClosedGate(id)) {
 								player.startingHeight = getYPositionOfPlayer()
-								player.character.y = (tile.y + 1) * board.tileSideLength;
+								player.asset.y = (tile.y + 1) * board.tileSideLength;
 								player.velocity = Constants.INITIAL_FALL_VELOCITY;
 							}
 						}
 					}
-					collideWithPlatform(Constants.UP);
+					collideWithPlatform(direction);
 				case Constants.DOWN:
 					player.inAir = true;
-					for each (tile in getTilesBelowPlayer()) {
+					if (collideWithPlatform(direction))
+						break;
+					for each (tile in getTilesInDirection(player, Constants.DOWN)) {
 						id = board.getTile(tile.x, tile.y);
-						if (tile.x * board.tileSideLength != player.character.x + player.character.width) {
+						if (tile.x * board.tileSideLength != player.asset.x + player.asset.width) {
 							if (checkLavaHit(id)) {
 								player.inAir = false;
 								break;
 							}
-							if (isButton(id) && collidingWithButton(tile)) {
+							if (isButton(id) && collidingWithButton(player, tile)) {
 								setButtonDown(board, id);
 							}
 							else if (id == Constants.LADDER) {
@@ -311,13 +316,13 @@ package
 								// Only check if they are close to the top when they are climbing UP the ladder.
 								// When player is falling, he should fall on top of ladder every time.
 								// When a player is deliberately pressing down, they should not get y position reset
-								var closeToTop:Boolean = Math.abs(player.character.y + player.character.height - (tile.y * board.tileSideLength)) <= player.downSpeedY;
+								var closeToTop:Boolean = Math.abs(player.asset.y + player.asset.height - (tile.y * board.tileSideLength)) <= player.downSpeedY;
 								if (player.dy > 0)
 									closeToTop = true;
 								if ((tileAboveLadder == Constants.EMPTY || tileAboveLadder == Constants.START || tileAboveLadder == Constants.END)
 									&& tileAboveLadder != -1 && closeToTop && !keyDown)
 								{
-									player.character.y = (int) (tile.y * board.tileSideLength - player.character.height);
+									player.asset.y = (int) (tile.y * board.tileSideLength - player.asset.height);
 								}
 								player.inAir = false;
 							}
@@ -329,7 +334,7 @@ package
 									 !isButton(id) && 
 									!isOpenGate(id) &&
 									!isMovingPlatformStartOrEnd(id)) {
-								player.character.y = (int) (tile.y * board.tileSideLength - player.character.height);
+								player.asset.y = (int) (tile.y * board.tileSideLength - player.asset.height);
 								
 								player.inAir = false;
 							}
@@ -384,29 +389,6 @@ package
 				meter.energy = player.energy;
 		}
 		
-		private function collideWithPlatform(direction:int):void
-		{
-			for each (var plat:Bitmap in platforms) {
-				if (direction == Constants.UP) {
-					var topPlat:int = plat.y + plat.height * .35;
-					var bottomPlat:int = plat.y + plat.height * .6;
-					var rightPlat:int = plat.x + plat.width;
-					var leftPlat:int = plat.x;
-					trace("player.y: " + player.character.y);
-					trace("topPlat: " + topPlat);
-					trace("bottomPlat: " + bottomPlat);
-					
-					if (player.character.y <= bottomPlat && player.character.y >= topPlat && 
-						player.character.x >= leftPlat && player.character.x <= rightPlat) {
-						// bounce player off
-						player.startingHeight = getYPositionOfPlayer()
-						player.character.y = plat.y + plat.height * .6;
-						player.velocity = Constants.INITIAL_FALL_VELOCITY;
-					}
-				}
-			}
-		}
-		
 		/**
 		 * Returns whether the user is colliding with a ladder
 		 * @return
@@ -426,7 +408,7 @@ package
 		 */
 		private function trampBelowPlayer():Boolean
 		{
-			for each (var tile:IntPair in getTilesBelowPlayer()) {
+			for each (var tile:IntPair in getTilesInDirection(player, Constants.DOWN)) {
 				if (board.getTile(tile.x, tile.y) == Constants.TRAMP) 
 					return true;
 			}
@@ -473,6 +455,52 @@ package
 			}
 		}
 		
+		public function updateCrates():void
+		{
+			for each (var crate:Crate in board.crates)
+			{
+				crate.updatePosition(board.tileSideLength);
+				checkCrateCollision(crate, Constants.DOWN);
+			}
+		}
+		
+		public function checkCrateCollision(crate:Crate, direction:int):void
+		{
+			switch (direction)
+			{
+				case Constants.DOWN:
+					crate.inAir = true;
+					if (collideWithPlatform(direction))
+						break;
+					for each (var tile:IntPair in getTilesInDirection(crate, Constants.DOWN)) {
+						var id:int = board.getTile(tile.x, tile.y);
+						if (tile.x * board.tileSideLength != crate.asset.x + crate.asset.width) {
+							if (isButton(id) && collidingWithButton(crate, tile)) {
+								setButtonDown(board, id);
+							}
+							// If one of the tiles below player is not empty, then player is not falling
+							else if (id != Constants.EMPTY &&
+									 id != Constants.START &&
+									 id != Constants.END &&
+									 !isButton(id) && 
+									!isOpenGate(id) &&
+									!isMovingPlatformStartOrEnd(id)) {
+								crate.asset.y = (int) (tile.y * board.tileSideLength - crate.asset.height);
+								crate.velocity = 0;
+								crate.inAir = false;
+							}
+						}
+					}
+					break;
+				default:
+					break;
+			}
+		}
+		
+		/**
+		 * Determines if the player is on any signs and displays thier text if so.
+		 * Removes the displayed text if there is one and the player is not on a sign.
+		**/
 		public function displaySign():void
 		{
 			var found:Boolean = false;
@@ -493,6 +521,9 @@ package
 						signText.borderColor = Constants.SIGN_BORDER_COLOR;
 						signText.wordWrap = true;
 						signText.autoSize = TextFieldAutoSize.LEFT
+						var format:TextFormat = signText.getTextFormat()
+						format.size = Constants.SIGN_FONT_SIZE;
+						signText.setTextFormat(format);
 						stage.addChild(signText);
 					}
 				}
@@ -512,8 +543,22 @@ package
 			var popupButtonsTouched:Vector.<int> = new Vector.<int>();
 			for each (var tile:IntPair in getPlayerTiles()) {
 				var id:int = board.getTile(tile.x, tile.y);
-				if (isPopupButton(id) && collidingWithButton(tile)) {
-					popupButtonsTouched.push(id);
+				if (isPopupButton(id))
+				{
+					if (collidingWithButton(player, tile)) {
+						popupButtonsTouched.push(id);
+					}
+					else
+					{
+						for each (var crate:Crate in board.crates)
+						{
+							if (collidingWithButton(crate, tile))
+							{
+								popupButtonsTouched.push(id);
+								break;
+							}
+						}
+					}
 				}
 			}
 			
@@ -531,20 +576,61 @@ package
 		 * @param	tile
 		 * @return
 		 */
-		private function collidingWithButton(tile:IntPair):Boolean
+		private function collidingWithButton(obj:PhysicsObject, tile:IntPair):Boolean
 		{
 			var result:Boolean = false;
-			var playerLeft:Number = player.character.x + player.character.width * .25;
-			var playerRight:Number = player.character.x + player.character.width * .75;
-			var playerY:Number = player.character.y + player.character.height;
+			var objLeft:Number = obj.asset.x + obj.asset.width * .25;
+			var objRight:Number = obj.asset.x + obj.asset.width * .75;
+			var objY:Number = obj.asset.y + obj.asset.height;
 			var tileLeft:Number = tile.x * board.tileSideLength + board.tileSideLength * .15;
 			var tileRight:Number = tile.x * board.tileSideLength + board.tileSideLength * .85;
 			var tileTop:Number = tile.y * board.tileSideLength + board.tileSideLength * .85;
 			var tileBottom:Number = tile.y * board.tileSideLength + board.tileSideLength;
-			if (playerLeft <= tileRight && playerRight >= tileLeft && playerY >= tileTop && playerY <= tileBottom) {
+			if (objLeft <= tileRight && objRight >= tileLeft && objY >= tileTop && objY <= tileBottom) {
 				result = true;
 			}
 			return result;
+		}
+		
+		/**
+		 * Collide with a platform, given a direction
+		 * @param	direction
+		 */
+		private function collideWithPlatform(direction:int):void
+		{
+			player.onPlatform = false;
+			if (isPlatformInPlayerTile()) { // Check that a platform is in a player's tile
+				for each (var plat:Bitmap in platforms) {
+					var topPlat:int = plat.y;
+					var bottomPlat:int = plat.y + plat.height * .35;
+					var rightPlat:int = plat.x + plat.width;
+					var leftPlat:int = plat.x;
+					var playerLeft:int = player.asset.x + player.asset.width * .25;
+					var playerRight:int = player.asset.x + player.asset.width * .75;
+					var playerTop:int = player.asset.y;
+					var playerBottom:int = player.asset.y + player.asset.height;
+					
+					if (direction == Constants.UP)
+					{
+						if (player.asset.y <= bottomPlat && player.asset.y >= topPlat && 
+							playerRight >= leftPlat && playerLeft <= rightPlat) {
+							// bounce player off
+							player.startingHeight = getYPositionOfPlayer()
+							player.asset.y = plat.y + plat.height * .6;
+							player.velocity = Constants.INITIAL_FALL_VELOCITY;
+						}
+					} 
+					else if (direction == Constants.DOWN)
+					{
+						if (playerBottom >= topPlat && playerTop <= bottomPlat &&
+							playerRight >= leftPlat && playerLeft <= rightPlat) {
+							player.asset.y = topPlat - player.asset.height;
+							player.inAir = false;
+							player.onPlatform = true;
+						}
+					}
+				}
+			}
 		}
 		
 		/**
@@ -553,7 +639,7 @@ package
 		 */
 		private function ladderBelowPlayer():Boolean
 		{
-			var tiles:Vector.<IntPair> = getTilesBelowPlayer();
+			var tiles:Vector.<IntPair> = getTilesInDirection(player, Constants.DOWN);
 			var result:Boolean = false;
 			for each (var tile:IntPair in tiles) {
 				var id:int = board.getTile(tile.x, tile.y);
@@ -569,8 +655,8 @@ package
 		
 		private function isPlayerFinished():Boolean
 		{
-			var midX:int = player.character.x + board.tileSideLength / 2;
-			var midY:int = player.character.y + board.tileSideLength / 2;
+			var midX:int = player.asset.x + board.tileSideLength / 2;
+			var midY:int = player.asset.y + board.tileSideLength / 2;
 			return midX >= finishTile.x &&
 			midX <= finishTile.x + board.tileSideLength &&
 			midY >= finishTile.y &&
@@ -579,7 +665,7 @@ package
 		
 		private function getYPositionOfPlayer():int
 		{
-			return (board.boardHeightInPixels - player.character.y - player.character.height ) / board.tileSideLength;
+			return (board.boardHeightInPixels - player.asset.y - player.asset.height ) / board.tileSideLength;
 		}
 		
 		/**
@@ -634,7 +720,8 @@ package
 		private function onKeyUp(event:KeyboardEvent):void 
 		{
 			var key:uint = event.keyCode;
-			switch (key) {
+			switch (key)
+			{
 				case Keyboard.UP :
 					keyUp = false;
 					break;
@@ -663,10 +750,10 @@ package
 		 */
 		private function getPlayerTiles():Vector.<IntPair> 		
 		{			
-			var lowX:int = (int) (player.character.x / board.tileSideLength);
-			var highX:int = (int) ((player.character.x + player.character.width) / board.tileSideLength);
-			var highY:int = (int) (player.character.y / board.tileSideLength);
-			var lowY:int = (int) ((player.character.y + player.character.height - 1) / board.tileSideLength);
+			var lowX:int = (int) (player.asset.x / board.tileSideLength);
+			var highX:int = (int) ((player.asset.x + player.asset.width) / board.tileSideLength);
+			var highY:int = (int) (player.asset.y / board.tileSideLength);
+			var lowY:int = (int) ((player.asset.y + player.asset.height - 1) / board.tileSideLength);
 			
 			// Determines if any of the above values are the same (Whether the player is located inside a square or in between two or more squares)
 			var oneX:Boolean = false; 
@@ -699,15 +786,38 @@ package
 			return result;
 		}
 		
+		private function getTilesInDirection(obj:PhysicsObject, direction:int):Vector.<IntPair>
+		{
+			var result:Vector.<IntPair> = new Vector.<IntPair>();
+			switch (direction)
+			{
+				case Constants.UP:
+					result = getTilesAboveObject(obj);
+					break;
+				case Constants.DOWN:
+					result = getTilesBelowObject(obj);
+					break;
+				case Constants.RIGHT:
+					result = getTilesOnObjectRight(obj);
+					break;
+				case Constants.LEFT:
+					result = getTilesOnObjectLeft(obj);
+					break;
+				default:
+					break;
+			}
+			return result;
+		}
+		
 		/**
 		 * Gets the tile(s) below the player, in the form of IntPairs
 		 * @return
 		 */
-		private function getTilesBelowPlayer():Vector.<IntPair>
+		private function getTilesBelowObject(obj:PhysicsObject):Vector.<IntPair>
 		{
-			var lowX:int = (int) (player.character.x / board.tileSideLength);
-			var highX:int = (int) ((player.character.x + player.character.width) / board.tileSideLength);
-			var lowY:int = (int) ((player.character.y + player.character.height) / board.tileSideLength);
+			var lowX:int = (int) (obj.asset.x / board.tileSideLength);
+			var highX:int = (int) ((obj.asset.x + obj.asset.width) / board.tileSideLength);
+			var lowY:int = (int) ((obj.asset.y + obj.asset.height) / board.tileSideLength);
 			
 			var result:Vector.<IntPair> = new Vector.<IntPair>();
 			
@@ -726,11 +836,11 @@ package
 		 * Gets the tile(s) to the right of the player, in the form of IntPairs
 		 * @return
 		 */
-		private function getTilesAbovePlayer():Vector.<IntPair>
+		private function getTilesAboveObject(obj:PhysicsObject):Vector.<IntPair>
 		{
-			var lowX:int = (int) (player.character.x / board.tileSideLength);
-			var highX:int = (int) ((player.character.x + player.character.width) / board.tileSideLength);
-			var highY:int = (int) (player.character.y / board.tileSideLength);
+			var lowX:int = (int) (obj.asset.x / board.tileSideLength);
+			var highX:int = (int) ((obj.asset.x + obj.asset.width) / board.tileSideLength);
+			var highY:int = (int) (obj.asset.y / board.tileSideLength);
 			
 			var result:Vector.<IntPair> = new Vector.<IntPair>();
 			
@@ -749,11 +859,11 @@ package
 		 * Gets the tile(s) to the right of the player, in the form of IntPairs
 		 * @return
 		 */
-		private function getTilesOnPlayerRight():Vector.<IntPair>
+		private function getTilesOnObjectRight(obj:PhysicsObject):Vector.<IntPair>
 		{
-			var highX:int = (int) ((player.character.x + player.character.width) / board.tileSideLength);
-			var lowY:int = (int) ((player.character.y + player.character.height - 1) / board.tileSideLength);
-			var highY:int = (int) (player.character.y / board.tileSideLength);
+			var highX:int = (int) ((obj.asset.x + obj.asset.width) / board.tileSideLength);
+			var lowY:int = (int) ((obj.asset.y + obj.asset.height - 1) / board.tileSideLength);
+			var highY:int = (int) (obj.asset.y / board.tileSideLength);
 		
 			var result:Vector.<IntPair> = new Vector.<IntPair>();
 			
@@ -772,11 +882,11 @@ package
 		 * Gets the tile(s) to the left of the player, in the form of IntPairs
 		 * @return
 		 */
-		private function getTilesOnPlayerLeft():Vector.<IntPair>
+		private function getTilesOnObjectLeft(obj:PhysicsObject):Vector.<IntPair>
 		{
-			var lowX:int = (int) (player.character.x / board.tileSideLength);
-			var lowY:int = (int) ((player.character.y + player.character.height - 1) / board.tileSideLength);
-			var highY:int = (int) (player.character.y / board.tileSideLength);
+			var lowX:int = (int) (obj.asset.x / board.tileSideLength);
+			var lowY:int = (int) ((obj.asset.y + obj.asset.height - 1) / board.tileSideLength);
+			var highY:int = (int) (obj.asset.y / board.tileSideLength);
 			
 			var result:Vector.<IntPair> = new Vector.<IntPair>();
 			
@@ -791,6 +901,19 @@ package
 			return result;
 		}
 		
+		private function isPlatformInPlayerTile():Boolean
+		{
+			for each (var tile:IntPair in getPlayerTiles())
+			{
+				for each (var platform:Bitmap in platforms) {					
+					if ((platform.x >= tile.x * board.tileSideLength || platform.x <= (tile.x + 1) * board.tileSideLength) &&
+						platform.y >= tile.y * board.tileSideLength && platform.y <= (tile.y + 1) * board.tileSideLength)
+						return true;
+				}
+			}
+			return false;
+		}
+		
 		private function checkLavaHit(id:int):Boolean
 		{
 			if (id == Constants.LAVA) {
@@ -801,8 +924,8 @@ package
 		
 		private function resetPlayer():void
 		{
-			player.character.x = playerStart.x;
-			player.character.y = playerStart.y;
+			player.asset.x = playerStart.x;
+			player.asset.y = playerStart.y;
 			player.energy = 0;
 			player.velocity = 0;
 			meter.energy = player.energy;
