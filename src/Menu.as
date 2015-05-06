@@ -96,6 +96,7 @@ package
 			switch (key)
 			{
 				case Keyboard.SPACE:
+					stage.removeEventListener(KeyboardEvent.KEY_DOWN, Menu.onKeyDown);
 					stage.removeChild(endLevelMenu);
 					game.startNextLevel();
 					break;
@@ -133,6 +134,8 @@ package
 		
 		public static function onMainMenuClick(event:MouseEvent):void
 		{
+			
+			stage.removeEventListener(KeyboardEvent.KEY_DOWN, Menu.onKeyDown);
 			createMainMenu();
 		}
 		
@@ -143,12 +146,15 @@ package
 		
 		public static function onNextLevelClick(event:MouseEvent):void
 		{
+			stage.removeEventListener(KeyboardEvent.KEY_DOWN, Menu.onKeyDown);
 			stage.removeChild(endLevelMenu);
 			game.startNextLevel();
 		}
 		
 		public static function onRestartLevelClick(event:MouseEvent):void
 		{
+			
+			stage.removeEventListener(KeyboardEvent.KEY_DOWN, Menu.onKeyDown);
 			stage.removeChild(endLevelMenu);
 			game.restartLevel();
 		}
