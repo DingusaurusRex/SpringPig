@@ -6,6 +6,7 @@ package view
 	import model.button.Button;
 	import model.levelHandling.Board;
 	import model.player.Crate;
+	import model.player.Player;
 	import util.IntPair;
 	/**
 	 * A Sprite containing all the static tiles
@@ -271,10 +272,11 @@ package view
 		}
 		
 		/**
-		 * Move the platforms in the direction they are supposed to move in
+		 * Move the platforms in the direction they are supposed to move in.
+		 * Moves player if he is on a platform
 		 * @param	id
 		 */
-		public function movePlatforms(board:Board):void
+		public function movePlatforms(player:Player, board:Board):void
 		{
 			for (var key:Object in m_platformArts) {
 				var id:int = int(key);
@@ -287,6 +289,9 @@ package view
 				if (dir == Constants.RIGHT && platform.x < (end.x * board.tileSideLength)) 
 				{
 					platform.x += Constants.PLATFORM_SPEED;
+					if (player.onPlatform) {
+						player.asset.x += Constants.PLATFORM_SPEED;
+					}
 					if (platform.x >= (end.x * board.tileSideLength)) {
 						m_platformDirs[id] = Constants.LEFT;
 					}
@@ -294,6 +299,9 @@ package view
 				else if (dir == Constants.LEFT && platform.x > (start.x * board.tileSideLength)) 
 				{
 					platform.x -= Constants.PLATFORM_SPEED;
+					if (player.onPlatform) {
+						player.asset.x -= Constants.PLATFORM_SPEED;
+					}
 					if (platform.x <= (start.x * board.tileSideLength)) {
 						m_platformDirs[id] = Constants.RIGHT;
 					}

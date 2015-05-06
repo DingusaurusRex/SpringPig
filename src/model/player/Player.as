@@ -18,6 +18,7 @@ package model.player
 		public var downSpeedY:Number = 5; // Speed on ladder
 		public var airSpeedX:Number = 5;
 		public var inAir:Boolean = false;
+		public var onPlatform:Boolean = false;
 		
 		public var startingHeight:int = 0;
 		
