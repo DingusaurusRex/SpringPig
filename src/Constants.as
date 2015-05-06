@@ -28,6 +28,7 @@ package
 		// Sign Colors
 		public static const SIGN_BORDER_COLOR:uint = 0x000000;
 		public static const SIGN_BACKGROUND_COLOR:uint = 0xffffff;
+		public static const SIGN_FONT_SIZE:int = 15;
 		
 		/**
 		 * Screen Values

@@ -493,6 +493,9 @@ package
 						signText.borderColor = Constants.SIGN_BORDER_COLOR;
 						signText.wordWrap = true;
 						signText.autoSize = TextFieldAutoSize.LEFT
+						var format:TextFormat = signText.getTextFormat()
+						format.size = Constants.SIGN_FONT_SIZE;
+						signText.setTextFormat(format);
 						stage.addChild(signText);
 					}
 				}
