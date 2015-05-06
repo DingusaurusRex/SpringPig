@@ -1,4 +1,4 @@
-package 
+package
 {
 	import flash.display.Stage;
 	import flash.events.KeyboardEvent;
@@ -16,7 +16,7 @@ package
 	 * ...
 	 * @author Panji Wisesa
 	 */
-	public class Menu 
+	public class Menu
 	{
 		public static var stage:Stage;
 		public static var game:Game;
@@ -28,7 +28,7 @@ package
 		public static var endGameMenu:EndGameMenu;
 		private static var muteButton:SimpleButton;
 		private static var instructions:TextField;
-		
+
 		// TODO: Background
 		public static function Init(s:Stage, g:Game):void
 		{
@@ -41,7 +41,7 @@ package
 			endLevelMenu = new EndLevelMenu();
 			endGameMenu = new EndGameMenu();
 			muteButton = Audio.muteButton;
-			
+
 			// Instructions
 			instructions = Menu.getTextField(Constants.INSTRUCTIONS,
 			Constants.INSTRUCTIONS_HEIGHT,
@@ -52,7 +52,7 @@ package
 			Constants.INSTRUCTIONS_FONT_SIZE,
 			Constants.INSTRUCTIONS_ALIGNMENT);
 		}
-		
+
 		// Menu creation/deletion functions
 		public static function createMainMenu():void
 		{
@@ -61,7 +61,7 @@ package
 			mainMenu.addChild(instructions);
 			stage.addChild(mainMenu);
 		}
-		
+
 		public static function createPauseMenu():void
 		{
 			Stopwatch.pause();
@@ -69,7 +69,7 @@ package
 			pauseMenu.addChild(instructions);
 			stage.addChild(pauseMenu);
 		}
-		
+
 		public static function removePauseMenu():void
 		{
 			stage.removeChild(pauseMenu);
@@ -77,7 +77,7 @@ package
 			Stopwatch.start();
 			stage.focus = stage;
 		}
-		
+
 		public static function createEndLevelMenu():void
 		{
 			Stopwatch.pause();
@@ -89,7 +89,7 @@ package
 			stage.addChild(Stopwatch.stopwatchMenuText);
 			stage.addEventListener(KeyboardEvent.KEY_DOWN, Menu.onKeyDown);
 		}
-		
+
 		private static function onKeyDown(event:KeyboardEvent):void
 		{
 			var key:uint = event.keyCode;
@@ -102,7 +102,7 @@ package
 					break;
 			}
 		}
-		
+
 		public static function createEndGameMenu():void
 		{
 			Stopwatch.pause();
@@ -112,59 +112,60 @@ package
 			Stopwatch.stopwatchMenuText.y = Constants.END_GAME_STOPWATCH_TOP_PADDING;
 			stage.addChild(Stopwatch.stopwatchMenuText);
 		}
-		
+
 		// Event functions
 		public static function onStartClick(event:MouseEvent):void
 		{
 			stage.removeChildren();
 			game.startFirstLevel();
 		}
-		
+
 		public static function onLevelSelectClick(event:MouseEvent):void
 		{
 			stage.removeChildren();
+            levelSelectMenu.regeneratePages();
 			stage.addChild(levelSelectMenu);
 		}
-		
+
 		public static function onCreditsClick(event:MouseEvent):void
 		{
 			stage.removeChildren();
 			stage.addChild(creditsMenu);
 		}
-		
+
 		public static function onMainMenuClick(event:MouseEvent):void
 		{
-			
+
 			stage.removeEventListener(KeyboardEvent.KEY_DOWN, Menu.onKeyDown);
 			createMainMenu();
 		}
-		
+
 		public static function onResumeClick(event:MouseEvent):void
 		{
 			removePauseMenu();
 		}
-		
+
 		public static function onNextLevelClick(event:MouseEvent):void
 		{
 			stage.removeEventListener(KeyboardEvent.KEY_DOWN, Menu.onKeyDown);
 			stage.removeChild(endLevelMenu);
 			game.startNextLevel();
 		}
-		
+
 		public static function onRestartLevelClick(event:MouseEvent):void
 		{
-			
+
 			stage.removeEventListener(KeyboardEvent.KEY_DOWN, Menu.onKeyDown);
 			stage.removeChild(endLevelMenu);
 			game.restartLevel();
 		}
-		
+
 		public static function onLevelClick(event:MouseEvent):void
 		{
 			stage.removeChild(levelSelectMenu);
 			game.startAtLevel(int(event.target.name));
 		}
-		
+
 		// Util functions
 		public static function getMenuTitle(text:String, topPadding:int, size:int):TextField
 		{
@@ -172,17 +173,17 @@ package
 			title.text = text;
 			title.width = Constants.SCREEN_WIDTH;
 			title.y = topPadding;
-			
+
 			var titleFormat:TextFormat = new TextFormat();
 			titleFormat.font = Constants.MENU_FONT;
 			titleFormat.size = size;
 			titleFormat.align = Constants.MENU_TITLE_ALIGNMENT;
-			
+
 			title.setTextFormat(titleFormat);
-			
+
 			return title;
 		}
-		
+
 		public static function getMenuButtonShape():Shape
 		{
 			var buttonShape:Shape = new Shape();
@@ -192,7 +193,7 @@ package
 			buttonShape.graphics.endFill();
 			return buttonShape;
 		}
-	
+
 		public static function getMenuButtonTextFormat():TextFormat
 		{
 			var buttonTextFormat:TextFormat = new TextFormat();
@@ -201,7 +202,7 @@ package
 			buttonTextFormat.align = Constants.MENU_BUTTON_TEXT_ALIGNMENT;
 			return buttonTextFormat;
 		}
-		
+
 		public static function getMenuButton(text:String, x:int, y:int, listener:Function):SimpleButton
 		{
 			var buttonText:TextField = new TextField();
@@ -209,11 +210,11 @@ package
 			buttonText.width = Constants.MENU_BUTTON_WIDTH;
 			buttonText.height = Constants.MENU_BUTTON_HEIGHT + Constants.MENU_BUTTON_BORDER_SIZE;
 			buttonText.setTextFormat(Menu.getMenuButtonTextFormat());
-			
+
 			var buttonSprite:Sprite = new Sprite();
 			buttonSprite.addChild(Menu.getMenuButtonShape());
 			buttonSprite.addChild(buttonText);
-			
+
 			var button:SimpleButton = new SimpleButton();
 			button.upState = buttonSprite;
 			button.downState = buttonSprite;
@@ -221,12 +222,12 @@ package
 			button.hitTestState = buttonSprite
 			button.x = x;
 			button.y = y;
-			
+
 			button.addEventListener(MouseEvent.CLICK, listener);
-			
+
 			return button;
 		}
-		
+
 		public static function getTextField(text:String, height:int, width:int, x:int, y:int, font:String, fontSize:int, align:String):TextField
 		{
 			var textField:TextField = new TextField();
@@ -236,14 +237,14 @@ package
 			textField.width = width;
 			textField.x = x;
 			textField.y = y;
-			
+
 			var textFormat:TextFormat = new TextFormat();
 			textFormat.font = font;
 			textFormat.size = fontSize;
 			textFormat.align = align;
-			
+
 			textField.setTextFormat(textFormat);
-			
+
 			return textField;
 		}
 	}
@@ -267,32 +268,32 @@ class MainMenu extends Sprite
 	private var startButton:SimpleButton;
 	private var levelSelectButton:SimpleButton;
 	private var creditsButton:SimpleButton;
-	
+
 	public function MainMenu():void
 	{
 		// Main title
 		title = Menu.getMenuTitle(Constants.GAME_TITLE,
 		Constants.MAIN_TITLE_TOP_PADDING,
 		Constants.MAIN_TITLE_FONT_SIZE);
-		
+
 		// Start button
 		startButton = Menu.getMenuButton(Constants.START_BUTTON_TEXT,
 		(Constants.SCREEN_WIDTH - Constants.MENU_BUTTON_WIDTH) / 2,
 		Constants.SCREEN_HEIGHT / 2,
 		Menu.onStartClick);
-		
+
 		// Level select button
 		levelSelectButton = Menu.getMenuButton(Constants.LEVEL_SELECT_BUTTON_TEXT,
 		(Constants.SCREEN_WIDTH - Constants.MENU_BUTTON_WIDTH) / 2,
 		startButton.y + Constants.MENU_BUTTON_PADDING_BETWEEN,
 		Menu.onLevelSelectClick);
-		
-		// Credits button		
+
+		// Credits button
 		creditsButton = Menu.getMenuButton(Constants.CREDITS_BUTTON_TEXT,
 		Constants.SCREEN_WIDTH - Constants.MENU_BUTTON_WIDTH - Constants.MAIN_CREDITS_BUTTON_RIGHT_PADDING,
 		Constants.SCREEN_HEIGHT - Constants.MAIN_CREDITS_BUTTON_BOTTOM_PADDING,
 		Menu.onCreditsClick);
-		
+
 		// Adding everything
 		addChild(title);
 		addChild(startButton);
@@ -306,31 +307,31 @@ class PauseMenu extends Sprite
 	private var title:TextField;
 	private var resumeButton:SimpleButton;
 	private var mainMenuButton:SimpleButton;
-	
+
 	public function PauseMenu():void
 	{
 		// Background
 		this.graphics.beginFill(Constants.PAUSE_BACKGROUND_COLOR, Constants.PAUSE_BACKGROUND_OPACITY);
 		this.graphics.drawRect(0, 0, Constants.SCREEN_WIDTH, Constants.SCREEN_HEIGHT);
 		this.graphics.endFill();
-		
+
 		// Pause title
 		title = Menu.getMenuTitle(Constants.PAUSE_TITLE_TEXT,
 		Constants.PAUSE_TITLE_TOP_PADDING,
 		Constants.PAUSE_TITLE_FONT_SIZE);
-		
+
 		// Resume button
 		resumeButton = Menu.getMenuButton(Constants.PAUSE_RESUME_BUTTON_TEXT,
 		(Constants.SCREEN_WIDTH - Constants.MENU_BUTTON_WIDTH) / 2,
 		Constants.SCREEN_HEIGHT / 2,
 		Menu.onResumeClick);
-		
+
 		// Main menu button
 		mainMenuButton = Menu.getMenuButton(Constants.MAIN_MENU_BUTTON_TEXT,
 		(Constants.SCREEN_WIDTH - Constants.MENU_BUTTON_WIDTH) / 2,
 		resumeButton.y + Constants.MENU_BUTTON_PADDING_BETWEEN,
 		Menu.onMainMenuClick);
-		
+
 		addChild(title);
 		addChild(resumeButton);
 		addChild(mainMenuButton);
@@ -344,14 +345,14 @@ class EndLevelMenu extends Sprite
 	private var nextLevelButton:SimpleButton;
 	private var restartLevelButton:SimpleButton;
 	private var mainMenuButton:SimpleButton;
-	
+
 	public function EndLevelMenu():void
 	{
 		// End level title
 		title = Menu.getMenuTitle(Constants.END_LEVEL_TITLE_TEXT,
 		Constants.END_LEVEL_TITLE_TOP_PADDING,
 		Constants.END_LEVEL_TITLE_FONT_SIZE);
-		
+
 		// Instructions
 		instructions = Menu.getTextField(Constants.END_LEVEL_INSTRUCTIONS_TEXT,
 		Constants.END_LEVEL_INSTRUCTIONS_HEIGHT,
@@ -361,25 +362,25 @@ class EndLevelMenu extends Sprite
 		Constants.MENU_FONT,
 		Constants.END_LEVEL_INSTRUCTIONS_FONT_SIZE,
 		Constants.END_LEVEL_INSTRUCTIONS_ALIGNMENT);
-		
+
 		// Next level button
 		nextLevelButton = Menu.getMenuButton(Constants.END_LEVEL_NEXT_LEVEL_BUTTON_TEXT,
 		(Constants.SCREEN_WIDTH - Constants.MENU_BUTTON_WIDTH) / 2,
 		Constants.SCREEN_HEIGHT / 2,
 		Menu.onNextLevelClick);
-		
+
 		// Restart level button
 		restartLevelButton = Menu.getMenuButton(Constants.END_LEVEL_RESTART_LEVEL_BUTTON_TEXT,
 		(Constants.SCREEN_WIDTH - Constants.MENU_BUTTON_WIDTH) / 2,
 		nextLevelButton.y + Constants.MENU_BUTTON_PADDING_BETWEEN,
 		Menu.onRestartLevelClick);
-		
+
 		// Main menu button
 		mainMenuButton = Menu.getMenuButton(Constants.END_LEVEL_MAIN_MENU_BUTTON_TEXT,
 		(Constants.SCREEN_WIDTH - Constants.MENU_BUTTON_WIDTH) / 2,
 		restartLevelButton.y + Constants.MENU_BUTTON_PADDING_BETWEEN,
 		Menu.onMainMenuClick);
-		
+
 		addChild(title);
 		addChild(instructions);
 		addChild(nextLevelButton);
@@ -394,31 +395,31 @@ class EndGameMenu extends Sprite
 	private var subtitle:TextField;
 	private var creditsButton:SimpleButton;
 	private var mainMenuButton:SimpleButton;
-	
+
 	public function EndGameMenu():void
 	{
 		// End level title
 		title = Menu.getMenuTitle(Constants.END_GAME_TITLE_TEXT,
 		Constants.END_GAME_TITLE_TOP_PADDING,
 		Constants.END_GAME_TITLE_FONT_SIZE);
-		
+
 		// End level subtitle
 		subtitle = Menu.getMenuTitle(Constants.END_GAME_SUBTITLE_TEXT,
 		Constants.END_GAME_SUBTITLE_TOP_PADDING,
 		Constants.END_GAME_SUBTITLE_FONT_SIZE);
-		
+
 		// Credits button
 		creditsButton = Menu.getMenuButton(Constants.END_GAME_CREDITS_BUTTON_TEXT,
 		(Constants.SCREEN_WIDTH - Constants.MENU_BUTTON_WIDTH) / 2,
 		Constants.SCREEN_HEIGHT / 2,
 		Menu.onCreditsClick);
-		
+
 		// Main menu button
 		mainMenuButton = Menu.getMenuButton(Constants.END_GAME_MAIN_MENU_BUTTON_TEXT,
 		(Constants.SCREEN_WIDTH - Constants.MENU_BUTTON_WIDTH) / 2,
 		creditsButton.y + Constants.MENU_BUTTON_PADDING_BETWEEN,
 		Menu.onMainMenuClick);
-		
+
 		addChild(title);
 		addChild(subtitle);
 		addChild(creditsButton);
@@ -430,14 +431,14 @@ class LevelSelectMenu extends Sprite
 {
 	private var mainMenuButton:SimpleButton;
 	private var title:TextField;
-	
+
 	private var previousPageButton:SimpleButton;
 	private var nextPageButton:SimpleButton;
-	
-	private var pages:Array;
 	private var currentPage:int;
+
+	private var pages:Array;
 	private var totalPages:int;
-	
+
 	public function LevelSelectMenu():void
 	{
 		// Main menu button
@@ -445,80 +446,85 @@ class LevelSelectMenu extends Sprite
 		Constants.MAIN_MENU_BUTTON_TOP_PADDING,
 		Constants.MAIN_MENU_BUTTON_LEFT_PADDING,
 		Menu.onMainMenuClick);
-		
+
 		// Level Select title
 		title = Menu.getMenuTitle(Constants.LEVEL_SELECT_TITLE_TEXT,
 		Constants.LEVEL_SELECT_TITLE_TOP_PADDING,
 		Constants.LEVEL_SELECT_TITLE_FONT_SIZE);
-		
+
 		// Page buttons
 		previousPageButton = Menu.getMenuButton(Constants.LEVEL_SELECT_PREVIOUS_PAGE_BUTTON_TEXT,
 		Constants.SCREEN_WIDTH / Constants.LEVEL_SELECT_COLUMNS - Constants.MENU_BUTTON_WIDTH / 2,
 		Constants.SCREEN_HEIGHT - Constants.LEVEL_SELECT_PAGE_BUTTON_BOTTOM_PADDING,
 		onPreviousPageClick);
-		
+
 		nextPageButton = Menu.getMenuButton(Constants.LEVEL_SELECT_NEXT_PAGE_BUTTON_TEXT,
 		Constants.SCREEN_WIDTH * (Constants.LEVEL_SELECT_COLUMNS - 1) / Constants.LEVEL_SELECT_COLUMNS - Constants.MENU_BUTTON_WIDTH / 2,
 		Constants.SCREEN_HEIGHT - Constants.LEVEL_SELECT_PAGE_BUTTON_BOTTOM_PADDING,
 		onNextPageClick);
-		
-		var levels:int = Menu.game.progression.length;
-		var levelsPerPage:int = Constants.LEVEL_SELECT_ROWS * Constants.LEVEL_SELECT_COLUMNS;
-		totalPages = levels / levelsPerPage;
-		if (levels % levelsPerPage != 0)
-		{
-			totalPages++;
-		}
-		
-		var pageHeight:int = Constants.SCREEN_HEIGHT - Constants.LEVEL_SELECT_PAGE_TOP_PADDING - Constants.LEVEL_SELECT_PAGE_BUTTON_BOTTOM_PADDING;
-		pages = new Array();
-		
-		var l:int = 0;
-		var p:int;
-		var r:int;
-		var c:int;
-		PageCreation: for (p = 0; p < totalPages; p++)
-		{
-			var page:Sprite = new Sprite();
-			LevelAddition:for (r = 0; r < Constants.LEVEL_SELECT_ROWS; r++)
-			{
-				for (c = 0; c < Constants.LEVEL_SELECT_COLUMNS; c++)
-				{
-					var levelButton:SimpleButton = Menu.getMenuButton(Menu.game.progression[l],
-					Constants.SCREEN_WIDTH * (c + 1) / (Constants.LEVEL_SELECT_COLUMNS + 1) - Constants.MENU_BUTTON_WIDTH / 2,
-					Constants.LEVEL_SELECT_PAGE_TOP_PADDING + pageHeight * r / Constants.LEVEL_SELECT_ROWS,
-					Menu.onLevelClick);
-					levelButton.name = String(l);
-					
-					page.addChild(levelButton);
-					l++;
-					if (l == levels)
-					{
-						break LevelAddition;
-					}
-				}
-			}
-			pages.push(page);
-			if (l == levels)
-			{
-				break PageCreation;
-			}
-		}
-		
-		addChild(mainMenuButton);
-		addChild(title);
-		
-		currentPage = 0;
-		if (pages.length == 1)
-		{
-			addChild(pages[currentPage]);
-		} else if (pages.length > 1)
-		{
-			addChild(pages[currentPage]);
-			addChild(nextPageButton);
-		}
 	}
-	
+
+    public function regeneratePages():void
+    {
+        removeChildren();
+
+        var levels:int = Menu.game.progression.length;
+        var levelsPerPage:int = Constants.LEVEL_SELECT_ROWS * Constants.LEVEL_SELECT_COLUMNS;
+        totalPages = levels / levelsPerPage;
+        if (levels % levelsPerPage != 0)
+        {
+            totalPages++;
+        }
+
+        var pageHeight:int = Constants.SCREEN_HEIGHT - Constants.LEVEL_SELECT_PAGE_TOP_PADDING - Constants.LEVEL_SELECT_PAGE_BUTTON_BOTTOM_PADDING;
+        pages = new Array();
+
+        var l:int = 0;
+        var p:int;
+        var r:int;
+        var c:int;
+        PageCreation: for (p = 0; p < totalPages; p++)
+        {
+            var page:Sprite = new Sprite();
+            LevelAddition:for (r = 0; r < Constants.LEVEL_SELECT_ROWS; r++)
+            {
+                for (c = 0; c < Constants.LEVEL_SELECT_COLUMNS; c++)
+                {
+                    var levelButton:SimpleButton = Menu.getMenuButton(Menu.game.progression[l],
+                                    Constants.SCREEN_WIDTH * (c + 1) / (Constants.LEVEL_SELECT_COLUMNS + 1) - Constants.MENU_BUTTON_WIDTH / 2,
+                                    Constants.LEVEL_SELECT_PAGE_TOP_PADDING + pageHeight * r / Constants.LEVEL_SELECT_ROWS,
+                            Menu.onLevelClick);
+                    levelButton.name = String(l);
+
+                    page.addChild(levelButton);
+                    l++;
+                    if (l == levels)
+                    {
+                        break LevelAddition;
+                    }
+                }
+            }
+            pages.push(page);
+            if (l == levels)
+            {
+                break PageCreation;
+            }
+        }
+
+        addChild(mainMenuButton);
+        addChild(title);
+
+        currentPage = 0;
+        if (pages.length == 1)
+        {
+            addChild(pages[currentPage]);
+        } else if (pages.length > 1)
+        {
+            addChild(pages[currentPage]);
+            addChild(nextPageButton);
+        }
+    }
+
 	private function onPreviousPageClick(event:MouseEvent):void
 	{
 		removeChild(pages[currentPage]);
@@ -533,7 +539,7 @@ class LevelSelectMenu extends Sprite
 		}
 		addChild(pages[currentPage]);
 	}
-	
+
 	private function onNextPageClick(event:MouseEvent):void
 	{
 		removeChild(pages[currentPage]);
@@ -555,7 +561,7 @@ class CreditsMenu extends Sprite
 	private var mainMenuButton:SimpleButton;
 	private var title:TextField;
 	private var credits:TextField;
-	
+
 	public function CreditsMenu():void
 	{
 		// Main menu button
@@ -563,12 +569,12 @@ class CreditsMenu extends Sprite
 		Constants.MAIN_MENU_BUTTON_TOP_PADDING,
 		Constants.MAIN_MENU_BUTTON_LEFT_PADDING,
 		Menu.onMainMenuClick);
-		
+
 		// Credits title
 		title = Menu.getMenuTitle(Constants.CREDITS_TITLE_TEXT,
 		Constants.CREDITS_TITLE_TOP_PADDING,
 		Constants.CREDITS_TITLE_FONT_SIZE);
-		
+
 		// Credits
 		credits = Menu.getTextField(Constants.CREDITS,
 		Constants.CREDITS_HEIGHT,
@@ -578,7 +584,7 @@ class CreditsMenu extends Sprite
 		Constants.MENU_FONT,
 		Constants.CREDITS_FONT_SIZE,
 		Constants.CREDITS_ALIGNMENT);
-		
+
 		addChild(mainMenuButton);
 		addChild(title);
 		addChild(credits);

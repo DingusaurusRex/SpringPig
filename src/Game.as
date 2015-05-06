@@ -25,6 +25,7 @@ package
 	import view.BoardView;
 	import view.MeterView;
 	import flash.text.TextFieldAutoSize;
+	import util.GameState;
 	/**
 	 * ...
 	 * @author Marc
@@ -344,6 +345,7 @@ package
 					
 					if (isPlayerFinished()) {
 						pause = true; // So that player position is disregarded
+                        GameState.save();
 						if (currLevelIndex == progression.length - 1) {
 							Menu.createEndGameMenu();
 						} else {

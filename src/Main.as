@@ -7,7 +7,9 @@ package
 	import flash.utils.ByteArray;
 	import model.levelHandling.Board;
 	import model.levelHandling.LevelParser;
-	import util.IntPair;
+
+import util.GameState;
+import util.IntPair;
 	import util.Audio;
 	import util.Stopwatch;
 	import view.BoardView;
@@ -51,13 +53,14 @@ package
 			
 			// Parse LevelProgression JSON
 			//var progressionString:String = (new Progression1() as ByteArray).toString();
-			var progressionString:String = (new TestProgression() as ByteArray).toString();
+			var progressionString:String = (new Progression1() as ByteArray).toString();
 			var prog:Object = JSON.parse(progressionString);
 			
 			// Menu Stuff Here!!!!!!!!!!!!!
 			var game:Game = new Game(stage, prog);
 			Audio.Init();
 			Stopwatch.Init();
+            GameState.Init("Progression1", game);
 			Menu.Init(stage, game);
 			Menu.createMainMenu();
 			
