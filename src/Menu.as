@@ -334,6 +334,7 @@ class PauseMenu extends Sprite
 class EndLevelMenu extends Sprite
 {
 	private var title:TextField;
+	private var instructions:TextField;
 	private var nextLevelButton:SimpleButton;
 	private var restartLevelButton:SimpleButton;
 	private var mainMenuButton:SimpleButton;
@@ -344,6 +345,16 @@ class EndLevelMenu extends Sprite
 		title = Menu.getMenuTitle(Constants.END_LEVEL_TITLE_TEXT,
 		Constants.END_LEVEL_TITLE_TOP_PADDING,
 		Constants.END_LEVEL_TITLE_FONT_SIZE);
+		
+		// Instructions
+		instructions = Menu.getTextField(Constants.END_LEVEL_INSTRUCTIONS_TEXT,
+		Constants.END_LEVEL_INSTRUCTIONS_HEIGHT,
+		Constants.SCREEN_WIDTH,
+		Constants.END_LEVEL_INSTRUCTIONS_LEFT_PADDING,
+		Constants.END_LEVEL_INSTRUCTIONS_TOP_PADDING,
+		Constants.MENU_FONT,
+		Constants.END_LEVEL_INSTRUCTIONS_FONT_SIZE,
+		Constants.END_LEVEL_INSTRUCTIONS_ALIGNMENT);
 		
 		// Next level button
 		nextLevelButton = Menu.getMenuButton(Constants.END_LEVEL_NEXT_LEVEL_BUTTON_TEXT,
@@ -364,6 +375,7 @@ class EndLevelMenu extends Sprite
 		Menu.onMainMenuClick);
 		
 		addChild(title);
+		addChild(instructions);
 		addChild(nextLevelButton);
 		addChild(restartLevelButton);
 		addChild(mainMenuButton);

@@ -240,6 +240,13 @@ package
 		public static const END_LEVEL_STOPWATCH_TOP_PADDING:int = 150;
 		public static const END_LEVEL_STOPWATCH_LEFT_PADDING:int = 0;
 		
+		public static const END_LEVEL_INSTRUCTIONS_TEXT:String = "Press Space to start the next level";
+		public static const END_LEVEL_INSTRUCTIONS_TOP_PADDING:int = 200;
+		public static const END_LEVEL_INSTRUCTIONS_LEFT_PADDING:int = 0;
+		public static const END_LEVEL_INSTRUCTIONS_HEIGHT:int = 20;
+		public static const END_LEVEL_INSTRUCTIONS_FONT_SIZE:int = 15;
+		public static const END_LEVEL_INSTRUCTIONS_ALIGNMENT:String = "center";
+		
 		public static const END_LEVEL_NEXT_LEVEL_BUTTON_TEXT:String = "Next Level";
 		public static const END_LEVEL_RESTART_LEVEL_BUTTON_TEXT:String = "Restart Last Level";
 		public static const END_LEVEL_MAIN_MENU_BUTTON_TEXT:String = "Main Menu";
