@@ -75,7 +75,6 @@ public class Menu {
     }
 
     public static function createEndLevelMenu():void {
-        Stopwatch.pause();
         stage.removeChildren();
         endLevelMenu.addChild(muteButton);
         stage.addChild(endLevelMenu);
@@ -97,7 +96,6 @@ public class Menu {
     }
 
     public static function createEndGameMenu():void {
-        Stopwatch.pause();
         stage.removeChildren();
         stage.addChild(endGameMenu);
         Stopwatch.stopwatchMenuText.x = Constants.END_GAME_STOPWATCH_LEFT_PADDING;

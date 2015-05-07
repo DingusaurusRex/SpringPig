@@ -221,6 +221,8 @@ package
 					useEnergy();
 				}
 				if (keyR) {
+                    var logData:Object = {x:player.asset.x, y:player.asset.y};
+                    logger.logAction(Constants.AID_RESET, logData);
 					resetPlayer();
 					resetCrates();
 				}
@@ -393,7 +395,9 @@ package
 					
 					if (isPlayerFinished()) {
 						pause = true; // So that player position is disregarded
-                        logger.logLevelEnd(null);
+                        Stopwatch.pause();
+                        var logData:Object = {time:Stopwatch.getCurrentTiming()};
+                        logger.logLevelEnd(logData);
                         GameState.openNextLevelSave();
 						if (currLevelIndex == progression.length - 1) {
 							Menu.createEndGameMenu();
@@ -433,6 +437,8 @@ package
 		 */
 		private function useEnergy(removeMeter:Boolean = true):void
 		{
+            var logData:Object = {x:player.asset.x, y:player.asset.y, power:player.energy};
+            logger.logAction(Constants.AID_SPRING, logData);
 			player.velocity = Constants.JUMP_VELOCITIES[player.energy];
 			player.inAir = true;
 			player.startingHeight = getYPositionOfPlayer() + player.energy;
@@ -1150,6 +1156,8 @@ package
 		private function checkLavaHit(id:int):Boolean
 		{
 			if (id == Constants.LAVA) {
+                var logData:Object = {x:player.asset.x, y:player.asset.y};
+                logger.logAction(Constants.AID_DEATH, logData);
 				resetPlayer();
 				resetCrates();
 			}

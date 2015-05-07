@@ -13,6 +13,11 @@ package
         public static const DB_NAME:String = "cgs_gc_SpringMan";
         public static const SKEY:String = "779979ab7f59b74ca0e57d9d7baeb9f0";
 
+        // Action IDs
+        public static const AID_SPRING:int = 1;
+        public static const AID_RESET:int = 2;
+        public static const AID_DEATH:int = 3;
+
 		/**
 		 * Colors
 		**/
