@@ -304,7 +304,7 @@ package
 						//if (isButton(id) && collidingWithButton(player, tile)) {
 							//setButtonDown(board, id);
 						//}
-						if (id == Constants.WALL || isClosedGate(id))
+						if (id == Constants.WALL || isClosedGate(id) || id == Constants.TRAMP)
 						{
 							player.asset.x = tile.x * board.tileSideLength - player.width;
 						}
@@ -331,7 +331,7 @@ package
 						//if (isButton(id) && collidingWithButton(player, tile)) {
 							//setButtonDown(board, id);
 						//}
-						if (id == Constants.WALL || isClosedGate(id))
+						if (id == Constants.WALL || isClosedGate(id) || id == Constants.TRAMP)
 						{
 							player.asset.x = (tile.x + 1) * board.tileSideLength;
 						}
@@ -610,7 +610,7 @@ package
 							// If one of the tiles below player is not empty, then player is not falling
 							else if (id != Constants.EMPTY &&
 									 id != Constants.START &&
-									 id != Constants.END &&
+									 id != Constants.CRATE &&
 									 !isButton(id) && 
 									!isOpenGate(id) &&
 									!isMovingPlatformStartOrEnd(id)) {

@@ -62,7 +62,7 @@ package
 			var game:Game = new Game(stage, prog, logger);
 			Audio.Init();
 			Stopwatch.Init();
-            GameState.Init("Progression1", game);
+            GameState.Init("TestProgression", game);
 			Menu.Init(stage, game);
 			Menu.createMainMenu();
 
