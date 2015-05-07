@@ -8,12 +8,11 @@ package
 	import model.levelHandling.Board;
 	import model.levelHandling.LevelParser;
 
-import util.GameState;
-import util.IntPair;
+	import util.GameState;
+	import util.IntPair;
 	import util.Audio;
 	import util.Stopwatch;
 	import view.BoardView;
-	import model.player.Player;
 	import view.MeterView;
 	
 	/**
@@ -37,8 +36,6 @@ import util.IntPair;
 		
 		[Embed(source = "../assets/progressions/progression2.json", mimeType = "application/octet-stream")]
 		private var Progression2:Class;
-		
-		private var player:Player = new Player();
 		
 		public function Main():void 
 		{

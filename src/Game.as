@@ -289,13 +289,11 @@ package
 					{
 						var crate:Crate = getCollidingCrate(player);
 						crate.asset.x += Constants.CRATEX;
-						trace("MOVE: " + crate.asset.x);
 						player.inAir ? player.asset.x -= player.airSpeedX - Constants.CRATEX : player.asset.x -= player.speedX - Constants.CRATEX;
 						if (checkCrateCollision(crate, Constants.RIGHT))
 						{
 							crate.asset.x -= Constants.CRATEX;
 							player.asset.x -= Constants.CRATEX;
-							trace("Collide: " + crate.asset.x);
 						}
 					}
 					// If you ran into a wall, keep the player in the previous square
@@ -318,13 +316,11 @@ package
 					{
 						crate = getCollidingCrate(player);
 						crate.asset.x -= Constants.CRATEX;
-						trace("MOVE: " + crate.asset.x);
 						player.inAir ? player.asset.x += player.airSpeedX - Constants.CRATEX : player.asset.x += player.speedX - Constants.CRATEX;
 						if (checkCrateCollision(crate, Constants.LEFT))
 						{
 							crate.asset.x += Constants.CRATEX;
 							player.asset.x += Constants.CRATEX;
-							trace("Collide: " + crate.asset.x);
 						}
 					}
 					// If you ran into a wall, keep the player in the previous square
