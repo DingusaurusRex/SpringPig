@@ -236,7 +236,7 @@ package
 		public static const CREDITS_TITLE_TOP_PADDING:int = 50;
 		public static const CREDITS_TITLE_FONT_SIZE:int = 80;
 		
-		public static const CREDITS:String = "A game created for:\n\tUW CSE Games Capstone - Spring 2015\nBy:\n- Jack Fancher\n- Marc-Antoine Fontenelle\n- Panji Wisesa";
+		public static const CREDITS:String = "A game created for:\n\tUW CSE Games Capstone - Spring 2015\nBy:\n- Jack Fancher\n- Marc-Antoine Fontenelle\n- Panji Wisesa\n\nMusic By:\n- Lizzie Siegel";
 		public static const CREDITS_TOP_PADDING:int = 250;
 		public static const CREDITS_HEIGHT:int = 500;
 		public static const CREDITS_WIDTH:int = 400;
