@@ -124,7 +124,7 @@ package
 			player.height = (int) (board.tileSideLength * 3.0 / 4.0);
 			player.width = (int) (board.tileSideLength * 3.0 / 4.0);
 			player.asset.x = playerStart.x;
-			player.asset.y = playerStart.y + board.tileSideLength - player.asset.height;
+			player.asset.y = playerStart.y + board.tileSideLength - player.height;
 			playerStart.y = player.asset.y;
 			player.energy = 0;
 			meter.energy = player.energy;
