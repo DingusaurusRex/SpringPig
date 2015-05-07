@@ -71,6 +71,9 @@ package
 		 */
 		public static function initialize(gid:int, name:String, skey:String, cid:int, data:Object, useDev:Boolean=true):Logger
 		{
+            if (!Constants.LOG) {
+                return new Logger();
+            }
 			if (gid <= 0 || name == null || skey == null) throw new ArgumentError("invalid game info");
 			
 			var logger:Logger = new Logger();
@@ -110,6 +113,9 @@ package
 		 */
 		public function logLevelStart(qid:int, data:Object):void
 		{
+            if (!Constants.LOG) {
+                return;
+            }
 			if (qid <= 0) throw new ArgumentError("qid must be positive");
 			server.logQuestStart(qid, null, data, function f(q:QuestLogResponseStatus):void {
 				trace("Logging quest with dqid: " + q.dqid);
@@ -126,6 +132,9 @@ package
 		 */
 		public function logAction(aid:int, data:Object):void
 		{
+            if (!Constants.LOG) {
+                return;
+            }
 			if (aid <= 0) throw new ArgumentError("aid must be positive");
 			var action:QuestAction = new QuestAction(aid, new Date().time - levelStartTime);
 			action.setDetail(data);
@@ -140,6 +149,9 @@ package
 		 */
 		public function logLevelEnd(data:Object):void
 		{
+            if (!Constants.LOG) {
+                return;
+            }
 			server.logQuestEnd(data);
 		}
 	}

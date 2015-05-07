@@ -9,6 +9,8 @@ package
         /**
          * Logging info
          */
+        public static const LOG:Boolean = false;
+
         public static const GID:int = 116;
         public static const DB_NAME:String = "cgs_gc_SpringMan";
         public static const SKEY:String = "779979ab7f59b74ca0e57d9d7baeb9f0";
