@@ -13,9 +13,11 @@ public class GameState {
     public static function Init(progressionFileName:String, g:Game):void {
         try {
             playerData = SharedObject.getLocal(progressionFileName);
+            //playerData.clear();
             saveable = true;
-            if (playerData.data.unlocked == 0) {
+            if (!playerData.data.hasOwnProperty("unlocked")) {
                 playerData.data.unlocked = 1;
+                playerData.data.progress = 0;
             }
         } catch (e:Error) {
             saveable = false;
@@ -32,6 +34,7 @@ public class GameState {
             if (playerData.data.unlocked < playerData.data.progress + 1) {
                 playerData.data.unlocked = playerData.data.progress + 1;
             }
+            //trace(Stopwatch.formatTiming(Stopwatch.getCurrentTiming()));
             //trace("onl cl:" + playerData.data.progress + "; op:" + playerData.data.unlocked);
             playerData.flush();
         }
