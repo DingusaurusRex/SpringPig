@@ -13,7 +13,7 @@ package model.player
 		
 		public var energy:int = 0;
 		private var m_asset:Bitmap;
-		public var speedX:Number = 5;
+		public var speedX:Number = Constants.PLAYERX;
 		public var upSpeedY:Number = 8; // Speed on ladder
 		public var downSpeedY:Number = 5; // Speed on ladder
 		public var airSpeedX:Number = 5;

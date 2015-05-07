@@ -260,6 +260,18 @@ package
 			switch(direction)
 			{
 				case Constants.RIGHT:
+					// If colliding with a crate, move the crate
+					if (collidingWithCrate(player))
+					{
+						var crate:Crate = getCollidingCrate(player);
+						crate.asset.x += Constants.CRATEX;
+						player.inAir ? player.asset.x -= player.airSpeedX - Constants.CRATEX : player.asset.x -= player.speedX - Constants.CRATEX;
+						if (checkCrateCollision(crate, Constants.RIGHT))
+						{
+							crate.asset.x -= Constants.CRATEX;
+							player.asset.x -= Constants.CRATEX;
+						}
+					}
 					// If you ran into a wall, keep the player in the previous square
 					for each (var tile:IntPair in getTilesInDirection(player, Constants.RIGHT))
 					{
@@ -275,6 +287,18 @@ package
 					}
 					break;
 				case Constants.LEFT:
+					// If colliding with a crate, move the crate
+					if (collidingWithCrate(player))
+					{
+						crate = getCollidingCrate(player);
+						crate.asset.x -= Constants.CRATEX;
+						player.inAir ? player.asset.x += player.airSpeedX - Constants.CRATEX : player.asset.x += player.speedX - Constants.CRATEX;
+						if (checkCrateCollision(crate, Constants.LEFT))
+						{
+							crate.asset.x += Constants.CRATEX;
+							player.asset.x += Constants.CRATEX;
+						}
+					}
 					// If you ran into a wall, keep the player in the previous square
 					for each (tile in getTilesInDirection(player, Constants.LEFT))
 					{
@@ -303,10 +327,18 @@ package
 						}
 					}
 					collideWithPlatform(direction);
+					break;
 				case Constants.DOWN:
 					player.inAir = true;
 					if (collideWithPlatform(direction))
 						break;
+					else if (standingOnCrate(player))
+					{
+						crate = getCollidingCrate(player);
+						player.asset.y = (int) (crate.asset.y - player.asset.height);
+						player.velocity = 0;
+						player.inAir = false;
+					}
 					for each (tile in getTilesInDirection(player, Constants.DOWN)) {
 						id = board.getTile(tile.x, tile.y);
 						if (tile.x * board.tileSideLength != player.asset.x + player.asset.width) {
@@ -335,12 +367,6 @@ package
 								}
 								player.inAir = false;
 							}
-							// Check if the player is on a crate
-							else if (collidingWithCrate(player))
-							{
-								player.asset.y = (int) (tile.y * board.tileSideLength - player.asset.height);
-								player.inAir = false;
-							}
 							// If one of the tiles below player is not empty, then player is not falling
 							else if (id != Constants.EMPTY &&
 									 id != Constants.START &&
@@ -351,7 +377,7 @@ package
 									!isOpenGate(id) &&
 									!isMovingPlatformStartOrEnd(id)) {
 								player.asset.y = (int) (tile.y * board.tileSideLength - player.asset.height);
-								
+								player.velocity = 0;
 								player.inAir = false;
 							}
 						}
@@ -481,16 +507,66 @@ package
 			}
 		}
 		
-		public function checkCrateCollision(crate:Crate, direction:int):void
+		public function checkCrateCollision(crate:Crate, direction:int):Boolean
 		{
 			switch (direction)
 			{
+				case Constants.RIGHT:
+					// If colliding with a crate, move the crate
+					if (crateAbove(crate) || crate.asset.x + crate.asset.width >= board.boardWidthInPixels)
+					{
+						return true;
+					}
+					// If you ran into a wall, keep the player in the previous square
+					for each (var tile:IntPair in getTilesInDirection(crate, Constants.RIGHT))
+					{
+						var id:int = board.getTile(tile.x, tile.y);
+						if (isButton(id) && collidingWithButton(crate, tile))
+						{
+							setButtonDown(board, id);
+						}
+						if (id == Constants.WALL ||
+						    id == Constants.LADDER ||
+							id == Constants.LAVA ||
+							id == Constants.END ||
+							id == Constants.TRAMP ||
+							isClosedGate(id))
+						{
+							return true;
+						}
+					}
+					break;
+				case Constants.LEFT:
+					// If colliding with a crate, move the crate
+					if (crateAbove(crate) || crate.asset.x <= 0)
+					{
+						return true;
+					}
+					// If you ran into a wall, keep the player in the previous square
+					for each (tile in getTilesInDirection(crate, Constants.LEFT))
+					{
+						id = board.getTile(tile.x, tile.y);
+						if (isButton(id) && collidingWithButton(crate, tile))
+						{
+							setButtonDown(board, id);
+						}
+						if (id == Constants.WALL ||
+						    id == Constants.LADDER ||
+							id == Constants.LAVA ||
+							id == Constants.END ||
+							id == Constants.TRAMP ||
+							isClosedGate(id))
+						{
+							return true;
+						}
+					}
+					break;
 				case Constants.DOWN:
 					crate.inAir = true;
 					//if (collideWithPlatform(direction))
 						//break;
-					for each (var tile:IntPair in getTilesInDirection(crate, Constants.DOWN)) {
-						var id:int = board.getTile(tile.x, tile.y);
+					for each (tile in getTilesInDirection(crate, Constants.DOWN)) {
+						id = board.getTile(tile.x, tile.y);
 						if (tile.x * board.tileSideLength != crate.asset.x + crate.asset.width) {
 							if (isButton(id) && collidingWithButton(crate, tile)) {
 								setButtonDown(board, id);
@@ -518,6 +594,7 @@ package
 				default:
 					break;
 			}
+			return false;
 		}
 		
 		/**
@@ -613,6 +690,65 @@ package
 				result = true;
 			}
 			return result;
+		}
+		
+		/**
+		 * Returns whether the given object is standing on a crate
+		 * @param	obj
+		 * @return
+		 */
+		private function standingOnCrate(obj:PhysicsObject):Boolean
+		{
+			var objLeft:Number = obj.asset.x + 1;
+			var objRight:Number = obj.asset.x + obj.asset.width - 1;
+			var objTop:Number = obj.asset.y;
+			var objBottom:Number = obj.asset.y + obj.asset.height;
+			
+			for each (var crate:Crate in board.crates)
+			{
+				if (obj != crate)
+				{
+					var crateLeft:Number = crate.asset.x;
+					var crateRight:Number = crate.asset.x + crate.asset.width;
+					var crateTop:Number = crate.asset.y;
+					var crateBottom:Number = crate.asset.y + crate.asset.height;
+					if ((objLeft >= crateLeft && objLeft <= crateRight ||
+						objRight >= crateLeft && objRight <= crateRight) &&
+						(objTop >= crateTop && objTop <= crateBottom ||
+						objBottom >= crateTop && objBottom <= crateBottom))
+						{
+							return true;
+						}
+				}
+			}
+			return false;
+		}
+		
+		private function crateAbove(obj:PhysicsObject):Boolean
+		{
+			var objLeft:Number = obj.asset.x + 1;
+			var objRight:Number = obj.asset.x + obj.asset.width - 1;
+			var objTop:Number = obj.asset.y;
+			var objBottom:Number = obj.asset.y + obj.asset.height - 1;
+			
+			for each (var crate:Crate in board.crates)
+			{
+				if (obj != crate)
+				{
+					var crateLeft:Number = crate.asset.x;
+					var crateRight:Number = crate.asset.x + crate.asset.width;
+					var crateTop:Number = crate.asset.y;
+					var crateBottom:Number = crate.asset.y + crate.asset.height;
+					if ((objLeft >= crateLeft && objLeft <= crateRight ||
+						objRight >= crateLeft && objRight <= crateRight) &&
+						(objTop >= crateTop && objTop <= crateBottom ||
+						objBottom >= crateTop && objBottom <= crateBottom))
+						{
+							return true;
+						}
+				}
+			}
+			return false;
 		}
 		
 		/**
