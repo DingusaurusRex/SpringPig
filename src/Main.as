@@ -2,6 +2,8 @@ package
 {
 	import flash.display.Sprite;
 	import flash.events.Event;
+	import flash.media.Sound;
+	import flash.media.SoundChannel;
 	import flash.text.TextField;
 	import flash.ui.Keyboard;
 	import flash.utils.ByteArray;
@@ -37,6 +39,17 @@ package
 		[Embed(source = "../assets/progressions/progression2.json", mimeType = "application/octet-stream")]
 		private var Progression2:Class;
 		
+		/**
+		 * 
+		 * Music
+		 * 
+		**/
+		
+		[Embed(source = "../assets/sounds/Spring Pig Loop.mp3")]
+		private var Song1:Class;
+		
+		public var m_song:Sound;
+		
 		public function Main():void 
 		{
 			if (stage) init();
@@ -50,7 +63,7 @@ package
 			
 			// Parse LevelProgression JSON
 			//var progressionString:String = (new Progression1() as ByteArray).toString();
-			var progressionString:String = (new TestProgression() as ByteArray).toString();
+			var progressionString:String = (new Progression1() as ByteArray).toString();
 			var prog:Object = JSON.parse(progressionString);
 
             // This is cid in the wiki
@@ -58,16 +71,17 @@ package
             var versionID:int = 1;
             var logger:Logger = Logger.initialize(Constants.GID, Constants.DB_NAME, Constants.SKEY, versionID, null, true);
 
+			m_song = (new Song1()) as Sound;
+			m_song.play(0, int.MAX_VALUE);
+			
             // Menu Stuff Here!!!!!!!!!!!!!
 			var game:Game = new Game(stage, prog, logger);
 			Audio.Init();
 			Stopwatch.Init();
-            GameState.Init("TestProgression", game);
+            GameState.Init("Progression1", game);
 			Menu.Init(stage, game);
 			Menu.createMainMenu();
 
-		}
-		
-	}
-	
+		}		
+	}	
 }
