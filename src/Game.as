@@ -226,12 +226,26 @@ package
 					resetPlayer();
 					resetCrates();
 				}
-				for each (var tile:IntPair in getPlayerTiles())
+				for (var x:int = 0; x < board.width; x++ )
 				{
-					var id:int = board.getTile(tile.x, tile.y)
-					if (isButton(id) && collidingWithButton(player, tile))
+					for (var y:int = 0; y < board.height; y++)
 					{
-						setButtonDown(board, id);
+						var tile:IntPair = new IntPair(x, y)
+						var id:int = board.getTile(x, y)
+						if (isButton(id))
+						{	
+							if (collidingWithButton(player, tile))
+							{
+								setButtonDown(board, id);
+							}
+							for each (var crate:Crate in board.crates)
+							{
+								if (collidingWithButton(crate, tile))
+								{
+									setButtonDown(board, id);
+								}
+							}
+						}
 					}
 				}
 				if (player.inAir || collidingWithLadder()) {

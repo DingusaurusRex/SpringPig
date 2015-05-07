@@ -53,7 +53,7 @@ import util.IntPair;
 			
 			// Parse LevelProgression JSON
 			//var progressionString:String = (new Progression1() as ByteArray).toString();
-			var progressionString:String = (new Progression1() as ByteArray).toString();
+			var progressionString:String = (new TestProgression() as ByteArray).toString();
 			var prog:Object = JSON.parse(progressionString);
 
             // This is cid in the wiki
