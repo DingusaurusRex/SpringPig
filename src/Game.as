@@ -71,12 +71,15 @@ package
 		
 		// Signs
 		private var signText:TextField;
+
+        // Logger
+        private var logger:Logger;
 		
 		/**
 		 * Begins the game
 		 * @param	p - Player Object (added to stage in main)
 		 */
-		public function Game(stage:Stage, progObj:Object) 
+		public function Game(stage:Stage, progObj:Object, logger:Logger)
 		{
 			
 			// Get the graphics for the meter
@@ -92,9 +95,11 @@ package
 			currLevelIndex = 0;
 			
 			this.pause = false;
-			
+
 			
 			this.levelReader = new LevelParser();
+
+            this.logger = logger;
 		}
 		
 		/**
@@ -153,6 +158,9 @@ package
 				gateStatus[id] = 0; // CLOSED
 			}
 			initButtonGateDict();
+
+            logger.logLevelStart(currLevelIndex + 1, null);
+
 			GameState.currentLevelSave();
 			// Reset and start timing
 			Stopwatch.reset();
@@ -385,6 +393,7 @@ package
 					
 					if (isPlayerFinished()) {
 						pause = true; // So that player position is disregarded
+                        logger.logLevelEnd(null);
                         GameState.openNextLevelSave();
 						if (currLevelIndex == progression.length - 1) {
 							Menu.createEndGameMenu();

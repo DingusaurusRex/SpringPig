@@ -55,19 +55,20 @@ import util.IntPair;
 			//var progressionString:String = (new Progression1() as ByteArray).toString();
 			var progressionString:String = (new Progression1() as ByteArray).toString();
 			var prog:Object = JSON.parse(progressionString);
-			
-			// Menu Stuff Here!!!!!!!!!!!!!
-			var game:Game = new Game(stage, prog);
+
+            // This is cid in the wiki
+            // TODO: change when deploying
+            var versionID:int = 1;
+            var logger:Logger = Logger.initialize(Constants.GID, Constants.DB_NAME, Constants.SKEY, versionID, null, true);
+
+            // Menu Stuff Here!!!!!!!!!!!!!
+			var game:Game = new Game(stage, prog, logger);
 			Audio.Init();
 			Stopwatch.Init();
             GameState.Init("Progression1", game);
 			Menu.Init(stage, game);
 			Menu.createMainMenu();
-			
 
-			// start the game
-			//var game:Game = new Game(stage);
-			//game.startLevel("");
 		}
 		
 	}
