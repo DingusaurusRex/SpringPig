@@ -46,6 +46,25 @@ package model.player
 			dy = 0;
 		}
 		
+		public function get width():int
+		{
+			return m_asset.width - 1;
+		}
+		
+		public function set width(val:int):void
+		{
+			m_asset.width = val;
+		}
+		
+		public function get height():int
+		{
+			return m_asset.height;
+		}
+		
+		public function set height(val:int):void
+		{
+			m_asset.height = val;
+		}
 	}
 
 }

@@ -121,8 +121,8 @@ package
 			
 			// Position the player
 			var playerStart:IntPair = boardSprite.getPlayerStart(); // Top right of the square
-			player.asset.height = (int) (board.tileSideLength * 3.0 / 4.0);
-			player.asset.width = (int) (board.tileSideLength * 3.0 / 4.0);
+			player.height = (int) (board.tileSideLength * 3.0 / 4.0);
+			player.width = (int) (board.tileSideLength * 3.0 / 4.0);
 			player.asset.x = playerStart.x;
 			player.asset.y = playerStart.y + board.tileSideLength - player.asset.height;
 			playerStart.y = player.asset.y;
@@ -206,7 +206,7 @@ package
 					player.asset.y += player.downSpeedY;
 				}
 				if (keyRight) {
-					if (player.asset.x < board.boardWidthInPixels - player.asset.width - 5) {
+					if (player.asset.x < board.boardWidthInPixels - player.width - 5) {
 						player.inAir ? player.asset.x += player.airSpeedX : player.asset.x += player.speedX;
 						checkPlayerCollision(Constants.RIGHT);
 					}						
@@ -289,11 +289,13 @@ package
 					{
 						var crate:Crate = getCollidingCrate(player);
 						crate.asset.x += Constants.CRATEX;
+						trace("MOVE: " + crate.asset.x);
 						player.inAir ? player.asset.x -= player.airSpeedX - Constants.CRATEX : player.asset.x -= player.speedX - Constants.CRATEX;
 						if (checkCrateCollision(crate, Constants.RIGHT))
 						{
 							crate.asset.x -= Constants.CRATEX;
 							player.asset.x -= Constants.CRATEX;
+							trace("Collide: " + crate.asset.x);
 						}
 					}
 					// If you ran into a wall, keep the player in the previous square
@@ -306,7 +308,7 @@ package
 						//}
 						if (id == Constants.WALL || isClosedGate(id))
 						{
-							player.asset.x = tile.x * board.tileSideLength - player.asset.width;
+							player.asset.x = tile.x * board.tileSideLength - player.width;
 						}
 					}
 					break;
@@ -316,11 +318,13 @@ package
 					{
 						crate = getCollidingCrate(player);
 						crate.asset.x -= Constants.CRATEX;
+						trace("MOVE: " + crate.asset.x);
 						player.inAir ? player.asset.x += player.airSpeedX - Constants.CRATEX : player.asset.x += player.speedX - Constants.CRATEX;
 						if (checkCrateCollision(crate, Constants.LEFT))
 						{
 							crate.asset.x += Constants.CRATEX;
 							player.asset.x += Constants.CRATEX;
+							trace("Collide: " + crate.asset.x);
 						}
 					}
 					// If you ran into a wall, keep the player in the previous square
@@ -341,7 +345,7 @@ package
 					//Check that the user has not crashed into a wall above him
 					for each (tile in getTilesInDirection(player, Constants.UP)) {
 						id = board.getTile(tile.x, tile.y);
-						if (tile.x * board.tileSideLength != player.asset.x + player.asset.width) {
+						if (tile.x * board.tileSideLength != player.asset.x + player.width) {
 							checkLavaHit(id);
 							if (id == Constants.WALL || isClosedGate(id)) {
 								player.startingHeight = getYPositionOfPlayer()
@@ -359,13 +363,13 @@ package
 					else if (standingOnCrate(player))
 					{
 						crate = getCollidingCrate(player);
-						player.asset.y = (int) (crate.asset.y - player.asset.height);
+						player.asset.y = (int) (crate.asset.y - player.height);
 						player.velocity = 0;
 						player.inAir = false;
 					}
 					for each (tile in getTilesInDirection(player, Constants.DOWN)) {
 						id = board.getTile(tile.x, tile.y);
-						if (tile.x * board.tileSideLength != player.asset.x + player.asset.width) {
+						if (tile.x * board.tileSideLength != player.asset.x + player.width) {
 							if (checkLavaHit(id)) {
 								player.inAir = false;
 								break;
@@ -381,13 +385,13 @@ package
 								// Only check if they are close to the top when they are climbing UP the ladder.
 								// When player is falling, he should fall on top of ladder every time.
 								// When a player is deliberately pressing down, they should not get y position reset
-								var closeToTop:Boolean = Math.abs(player.asset.y + player.asset.height - (tile.y * board.tileSideLength)) <= player.downSpeedY;
+								var closeToTop:Boolean = Math.abs(player.asset.y + player.height - (tile.y * board.tileSideLength)) <= player.downSpeedY;
 								if (player.dy > 0)
 									closeToTop = true;
 								if ((tileAboveLadder == Constants.EMPTY || tileAboveLadder == Constants.START || tileAboveLadder == Constants.END)
 									&& tileAboveLadder != -1 && closeToTop && !keyDown)
 								{
-									player.asset.y = (int) (tile.y * board.tileSideLength - player.asset.height);
+									player.asset.y = (int) (tile.y * board.tileSideLength - player.height);
 								}
 								player.inAir = false;
 							}
@@ -400,7 +404,7 @@ package
 									 !isButton(id) && 
 									!isOpenGate(id) &&
 									!isMovingPlatformStartOrEnd(id)) {
-								player.asset.y = (int) (tile.y * board.tileSideLength - player.asset.height);
+								player.asset.y = (int) (tile.y * board.tileSideLength - player.height);
 								player.velocity = 0;
 								player.inAir = false;
 							}
@@ -542,12 +546,13 @@ package
 			{
 				case Constants.RIGHT:
 					// If colliding with a crate, move the crate
-					if (crateAbove(crate) || crate.asset.x + crate.asset.width >= board.boardWidthInPixels)
+					if (crateAbove(crate) || crate.asset.x + crate.width >= board.boardWidthInPixels)
 					{
 						return true;
 					}
 					// If you ran into a wall, keep the player in the previous square
-					for each (var tile:IntPair in getTilesInDirection(crate, Constants.RIGHT))
+					var tiles:Vector.<IntPair> = getTilesInDirection(crate, Constants.RIGHT)
+					for each (var tile:IntPair in tiles)
 					{
 						var id:int = board.getTile(tile.x, tile.y);
 						if (isButton(id) && collidingWithButton(crate, tile))
@@ -567,7 +572,7 @@ package
 					break;
 				case Constants.LEFT:
 					// If colliding with a crate, move the crate
-					if (crateAbove(crate) || crate.asset.x <= 0)
+					if (crateAbove(crate) || crate.asset.x < 0)
 					{
 						return true;
 					}
@@ -596,13 +601,13 @@ package
 						//break;
 					for each (tile in getTilesInDirection(crate, Constants.DOWN)) {
 						id = board.getTile(tile.x, tile.y);
-						if (tile.x * board.tileSideLength != crate.asset.x + crate.asset.width) {
+						if (tile.x * board.tileSideLength != crate.asset.x + crate.width) {
 							if (isButton(id) && collidingWithButton(crate, tile)) {
 								setButtonDown(board, id);
 							}
 							else if (collidingWithCrate(crate))
 							{
-								crate.asset.y = (int) (tile.y * board.tileSideLength - crate.asset.height);
+								crate.asset.y = (int) (tile.y * board.tileSideLength - crate.height);
 								crate.velocity = 0;
 								crate.inAir = false;
 							}
@@ -613,7 +618,7 @@ package
 									 !isButton(id) && 
 									!isOpenGate(id) &&
 									!isMovingPlatformStartOrEnd(id)) {
-								crate.asset.y = (int) (tile.y * board.tileSideLength - crate.asset.height);
+								crate.asset.y = (int) (tile.y * board.tileSideLength - crate.height);
 								crate.velocity = 0;
 								crate.inAir = false;
 							}
@@ -708,9 +713,9 @@ package
 		private function collidingWithButton(obj:PhysicsObject, tile:IntPair):Boolean
 		{
 			var result:Boolean = false;
-			var objLeft:Number = obj.asset.x + obj.asset.width * .25;
-			var objRight:Number = obj.asset.x + obj.asset.width * .75;
-			var objY:Number = obj.asset.y + obj.asset.height;
+			var objLeft:Number = obj.asset.x + obj.width * .25;
+			var objRight:Number = obj.asset.x + obj.width * .75;
+			var objY:Number = obj.asset.y + obj.height;
 			var tileLeft:Number = tile.x * board.tileSideLength + board.tileSideLength * .15;
 			var tileRight:Number = tile.x * board.tileSideLength + board.tileSideLength * .85;
 			var tileTop:Number = tile.y * board.tileSideLength + board.tileSideLength * .85;
@@ -729,18 +734,18 @@ package
 		private function standingOnCrate(obj:PhysicsObject):Boolean
 		{
 			var objLeft:Number = obj.asset.x + 1;
-			var objRight:Number = obj.asset.x + obj.asset.width - 1;
+			var objRight:Number = obj.asset.x + obj.width - 1;
 			var objTop:Number = obj.asset.y;
-			var objBottom:Number = obj.asset.y + obj.asset.height;
+			var objBottom:Number = obj.asset.y + obj.height;
 			
 			for each (var crate:Crate in board.crates)
 			{
 				if (obj != crate)
 				{
 					var crateLeft:Number = crate.asset.x;
-					var crateRight:Number = crate.asset.x + crate.asset.width;
+					var crateRight:Number = crate.asset.x + crate.width;
 					var crateTop:Number = crate.asset.y;
-					var crateBottom:Number = crate.asset.y + crate.asset.height;
+					var crateBottom:Number = crate.asset.y + crate.height;
 					if ((objLeft >= crateLeft && objLeft <= crateRight ||
 						objRight >= crateLeft && objRight <= crateRight) &&
 						(objTop >= crateTop && objTop <= crateBottom ||
@@ -756,18 +761,18 @@ package
 		private function crateAbove(obj:PhysicsObject):Boolean
 		{
 			var objLeft:Number = obj.asset.x + 1;
-			var objRight:Number = obj.asset.x + obj.asset.width - 1;
+			var objRight:Number = obj.asset.x + obj.width - 1;
 			var objTop:Number = obj.asset.y;
-			var objBottom:Number = obj.asset.y + obj.asset.height - 1;
+			var objBottom:Number = obj.asset.y + obj.height - 1;
 			
 			for each (var crate:Crate in board.crates)
 			{
 				if (obj != crate)
 				{
 					var crateLeft:Number = crate.asset.x;
-					var crateRight:Number = crate.asset.x + crate.asset.width;
+					var crateRight:Number = crate.asset.x + crate.width;
 					var crateTop:Number = crate.asset.y;
-					var crateBottom:Number = crate.asset.y + crate.asset.height;
+					var crateBottom:Number = crate.asset.y + crate.height;
 					if ((objLeft >= crateLeft && objLeft <= crateRight ||
 						objRight >= crateLeft && objRight <= crateRight) &&
 						(objTop >= crateTop && objTop <= crateBottom ||
@@ -788,18 +793,18 @@ package
 		private function collidingWithCrate(obj:PhysicsObject):Boolean
 		{
 			var objLeft:Number = obj.asset.x + 1;
-			var objRight:Number = obj.asset.x + obj.asset.width - 1;
+			var objRight:Number = obj.asset.x + obj.width - 1;
 			var objTop:Number = obj.asset.y + 1;
-			var objBottom:Number = obj.asset.y + obj.asset.height - 1;
+			var objBottom:Number = obj.asset.y + obj.height - 1;
 			
 			for each (var crate:Crate in board.crates)
 			{
 				if (obj != crate)
 				{
 					var crateLeft:Number = crate.asset.x;
-					var crateRight:Number = crate.asset.x + crate.asset.width;
+					var crateRight:Number = crate.asset.x + crate.width;
 					var crateTop:Number = crate.asset.y;
-					var crateBottom:Number = crate.asset.y + crate.asset.height;
+					var crateBottom:Number = crate.asset.y + crate.height;
 					if ((objLeft >= crateLeft && objLeft <= crateRight ||
 						objRight >= crateLeft && objRight <= crateRight) &&
 						(objTop >= crateTop && objTop <= crateBottom ||
@@ -821,18 +826,18 @@ package
 		private function getCollidingCrate(obj:PhysicsObject):Crate
 		{
 			var objLeft:Number = obj.asset.x;
-			var objRight:Number = obj.asset.x + obj.asset.width;
+			var objRight:Number = obj.asset.x + obj.width;
 			var objTop:Number = obj.asset.y;
-			var objBottom:Number = obj.asset.y + obj.asset.height;
+			var objBottom:Number = obj.asset.y + obj.height;
 			
 			for each (var crate:Crate in board.crates)
 			{
 				if (obj != crate)
 				{
 					var crateLeft:Number = crate.asset.x;
-					var crateRight:Number = crate.asset.x + crate.asset.width;
+					var crateRight:Number = crate.asset.x + crate.width;
 					var crateTop:Number = crate.asset.y;
-					var crateBottom:Number = crate.asset.y + crate.asset.height;
+					var crateBottom:Number = crate.asset.y + crate.height;
 					if ((objLeft >= crateLeft && objLeft <= crateRight ||
 						objRight >= crateLeft && objRight <= crateRight) &&
 						(objTop >= crateTop && objTop <= crateBottom ||
@@ -858,10 +863,10 @@ package
 					var bottomPlat:int = plat.y + plat.height * .35;
 					var rightPlat:int = plat.x + plat.width;
 					var leftPlat:int = plat.x;
-					var playerLeft:int = player.asset.x + player.asset.width * .25;
-					var playerRight:int = player.asset.x + player.asset.width * .75;
+					var playerLeft:int = player.asset.x + player.width * .25;
+					var playerRight:int = player.asset.x + player.width * .75;
 					var playerTop:int = player.asset.y;
-					var playerBottom:int = player.asset.y + player.asset.height;
+					var playerBottom:int = player.asset.y + player.height;
 					
 					if (direction == Constants.UP)
 					{
@@ -877,7 +882,7 @@ package
 					{
 						if (playerBottom >= topPlat && playerTop <= bottomPlat &&
 							playerRight >= leftPlat && playerLeft <= rightPlat) {
-							player.asset.y = topPlat - player.asset.height;
+							player.asset.y = topPlat - player.height;
 							player.inAir = false;
 							player.onPlatform = true;
 						}
@@ -918,7 +923,7 @@ package
 		
 		private function getYPositionOfPlayer():int
 		{
-			return (board.boardHeightInPixels - player.asset.y - player.asset.height ) / board.tileSideLength;
+			return (board.boardHeightInPixels - player.asset.y - player.height ) / board.tileSideLength;
 		}
 		
 		/**
@@ -1004,9 +1009,9 @@ package
 		private function getPlayerTiles():Vector.<IntPair> 		
 		{			
 			var lowX:int = (int) (player.asset.x / board.tileSideLength);
-			var highX:int = (int) ((player.asset.x + player.asset.width) / board.tileSideLength);
+			var highX:int = (int) ((player.asset.x + player.width) / board.tileSideLength);
 			var highY:int = (int) (player.asset.y / board.tileSideLength);
-			var lowY:int = (int) ((player.asset.y + player.asset.height - 1) / board.tileSideLength);
+			var lowY:int = (int) ((player.asset.y + player.height - 1) / board.tileSideLength);
 			
 			// Determines if any of the above values are the same (Whether the player is located inside a square or in between two or more squares)
 			var oneX:Boolean = false; 
@@ -1069,8 +1074,8 @@ package
 		private function getTilesBelowObject(obj:PhysicsObject):Vector.<IntPair>
 		{
 			var lowX:int = (int) (obj.asset.x / board.tileSideLength);
-			var highX:int = (int) ((obj.asset.x + obj.asset.width) / board.tileSideLength);
-			var lowY:int = (int) ((obj.asset.y + obj.asset.height) / board.tileSideLength);
+			var highX:int = (int) ((obj.asset.x + obj.width) / board.tileSideLength);
+			var lowY:int = (int) ((obj.asset.y + obj.height) / board.tileSideLength);
 			
 			var result:Vector.<IntPair> = new Vector.<IntPair>();
 			
@@ -1092,7 +1097,7 @@ package
 		private function getTilesAboveObject(obj:PhysicsObject):Vector.<IntPair>
 		{
 			var lowX:int = (int) (obj.asset.x / board.tileSideLength);
-			var highX:int = (int) ((obj.asset.x + obj.asset.width) / board.tileSideLength);
+			var highX:int = (int) ((obj.asset.x + obj.width) / board.tileSideLength);
 			var highY:int = (int) (obj.asset.y / board.tileSideLength);
 			
 			var result:Vector.<IntPair> = new Vector.<IntPair>();
@@ -1114,8 +1119,8 @@ package
 		 */
 		private function getTilesOnObjectRight(obj:PhysicsObject):Vector.<IntPair>
 		{
-			var highX:int = (int) ((obj.asset.x + obj.asset.width) / board.tileSideLength);
-			var lowY:int = (int) ((obj.asset.y + obj.asset.height - 1) / board.tileSideLength);
+			var highX:int = (int) ((obj.asset.x + obj.width) / board.tileSideLength);
+			var lowY:int = (int) ((obj.asset.y + obj.height - 1) / board.tileSideLength);
 			var highY:int = (int) (obj.asset.y / board.tileSideLength);
 		
 			var result:Vector.<IntPair> = new Vector.<IntPair>();
@@ -1138,7 +1143,7 @@ package
 		private function getTilesOnObjectLeft(obj:PhysicsObject):Vector.<IntPair>
 		{
 			var lowX:int = (int) (obj.asset.x / board.tileSideLength);
-			var lowY:int = (int) ((obj.asset.y + obj.asset.height - 1) / board.tileSideLength);
+			var lowY:int = (int) ((obj.asset.y + obj.height - 1) / board.tileSideLength);
 			var highY:int = (int) (obj.asset.y / board.tileSideLength);
 			
 			var result:Vector.<IntPair> = new Vector.<IntPair>();
