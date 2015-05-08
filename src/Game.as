@@ -343,7 +343,9 @@ package
 						id = board.getTile(tile.x, tile.y);
 						if (tile.x * board.tileSideLength != player.asset.x + player.width) {
 							checkLavaHit(id);
-							if (id == Constants.WALL || isClosedGate(id)) {
+							if (id == Constants.WALL ||
+								id == Constants.TRAMP ||
+								isClosedGate(id)) {
 								player.startingHeight = getYPositionOfPlayer()
 								player.asset.y = (tile.y + 1) * board.tileSideLength;
 								player.velocity = Constants.INITIAL_FALL_VELOCITY;

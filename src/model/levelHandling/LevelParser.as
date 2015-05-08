@@ -66,7 +66,8 @@ package model.levelHandling
 		[Embed(source = "../../../assets/levels/level13.json", mimeType = "application/octet-stream")]
 		private var Level13:Class;
 
-		
+		[Embed(source = "../../../assets/levels/level14.json", mimeType = "application/octet-stream")]
+		private var Level14:Class;
 		
 		/**
 		 *	Level Names Dictionary
@@ -96,6 +97,7 @@ package model.levelHandling
 			m_levelNames["level11"] = Level11;
 			m_levelNames["level12"] = Level12;
 			m_levelNames["level13"] = Level13;
+			m_levelNames["level14"] = Level14;
 			
 		}
 		
