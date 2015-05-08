@@ -63,7 +63,7 @@ package
 			
 			// Parse LevelProgression JSON
 			//var progressionString:String = (new Progression1() as ByteArray).toString();
-			var progressionString:String = (new Progression1() as ByteArray).toString();
+			var progressionString:String = (new TestProgression() as ByteArray).toString();
 			var prog:Object = JSON.parse(progressionString);
 
             // This is cid in the wiki
@@ -78,7 +78,7 @@ package
 			var game:Game = new Game(stage, prog, logger);
 			Audio.Init();
 			Stopwatch.Init();
-            GameState.Init("Progression1", game);
+            GameState.Init("asjsfskdhfk", game);
 			Menu.Init(stage, game);
 			Menu.createMainMenu();
 

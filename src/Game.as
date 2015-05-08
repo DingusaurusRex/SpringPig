@@ -304,7 +304,7 @@ package
 					for each (var tile:IntPair in getTilesInDirection(m_player, Constants.RIGHT))
 					{
 						var id:int = m_board.getTile(tile.x, tile.y);
-						checkLavaHit(id);
+						checkLavaHit(id, tile);
 						//if (isButton(id) && collidingWithButton(player, tile)) {
 							//setButtonDown(board, id);
 						//}
@@ -331,7 +331,7 @@ package
 					for each (tile in getTilesInDirection(m_player, Constants.LEFT))
 					{
 						id = m_board.getTile(tile.x, tile.y);
-						checkLavaHit(id);
+						checkLavaHit(id, tile);
 						//if (isButton(id) && collidingWithButton(player, tile)) {
 							//setButtonDown(board, id);
 						//}
@@ -346,7 +346,7 @@ package
 					for each (tile in getTilesInDirection(m_player, Constants.UP)) {
 						id = m_board.getTile(tile.x, tile.y);
 						if (tile.x * m_board.tileSideLength != m_player.asset.x + m_player.width) {
-							checkLavaHit(id);
+							checkLavaHit(id, tile);
 							if (id == Constants.WALL ||
 								id == Constants.TRAMP ||
 								isClosedGate(id)) {
@@ -372,7 +372,7 @@ package
 					for each (tile in getTilesInDirection(m_player, Constants.DOWN)) {
 						id = m_board.getTile(tile.x, tile.y);
 						if (tile.x * m_board.tileSideLength != m_player.asset.x + m_player.width) {
-							if (checkLavaHit(id)) {
+							if (checkLavaHit(id, tile, true)) {
 								m_player.inAir = false;
 								break;
 							}
@@ -1176,15 +1176,31 @@ package
 			return false;
 		}
 		
-		private function checkLavaHit(id:int):Boolean
+		/**
+		 * Returns true if player is colliding with lava. False otherwise
+		 * @param	id - id of tile colliding with
+		 * @param	tile - tile colliding with
+		 * @param	playerBottom - True if bottom of player is hitting lava, false if top of player is hitting lava
+		 * @return
+		 */
+		private function checkLavaHit(id:int, tile:IntPair, playerBottom:Boolean = false):Boolean
 		{
+			var playerRight:int = m_player.asset.x + m_player.width * .75;
+			var playerLeft:int = m_player.asset.x + m_player.width * .25;
+			var tileRight:int = (tile.x + 1) * m_board.tileSideLength;
+			var tileLeft:int = tile.x * m_board.tileSideLength;
+			
+			// Check if top or bottom of player is hitting lava
 			if (id == Constants.LAVA) {
-                var logData:Object = {x:m_player.asset.x, y:m_player.asset.y};
-                m_logger.logAction(Constants.AID_DEATH, logData);
-				resetPlayer();
-				resetCrates();
+				if (!playerBottom || (playerBottom && playerLeft <= tileRight && playerRight >= tileLeft)) {
+					var logData:Object = {x:m_player.asset.x, y:m_player.asset.y};
+					m_logger.logAction(Constants.AID_DEATH, logData);
+					resetPlayer();
+					resetCrates();
+					return true;
+				}
 			}
-			return id == Constants.LAVA;
+			return false;
 		}
 		
 		private function resetPlayer():void
