@@ -7,6 +7,7 @@ package
 	import flash.text.TextField;
 	import flash.ui.Keyboard;
 	import flash.utils.ByteArray;
+    import mx.utils.SHA256;
 	import model.levelHandling.Board;
 	import model.levelHandling.LevelParser;
 
@@ -62,8 +63,8 @@ package
 			// entry point
 			
 			// Parse LevelProgression JSON
-			//var progressionString:String = (new Progression1() as ByteArray).toString();
-			var progressionString:String = (new Progression1() as ByteArray).toString();
+			var progression:ByteArray = (new Progression1() as ByteArray); // Change this for progression
+			var progressionString:String = progression.toString();
 			var prog:Object = JSON.parse(progressionString);
 
             // This is cid in the wiki
@@ -74,11 +75,11 @@ package
 			m_song = (new Song1()) as Sound;
 			m_song.play(0, int.MAX_VALUE);
 			
-            // Menu Stuff Here!!!!!!!!!!!!!
+            // Initialization
 			var game:Game = new Game(stage, prog, logger);
 			Audio.Init();
 			Stopwatch.Init();
-            GameState.Init("Progression1", game);
+            GameState.Init(SHA256.computeDigest(progression), game);
 			Menu.Init(stage, game);
 			Menu.createMainMenu();
 
