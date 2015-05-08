@@ -160,8 +160,13 @@ package
 		public static const TERMINAL_VELOCITY:Number = 1;		// Maximum Velocity (game might break if exceeded)
 		public static const GRAVITY:Number = .03;				// change in blocks / update ^2
 		
-		public static const PLAYERX:Number = 5;
-		public static const CRATEX:Number = 2;
+		public static const PLAYER_SPEED:Number = 5;
+		public static const CRATE_SPEED:Number = 2;
+		public static const AIR_SPEED:Number = 5;
+		public static const LADDER_UP_SPEED:Number = 8;
+		public static const LADDER_DOWN_SPEED:Number = 5;
+		
+		public static const BASE_SIDE_LENGTH:Number = 46;		// The base pixels / block that will result in the above speeds.
 		
 		
 		/*

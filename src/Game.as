@@ -33,23 +33,23 @@ package
 	public class Game 
 	{
 		// Keys
-		private var keyUp:Boolean;
-		private var keyDown:Boolean;
-		private var keyRight:Boolean;
-		private var keyLeft:Boolean;
-		private var keySpace:Boolean;
-		private var keyR:Boolean;
+		private var m_keyUp:Boolean;
+		private var m_keyDown:Boolean;
+		private var m_keyRight:Boolean;
+		private var m_keyLeft:Boolean;
+		private var m_keySpace:Boolean;
+		private var m_keyR:Boolean;
 		
 		// Player
-		private var player:Player;
-		private var playerStart:IntPair;
+		private var m_player:Player;
+		private var m_playerStart:IntPair;
 		
 		// Stage
-		private var stage:Stage;
-		private var board:Board;
-		private var meter:MeterView;
-		private var finishTile:IntPair;
-		private var boardSprite:BoardView;
+		private var m_stage:Stage;
+		private var m_board:Board;
+		private var m_meter:MeterView;
+		private var m_finishTile:IntPair;
+		private var m_boardSprite:BoardView;
 		
 		// Level Progression Variables
 		public var progression:Array;
@@ -64,16 +64,16 @@ package
 				
 		public var pause:Boolean;
 		
-		private var levelReader:LevelParser;
+		private var m_levelReader:LevelParser;
 		
 		// Platforms
 		private var platforms:Vector.<Bitmap>;
 		
 		// Signs
-		private var signText:TextField;
+		private var m_signText:TextField;
 
         // Logger
-        private var logger:Logger;
+        private var m_logger:Logger;
 		
 		/**
 		 * Begins the game
@@ -83,23 +83,20 @@ package
 		{
 			
 			// Get the graphics for the meter
-			meter = new MeterView();
-			meter.x = Constants.METER_X;
-			meter.y = Constants.METER_Y;
+			m_meter = new MeterView();
+			m_meter.x = Constants.METER_X;
+			m_meter.y = Constants.METER_Y;
 			
-			// Create the Player
-			player = new Player();
-			
-			this.stage = stage;
+			this.m_stage = stage;
 			this.progression = progObj.progression;
 			currLevelIndex = 0;
 			
 			this.pause = false;
 
 			
-			this.levelReader = new LevelParser();
+			this.m_levelReader = new LevelParser();
 
-            this.logger = logger;
+            this.m_logger = logger;
 		}
 		
 		/**
@@ -110,56 +107,60 @@ package
 		public function startLevel(levelName:String):void
 		{
 			// Get the board for the test level
-			board = levelReader.parseLevel(levelName);
+			m_board = m_levelReader.parseLevel(levelName);
+			trace(m_board.width + "x" + m_board.height + ": " + m_board.tileSideLength);
 			
 			// Get the graphics for the test level
-			if (boardSprite)
+			if (m_boardSprite)
 			{
 				//stage.removeChild(boardSprite);
 			}
-			boardSprite = new BoardView(board);
+			m_boardSprite = new BoardView(m_board);
+			
+			// Create the Player
+			m_player = new Player(m_board.tileSideLength);
 			
 			// Position the player
-			var playerStart:IntPair = boardSprite.getPlayerStart(); // Top right of the square
-			player.height = (int) (board.tileSideLength * 3.0 / 4.0);
-			player.width = (int) (board.tileSideLength * 3.0 / 4.0);
-			player.asset.x = playerStart.x;
-			player.asset.y = playerStart.y + board.tileSideLength - player.height;
-			playerStart.y = player.asset.y;
-			player.energy = 0;
-			meter.energy = player.energy;
+			var playerStart:IntPair = m_boardSprite.getPlayerStart(); // Top right of the square
+			m_player.height = (int) (m_board.tileSideLength * 3.0 / 4.0);
+			m_player.width = (int) (m_board.tileSideLength * 3.0 / 4.0);
+			m_player.asset.x = playerStart.x;
+			m_player.asset.y = playerStart.y + m_board.tileSideLength - m_player.height;
+			playerStart.y = m_player.asset.y;
+			m_player.energy = 0;
+			m_meter.energy = m_player.energy;
 			
-			this.playerStart = playerStart;
+			this.m_playerStart = playerStart;
 			
-			Stopwatch.stopwatchText.x = meter.x;
-			Stopwatch.stopwatchText.y = meter.y + meter.height + Constants.GAME_STOPWATCH_TOP_PADDING;
+			Stopwatch.stopwatchText.x = m_meter.x;
+			Stopwatch.stopwatchText.y = m_meter.y + m_meter.height + Constants.GAME_STOPWATCH_TOP_PADDING;
 			
 			// Add graphics			
-			stage.addChild(boardSprite);
-			stage.addChild(meter);
-			stage.addChild(Stopwatch.stopwatchText);
-			stage.addChild(player.asset);
+			m_stage.addChild(m_boardSprite);
+			m_stage.addChild(m_meter);
+			m_stage.addChild(Stopwatch.stopwatchText);
+			m_stage.addChild(m_player.asset);
 			
 			// Create Listeners
-			stage.addEventListener(KeyboardEvent.KEY_DOWN, onKeyDown);
-			stage.addEventListener(KeyboardEvent.KEY_UP, onKeyUp);
-			stage.addEventListener(Event.ENTER_FRAME, update);
+			m_stage.addEventListener(KeyboardEvent.KEY_DOWN, onKeyDown);
+			m_stage.addEventListener(KeyboardEvent.KEY_UP, onKeyUp);
+			m_stage.addEventListener(Event.ENTER_FRAME, update);
 			
-			stage.focus = stage; // Needed to refocus back to the game
+			m_stage.focus = m_stage; // Needed to refocus back to the game
 			pause = false; // Reset pause
-			this.finishTile = boardSprite.getFinishTile();
+			this.m_finishTile = m_boardSprite.getFinishTile();
 			
 			// Buttons and Gates
-			buttons = board.getButtons();
-			popupButtons = board.getPopupButtons();
-			gates = board.getGates();
+			buttons = m_board.getButtons();
+			popupButtons = m_board.getPopupButtons();
+			gates = m_board.getGates();
 			gateStatus = new Dictionary();
 			for each (var id:int in gates) {
 				gateStatus[id] = 0; // CLOSED
 			}
 			initButtonGateDict();
 
-            logger.logLevelStart(currLevelIndex + 1, null);
+            m_logger.logLevelStart(currLevelIndex + 1, null);
 
 			GameState.currentLevelSave();
 			// Reset and start timing
@@ -177,106 +178,106 @@ package
 				// Update the stopwatch
 				Stopwatch.updateStopwatchText();
 				
-				boardSprite.movePlatforms(player, board);
-				platforms = boardSprite.platforms;
+				m_boardSprite.movePlatforms(m_player, m_board);
+				platforms = m_boardSprite.platforms;
 				
 				popButtonsUp();
 				displaySign();
 				updateCrates();
-				var wasInAir:Boolean = player.inAir;
+				var wasInAir:Boolean = m_player.inAir;
 				checkPlayerCollision(Constants.DOWN); // Sets player.inAir
 				// Check if the player has started falling. If so, get his starting height in order to later calculate energy gained.
-				if (player.inAir && !wasInAir) {
-					player.startingHeight = getYPositionOfPlayer();
-					player.velocity = Constants.INITIAL_FALL_VELOCITY;
+				if (m_player.inAir && !wasInAir) {
+					m_player.startingHeight = getYPositionOfPlayer();
+					m_player.velocity = Constants.INITIAL_FALL_VELOCITY;
 				}
 				
 				// Process Keyboard controls
-				if (keyUp && !player.inAir) {
+				if (m_keyUp && !m_player.inAir) {
 					if (collidingWithLadder()) { // Go up the ladder
-						player.asset.y -= player.upSpeedY;
+						m_player.asset.y -= m_player.upSpeedY;
 						checkPlayerCollision(Constants.UP);
 					} else { // Jump
-						player.velocity = Constants.JUMP_VELOCITIES[1];
-						player.inAir = true;
-						player.startingHeight = getYPositionOfPlayer();
+						m_player.velocity = Constants.JUMP_VELOCITIES[1];
+						m_player.inAir = true;
+						m_player.startingHeight = getYPositionOfPlayer();
 					}
 				}
-				if (keyDown && ladderBelowPlayer()) {
-					player.asset.y += player.downSpeedY;
+				if (m_keyDown && ladderBelowPlayer()) {
+					m_player.asset.y += m_player.downSpeedY;
 				}
-				if (keyRight) {
-					if (player.asset.x < board.boardWidthInPixels - player.width - 5) {
-						player.inAir ? player.asset.x += player.airSpeedX : player.asset.x += player.speedX;
+				if (m_keyRight) {
+					if (m_player.asset.x < m_board.boardWidthInPixels - m_player.width - 5) {
+						m_player.inAir ? m_player.asset.x += m_player.airSpeedX : m_player.asset.x += m_player.speedX;
 						checkPlayerCollision(Constants.RIGHT);
 					}						
 				}
-				if (keyLeft) {
-					if (player.asset.x > 0) {
-						player.inAir ? player.asset.x -= player.airSpeedX : player.asset.x -= player.speedX;
+				if (m_keyLeft) {
+					if (m_player.asset.x > 0) {
+						m_player.inAir ? m_player.asset.x -= m_player.airSpeedX : m_player.asset.x -= m_player.speedX;
 						checkPlayerCollision(Constants.LEFT);
 					}
 				}
-				if (keySpace && !player.inAir && !ladderBelowPlayer()) {
+				if (m_keySpace && !m_player.inAir && !ladderBelowPlayer()) {
 					useEnergy();
 				}
-				if (keyR) {
-                    var logData:Object = {x:player.asset.x, y:player.asset.y};
-                    logger.logAction(Constants.AID_RESET, logData);
+				if (m_keyR) {
+                    var logData:Object = {x:m_player.asset.x, y:m_player.asset.y};
+                    m_logger.logAction(Constants.AID_RESET, logData);
 					resetPlayer();
 					resetCrates();
 				}
-				for (var x:int = 0; x < board.width; x++ )
+				for (var x:int = 0; x < m_board.width; x++ )
 				{
-					for (var y:int = 0; y < board.height; y++)
+					for (var y:int = 0; y < m_board.height; y++)
 					{
 						var tile:IntPair = new IntPair(x, y)
-						var id:int = board.getTile(x, y)
+						var id:int = m_board.getTile(x, y)
 						if (isButton(id))
 						{	
-							if (collidingWithButton(player, tile))
+							if (collidingWithButton(m_player, tile))
 							{
-								setButtonDown(board, id);
+								setButtonDown(m_board, id);
 							}
-							for each (var crate:Crate in board.crates)
+							for each (var crate:Crate in m_board.crates)
 							{
 								if (collidingWithButton(crate, tile))
 								{
-									setButtonDown(board, id);
+									setButtonDown(m_board, id);
 								}
 							}
 						}
 					}
 				}
-				if (player.inAir || collidingWithLadder()) {
-					player.updatePosition(board.tileSideLength);
+				if (m_player.inAir || collidingWithLadder()) {
+					m_player.updatePosition(m_board.tileSideLength);
 					
-					if (player.asset.y <= 0) {
-						player.startingHeight = getYPositionOfPlayer();
-						player.asset.y = 0;
-						player.velocity = Constants.INITIAL_FALL_VELOCITY;
+					if (m_player.asset.y <= 0) {
+						m_player.startingHeight = getYPositionOfPlayer();
+						m_player.asset.y = 0;
+						m_player.velocity = Constants.INITIAL_FALL_VELOCITY;
 					}
 					
 					checkPlayerCollision(Constants.UP);
 					checkPlayerCollision(Constants.DOWN); // Sets player.inAir
-					if (!player.inAir) { // If player was in air and no longer is, add energy
-						player.velocity = 0;
+					if (!m_player.inAir) { // If player was in air and no longer is, add energy
+						m_player.velocity = 0;
 						if (!collidingWithLadder()) { // Dont add energy if you fall on ladder
-							var energy:int = player.startingHeight - getYPositionOfPlayer() - Constants.ENERGY_DOWNGRADE;
-							player.energy += Math.max(0, energy);
-							if (player.energy > 10) 
-								player.energy = 10;
-							meter.energy = player.energy;
+							var energy:int = m_player.startingHeight - getYPositionOfPlayer() - Constants.ENERGY_DOWNGRADE;
+							m_player.energy += Math.max(0, energy);
+							if (m_player.energy > 10) 
+								m_player.energy = 10;
+							m_meter.energy = m_player.energy;
 							
 							if (trampBelowPlayer()) 
 							{
 								useEnergy();
-								player.updatePosition(board.tileSideLength);
+								m_player.updatePosition(m_board.tileSideLength);
 							}
 						}
 						else
 						{
-							player.startingHeight = getYPositionOfPlayer();
+							m_player.startingHeight = getYPositionOfPlayer();
 						}
 					}
 				}
@@ -289,91 +290,91 @@ package
 			{
 				case Constants.RIGHT:
 					// If colliding with a crate, move the crate
-					if (collidingWithCrate(player))
+					if (collidingWithCrate(m_player))
 					{
-						var crate:Crate = getCollidingCrate(player);
-						crate.asset.x += Constants.CRATEX;
-						player.inAir ? player.asset.x -= player.airSpeedX - Constants.CRATEX : player.asset.x -= player.speedX - Constants.CRATEX;
+						var crate:Crate = getCollidingCrate(m_player);
+						crate.asset.x += m_player.cratePushSpeed;
+						m_player.inAir ? m_player.asset.x -= m_player.airSpeedX - m_player.cratePushSpeed : m_player.asset.x -= m_player.speedX - m_player.cratePushSpeed;
 						if (checkCrateCollision(crate, Constants.RIGHT))
 						{
-							crate.asset.x -= Constants.CRATEX;
-							player.asset.x -= Constants.CRATEX;
+							crate.asset.x -= m_player.cratePushSpeed;
+							m_player.asset.x -= m_player.cratePushSpeed;
 						}
 					}
 					// If you ran into a wall, keep the player in the previous square
-					for each (var tile:IntPair in getTilesInDirection(player, Constants.RIGHT))
+					for each (var tile:IntPair in getTilesInDirection(m_player, Constants.RIGHT))
 					{
-						var id:int = board.getTile(tile.x, tile.y);
+						var id:int = m_board.getTile(tile.x, tile.y);
 						checkLavaHit(id);
 						//if (isButton(id) && collidingWithButton(player, tile)) {
 							//setButtonDown(board, id);
 						//}
 						if (id == Constants.WALL || isClosedGate(id) || id == Constants.TRAMP)
 						{
-							player.asset.x = tile.x * board.tileSideLength - player.width;
+							m_player.asset.x = tile.x * m_board.tileSideLength - m_player.width;
 						}
 					}
 					break;
 				case Constants.LEFT:
 					// If colliding with a crate, move the crate
-					if (collidingWithCrate(player))
+					if (collidingWithCrate(m_player))
 					{
-						crate = getCollidingCrate(player);
-						crate.asset.x -= Constants.CRATEX;
-						player.inAir ? player.asset.x += player.airSpeedX - Constants.CRATEX : player.asset.x += player.speedX - Constants.CRATEX;
+						crate = getCollidingCrate(m_player);
+						crate.asset.x -= m_player.cratePushSpeed;
+						m_player.inAir ? m_player.asset.x += m_player.airSpeedX - m_player.cratePushSpeed : m_player.asset.x += m_player.speedX - m_player.cratePushSpeed;
 						if (checkCrateCollision(crate, Constants.LEFT))
 						{
-							crate.asset.x += Constants.CRATEX;
-							player.asset.x += Constants.CRATEX;
+							crate.asset.x += m_player.cratePushSpeed;
+							m_player.asset.x += m_player.cratePushSpeed;
 						}
 					}
 					// If you ran into a wall, keep the player in the previous square
-					for each (tile in getTilesInDirection(player, Constants.LEFT))
+					for each (tile in getTilesInDirection(m_player, Constants.LEFT))
 					{
-						id = board.getTile(tile.x, tile.y);
+						id = m_board.getTile(tile.x, tile.y);
 						checkLavaHit(id);
 						//if (isButton(id) && collidingWithButton(player, tile)) {
 							//setButtonDown(board, id);
 						//}
 						if (id == Constants.WALL || isClosedGate(id) || id == Constants.TRAMP)
 						{
-							player.asset.x = (tile.x + 1) * board.tileSideLength;
+							m_player.asset.x = (tile.x + 1) * m_board.tileSideLength;
 						}
 					}
 					break;
 				case Constants.UP:
 					//Check that the user has not crashed into a wall above him
-					for each (tile in getTilesInDirection(player, Constants.UP)) {
-						id = board.getTile(tile.x, tile.y);
-						if (tile.x * board.tileSideLength != player.asset.x + player.width) {
+					for each (tile in getTilesInDirection(m_player, Constants.UP)) {
+						id = m_board.getTile(tile.x, tile.y);
+						if (tile.x * m_board.tileSideLength != m_player.asset.x + m_player.width) {
 							checkLavaHit(id);
 							if (id == Constants.WALL ||
 								id == Constants.TRAMP ||
 								isClosedGate(id)) {
-								player.startingHeight = getYPositionOfPlayer()
-								player.asset.y = (tile.y + 1) * board.tileSideLength;
-								player.velocity = Constants.INITIAL_FALL_VELOCITY;
+								m_player.startingHeight = getYPositionOfPlayer()
+								m_player.asset.y = (tile.y + 1) * m_board.tileSideLength;
+								m_player.velocity = Constants.INITIAL_FALL_VELOCITY;
 							}
 						}
 					}
 					collideWithPlatform(direction);
 					break;
 				case Constants.DOWN:
-					player.inAir = true;
+					m_player.inAir = true;
 					if (collideWithPlatform(direction))
 						break;
-					else if (standingOnCrate(player))
+					else if (standingOnCrate(m_player))
 					{
-						crate = getCollidingCrate(player);
-						player.asset.y = (int) (crate.asset.y - player.height);
-						player.velocity = 0;
-						player.inAir = false;
+						crate = getCollidingCrate(m_player);
+						m_player.asset.y = (int) (crate.asset.y - m_player.height);
+						m_player.velocity = 0;
+						m_player.inAir = false;
 					}
-					for each (tile in getTilesInDirection(player, Constants.DOWN)) {
-						id = board.getTile(tile.x, tile.y);
-						if (tile.x * board.tileSideLength != player.asset.x + player.width) {
+					for each (tile in getTilesInDirection(m_player, Constants.DOWN)) {
+						id = m_board.getTile(tile.x, tile.y);
+						if (tile.x * m_board.tileSideLength != m_player.asset.x + m_player.width) {
 							if (checkLavaHit(id)) {
-								player.inAir = false;
+								m_player.inAir = false;
 								break;
 							}
 							//if (isButton(id) && collidingWithButton(player, tile)) {
@@ -381,21 +382,21 @@ package
 							//}
 							else if (id == Constants.LADDER) {
 								// If at the top of the ladder, make sure player falls back to top of ladder and not slightly inside ladder
-								var tileAboveLadder:int = board.getTile(tile.x, tile.y - 1);
+								var tileAboveLadder:int = m_board.getTile(tile.x, tile.y - 1);
 
 								// Check that the player is close to the top of the ladder when they are climbing up
 								// Only check if they are close to the top when they are climbing UP the ladder.
 								// When player is falling, he should fall on top of ladder every time.
 								// When a player is deliberately pressing down, they should not get y position reset
-								var closeToTop:Boolean = Math.abs(player.asset.y + player.height - (tile.y * board.tileSideLength)) <= player.downSpeedY;
-								if (player.dy > 0)
+								var closeToTop:Boolean = Math.abs(m_player.asset.y + m_player.height - (tile.y * m_board.tileSideLength)) <= m_player.downSpeedY;
+								if (m_player.dy > 0)
 									closeToTop = true;
 								if ((tileAboveLadder == Constants.EMPTY || tileAboveLadder == Constants.START || tileAboveLadder == Constants.END)
-									&& tileAboveLadder != -1 && closeToTop && !keyDown)
+									&& tileAboveLadder != -1 && closeToTop && !m_keyDown)
 								{
-									player.asset.y = (int) (tile.y * board.tileSideLength - player.height);
+									m_player.asset.y = (int) (tile.y * m_board.tileSideLength - m_player.height);
 								}
-								player.inAir = false;
+								m_player.inAir = false;
 							}
 							// If one of the tiles below player is not empty, then player is not falling
 							else if (id != Constants.EMPTY &&
@@ -406,9 +407,9 @@ package
 									 !isButton(id) && 
 									!isOpenGate(id) &&
 									!isMovingPlatformStartOrEnd(id)) {
-								player.asset.y = (int) (tile.y * board.tileSideLength - player.height);
-								player.velocity = 0;
-								player.inAir = false;
+								m_player.asset.y = (int) (tile.y * m_board.tileSideLength - m_player.height);
+								m_player.velocity = 0;
+								m_player.inAir = false;
 							}
 						}
 					}
@@ -417,7 +418,7 @@ package
 						pause = true; // So that player position is disregarded
                         Stopwatch.pause();
                         var logData:Object = {time:Stopwatch.getCurrentTiming()};
-                        logger.logLevelEnd(logData);
+                        m_logger.logLevelEnd(logData);
                         GameState.openNextLevelSave();
 						if (currLevelIndex == progression.length - 1) {
 							Menu.createEndGameMenu();
@@ -457,14 +458,14 @@ package
 		 */
 		private function useEnergy(removeMeter:Boolean = true):void
 		{
-            var logData:Object = {x:player.asset.x, y:player.asset.y, power:player.energy};
-            logger.logAction(Constants.AID_SPRING, logData);
-			player.velocity = Constants.JUMP_VELOCITIES[player.energy];
-			player.inAir = true;
-			player.startingHeight = getYPositionOfPlayer() + player.energy;
-			player.energy = 0;
+            var logData:Object = {x:m_player.asset.x, y:m_player.asset.y, power:m_player.energy};
+            m_logger.logAction(Constants.AID_SPRING, logData);
+			m_player.velocity = Constants.JUMP_VELOCITIES[m_player.energy];
+			m_player.inAir = true;
+			m_player.startingHeight = getYPositionOfPlayer() + m_player.energy;
+			m_player.energy = 0;
 			if (removeMeter)
-				meter.energy = player.energy;
+				m_meter.energy = m_player.energy;
 		}
 		
 		/**
@@ -474,7 +475,7 @@ package
 		private function collidingWithLadder():Boolean
 		{
 			for each (var tile:IntPair in getPlayerTiles()) {
-				if (board.getTile(tile.x, tile.y) == Constants.LADDER) 
+				if (m_board.getTile(tile.x, tile.y) == Constants.LADDER) 
 					return true;
 			}
 			return false;
@@ -486,8 +487,8 @@ package
 		 */
 		private function trampBelowPlayer():Boolean
 		{
-			for each (var tile:IntPair in getTilesInDirection(player, Constants.DOWN)) {
-				if (board.getTile(tile.x, tile.y) == Constants.TRAMP) 
+			for each (var tile:IntPair in getTilesInDirection(m_player, Constants.DOWN)) {
+				if (m_board.getTile(tile.x, tile.y) == Constants.TRAMP) 
 					return true;
 			}
 			return false;
@@ -500,7 +501,7 @@ package
 		 */
 		public function setButtonDown(board:Board, id:int):void
 		{
-			boardSprite.setButtonDown(board, id);
+			m_boardSprite.setButtonDown(board, id);
 			if (isPopupButton(id)) {
 				popupButtons[id] = 0;
 			}
@@ -508,7 +509,7 @@ package
 			var gateId:int = buttonToGate[id];
 			if (gateStatus[gateId] == 0) 
 			{
-				boardSprite.openGate(board, gateId);
+				m_boardSprite.openGate(board, gateId);
 				gateStatus[gateId] = 1; // OPEN
 			}
 		}
@@ -520,7 +521,7 @@ package
 		 */
 		public function setButtonUp(board:Board, id:int):void
 		{
-			boardSprite.setButtonUp(board, id);
+			m_boardSprite.setButtonUp(board, id);
 			if (isPopupButton(id)) {
 				popupButtons[id] = 1;
 			}
@@ -528,16 +529,16 @@ package
 			var gateId:int = buttonToGate[id];
 			if (gateStatus[gateId] == 1) 
 			{
-				boardSprite.closeGate(board, gateId);
+				m_boardSprite.closeGate(board, gateId);
 				gateStatus[gateId] = 0; // CLOSED
 			}
 		}
 		
 		public function updateCrates():void
 		{
-			for each (var crate:Crate in board.crates)
+			for each (var crate:Crate in m_board.crates)
 			{
-				crate.updatePosition(board.tileSideLength);
+				crate.updatePosition(m_board.tileSideLength);
 				checkCrateCollision(crate, Constants.DOWN);
 			}
 		}
@@ -548,7 +549,7 @@ package
 			{
 				case Constants.RIGHT:
 					// If colliding with a crate, move the crate
-					if (crateAbove(crate) || crate.asset.x + crate.width >= board.boardWidthInPixels)
+					if (crateAbove(crate) || crate.asset.x + crate.width >= m_board.boardWidthInPixels)
 					{
 						return true;
 					}
@@ -556,10 +557,10 @@ package
 					var tiles:Vector.<IntPair> = getTilesInDirection(crate, Constants.RIGHT)
 					for each (var tile:IntPair in tiles)
 					{
-						var id:int = board.getTile(tile.x, tile.y);
+						var id:int = m_board.getTile(tile.x, tile.y);
 						if (isButton(id) && collidingWithButton(crate, tile))
 						{
-							setButtonDown(board, id);
+							setButtonDown(m_board, id);
 						}
 						if (id == Constants.WALL ||
 						    id == Constants.LADDER ||
@@ -581,10 +582,10 @@ package
 					// If you ran into a wall, keep the player in the previous square
 					for each (tile in getTilesInDirection(crate, Constants.LEFT))
 					{
-						id = board.getTile(tile.x, tile.y);
+						id = m_board.getTile(tile.x, tile.y);
 						if (isButton(id) && collidingWithButton(crate, tile))
 						{
-							setButtonDown(board, id);
+							setButtonDown(m_board, id);
 						}
 						if (id == Constants.WALL ||
 						    id == Constants.LADDER ||
@@ -602,14 +603,14 @@ package
 					//if (collideWithPlatform(direction))
 						//break;
 					for each (tile in getTilesInDirection(crate, Constants.DOWN)) {
-						id = board.getTile(tile.x, tile.y);
-						if (tile.x * board.tileSideLength != crate.asset.x + crate.width) {
+						id = m_board.getTile(tile.x, tile.y);
+						if (tile.x * m_board.tileSideLength != crate.asset.x + crate.width) {
 							if (isButton(id) && collidingWithButton(crate, tile)) {
-								setButtonDown(board, id);
+								setButtonDown(m_board, id);
 							}
 							else if (collidingWithCrate(crate))
 							{
-								crate.asset.y = (int) (tile.y * board.tileSideLength - crate.height);
+								crate.asset.y = (int) (tile.y * m_board.tileSideLength - crate.height);
 								crate.velocity = 0;
 								crate.inAir = false;
 							}
@@ -620,7 +621,7 @@ package
 									 !isButton(id) && 
 									!isOpenGate(id) &&
 									!isMovingPlatformStartOrEnd(id)) {
-								crate.asset.y = (int) (tile.y * board.tileSideLength - crate.height);
+								crate.asset.y = (int) (tile.y * m_board.tileSideLength - crate.height);
 								crate.velocity = 0;
 								crate.inAir = false;
 							}
@@ -641,33 +642,33 @@ package
 		{
 			var found:Boolean = false;
 			for each (var tile:IntPair in getPlayerTiles()) {
-				var id:int = board.getTile(tile.x, tile.y);
+				var id:int = m_board.getTile(tile.x, tile.y);
 				if (id >= Constants.SIGN1 && id <= Constants.SIGN5)
 				{
 					found = true;
-					if (!signText)
+					if (!m_signText)
 					{
-						signText = new TextField();
-						signText.text = board.getSignText(id);
-						signText.x = tile.x * board.tileSideLength;
-						signText.y = (tile.y - 1) * board.tileSideLength;
-						signText.background = true;
-						signText.backgroundColor = Constants.SIGN_BACKGROUND_COLOR;
-						signText.border = true;
-						signText.borderColor = Constants.SIGN_BORDER_COLOR;
-						signText.wordWrap = true;
-						signText.autoSize = TextFieldAutoSize.LEFT
-						var format:TextFormat = signText.getTextFormat()
+						m_signText = new TextField();
+						m_signText.text = m_board.getSignText(id);
+						m_signText.x = tile.x * m_board.tileSideLength;
+						m_signText.y = (tile.y - 1) * m_board.tileSideLength;
+						m_signText.background = true;
+						m_signText.backgroundColor = Constants.SIGN_BACKGROUND_COLOR;
+						m_signText.border = true;
+						m_signText.borderColor = Constants.SIGN_BORDER_COLOR;
+						m_signText.wordWrap = true;
+						m_signText.autoSize = TextFieldAutoSize.LEFT
+						var format:TextFormat = m_signText.getTextFormat()
 						format.size = Constants.SIGN_FONT_SIZE;
-						signText.setTextFormat(format);
-						stage.addChild(signText);
+						m_signText.setTextFormat(format);
+						m_stage.addChild(m_signText);
 					}
 				}
 			}
-			if (!found && signText)
+			if (!found && m_signText)
 			{
-				stage.removeChild(signText);
-				signText = null;
+				m_stage.removeChild(m_signText);
+				m_signText = null;
 			}
 		}
 		
@@ -678,15 +679,15 @@ package
 		{
 			var popupButtonsTouched:Vector.<int> = new Vector.<int>();
 			for each (var tile:IntPair in getPlayerTiles()) {
-				var id:int = board.getTile(tile.x, tile.y);
+				var id:int = m_board.getTile(tile.x, tile.y);
 				if (isPopupButton(id))
 				{
-					if (collidingWithButton(player, tile)) {
+					if (collidingWithButton(m_player, tile)) {
 						popupButtonsTouched.push(id);
 					}
 					else
 					{
-						for each (var crate:Crate in board.crates)
+						for each (var crate:Crate in m_board.crates)
 						{
 							if (collidingWithButton(crate, tile))
 							{
@@ -701,7 +702,7 @@ package
 			for (var key:String in popupButtons) {
 				id = int(key);
 				if (popupButtons[id] == 0 && popupButtonsTouched.indexOf(id) == -1) { // Buttons is DOWN and not being touched by player
-					setButtonUp(board, id);
+					setButtonUp(m_board, id);
 				}
 			}
 		}
@@ -718,10 +719,10 @@ package
 			var objLeft:Number = obj.asset.x + obj.width * .25;
 			var objRight:Number = obj.asset.x + obj.width * .75;
 			var objY:Number = obj.asset.y + obj.height;
-			var tileLeft:Number = tile.x * board.tileSideLength + board.tileSideLength * .15;
-			var tileRight:Number = tile.x * board.tileSideLength + board.tileSideLength * .85;
-			var tileTop:Number = tile.y * board.tileSideLength + board.tileSideLength * .85;
-			var tileBottom:Number = tile.y * board.tileSideLength + board.tileSideLength;
+			var tileLeft:Number = tile.x * m_board.tileSideLength + m_board.tileSideLength * .15;
+			var tileRight:Number = tile.x * m_board.tileSideLength + m_board.tileSideLength * .85;
+			var tileTop:Number = tile.y * m_board.tileSideLength + m_board.tileSideLength * .85;
+			var tileBottom:Number = tile.y * m_board.tileSideLength + m_board.tileSideLength;
 			if (objLeft <= tileRight && objRight >= tileLeft && objY >= tileTop && objY <= tileBottom) {
 				result = true;
 			}
@@ -740,7 +741,7 @@ package
 			var objTop:Number = obj.asset.y;
 			var objBottom:Number = obj.asset.y + obj.height;
 			
-			for each (var crate:Crate in board.crates)
+			for each (var crate:Crate in m_board.crates)
 			{
 				if (obj != crate)
 				{
@@ -767,7 +768,7 @@ package
 			var objTop:Number = obj.asset.y;
 			var objBottom:Number = obj.asset.y + obj.height - 1;
 			
-			for each (var crate:Crate in board.crates)
+			for each (var crate:Crate in m_board.crates)
 			{
 				if (obj != crate)
 				{
@@ -799,7 +800,7 @@ package
 			var objTop:Number = obj.asset.y + 1;
 			var objBottom:Number = obj.asset.y + obj.height - 1;
 			
-			for each (var crate:Crate in board.crates)
+			for each (var crate:Crate in m_board.crates)
 			{
 				if (obj != crate)
 				{
@@ -832,7 +833,7 @@ package
 			var objTop:Number = obj.asset.y;
 			var objBottom:Number = obj.asset.y + obj.height;
 			
-			for each (var crate:Crate in board.crates)
+			for each (var crate:Crate in m_board.crates)
 			{
 				if (obj != crate)
 				{
@@ -858,35 +859,35 @@ package
 		 */
 		private function collideWithPlatform(direction:int):void
 		{
-			player.onPlatform = false;
+			m_player.onPlatform = false;
 			if (isPlatformInPlayerTile()) { // Check that a platform is in a player's tile
 				for each (var plat:Bitmap in platforms) {
 					var topPlat:int = plat.y;
 					var bottomPlat:int = plat.y + plat.height * .35;
 					var rightPlat:int = plat.x + plat.width;
 					var leftPlat:int = plat.x;
-					var playerLeft:int = player.asset.x + player.width * .25;
-					var playerRight:int = player.asset.x + player.width * .75;
-					var playerTop:int = player.asset.y;
-					var playerBottom:int = player.asset.y + player.height;
+					var playerLeft:int = m_player.asset.x + m_player.width * .25;
+					var playerRight:int = m_player.asset.x + m_player.width * .75;
+					var playerTop:int = m_player.asset.y;
+					var playerBottom:int = m_player.asset.y + m_player.height;
 					
 					if (direction == Constants.UP)
 					{
-						if (player.asset.y <= bottomPlat && player.asset.y >= topPlat && 
+						if (m_player.asset.y <= bottomPlat && m_player.asset.y >= topPlat && 
 							playerRight >= leftPlat && playerLeft <= rightPlat) {
 							// bounce player off
-							player.startingHeight = getYPositionOfPlayer()
-							player.asset.y = plat.y + plat.height * .6;
-							player.velocity = Constants.INITIAL_FALL_VELOCITY;
+							m_player.startingHeight = getYPositionOfPlayer()
+							m_player.asset.y = plat.y + plat.height * .6;
+							m_player.velocity = Constants.INITIAL_FALL_VELOCITY;
 						}
 					} 
 					else if (direction == Constants.DOWN)
 					{
 						if (playerBottom >= topPlat && playerTop <= bottomPlat &&
 							playerRight >= leftPlat && playerLeft <= rightPlat) {
-							player.asset.y = topPlat - player.height;
-							player.inAir = false;
-							player.onPlatform = true;
+							m_player.asset.y = topPlat - m_player.height;
+							m_player.inAir = false;
+							m_player.onPlatform = true;
 						}
 					}
 				}
@@ -899,10 +900,10 @@ package
 		 */
 		private function ladderBelowPlayer():Boolean
 		{
-			var tiles:Vector.<IntPair> = getTilesInDirection(player, Constants.DOWN);
+			var tiles:Vector.<IntPair> = getTilesInDirection(m_player, Constants.DOWN);
 			var result:Boolean = false;
 			for each (var tile:IntPair in tiles) {
-				var id:int = board.getTile(tile.x, tile.y);
+				var id:int = m_board.getTile(tile.x, tile.y);
 				if (id == Constants.LADDER) {
 					result = true;
 				} else if (id != Constants.EMPTY && id != Constants.START && id != Constants.END) {
@@ -915,17 +916,17 @@ package
 		
 		private function isPlayerFinished():Boolean
 		{
-			var midX:int = player.asset.x + board.tileSideLength / 2;
-			var midY:int = player.asset.y + board.tileSideLength / 2;
-			return midX >= finishTile.x &&
-			midX <= finishTile.x + board.tileSideLength &&
-			midY >= finishTile.y &&
-			midY <= finishTile.y + board.tileSideLength;
+			var midX:int = m_player.asset.x + m_board.tileSideLength / 2;
+			var midY:int = m_player.asset.y + m_board.tileSideLength / 2;
+			return midX >= m_finishTile.x &&
+			midX <= m_finishTile.x + m_board.tileSideLength &&
+			midY >= m_finishTile.y &&
+			midY <= m_finishTile.y + m_board.tileSideLength;
 		}
 		
 		private function getYPositionOfPlayer():int
 		{
-			return (board.boardHeightInPixels - player.asset.y - player.height ) / board.tileSideLength;
+			return (m_board.boardHeightInPixels - m_player.asset.y - m_player.height ) / m_board.tileSideLength;
 		}
 		
 		/**
@@ -937,30 +938,30 @@ package
 			var key:uint = event.keyCode;
 			switch (key) {
 				case Keyboard.UP :
-					keyUp = true;
-					keySpace = false;
-					keyDown = false;
+					m_keyUp = true;
+					m_keySpace = false;
+					m_keyDown = false;
 					break;
 				case Keyboard.DOWN:
-					keyDown = true;
-					keyUp = false;
-					keySpace = false;
+					m_keyDown = true;
+					m_keyUp = false;
+					m_keySpace = false;
 					break;
 				case Keyboard.RIGHT :
-					keyRight = true;
-					keyLeft = false;
+					m_keyRight = true;
+					m_keyLeft = false;
 					break;
 				case Keyboard.LEFT :
-					keyLeft = true;
-					keyRight = false;
+					m_keyLeft = true;
+					m_keyRight = false;
 					break;
 				case Keyboard.SPACE :
-					keySpace = true;
-					keyUp = false;
-					keyDown = false;
+					m_keySpace = true;
+					m_keyUp = false;
+					m_keyDown = false;
 					break;
 				case Keyboard.R :
-					keyR = true;
+					m_keyR = true;
 					break;
 				case Keyboard.ESCAPE :
 					pause = !pause;
@@ -983,22 +984,22 @@ package
 			switch (key)
 			{
 				case Keyboard.UP :
-					keyUp = false;
+					m_keyUp = false;
 					break;
 				case Keyboard.DOWN :
-					keyDown = false;
+					m_keyDown = false;
 					break;
 				case Keyboard.RIGHT :
-					keyRight = false;
+					m_keyRight = false;
 					break;
 				case Keyboard.LEFT :
-					keyLeft = false;
+					m_keyLeft = false;
 					break;
 				case Keyboard.SPACE :
-					keySpace = false;
+					m_keySpace = false;
 					break;
 				case Keyboard.R :
-					keyR = false;
+					m_keyR = false;
 					break;
 			}
 		}
@@ -1010,10 +1011,10 @@ package
 		 */
 		private function getPlayerTiles():Vector.<IntPair> 		
 		{			
-			var lowX:int = (int) (player.asset.x / board.tileSideLength);
-			var highX:int = (int) ((player.asset.x + player.width) / board.tileSideLength);
-			var highY:int = (int) (player.asset.y / board.tileSideLength);
-			var lowY:int = (int) ((player.asset.y + player.height - 1) / board.tileSideLength);
+			var lowX:int = (int) (m_player.asset.x / m_board.tileSideLength);
+			var highX:int = (int) ((m_player.asset.x + m_player.width) / m_board.tileSideLength);
+			var highY:int = (int) (m_player.asset.y / m_board.tileSideLength);
+			var lowY:int = (int) ((m_player.asset.y + m_player.height - 1) / m_board.tileSideLength);
 			
 			// Determines if any of the above values are the same (Whether the player is located inside a square or in between two or more squares)
 			var oneX:Boolean = false; 
@@ -1075,9 +1076,9 @@ package
 		 */
 		private function getTilesBelowObject(obj:PhysicsObject):Vector.<IntPair>
 		{
-			var lowX:int = (int) (obj.asset.x / board.tileSideLength);
-			var highX:int = (int) ((obj.asset.x + obj.width) / board.tileSideLength);
-			var lowY:int = (int) ((obj.asset.y + obj.height) / board.tileSideLength);
+			var lowX:int = (int) (obj.asset.x / m_board.tileSideLength);
+			var highX:int = (int) ((obj.asset.x + obj.width) / m_board.tileSideLength);
+			var lowY:int = (int) ((obj.asset.y + obj.height) / m_board.tileSideLength);
 			
 			var result:Vector.<IntPair> = new Vector.<IntPair>();
 			
@@ -1098,9 +1099,9 @@ package
 		 */
 		private function getTilesAboveObject(obj:PhysicsObject):Vector.<IntPair>
 		{
-			var lowX:int = (int) (obj.asset.x / board.tileSideLength);
-			var highX:int = (int) ((obj.asset.x + obj.width) / board.tileSideLength);
-			var highY:int = (int) (obj.asset.y / board.tileSideLength);
+			var lowX:int = (int) (obj.asset.x / m_board.tileSideLength);
+			var highX:int = (int) ((obj.asset.x + obj.width) / m_board.tileSideLength);
+			var highY:int = (int) (obj.asset.y / m_board.tileSideLength);
 			
 			var result:Vector.<IntPair> = new Vector.<IntPair>();
 			
@@ -1121,9 +1122,9 @@ package
 		 */
 		private function getTilesOnObjectRight(obj:PhysicsObject):Vector.<IntPair>
 		{
-			var highX:int = (int) ((obj.asset.x + obj.width) / board.tileSideLength);
-			var lowY:int = (int) ((obj.asset.y + obj.height - 1) / board.tileSideLength);
-			var highY:int = (int) (obj.asset.y / board.tileSideLength);
+			var highX:int = (int) ((obj.asset.x + obj.width) / m_board.tileSideLength);
+			var lowY:int = (int) ((obj.asset.y + obj.height - 1) / m_board.tileSideLength);
+			var highY:int = (int) (obj.asset.y / m_board.tileSideLength);
 		
 			var result:Vector.<IntPair> = new Vector.<IntPair>();
 			
@@ -1144,9 +1145,9 @@ package
 		 */
 		private function getTilesOnObjectLeft(obj:PhysicsObject):Vector.<IntPair>
 		{
-			var lowX:int = (int) (obj.asset.x / board.tileSideLength);
-			var lowY:int = (int) ((obj.asset.y + obj.height - 1) / board.tileSideLength);
-			var highY:int = (int) (obj.asset.y / board.tileSideLength);
+			var lowX:int = (int) (obj.asset.x / m_board.tileSideLength);
+			var lowY:int = (int) ((obj.asset.y + obj.height - 1) / m_board.tileSideLength);
+			var highY:int = (int) (obj.asset.y / m_board.tileSideLength);
 			
 			var result:Vector.<IntPair> = new Vector.<IntPair>();
 			
@@ -1166,8 +1167,8 @@ package
 			for each (var tile:IntPair in getPlayerTiles())
 			{
 				for each (var platform:Bitmap in platforms) {					
-					if ((platform.x >= tile.x * board.tileSideLength || platform.x <= (tile.x + 1) * board.tileSideLength) &&
-						platform.y >= tile.y * board.tileSideLength && platform.y <= (tile.y + 1) * board.tileSideLength)
+					if ((platform.x >= tile.x * m_board.tileSideLength || platform.x <= (tile.x + 1) * m_board.tileSideLength) &&
+						platform.y >= tile.y * m_board.tileSideLength && platform.y <= (tile.y + 1) * m_board.tileSideLength)
 						return true;
 				}
 			}
@@ -1177,8 +1178,8 @@ package
 		private function checkLavaHit(id:int):Boolean
 		{
 			if (id == Constants.LAVA) {
-                var logData:Object = {x:player.asset.x, y:player.asset.y};
-                logger.logAction(Constants.AID_DEATH, logData);
+                var logData:Object = {x:m_player.asset.x, y:m_player.asset.y};
+                m_logger.logAction(Constants.AID_DEATH, logData);
 				resetPlayer();
 				resetCrates();
 			}
@@ -1187,18 +1188,18 @@ package
 		
 		private function resetPlayer():void
 		{
-			player.asset.x = playerStart.x;
-			player.asset.y = playerStart.y;
-			player.energy = 0;
-			player.velocity = 0;
-			meter.energy = player.energy;
+			m_player.asset.x = m_playerStart.x;
+			m_player.asset.y = m_playerStart.y;
+			m_player.energy = 0;
+			m_player.velocity = 0;
+			m_meter.energy = m_player.energy;
 			// Reset the buttons
 			for each (var id:int in buttons) {
-				setButtonUp(board, id);
+				setButtonUp(m_board, id);
 			}
 			
 			for each (id in gates) {
-				boardSprite.closeGate(board, id);
+				m_boardSprite.closeGate(m_board, id);
 				gateStatus[id] = 0; // CLOSED
 			}
 			
@@ -1208,7 +1209,7 @@ package
 		
 		private function resetCrates():void
 		{
-			for each (var crate:Crate in board.crates)
+			for each (var crate:Crate in m_board.crates)
 			{
 				crate.reset();
 			}

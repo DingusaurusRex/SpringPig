@@ -15,11 +15,11 @@ package model.player
 		
 		public var energy:int = 0;
 		private var m_asset:Bitmap;
-		public var speedX:Number = Constants.PLAYERX;
-		public var cratePushSpeed:Number = Constants.CRATEX;
-		public var upSpeedY:Number = 8; // Speed on ladder
-		public var downSpeedY:Number = 5; // Speed on ladder
-		public var airSpeedX:Number = 5;
+		public var speedX:Number;
+		public var cratePushSpeed:Number;
+		public var upSpeedY:Number; // Speed on ladder
+		public var downSpeedY:Number; // Speed on ladder
+		public var airSpeedX:Number;
 		public var inAir:Boolean = false;
 		public var onPlatform:Boolean = false;
 		
@@ -27,10 +27,18 @@ package model.player
 		
 		public var dy:Number;
 		
-		public function Player() 
+		public function Player(tileSideLength:int) 
 		{
 			m_asset = new playerArt();
 			dy = 0;
+			
+			var frac:Number = tileSideLength / Constants.BASE_SIDE_LENGTH;
+			speedX = Constants.PLAYER_SPEED * frac;
+			cratePushSpeed = Constants.CRATE_SPEED * frac;
+			upSpeedY = Constants.LADDER_UP_SPEED * frac;
+			downSpeedY = Constants.LADDER_DOWN_SPEED * frac;
+			airSpeedX = Constants.AIR_SPEED * frac;
+			trace(speedX);
 		}
 		
 		public function updatePosition(tileSize:int):void
