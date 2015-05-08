@@ -274,6 +274,10 @@ package
 								player.updatePosition(board.tileSideLength);
 							}
 						}
+						else
+						{
+							player.startingHeight = getYPositionOfPlayer();
+						}
 					}
 				}
 			}
