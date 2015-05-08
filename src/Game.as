@@ -108,7 +108,6 @@ package
 		{
 			// Get the board for the test level
 			m_board = m_levelReader.parseLevel(levelName);
-			trace(m_board.width + "x" + m_board.height + ": " + m_board.tileSideLength);
 			
 			// Get the graphics for the test level
 			if (m_boardSprite)
@@ -182,6 +181,28 @@ package
 				platforms = m_boardSprite.platforms;
 				
 				popButtonsUp();
+				for (var x:int = 0; x < m_board.width; x++ )
+				{
+					for (var y:int = 0; y < m_board.height; y++)
+					{
+						var tile:IntPair = new IntPair(x, y)
+						var id:int = m_board.getTile(x, y)
+						if (isButton(id))
+						{	
+							if (collidingWithButton(m_player, tile))
+							{
+								setButtonDown(m_board, id);
+							}
+							for each (var crate:Crate in m_board.crates)
+							{
+								if (collidingWithButton(crate, tile))
+								{
+									setButtonDown(m_board, id);
+								}
+							}
+						}
+					}
+				}
 				displaySign();
 				updateCrates();
 				var wasInAir:Boolean = m_player.inAir;
@@ -226,28 +247,6 @@ package
                     m_logger.logAction(Constants.AID_RESET, logData);
 					resetPlayer();
 					resetCrates();
-				}
-				for (var x:int = 0; x < m_board.width; x++ )
-				{
-					for (var y:int = 0; y < m_board.height; y++)
-					{
-						var tile:IntPair = new IntPair(x, y)
-						var id:int = m_board.getTile(x, y)
-						if (isButton(id))
-						{	
-							if (collidingWithButton(m_player, tile))
-							{
-								setButtonDown(m_board, id);
-							}
-							for each (var crate:Crate in m_board.crates)
-							{
-								if (collidingWithButton(crate, tile))
-								{
-									setButtonDown(m_board, id);
-								}
-							}
-						}
-					}
 				}
 				if (m_player.inAir || collidingWithLadder()) {
 					m_player.updatePosition(m_board.tileSideLength);
@@ -602,7 +601,9 @@ package
 					crate.inAir = true;
 					//if (collideWithPlatform(direction))
 						//break;
-					for each (tile in getTilesInDirection(crate, Constants.DOWN)) {
+					tiles = getTilesInDirection(crate, Constants.DOWN)
+					for each (tile in tiles)
+					{
 						id = m_board.getTile(tile.x, tile.y);
 						if (tile.x * m_board.tileSideLength != crate.asset.x + crate.width) {
 							if (isButton(id) && collidingWithButton(crate, tile)) {

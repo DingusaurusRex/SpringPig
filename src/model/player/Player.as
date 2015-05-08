@@ -38,7 +38,6 @@ package model.player
 			upSpeedY = Constants.LADDER_UP_SPEED * frac;
 			downSpeedY = Constants.LADDER_DOWN_SPEED * frac;
 			airSpeedX = Constants.AIR_SPEED * frac;
-			trace(speedX);
 		}
 		
 		public function updatePosition(tileSize:int):void

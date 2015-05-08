@@ -157,7 +157,7 @@ package
 		
 		public static const INITIAL_FALL_VELOCITY:Number = .15	// The velocity given to an object when it starts falling
 		public static const ENERGY_DOWNGRADE:int = 1;			// How much energy is lost every time you fall.
-		public static const TERMINAL_VELOCITY:Number = 1;		// Maximum Velocity (game might break if exceeded)
+		public static const TERMINAL_VELOCITY:Number = .75;		// Maximum Velocity (game might break if exceeded)
 		public static const GRAVITY:Number = .03;				// change in blocks / update ^2
 		
 		public static const PLAYER_SPEED:Number = 5;
