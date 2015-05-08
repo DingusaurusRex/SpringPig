@@ -57,6 +57,75 @@ package view
 		
 		
 		
+		/**
+		 * Button Assets
+		**/
+		
+		[Embed(source = "../../assets/art/tiles/buttons/blue_down.png")]
+		private var BlueDownArt:Class
+		
+		[Embed(source = "../../assets/art/tiles/buttons/red_down.png")]
+		private var RedDownArt:Class
+		
+		[Embed(source = "../../assets/art/tiles/buttons/yellow_down.png")]
+		private var YellowDownArt:Class
+		
+		[Embed(source = "../../assets/art/tiles/buttons/green_down.png")]
+		private var GreenDownArt:Class
+		
+		[Embed(source = "../../assets/art/tiles/buttons/purple_down.png")]
+		private var PurpleDownArt:Class
+		
+		[Embed(source = "../../assets/art/tiles/buttons/blue_up.png")]
+		private var BlueUpArt:Class
+		
+		[Embed(source = "../../assets/art/tiles/buttons/red_up.png")]
+		private var RedUpArt:Class
+		
+		[Embed(source = "../../assets/art/tiles/buttons/yellow_up.png")]
+		private var YellowUpArt:Class
+		
+		[Embed(source = "../../assets/art/tiles/buttons/green_up.png")]
+		private var GreenUpArt:Class
+		
+		[Embed(source = "../../assets/art/tiles/buttons/purple_up.png")]
+		private var PurpleUpArt:Class
+		
+		/**
+		 * Gate Assets
+		**/
+		
+		[Embed(source = "../../assets/art/tiles/gates/blue_closed.png")]
+		private var BlueClosedArt:Class
+		
+		[Embed(source = "../../assets/art/tiles/gates/blue_open.png")]
+		private var BlueOpenArt:Class
+		
+		[Embed(source = "../../assets/art/tiles/gates/green_closed.png")]
+		private var GreenClosedArt:Class
+		
+		[Embed(source = "../../assets/art/tiles/gates/green_open.png")]
+		private var GreenOpenArt:Class
+		
+		[Embed(source = "../../assets/art/tiles/gates/purple_closed.png")]
+		private var PurpleClosedArt:Class
+		
+		[Embed(source = "../../assets/art/tiles/gates/purple_open.png")]
+		private var PurpleOpenArt:Class
+		
+		[Embed(source = "../../assets/art/tiles/gates/red_closed.png")]
+		private var RedClosedArt:Class
+		
+		[Embed(source = "../../assets/art/tiles/gates/red_open.png")]
+		private var RedOpenArt:Class
+		
+		[Embed(source = "../../assets/art/tiles/gates/yellow_closed.png")]
+		private var YellowClosedArt:Class
+		
+		[Embed(source = "../../assets/art/tiles/gates/yellow_open.png")]
+		private var YellowOpenArt:Class
+		
+		
 
 		protected var m_boardViewWidth:int;		// The actual total width of the BoardView
 		protected var m_boardViewHeight:int;	// The actual total height of the BoardView
@@ -179,16 +248,7 @@ package view
 		private function getAssetBitmap(id:int):Bitmap
 		{
 			var result:Bitmap = null;
-			if (id >= Constants.GATE1 && id <= Constants.GATE5) {
-				result = new ClosedGateArt();
-				m_gateArts[id].push(result);
-			} 
-			else if (id >= Constants.BUTTON1 && id <= Constants.POPUP_BUTTON5)
-			{
-				result = new ButtonUpArt();
-				m_buttonArts[id] = result;
-			}
-			else if (id >= Constants.MOVING_PLATFORM_START1 && id <= Constants.MOVING_PLATFORM_START5)
+			if (id >= Constants.MOVING_PLATFORM_START1 && id <= Constants.MOVING_PLATFORM_START5)
 			{
 				result = new PlatformArt();
 				m_platformArts[id] = result;
@@ -215,6 +275,66 @@ package view
 					case Constants.TRAMP:
 						result = new TrampolineArt();
 						break;
+					case Constants.GATE1:
+						result = new RedClosedArt();
+						m_gateArts[id].push(result);
+						break;
+					case Constants.GATE2:
+						result = new BlueClosedArt();
+						m_gateArts[id].push(result);
+						break;
+					case Constants.GATE3:
+						result = new GreenClosedArt();
+						m_gateArts[id].push(result);
+						break;
+					case Constants.GATE4:
+						result = new PurpleClosedArt();
+						m_gateArts[id].push(result);
+						break;
+					case Constants.GATE5:
+						result = new YellowClosedArt();
+						m_gateArts[id].push(result);
+						break;
+					case Constants.BUTTON1:
+						result = new RedUpArt();
+						m_buttonArts[id] = result;
+						break;
+					case Constants.BUTTON2:
+						result = new BlueUpArt();
+						m_buttonArts[id] = result;
+						break;
+					case Constants.BUTTON3:
+						result = new GreenUpArt();
+						m_buttonArts[id] = result;
+						break;
+					case Constants.BUTTON4:
+						result = new PurpleUpArt();
+						m_buttonArts[id] = result;
+						break;
+					case Constants.BUTTON5:
+						result = new YellowUpArt();
+						m_buttonArts[id] = result;
+						break;
+					case Constants.POPUP_BUTTON1:
+						result = new RedUpArt();
+						m_buttonArts[id] = result;
+						break
+					case Constants.POPUP_BUTTON2:
+						result = new BlueUpArt();
+						m_buttonArts[id] = result;
+						break
+					case Constants.POPUP_BUTTON3:
+						result = new GreenUpArt();
+						m_buttonArts[id] = result;
+						break
+					case Constants.POPUP_BUTTON4:
+						result = new PurpleUpArt();
+						m_buttonArts[id] = result;
+						break
+					case Constants.POPUP_BUTTON5:
+						result = new YellowUpArt();
+						m_buttonArts[id] = result;
+						break
 					default:
 						result = null;
 						break;
@@ -321,7 +441,42 @@ package view
 			var prevY:Number = m_buttonArts[id].y;
 			
 			removeChild(m_buttonArts[id]);
-			m_buttonArts[id] = new ButtonDownArt();
+			switch(id)
+			{
+				case Constants.BUTTON1:
+					m_buttonArts[id] = new RedDownArt();
+					break;
+				case Constants.BUTTON2:
+					m_buttonArts[id] = new BlueDownArt();
+					break;
+				case Constants.BUTTON3:
+					m_buttonArts[id] = new GreenDownArt();
+					break;
+				case Constants.BUTTON4:
+					m_buttonArts[id] = new PurpleDownArt();
+					break;
+				case Constants.BUTTON5:
+					m_buttonArts[id] = new YellowDownArt();
+					break;
+				case Constants.POPUP_BUTTON1:
+					m_buttonArts[id] = new RedDownArt();
+					break
+				case Constants.POPUP_BUTTON2:
+					m_buttonArts[id] = new BlueDownArt();
+					break
+				case Constants.POPUP_BUTTON3:
+					m_buttonArts[id] = new GreenDownArt();
+					break
+				case Constants.POPUP_BUTTON4:
+					m_buttonArts[id] = new PurpleDownArt();
+					break
+				case Constants.POPUP_BUTTON5:
+					m_buttonArts[id] = new YellowDownArt();
+					break
+				default:
+					m_buttonArts[id] = new ButtonDownArt();
+					break;
+			}
 			
 			m_buttonArts[id].width = board.tileSideLength;
 			m_buttonArts[id].height = board.tileSideLength;
@@ -341,7 +496,45 @@ package view
 			var prevY:Number = m_buttonArts[id].y;
 			
 			removeChild(m_buttonArts[id]);
-			m_buttonArts[id] = new ButtonUpArt();
+			switch(id)
+			{
+				case Constants.BUTTON1:
+					m_buttonArts[id] = new RedUpArt();
+					break;
+				case Constants.BUTTON2:
+					m_buttonArts[id] = new BlueUpArt();
+					break;
+				case Constants.BUTTON3:
+					m_buttonArts[id] = new GreenUpArt();
+					break;
+				case Constants.BUTTON4:
+					m_buttonArts[id] = new PurpleUpArt();
+					break;
+				case Constants.BUTTON5:
+					m_buttonArts[id] = new YellowUpArt();
+					break;
+				case Constants.POPUP_BUTTON1:
+					m_buttonArts[id] = new RedUpArt();
+					break
+				case Constants.POPUP_BUTTON2:
+					m_buttonArts[id] = new BlueUpArt();
+					break
+				case Constants.POPUP_BUTTON3:
+					m_buttonArts[id] = new GreenUpArt();
+					break
+				case Constants.POPUP_BUTTON4:
+					m_buttonArts[id] = new PurpleUpArt();
+					break
+				case Constants.POPUP_BUTTON5:
+					m_buttonArts[id] = new YellowUpArt();
+					break
+				default:
+					m_buttonArts[id] = new ButtonUpArt();
+					break;
+			}
+			
+			
+			
 			
 			m_buttonArts[id].width = board.tileSideLength;
 			m_buttonArts[id].height = board.tileSideLength;
@@ -357,7 +550,28 @@ package view
 		 */
 		public function openGate(board:Board, id:int):void
 		{
-			replaceGate(board, id, OpenGateArt);
+			switch(id)
+			{
+				case Constants.GATE1:
+					var gateArt:Class = RedOpenArt;
+					break;
+				case Constants.GATE2:
+					gateArt = BlueOpenArt;
+					break;
+				case Constants.GATE3:
+					gateArt = GreenOpenArt;
+					break;
+				case Constants.GATE4:
+					gateArt = PurpleOpenArt;
+					break;
+				case Constants.GATE5:
+					gateArt = YellowOpenArt;
+					break;
+				default:
+					gateArt = OpenGateArt;
+					break;
+			}
+			replaceGate(board, id, gateArt);
 		}
 		
 		/**
@@ -367,7 +581,28 @@ package view
 		 */
 		public function closeGate(board:Board, id:int):void
 		{
-			replaceGate(board, id, ClosedGateArt);
+			switch(id)
+			{
+				case Constants.GATE1:
+					var gateArt:Class = RedClosedArt;
+					break;
+				case Constants.GATE2:
+					gateArt = BlueClosedArt;
+					break;
+				case Constants.GATE3:
+					gateArt = GreenClosedArt;
+					break;
+				case Constants.GATE4:
+					gateArt = PurpleClosedArt;
+					break;
+				case Constants.GATE5:
+					gateArt = YellowClosedArt;
+					break;
+				default:
+					gateArt = ClosedGateArt;
+					break;
+			}
+			replaceGate(board, id, gateArt);
 		}
 		
 		private function replaceGate(board:Board, id:int, art:Class):void
