@@ -950,7 +950,7 @@ package
 		 * Test if keys are pressed down
 		 * @param	event
 		 */
-		private function onKeyDown(event:KeyboardEvent):void 
+		public function onKeyDown(event:KeyboardEvent):void
 		{
 			var key:uint = event.keyCode;
 			switch (key) {

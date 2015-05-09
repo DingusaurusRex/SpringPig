@@ -28,6 +28,7 @@ public class Menu {
     public static var endGameMenu:EndGameMenu;
     private static var muteButton:SimpleButton;
     private static var instructions:TextField;
+    private static var state:int;
 
     // TODO: Background
     public static function Init(s:Stage, g:Game):void {
@@ -50,25 +51,36 @@ public class Menu {
                 Constants.MENU_FONT,
                 Constants.INSTRUCTIONS_FONT_SIZE,
                 Constants.INSTRUCTIONS_ALIGNMENT);
+
+        state = 0;
     }
 
     // Menu creation/deletion functions
     public static function createMainMenu():void {
         stage.removeChildren();
+        stage.removeEventListener(KeyboardEvent.KEY_DOWN, game.onKeyDown); // Need to do this whenever leaving game state
+        state = Constants.STATE_MAIN_MENU;
         mainMenu.addChild(muteButton);
         mainMenu.addChild(instructions);
         stage.addChild(mainMenu);
+        stage.addEventListener(KeyboardEvent.KEY_DOWN, Menu.onKeyDown);
+        stage.focus = stage;
     }
 
     public static function createPauseMenu():void {
         Stopwatch.pause();
+        state = Constants.STATE_PAUSE_MENU;
         pauseMenu.addChild(muteButton);
         pauseMenu.addChild(instructions);
         stage.addChild(pauseMenu);
+        stage.addEventListener(KeyboardEvent.KEY_DOWN, Menu.onKeyDown);
+        stage.focus = stage;
     }
 
     public static function removePauseMenu():void {
+        stage.removeEventListener(KeyboardEvent.KEY_DOWN, Menu.onKeyDown);
         stage.removeChild(pauseMenu);
+        state = Constants.STATE_GAME;
         game.pause = false; // For leaving pause menu using button
         Stopwatch.start();
         stage.focus = stage;
@@ -76,59 +88,90 @@ public class Menu {
 
     public static function createEndLevelMenu():void {
         stage.removeChildren();
+        state = Constants.STATE_END_LEVEL_MENU;
         endLevelMenu.addChild(muteButton);
         stage.addChild(endLevelMenu);
         Stopwatch.stopwatchMenuText.x = Constants.END_LEVEL_STOPWATCH_LEFT_PADDING;
         Stopwatch.stopwatchMenuText.y = Constants.END_LEVEL_STOPWATCH_TOP_PADDING;
         stage.addChild(Stopwatch.stopwatchMenuText);
         stage.addEventListener(KeyboardEvent.KEY_DOWN, Menu.onKeyDown);
-    }
-
-    private static function onKeyDown(event:KeyboardEvent):void {
-        var key:uint = event.keyCode;
-        switch (key) {
-            case Keyboard.SPACE:
-                stage.removeEventListener(KeyboardEvent.KEY_DOWN, Menu.onKeyDown);
-                stage.removeChild(endLevelMenu);
-                game.startNextLevel();
-                break;
-        }
+        stage.focus = stage;
     }
 
     public static function createEndGameMenu():void {
         stage.removeChildren();
+        state = Constants.STATE_END_GAME_MENU;
         stage.addChild(endGameMenu);
         Stopwatch.stopwatchMenuText.x = Constants.END_GAME_STOPWATCH_LEFT_PADDING;
         Stopwatch.stopwatchMenuText.y = Constants.END_GAME_STOPWATCH_TOP_PADDING;
         stage.addChild(Stopwatch.stopwatchMenuText);
+        stage.addEventListener(KeyboardEvent.KEY_DOWN, Menu.onKeyDown);
+        stage.focus = stage;
+    }
+
+    public static function createLevelSelectMenu():void {
+        stage.removeChildren();
+        levelSelectMenu.regeneratePages();
+        state = Constants.STATE_LEVEL_SELECT_MENU;
+        stage.addChild(levelSelectMenu);
+        stage.focus = stage;
+    }
+
+    public static function createCreditsMenu():void {
+        stage.removeChildren();
+        stage.removeEventListener(KeyboardEvent.KEY_DOWN, game.onKeyDown); // Need to do this whenever leaving game state
+        state = Constants.STATE_CREDITS_MENU;
+        stage.addChild(creditsMenu);
+        stage.focus = stage;
+    }
+
+    public static function continueGame():void {
+        stage.removeEventListener(KeyboardEvent.KEY_DOWN, Menu.onKeyDown);
+        stage.removeChildren();
+        state = Constants.STATE_GAME;
+        game.startAtLevel(GameState.getPlayerLetestProgress());
+    }
+
+    public static function startGame():void {
+        stage.removeEventListener(KeyboardEvent.KEY_DOWN, Menu.onKeyDown);
+        stage.removeChildren();
+        mainMenu.enableContinue();
+        state = Constants.STATE_GAME;
+        game.startFirstLevel();
+    }
+
+    public static function startNextLevel():void {
+        stage.removeEventListener(KeyboardEvent.KEY_DOWN, Menu.onKeyDown);
+        stage.removeChild(endLevelMenu);
+        state = Constants.STATE_GAME;
+        game.startNextLevel();
+    }
+
+    public static function restartLevel():void {
+        stage.removeEventListener(KeyboardEvent.KEY_DOWN, Menu.onKeyDown);
+        stage.removeChild(endLevelMenu);
+        state = Constants.STATE_GAME;
+        game.restartLevel();
     }
 
     // Event functions
     public static function onContinueClick(event:MouseEvent):void {
-        stage.removeChildren();
-        game.startAtLevel(GameState.getPlayerLetestProgress());
+        continueGame();
     }
 
     public static function onStartClick(event:MouseEvent):void {
-        stage.removeChildren();
-        mainMenu.enableContinue();
-        game.startFirstLevel();
+        startGame();
     }
 
     public static function onLevelSelectClick(event:MouseEvent):void {
-        stage.removeChildren();
-        levelSelectMenu.regeneratePages();
-        stage.addChild(levelSelectMenu);
+        createLevelSelectMenu();
     }
 
     public static function onCreditsClick(event:MouseEvent):void {
-        stage.removeChildren();
-        stage.addChild(creditsMenu);
+        createCreditsMenu();
     }
 
     public static function onMainMenuClick(event:MouseEvent):void {
-
-        stage.removeEventListener(KeyboardEvent.KEY_DOWN, Menu.onKeyDown);
         createMainMenu();
     }
 
@@ -137,21 +180,86 @@ public class Menu {
     }
 
     public static function onNextLevelClick(event:MouseEvent):void {
-        stage.removeEventListener(KeyboardEvent.KEY_DOWN, Menu.onKeyDown);
-        stage.removeChild(endLevelMenu);
-        game.startNextLevel();
+        startNextLevel()
     }
 
     public static function onRestartLevelClick(event:MouseEvent):void {
-
-        stage.removeEventListener(KeyboardEvent.KEY_DOWN, Menu.onKeyDown);
-        stage.removeChild(endLevelMenu);
-        game.restartLevel();
+        restartLevel();
     }
 
     public static function onLevelClick(event:MouseEvent):void {
         stage.removeChild(levelSelectMenu);
+        state = Constants.STATE_GAME;
         game.startAtLevel(int(event.target.name));
+    }
+
+    // Keyboard controls
+    private static function onKeyDown(event:KeyboardEvent):void {
+        var key:uint = event.keyCode;
+        switch (state) {
+            case Constants.STATE_MAIN_MENU:
+                switch (key) {
+                    case Keyboard.SPACE:
+                        continueGame();
+                        break;
+                    case Keyboard.S:
+                        startGame();
+                        break;
+                    case Keyboard.L:
+                        createLevelSelectMenu();
+                        break;
+                    case Keyboard.C:
+                        createCreditsMenu();
+                        break;
+                }
+                break;
+            case Constants.STATE_END_LEVEL_MENU:
+                switch (key) {
+                    case Keyboard.SPACE:
+                        startNextLevel();
+                        break;
+                    case Keyboard.R:
+                        restartLevel();
+                        break;
+                    case Keyboard.M:
+                        createMainMenu();
+                        break;
+                }
+                break;
+            case Constants.STATE_END_GAME_MENU:
+                switch (key) {
+                    case Keyboard.M:
+                        createMainMenu();
+                        break;
+                    case Keyboard.C:
+                        createCreditsMenu();
+                        break;
+                }
+                break;
+            case Constants.STATE_CREDITS_MENU:
+                switch (key) {
+                    case Keyboard.M:
+                        createMainMenu();
+                        break;
+                }
+                break;
+            case Constants.STATE_LEVEL_SELECT_MENU:
+                switch (key) {
+                    case Keyboard.M:
+                        createMainMenu();
+                        break;
+                }
+                break;
+            case Constants.STATE_PAUSE_MENU:
+                switch (key) {
+                    case Keyboard.E:
+                        removePauseMenu();
+                        break;
+                    case Keyboard.M:
+                        createMainMenu();
+                        break;
+                }
+        }
     }
 
     // Util functions
@@ -352,7 +460,6 @@ class PauseMenu extends Sprite {
 
 class EndLevelMenu extends Sprite {
     private var title:TextField;
-    private var instructions:TextField;
     private var nextLevelButton:SimpleButton;
     private var restartLevelButton:SimpleButton;
     private var mainMenuButton:SimpleButton;
@@ -362,16 +469,6 @@ class EndLevelMenu extends Sprite {
         title = Menu.getMenuTitle(Constants.END_LEVEL_TITLE_TEXT,
                 Constants.END_LEVEL_TITLE_TOP_PADDING,
                 Constants.END_LEVEL_TITLE_FONT_SIZE);
-
-        // Instructions
-        instructions = Menu.getTextField(Constants.END_LEVEL_INSTRUCTIONS_TEXT,
-                Constants.END_LEVEL_INSTRUCTIONS_HEIGHT,
-                Constants.SCREEN_WIDTH,
-                Constants.END_LEVEL_INSTRUCTIONS_LEFT_PADDING,
-                Constants.END_LEVEL_INSTRUCTIONS_TOP_PADDING,
-                Constants.MENU_FONT,
-                Constants.END_LEVEL_INSTRUCTIONS_FONT_SIZE,
-                Constants.END_LEVEL_INSTRUCTIONS_ALIGNMENT);
 
         // Next level button
         nextLevelButton = Menu.getMenuButton(Constants.END_LEVEL_NEXT_LEVEL_BUTTON_TEXT,
@@ -392,7 +489,6 @@ class EndLevelMenu extends Sprite {
                 Menu.onMainMenuClick);
 
         addChild(title);
-        addChild(instructions);
         addChild(nextLevelButton);
         addChild(restartLevelButton);
         addChild(mainMenuButton);
@@ -417,13 +513,13 @@ class EndGameMenu extends Sprite {
                 Constants.END_GAME_SUBTITLE_FONT_SIZE);
 
         // Credits button
-        creditsButton = Menu.getMenuButton(Constants.END_GAME_CREDITS_BUTTON_TEXT,
+        creditsButton = Menu.getMenuButton(Constants.CREDITS_BUTTON_TEXT,
                         (Constants.SCREEN_WIDTH - Constants.MENU_BUTTON_WIDTH) / 2,
                         Constants.SCREEN_HEIGHT / 2,
                 Menu.onCreditsClick);
 
         // Main menu button
-        mainMenuButton = Menu.getMenuButton(Constants.END_GAME_MAIN_MENU_BUTTON_TEXT,
+        mainMenuButton = Menu.getMenuButton(Constants.MAIN_MENU_BUTTON_TEXT,
                         (Constants.SCREEN_WIDTH - Constants.MENU_BUTTON_WIDTH) / 2,
                         creditsButton.y + Constants.MENU_BUTTON_PADDING_BETWEEN,
                 Menu.onMainMenuClick);

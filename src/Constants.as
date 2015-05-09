@@ -175,7 +175,16 @@ package
 		 * 
 		 */
 		public static const GAME_TITLE:String = "Spring Pig";
-		
+
+        // Menu state
+        public static const STATE_GAME:int = 0;
+        public static const STATE_MAIN_MENU:int = 1;
+        public static const STATE_CREDITS_MENU:int = 2;
+        public static const STATE_LEVEL_SELECT_MENU:int = 3;
+        public static const STATE_PAUSE_MENU:int = 4;
+        public static const STATE_END_LEVEL_MENU:int = 5;
+        public static const STATE_END_GAME_MENU:int = 6;
+
 		// General menu
 		public static const MENU_FONT:String = "arial";
 		public static const MENU_TITLE_ALIGNMENT:String = "center";
@@ -196,8 +205,8 @@ package
 		public static const MUTE_BUTTON_RIGHT_PADDING:int = 20;
 		
 		// Menus
-		public static const CREDITS_BUTTON_TEXT:String = "Credits";
-		public static const MAIN_MENU_BUTTON_TEXT:String = "Main Menu";
+		public static const CREDITS_BUTTON_TEXT:String = "[C]redits";
+		public static const MAIN_MENU_BUTTON_TEXT:String = "[M]ain Menu";
 		public static const MAIN_MENU_BUTTON_TOP_PADDING:int = 20;
 		public static const MAIN_MENU_BUTTON_LEFT_PADDING:int = 20;
 		
@@ -205,12 +214,12 @@ package
 		public static const MAIN_TITLE_FONT_SIZE:int = 80;
 		public static const MAIN_TITLE_TOP_PADDING:int = 50;
 
-        public static const CONTINUE_BUTTON_TEXT:String = "Continue";
+        public static const CONTINUE_BUTTON_TEXT:String = "[Space] Continue";
         public static const CONTINUE_BUTTON_COVER_COLOR:uint = 0xFFFFFF;
         public static const CONTINUE_BUTTON_COVER_OPACITY:Number = 0.5;
 
-        public static const START_BUTTON_TEXT:String = "Start";
-        public static const LEVEL_SELECT_BUTTON_TEXT:String = "Select Level";
+        public static const START_BUTTON_TEXT:String = "[S]tart";
+        public static const LEVEL_SELECT_BUTTON_TEXT:String = "Select [L]evel";
 		
 		public static const INSTRUCTIONS:String = "How to play:\nMove Left\t: Left Arrow\nMove Right\t: Right Arrow\nJump\t\t: Up Arrow\nSpring\t\t: Space\nReset\t\t: R\nPause\t\t: Escape";
 		public static const INSTRUCTIONS_TOP_PADDING:int = 460;
@@ -257,7 +266,7 @@ package
 		public static const PAUSE_BACKGROUND_COLOR:uint = 0x000000;
 		public static const PAUSE_BACKGROUND_OPACITY:Number = 0.5;
 		
-		public static const PAUSE_RESUME_BUTTON_TEXT:String = "Resume";
+		public static const PAUSE_RESUME_BUTTON_TEXT:String = "R[e]sume";
 		
 		// End level menu
 		public static const END_LEVEL_TITLE_TEXT:String = "Level Finished!";
@@ -267,16 +276,9 @@ package
 		public static const END_LEVEL_STOPWATCH_TOP_PADDING:int = 150;
 		public static const END_LEVEL_STOPWATCH_LEFT_PADDING:int = 0;
 		
-		public static const END_LEVEL_INSTRUCTIONS_TEXT:String = "Press Space to start the next level";
-		public static const END_LEVEL_INSTRUCTIONS_TOP_PADDING:int = 200;
-		public static const END_LEVEL_INSTRUCTIONS_LEFT_PADDING:int = 0;
-		public static const END_LEVEL_INSTRUCTIONS_HEIGHT:int = 20;
-		public static const END_LEVEL_INSTRUCTIONS_FONT_SIZE:int = 15;
-		public static const END_LEVEL_INSTRUCTIONS_ALIGNMENT:String = "center";
-		
-		public static const END_LEVEL_NEXT_LEVEL_BUTTON_TEXT:String = "Next Level";
-		public static const END_LEVEL_RESTART_LEVEL_BUTTON_TEXT:String = "Restart Last Level";
-		public static const END_LEVEL_MAIN_MENU_BUTTON_TEXT:String = "Main Menu";
+		public static const END_LEVEL_NEXT_LEVEL_BUTTON_TEXT:String = "[Space] Next Level";
+		public static const END_LEVEL_RESTART_LEVEL_BUTTON_TEXT:String = "[R]estart Last Level";
+		public static const END_LEVEL_MAIN_MENU_BUTTON_TEXT:String = "[M]ain Menu";
 		
 		// End game menu
 		public static const END_GAME_TITLE_TEXT:String = "Congratulations!";
@@ -289,9 +291,6 @@ package
 		public static const END_GAME_SUBTITLE_TEXT:String = "You have beaten Spring Pig";
 		public static const END_GAME_SUBTITLE_TOP_PADDING:int = 150;
 		public static const END_GAME_SUBTITLE_FONT_SIZE:int = 50;
-		
-		public static const END_GAME_CREDITS_BUTTON_TEXT:String = "Credits";
-		public static const END_GAME_MAIN_MENU_BUTTON_TEXT:String = "Main Menu";
 	}
 
 }
