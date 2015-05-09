@@ -78,7 +78,7 @@ package
 			var game:Game = new Game(stage, prog, logger);
 			Audio.Init();
 			Stopwatch.Init();
-            GameState.Init("asjsfskdhfk", game);
+            GameState.Init("testProg", game);
 			Menu.Init(stage, game);
 			Menu.createMainMenu();
 

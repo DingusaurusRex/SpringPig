@@ -6,6 +6,7 @@ package
 	 */
 	public class Constants 
 	{
+		public static const SHOW_JUMP_HEIGHT:Boolean = true;
         /**
          * Logging info
          */

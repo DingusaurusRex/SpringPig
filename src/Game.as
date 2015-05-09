@@ -51,6 +51,10 @@ package
 		private var m_finishTile:IntPair;
 		private var m_boardSprite:BoardView;
 		
+		
+		private var m_jumpHeightRects:Vector.<Sprite>;
+		private var m_prevPlayerX:int;
+		
 		// Level Progression Variables
 		public var progression:Array;
 		public var currLevelIndex:int;
@@ -128,6 +132,7 @@ package
 			playerStart.y = m_player.asset.y;
 			m_player.energy = 0;
 			m_meter.energy = m_player.energy;
+			m_jumpHeightRects = new Vector.<Sprite>();
 			
 			this.m_playerStart = playerStart;
 			
@@ -176,6 +181,15 @@ package
 			if (!pause) {
 				// Update the stopwatch
 				Stopwatch.updateStopwatchText();
+				
+				if (Constants.SHOW_JUMP_HEIGHT) {
+					if (!m_player.inAir) 
+					{
+						showJumpHeight();
+					} else {
+						removePlayerJumpHeight();
+					}
+				}
 				
 				m_boardSprite.movePlatforms(m_player, m_board);
 				platforms = m_boardSprite.platforms;
@@ -346,7 +360,9 @@ package
 					for each (tile in getTilesInDirection(m_player, Constants.UP)) {
 						id = m_board.getTile(tile.x, tile.y);
 						if (tile.x * m_board.tileSideLength != m_player.asset.x + m_player.width) {
-							checkLavaHit(id, tile);
+							if (checkLavaHit(id, tile)) {
+								break;
+							}
 							if (id == Constants.WALL ||
 								id == Constants.TRAMP ||
 								isClosedGate(id)) {
@@ -1277,6 +1293,51 @@ package
 			buttonToGate[Constants.POPUP_BUTTON3] = Constants.GATE3;
 			buttonToGate[Constants.POPUP_BUTTON4] = Constants.GATE4;
 			buttonToGate[Constants.POPUP_BUTTON5] = Constants.GATE5;
+		}
+		
+		private function showJumpHeight():void
+		{
+			var lowX:Number = (m_player.asset.x / m_board.tileSideLength);
+			var highX:Number = ((m_player.asset.x + m_player.width) / m_board.tileSideLength);
+			var x:int;
+			if (int(highX) - lowX > highX - int(highX)) {
+				x = int(lowX);
+			} else {
+				x = int(highX);
+			}
+			if (x != m_prevPlayerX) 
+			{
+				removePlayerJumpHeight(x);
+				
+				var y:int = (int) (m_player.asset.y / m_board.tileSideLength);
+				for (var i:int = y - 1; i >= y - (m_player.energy - 1); i--) 
+				{					
+					var id:int = m_board.getTile(x, i);
+					if (id != Constants.WALL && id != Constants.LADDER && !isClosedGate(id) && id != Constants.LAVA) {
+						var size:int = m_board.tileSideLength;
+						
+						var rect:Sprite = new Sprite();
+						rect.graphics.beginFill(0xFF0000);
+						rect.graphics.drawRect(x * size, i * size, size, size);
+						rect.alpha = .25;
+						rect.graphics.endFill();
+						
+						m_jumpHeightRects.push(rect);
+						m_boardSprite.addChild(rect);
+					} else {
+						break;
+					}
+				}
+			}
+		}
+		
+		private function removePlayerJumpHeight(prevX:int = -1):void
+		{
+			m_prevPlayerX = prevX;
+			for each (var rect:Sprite in m_jumpHeightRects) {
+				m_boardSprite.removeChild(rect);
+			}
+			m_jumpHeightRects = new Vector.<Sprite>();
 		}
 	}
 
