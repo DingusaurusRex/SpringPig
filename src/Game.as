@@ -1297,6 +1297,7 @@ package
 		
 		private function showJumpHeight():void
 		{
+			// Pick x value (low or high) on which to show the jump height
 			var lowX:Number = (m_player.asset.x / m_board.tileSideLength);
 			var highX:Number = ((m_player.asset.x + m_player.width) / m_board.tileSideLength);
 			var x:int;
@@ -1310,7 +1311,18 @@ package
 				removePlayerJumpHeight(x);
 				
 				var y:int = (int) (m_player.asset.y / m_board.tileSideLength);
-				for (var i:int = y - 1; i >= y - (m_player.energy - 1); i--) 
+				var startingHeight:int = y - 1;
+				var endingHeight:int = y - (m_player.energy - 1);
+				if (Constants.JUMP_HEIGHT_ONE_HIGHER) 
+				{
+					endingHeight = y - m_player.energy;
+				}
+				if (Constants.HIGHLIGHT_PLAYER_SQUARE) 
+				{
+					startingHeight = y;
+				}
+				
+				for (var i:int = startingHeight; i >= endingHeight; i--) 
 				{					
 					var id:int = m_board.getTile(x, i);
 					if (id != Constants.WALL && id != Constants.LADDER && !isClosedGate(id) && id != Constants.LAVA) {

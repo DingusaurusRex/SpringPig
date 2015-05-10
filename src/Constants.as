@@ -7,6 +7,11 @@ package
 	public class Constants 
 	{
 		public static const SHOW_JUMP_HEIGHT:Boolean = true;
+		
+		// A/B TESTING
+		public static const JUMP_HEIGHT_ONE_HIGHER:Boolean = true;
+		public static const HIGHLIGHT_PLAYER_SQUARE:Boolean = true;
+		
         /**
          * Logging info
          */
