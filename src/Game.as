@@ -277,10 +277,7 @@ package
 						m_player.velocity = 0;
 						if (!collidingWithLadder()) { // Dont add energy if you fall on ladder
 							var energy:int = m_player.startingHeight - getYPositionOfPlayer() - Constants.ENERGY_DOWNGRADE;
-							m_player.energy += Math.max(0, energy);
-							if (m_player.energy > 10) 
-								m_player.energy = 10;
-							m_meter.energy = m_player.energy;
+							incrementEnergy(energy);
 							
 							if (trampBelowPlayer()) 
 							{
@@ -318,6 +315,9 @@ package
 					for each (var tile:IntPair in getTilesInDirection(m_player, Constants.RIGHT))
 					{
 						var id:int = m_board.getTile(tile.x, tile.y);
+						if (isPowerUp(id) && m_boardSprite.isPowerupVisible(tile)) {
+							handlePowerUp(id, tile);
+						}
 						checkLavaHit(id, tile);
 						//if (isButton(id) && collidingWithButton(player, tile)) {
 							//setButtonDown(board, id);
@@ -346,6 +346,9 @@ package
 					{
 						id = m_board.getTile(tile.x, tile.y);
 						checkLavaHit(id, tile);
+						if (isPowerUp(id) && m_boardSprite.isPowerupVisible(tile)) {
+							handlePowerUp(id, tile);
+						}
 						//if (isButton(id) && collidingWithButton(player, tile)) {
 							//setButtonDown(board, id);
 						//}
@@ -362,6 +365,9 @@ package
 						if (tile.x * m_board.tileSideLength != m_player.asset.x + m_player.width) {
 							if (checkLavaHit(id, tile)) {
 								break;
+							}
+							if (isPowerUp(id) && m_boardSprite.isPowerupVisible(tile)) {
+								handlePowerUp(id, tile);
 							}
 							if (id == Constants.WALL ||
 								id == Constants.TRAMP ||
@@ -413,6 +419,10 @@ package
 								}
 								m_player.inAir = false;
 							}
+							else if (isPowerUp(id) && m_boardSprite.isPowerupVisible(tile)) 
+							{
+								handlePowerUp(id, tile);
+							}
 							// If one of the tiles below player is not empty, then player is not falling
 							else if (id != Constants.EMPTY &&
 									 id != Constants.START &&
@@ -420,11 +430,13 @@ package
 									 id != Constants.CRATE &&
 									 !(id >= Constants.SIGN1 && id <= Constants.SIGN5) &&
 									 !isButton(id) && 
-									!isOpenGate(id) &&
-									!isMovingPlatformStartOrEnd(id)) {
+									 !isOpenGate(id) &&
+									 !isMovingPlatformStartOrEnd(id) &&
+									 !isPowerUp(id)) 
+							{
 								m_player.asset.y = (int) (tile.y * m_board.tileSideLength - m_player.height);
 								m_player.velocity = 0;
-								m_player.inAir = false;
+								m_player.inAir = false;								
 							}
 						}
 					}
@@ -1236,6 +1248,8 @@ package
 				gateStatus[id] = 0; // CLOSED
 			}
 			
+			m_boardSprite.setPowerupsVisible();
+			
 			Stopwatch.reset();
 			Stopwatch.start();
 		}
@@ -1273,6 +1287,68 @@ package
 			return id >= Constants.MOVING_PLATFORM_START1 && id <= Constants.MOVING_PLATFORM_END5;
 		}
 		
+		private function isPowerUp(id:int):Boolean
+		{
+			return id >= Constants.TIMES2 && id <= Constants.PLUS10;
+		}
+		
+		private function handlePowerUp(id:int, tile:IntPair):void
+		{
+			switch (id)
+			{
+				case Constants.TIMES2:
+					m_player.energy *= 2;
+					if (m_player.energy > 10) 
+						m_player.energy = 10;
+					m_meter.energy = m_player.energy;
+					break;
+				case Constants.PLUS1:
+					incrementEnergy(1);
+					break;
+				case Constants.PLUS2:
+					incrementEnergy(2);
+					break;
+				case Constants.PLUS3:
+					incrementEnergy(3);
+					break;
+				case Constants.PLUS4:
+					incrementEnergy(4);
+					break;
+				case Constants.PLUS5:
+					incrementEnergy(5);
+					break;
+				case Constants.PLUS6:
+					incrementEnergy(6);
+					break;
+				case Constants.PLUS7:
+					incrementEnergy(7);
+					break;
+				case Constants.PLUS8:
+					incrementEnergy(8);
+					break;
+				case Constants.PLUS9:
+					incrementEnergy(9);
+					break;
+				case Constants.PLUS10:
+					incrementEnergy(10);
+					break;
+			}
+			
+			m_boardSprite.setPowerupInvisible(tile);
+		}
+		
+		/**
+		 * Add x to energy
+		 * @param	energy
+		 */
+		private function incrementEnergy(energy:int):void
+		{
+			m_player.energy += Math.max(0, energy);
+			if (m_player.energy > 10) 
+				m_player.energy = 10;
+			m_meter.energy = m_player.energy;
+		}
+		
 		/**
 		 * Describes relationship between the buttons and which gate they open.
 		 */
@@ -1295,6 +1371,10 @@ package
 			buttonToGate[Constants.POPUP_BUTTON5] = Constants.GATE5;
 		}
 		
+		/**
+		 * Highlights the squares above the player to show how high the player can jump
+		 * based on his energy
+		 */
 		private function showJumpHeight():void
 		{
 			// Pick x value (low or high) on which to show the jump height

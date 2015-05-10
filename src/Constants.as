@@ -148,6 +148,19 @@ package
 		public static const SIGN4:int = 53;
 		public static const SIGN5:int = 54;
 		
+		// POWERUPS
+		public static const TIMES2:int = 60;
+		public static const PLUS1:int = 61;
+		public static const PLUS2:int = 62;
+		public static const PLUS3:int = 63;
+		public static const PLUS4:int = 64;
+		public static const PLUS5:int = 65;
+		public static const PLUS6:int = 66;
+		public static const PLUS7:int = 67;
+		public static const PLUS8:int = 68;
+		public static const PLUS9:int = 69;
+		public static const PLUS10:int = 70;
+		
 		
 		/**
 		 * 

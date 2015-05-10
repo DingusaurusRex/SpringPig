@@ -18,7 +18,7 @@ package util
 			y = int2;
 		}
 		
-		public function compareTo(other:IntPair):Boolean
+		public function isEqualTo(other:IntPair):Boolean
 		{
 			if (x == other.x && y == other.y) 
 				return true;

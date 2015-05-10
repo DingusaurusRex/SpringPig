@@ -1,6 +1,9 @@
 package view 
 {
+	import adobe.utils.CustomActions;
+	import cgs.fractionVisualization.fractionAnimators.grid.GridCompareSizeAnimator;
 	import flash.display.Bitmap;
+	import flash.display.InterpolationMethod;
 	import flash.display.Sprite;
 	import flash.utils.Dictionary;
 	import model.button.Button;
@@ -54,8 +57,42 @@ package view
 		[Embed(source = "../../assets/art/tiles/sign.png")]
 		private var SignArt:Class;
 		
+		/**
+		 * Powerups
+		 */
 		
+		[Embed(source = "../../assets/art/tiles/PowerUpPlus1.png")]
+		private var Plus1Art:Class;
 		
+		[Embed(source = "../../assets/art/tiles/PowerUpPlus2.png")]
+		private var Plus2Art:Class;
+		
+		[Embed(source = "../../assets/art/tiles/PowerUpPlus3.png")]
+		private var Plus3Art:Class;
+		
+		[Embed(source = "../../assets/art/tiles/PowerUpPlus4.png")]
+		private var Plus4Art:Class;
+		
+		[Embed(source = "../../assets/art/tiles/PowerUpPlus5.png")]
+		private var Plus5Art:Class;
+		
+		[Embed(source = "../../assets/art/tiles/PowerUpPlus6.png")]
+		private var Plus6Art:Class;
+		
+		[Embed(source = "../../assets/art/tiles/PowerUpPlus7.png")]
+		private var Plus7Art:Class;
+		
+		[Embed(source = "../../assets/art/tiles/PowerUpPlus8.png")]
+		private var Plus8Art:Class;
+		
+		[Embed(source = "../../assets/art/tiles/PowerUpPlus9.png")]
+		private var Plus9Art:Class;
+		
+		[Embed(source = "../../assets/art/tiles/PowerUpPlus10.png")]
+		private var Plus10Art:Class;
+		
+		[Embed(source = "../../assets/art/tiles/PowerUpTimes2.png")]
+		private var Time2Art:Class;
 		
 		/**
 		 * Button Assets
@@ -143,6 +180,8 @@ package view
 		private var m_platformDirs:Dictionary; // Start ID -> direction 
 		private var m_platformStartToEnd:Dictionary; // Start IDs -> End IDs
 		
+		private var m_powerUps:Dictionary; // Tile intpair (x/y) -> powerup bitmap
+		
 		public function BoardView(board:Board) 
 		{
 			m_buttonArts = new Dictionary();
@@ -155,6 +194,7 @@ package view
 			m_platformStart = new Dictionary();
 			m_platformEnd = new Dictionary();
 			m_platformDirs = new Dictionary();
+			m_powerUps = new Dictionary();
 			initPlatformStartToEnd();
 			
 			draw(board);
@@ -179,6 +219,7 @@ package view
 			{
 				for (var x:int = 0; x < board.width; x++)
 				{
+					var tile:IntPair = new IntPair(x, y);
 					var id:int = board.getTile(x, y);
 					if (id == Constants.START)
 						m_playerStart = new IntPair(x * tileSideLength, y * tileSideLength);
@@ -201,7 +242,7 @@ package view
 					}
 					else
 					{
-						asset = getAssetBitmap(id);
+						asset = getAssetBitmap(id, tile);
 					}
 					if (asset)
 					{
@@ -245,7 +286,7 @@ package view
 		 * @param	id - the ID of the tile to return the asset of
 		 * @return
 		**/
-		private function getAssetBitmap(id:int):Bitmap
+		private function getAssetBitmap(id:int, tile:IntPair):Bitmap
 		{
 			var result:Bitmap = null;
 			if (id >= Constants.MOVING_PLATFORM_START1 && id <= Constants.MOVING_PLATFORM_START5)
@@ -318,30 +359,131 @@ package view
 					case Constants.POPUP_BUTTON1:
 						result = new RedUpArt();
 						m_buttonArts[id] = result;
-						break
+						break;
 					case Constants.POPUP_BUTTON2:
 						result = new BlueUpArt();
 						m_buttonArts[id] = result;
-						break
+						break;
 					case Constants.POPUP_BUTTON3:
 						result = new GreenUpArt();
 						m_buttonArts[id] = result;
-						break
+						break;
 					case Constants.POPUP_BUTTON4:
 						result = new PurpleUpArt();
 						m_buttonArts[id] = result;
-						break
+						break;
 					case Constants.POPUP_BUTTON5:
 						result = new YellowUpArt();
 						m_buttonArts[id] = result;
-						break
+						break;
+					case Constants.TIMES2:
+						result = new Time2Art();
+						m_powerUps[tile] = result;
+						break;
+					case Constants.PLUS1:
+						result = new Plus1Art();
+						m_powerUps[tile] = result;
+						break;
+					case Constants.PLUS2:
+						result = new Plus2Art();
+						m_powerUps[tile] = result;
+						break;
+					case Constants.PLUS3:
+						result = new Plus3Art();
+						m_powerUps[tile] = result;
+						break;
+					case Constants.PLUS4:
+						result = new Plus4Art();
+						m_powerUps[tile] = result;
+						break;
+					case Constants.PLUS5:
+						result = new Plus5Art();
+						m_powerUps[tile] = result;
+						break;
+					case Constants.PLUS6:
+						result = new Plus6Art();
+						m_powerUps[tile] = result;
+						break;
+					case Constants.PLUS7:
+						result = new Plus7Art();
+						m_powerUps[tile] = result;
+						break;
+					case Constants.PLUS8:
+						result = new Plus8Art();
+						m_powerUps[tile] = result;
+						break;
+					case Constants.PLUS9:
+						result = new Plus9Art();
+						m_powerUps[tile] = result;
+						break;
+					case Constants.PLUS10:
+						result = new Plus10Art();
+						m_powerUps[tile] = result;
+						break;
 					default:
 						result = null;
 						break;
 				}
 			}
-			
 			return result;
+		}
+		
+		/**
+		 * Set given powerup invisible
+		 * @param	tile
+		 */
+		public function setPowerupInvisible(tile:IntPair):void
+		{
+			var powerup:Bitmap = getPowerupBitmap(tile);
+			if (powerup)
+				powerup.visible = false;
+		}
+		
+		/**
+		 * Set given powerup visible
+		 * @param	tile
+		 */
+		public function setPowerupVisible(tile:IntPair):void
+		{
+			var powerup:Bitmap = getPowerupBitmap(tile);
+			if (powerup)
+				powerup.visible = true;
+		}
+		
+		/**
+		 * Sets ALL powerups visible
+		 */
+		public function setPowerupsVisible():void
+		{
+			for each (var pu:Bitmap in m_powerUps) 
+			{
+				pu.visible = true;
+			}
+		}		
+		
+		/**
+		 * Returns whether a powerup is visible
+		 * @param	tile
+		 * @return
+		 */
+		public function isPowerupVisible(tile:IntPair):Boolean 
+		{
+			var powerup:Bitmap = getPowerupBitmap(tile);
+			if (powerup)
+				return powerup.visible;
+			else 
+				return false;
+		}
+		
+		private function getPowerupBitmap(tile:IntPair):Bitmap
+		{
+			for (var key:Object in m_powerUps) 
+			{
+				if ((key as IntPair).isEqualTo(tile)) {
+					return (m_powerUps[key] as Bitmap);
+				}
+			}
+			return null;
 		}
 		
 		public function get platforms():Vector.<Bitmap>
