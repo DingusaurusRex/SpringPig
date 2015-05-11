@@ -40,17 +40,6 @@ package
 		[Embed(source = "../assets/progressions/progression2.json", mimeType = "application/octet-stream")]
 		private var Progression2:Class;
 		
-		/**
-		 * 
-		 * Music
-		 * 
-		**/
-		
-		[Embed(source = "../assets/sounds/Spring Pig Loop.mp3")]
-		private var Song1:Class;
-		
-		public var m_song:Sound;
-		
 		public function Main():void 
 		{
 			if (stage) init();
@@ -71,9 +60,6 @@ package
             // TODO: change when deploying
             var versionID:int = 1;
             var logger:Logger = Logger.initialize(Constants.GID, Constants.DB_NAME, Constants.SKEY, versionID, null, true);
-
-			m_song = (new Song1()) as Sound;
-			m_song.play(0, int.MAX_VALUE);
 			
             // Initialization
 			var game:Game = new Game(stage, prog, logger);
