@@ -1,6 +1,8 @@
 package util {
 import flash.net.SharedObject;
 
+import util.Stopwatch;
+
 /**
  * ...
  * @author Panji Wisesa
@@ -11,18 +13,22 @@ public class GameState {
     private static var game:Game;
 
     public static function Init(progressionFileName:String, g:Game):void {
+        game = g;
         try {
             playerData = SharedObject.getLocal(progressionFileName);
-            //playerData.clear();
             saveable = true;
             if (!playerData.data.hasOwnProperty("unlocked")) {
                 playerData.data.unlocked = 1;
                 playerData.data.progress = 0;
+                var personalRecords:Array = new Array();
+                for (var i:int = 0; i < game.progression.length; i++) {
+                    personalRecords.push(Constants.STOPWATCH_DEFAULT_TIME);
+                }
+                playerData.data.personalRecords = personalRecords;
             }
         } catch (e:Error) {
             saveable = false;
         }
-        game = g;
     }
 
     public static function openNextLevelSave():void {
@@ -34,8 +40,9 @@ public class GameState {
             if (playerData.data.unlocked < playerData.data.progress + 1) {
                 playerData.data.unlocked = playerData.data.progress + 1;
             }
-            //trace(Stopwatch.formatTiming(Stopwatch.getCurrentTiming()));
-            //trace("onl cl:" + playerData.data.progress + "; op:" + playerData.data.unlocked);
+            if (Stopwatch.getCurrentTiming() < playerData.data.personalRecords[game.currLevelIndex]) {
+                playerData.data.personalRecords[game.currLevelIndex] = Stopwatch.getCurrentTiming();
+            }
             playerData.flush();
         }
     }
@@ -49,7 +56,6 @@ public class GameState {
             if (playerData.data.unlocked < playerData.data.progress + 1) {
                 playerData.data.unlocked = playerData.data.progress + 1;
             }
-            //trace("cls cl:" + playerData.data.progress + "; op:" + playerData.data.unlocked);
             playerData.flush();
         }
     }
@@ -66,6 +72,10 @@ public class GameState {
             return playerData.data.unlocked;
         }
         return -1;
+    }
+
+    public static function getPlayerRecord(level:int):int {
+        return playerData.data.personalRecords[level];
     }
 }
 

@@ -200,7 +200,9 @@ public class Menu {
             case Constants.STATE_MAIN_MENU:
                 switch (key) {
                     case Keyboard.SPACE:
-                        continueGame();
+                        if (!mainMenu.blocked) {
+                            continueGame();
+                        }
                         break;
                     case Keyboard.S:
                         startGame();
@@ -349,15 +351,17 @@ import flash.filters.ColorMatrixFilter;
 import flash.text.TextField;
 
 import util.GameState;
+import util.Stopwatch;
 
 class MainMenu extends Sprite {
     private var title:TextField;
     private var continueButton:SimpleButton;
     private var continueButtonCover:Sprite;
-    private var blocked:Boolean;
     private var startButton:SimpleButton;
     private var levelSelectButton:SimpleButton;
     private var creditsButton:SimpleButton;
+
+    public var blocked:Boolean;
 
     public function MainMenu():void {
         // Main title
@@ -587,13 +591,23 @@ class LevelSelectMenu extends Sprite {
             var page:Sprite = new Sprite();
             LevelAddition:for (r = 0; r < Constants.LEVEL_SELECT_ROWS; r++) {
                 for (c = 0; c < Constants.LEVEL_SELECT_COLUMNS; c++) {
+                    var x:int = Constants.SCREEN_WIDTH * (c + 1) / (Constants.LEVEL_SELECT_COLUMNS + 1) - Constants.MENU_BUTTON_WIDTH / 2;
+                    var y:int = Constants.LEVEL_SELECT_PAGE_TOP_PADDING + pageHeight * r / Constants.LEVEL_SELECT_ROWS;
                     var levelButton:SimpleButton = Menu.getMenuButton(Menu.game.progression[l],
-                                    Constants.SCREEN_WIDTH * (c + 1) / (Constants.LEVEL_SELECT_COLUMNS + 1) - Constants.MENU_BUTTON_WIDTH / 2,
-                                    Constants.LEVEL_SELECT_PAGE_TOP_PADDING + pageHeight * r / Constants.LEVEL_SELECT_ROWS,
+                                    x,
+                                    y,
                             Menu.onLevelClick);
                     levelButton.name = String(l);
-
+                    var levelRecord:TextField = Menu.getTextField(Constants.LEVEL_SELECT_TIME_RECORD_TEXT + Stopwatch.formatTiming(GameState.getPlayerRecord(l)),
+                                    Constants.MENU_BUTTON_HEIGHT,
+                                    Constants.MENU_BUTTON_WIDTH,
+                                    x,
+                                    y + Constants.MENU_BUTTON_HEIGHT + Constants.LEVEL_SELECT_TIME_RECORD_TOP_PADDING,
+                                    Constants.MENU_FONT,
+                                    Constants.LEVEL_SELECT_TIME_RECORD_FONT_SIZE,
+                            Constants.LEVEL_SELECT_TIME_RECORD_ALIGNMENT);
                     page.addChild(levelButton);
+                    page.addChild(levelRecord);
                     l++;
                     if (l == levels) {
                         break LevelAddition;

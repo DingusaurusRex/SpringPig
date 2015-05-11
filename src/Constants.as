@@ -73,6 +73,7 @@ package
 		
 		// Stopwatch Values
 		public static const STOPWATCH_DEFAULT_TEXT:String = "00:00.000";
+        public static const STOPWATCH_DEFAULT_TIME:int = 5999999;
 		
 		public static const GAME_STOPWATCH_FONT:String = "arial";
 		public static const GAME_STOPWATCH_FONT_SIZE:int = 20;
@@ -268,6 +269,11 @@ package
 		public static const LEVEL_SELECT_PAGE_BUTTON_BOTTOM_PADDING:int = 50;
 		
 		public static const LEVEL_SELECT_PAGE_TOP_PADDING:int = 200;
+
+        public static const LEVEL_SELECT_TIME_RECORD_TEXT:String = "PB: ";
+        public static const LEVEL_SELECT_TIME_RECORD_TOP_PADDING:int = 3;
+        public static const LEVEL_SELECT_TIME_RECORD_FONT_SIZE:int = 15;
+        public static const LEVEL_SELECT_TIME_RECORD_ALIGNMENT:String = "left";
 		
 		// Credits menu
 		public static const CREDITS_TITLE_TEXT:String = "Credits";
