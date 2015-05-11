@@ -63,9 +63,9 @@ package
 			
             // Initialization
 			var game:Game = new Game(stage, prog, logger);
-			Audio.Init();
-			Stopwatch.Init();
             GameState.Init(SHA256.computeDigest(progression), game);
+			Audio.Init(GameState.getPlayerMuteOption());
+			Stopwatch.Init();
 			Menu.Init(stage, game);
 			Menu.createMainMenu();
 

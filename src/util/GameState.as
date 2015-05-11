@@ -23,6 +23,7 @@ public class GameState {
                     personalRecords.push(Constants.STOPWATCH_DEFAULT_TIME);
                 }
                 playerData.data.personalRecords = personalRecords;
+                playerData.data.mute = false;
             }
         } catch (e:Error) {
             saveable = false;
@@ -58,6 +59,11 @@ public class GameState {
         }
     }
 
+    public static function muteSave(mute:Boolean):void {
+        playerData.data.mute = mute;
+        playerData.flush();
+    }
+
     public static function getPlayerLetestProgress():int {
         if (saveable) {
             return playerData.data.progress;
@@ -74,6 +80,10 @@ public class GameState {
 
     public static function getPlayerRecord(level:int):int {
         return playerData.data.personalRecords[level];
+    }
+
+    public static function getPlayerMuteOption():Boolean {
+        return playerData.data.mute;
     }
 }
 

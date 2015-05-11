@@ -31,13 +31,19 @@ public class Audio {
     public static var muteButton:SimpleButton;
     private static var muteTransform:SoundTransform;
 
-    public static function Init():void {
-        mute = false;
+    public static function Init(m:Boolean):void {
+        muteTransform = new SoundTransform();
+        muteTransform.volume = 0;
+
+        defaultTransform = new SoundTransform();
+        defaultTransform.volume = 1;
+
+        mute = !m;
         muteButtonText = new TextField();
-        muteButtonText.text = Constants.MUTE_BUTTON_TEXT + "Off";
         muteButtonText.width = Constants.MENU_BUTTON_WIDTH;
+        muteButtonText.height = Constants.MENU_BUTTON_HEIGHT;
         muteButtonTextFormat = Menu.getMenuButtonTextFormat();
-        muteButtonText.setTextFormat(muteButtonTextFormat);
+        flipMute();
 
         muteButtonShape = Menu.getMenuButtonShape();
 
@@ -55,12 +61,6 @@ public class Audio {
 
         muteButton.addEventListener(MouseEvent.CLICK, onMuteClick);
 
-        muteTransform = new SoundTransform();
-        muteTransform.volume = 0;
-
-        defaultTransform = new SoundTransform();
-        defaultTransform.volume = 1;
-
         BGMSound = (new BGM1()) as Sound;
         BGMChannel = BGMSound.play(0, int.MAX_VALUE);
     }
@@ -75,6 +75,7 @@ public class Audio {
             muteButtonText.text = Constants.MUTE_BUTTON_TEXT + "Off";
         }
         muteButtonText.setTextFormat(muteButtonTextFormat);
+        GameState.muteSave(mute);
     }
 
     public static function onMuteClick(event:MouseEvent):void {
