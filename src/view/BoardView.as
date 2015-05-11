@@ -559,6 +559,11 @@ package view
 					if (player.onPlatform) {
 						player.asset.x += Constants.PLATFORM_SPEED;
 					}
+					for each (var crate:Crate in board.crates)
+					{
+						if (crate.onPlatform)
+							crate.asset.x += Constants.PLATFORM_SPEED;
+					}					
 					if (platform.x >= (end.x * board.tileSideLength)) {
 						m_platformDirs[id] = Constants.LEFT;
 					}
@@ -568,6 +573,11 @@ package view
 					platform.x -= Constants.PLATFORM_SPEED;
 					if (player.onPlatform) {
 						player.asset.x -= Constants.PLATFORM_SPEED;
+					}
+					for each (crate in board.crates)
+					{
+						if (crate.onPlatform)
+							crate.asset.x += Constants.PLATFORM_SPEED;
 					}
 					if (platform.x <= (start.x * board.tileSideLength)) {
 						m_platformDirs[id] = Constants.RIGHT;

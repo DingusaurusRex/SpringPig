@@ -17,6 +17,8 @@ package model.player
 		function set height(val:int):void;
 		function get onPlatform():Boolean;
 		function set onPlatform(val:Boolean):void;
+		function set inAir(val:Boolean):void
+		function get inAir():Boolean;
 	}
 	
 }
