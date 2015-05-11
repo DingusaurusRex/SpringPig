@@ -11,6 +11,7 @@ package
 		// A/B TESTING
 		public static const JUMP_HEIGHT_ONE_HIGHER:Boolean = true;
 		public static const HIGHLIGHT_PLAYER_SQUARE:Boolean = true;
+		public static const MOVE_CRATES_IN_AIR:Boolean = true;
 		
         /**
          * Logging info
@@ -134,19 +135,23 @@ package
 		public static const MOVING_PLATFORM_START3:int = 42;
 		public static const MOVING_PLATFORM_START4:int = 43;
 		public static const MOVING_PLATFORM_START5:int = 44;
+		public static const LONG_MOVING_PLATFORM_START1:int = 45;
+		public static const LONG_MOVING_PLATFORM_START2:int = 46;
 		
-		public static const MOVING_PLATFORM_END1:int = 45;
-		public static const MOVING_PLATFORM_END2:int = 46;
-		public static const MOVING_PLATFORM_END3:int = 47;
-		public static const MOVING_PLATFORM_END4:int = 48;
-		public static const MOVING_PLATFORM_END5:int = 49;
+		public static const MOVING_PLATFORM_END1:int = 47;
+		public static const MOVING_PLATFORM_END2:int = 48;
+		public static const MOVING_PLATFORM_END3:int = 49;
+		public static const MOVING_PLATFORM_END4:int = 50;
+		public static const MOVING_PLATFORM_END5:int = 51;
+		public static const LONG_MOVING_PLATFORM_END1:int = 52;
+		public static const LONG_MOVING_PLATFORM_END2:int = 53;
 		
 		// Signs
-		public static const SIGN1:int = 50;
-		public static const SIGN2:int = 51;
-		public static const SIGN3:int = 52;
-		public static const SIGN4:int = 53;
-		public static const SIGN5:int = 54;
+		public static const SIGN1:int = 54;
+		public static const SIGN2:int = 55;
+		public static const SIGN3:int = 56;
+		public static const SIGN4:int = 57;
+		public static const SIGN5:int = 58;
 		
 		// POWERUPS
 		public static const TIMES2:int = 60;

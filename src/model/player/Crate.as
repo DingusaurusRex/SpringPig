@@ -15,6 +15,7 @@ package model.player
 		public var inAir:Boolean = false;
 		public var dy:Number = 0;
 		public var startingPos:IntPair;
+		private var m_onPlatform:Boolean;
 		
 		public function Crate() 
 		{
@@ -64,6 +65,16 @@ package model.player
 		public function set height(val:int):void
 		{
 			m_asset.height = val;
+		}
+		
+		public function get onPlatform():Boolean
+		{
+			return m_onPlatform;
+		}
+		
+		public function set onPlatform(val:Boolean):void
+		{
+			m_onPlatform = val;
 		}
 	}
 

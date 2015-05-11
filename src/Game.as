@@ -378,11 +378,11 @@ package
 							}
 						}
 					}
-					collideWithPlatform(direction);
+					collideWithPlatform(m_player, direction);
 					break;
 				case Constants.DOWN:
 					m_player.inAir = true;
-					if (collideWithPlatform(direction))
+					if (collideWithPlatform(m_player, direction))
 						break;
 					else if (standingOnCrate(m_player))
 					{
@@ -627,8 +627,8 @@ package
 					break;
 				case Constants.DOWN:
 					crate.inAir = true;
-					//if (collideWithPlatform(direction))
-						//break;
+					if (collideWithPlatform(crate, direction))
+						break;
 					tiles = getTilesInDirection(crate, Constants.DOWN)
 					for each (tile in tiles)
 					{
@@ -886,7 +886,7 @@ package
 		 * Collide with a platform, given a direction
 		 * @param	direction
 		 */
-		private function collideWithPlatform(direction:int):void
+		private function collideWithPlatform(obj:PhysicsObject, direction:int):void
 		{
 			m_player.onPlatform = false;
 			if (isPlatformInPlayerTile()) { // Check that a platform is in a player's tile
@@ -1284,7 +1284,7 @@ package
 		
 		private function isMovingPlatformStartOrEnd(id:int):Boolean
 		{
-			return id >= Constants.MOVING_PLATFORM_START1 && id <= Constants.MOVING_PLATFORM_END5;
+			return id >= Constants.MOVING_PLATFORM_START1 && id <= Constants.LONG_MOVING_PLATFORM_END2;
 		}
 		
 		private function isPowerUp(id:int):Boolean

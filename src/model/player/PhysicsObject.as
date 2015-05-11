@@ -15,6 +15,8 @@ package model.player
 		function set width(val:int):void;
 		function get height():int;
 		function set height(val:int):void;
+		function get onPlatform():Boolean;
+		function set onPlatform(val:Boolean):void;
 	}
 	
 }

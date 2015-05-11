@@ -21,7 +21,7 @@ package model.player
 		public var downSpeedY:Number; // Speed on ladder
 		public var airSpeedX:Number;
 		public var inAir:Boolean = false;
-		public var onPlatform:Boolean = false;
+		private var m_onPlatform:Boolean = false;
 		
 		public var startingHeight:int = 0;
 		
@@ -74,6 +74,16 @@ package model.player
 		public function set height(val:int):void
 		{
 			m_asset.height = val;
+		}
+		
+		public function get onPlatform():Boolean
+		{
+			return m_onPlatform;
+		}
+		
+		public function set onPlatform(val:Boolean):void
+		{
+			m_onPlatform = val;
 		}
 	}
 }

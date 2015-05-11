@@ -246,7 +246,11 @@ package view
 					}
 					if (asset)
 					{
-						asset.width = tileSideLength;
+						if (id >= Constants.LONG_MOVING_PLATFORM_START1 && id <= Constants.LONG_MOVING_PLATFORM_START2) {
+							asset.width = 2 * tileSideLength;
+						} else {
+							asset.width = tileSideLength;
+						}
 						asset.height = tileSideLength;
 						asset.x = x * tileSideLength;
 						asset.y = y * tileSideLength;
@@ -289,7 +293,7 @@ package view
 		private function getAssetBitmap(id:int, tile:IntPair):Bitmap
 		{
 			var result:Bitmap = null;
-			if (id >= Constants.MOVING_PLATFORM_START1 && id <= Constants.MOVING_PLATFORM_START5)
+			if (id >= Constants.MOVING_PLATFORM_START1 && id <= Constants.LONG_MOVING_PLATFORM_START1)
 			{
 				result = new PlatformArt();
 				m_platformArts[id] = result;
@@ -675,9 +679,6 @@ package view
 					break;
 			}
 			
-			
-			
-			
 			m_buttonArts[id].width = board.tileSideLength;
 			m_buttonArts[id].height = board.tileSideLength;
 			m_buttonArts[id].x = prevX;
@@ -777,12 +778,12 @@ package view
 		
 		private function isMovingPlatformStart(id:int):Boolean
 		{	
-			return id >= Constants.MOVING_PLATFORM_START1 && id <= Constants.MOVING_PLATFORM_START5;
+			return id >= Constants.MOVING_PLATFORM_START1 && id <= Constants.LONG_MOVING_PLATFORM_START2;
 		}
 		
 		private function isMovingPlatformEnd(id:int):Boolean
 		{
-			return id >= Constants.MOVING_PLATFORM_END1 && id <= Constants.MOVING_PLATFORM_END5;
+			return id >= Constants.MOVING_PLATFORM_END1 && id <= Constants.LONG_MOVING_PLATFORM_END2;
 		}
 		
 		/**
@@ -798,6 +799,9 @@ package view
 			m_platformStartToEnd[Constants.MOVING_PLATFORM_START3] = Constants.MOVING_PLATFORM_END3;
 			m_platformStartToEnd[Constants.MOVING_PLATFORM_START4] = Constants.MOVING_PLATFORM_END4;
 			m_platformStartToEnd[Constants.MOVING_PLATFORM_START5] = Constants.MOVING_PLATFORM_END5;
+			
+			m_platformStartToEnd[Constants.LONG_MOVING_PLATFORM_START1] = Constants.LONG_MOVING_PLATFORM_END1;
+			m_platformStartToEnd[Constants.LONG_MOVING_PLATFORM_START2] = Constants.LONG_MOVING_PLATFORM_END2;
 		}
 	}
 
