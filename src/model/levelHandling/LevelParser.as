@@ -27,6 +27,9 @@ package model.levelHandling
 		[Embed(source = "../../../assets/levels/testlevel2.json", mimeType = "application/octet-stream")]
 		private var TestLevel2:Class;
 		
+		[Embed(source = "../../../assets/levels/crateTest.json", mimeType = "application/octet-stream")]
+		private var CrateTest:Class;
+		
 		[Embed(source = "../../../assets/levels/level1.json", mimeType = "application/octet-stream")]
 		private var Level1:Class;
 		
@@ -90,6 +93,7 @@ package model.levelHandling
 			**/
 			m_levelNames["test1"] = TestLevel1;
 			m_levelNames["test2"] = TestLevel2;
+			m_levelNames["crateTest"] = CrateTest;
 			m_levelNames["level1"] = Level1;
 			m_levelNames["level2"] = Level2;
 			m_levelNames["level3"] = Level3;
