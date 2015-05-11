@@ -347,7 +347,6 @@ public class Menu {
 import flash.display.SimpleButton;
 import flash.display.Sprite;
 import flash.events.MouseEvent;
-import flash.filters.ColorMatrixFilter;
 import flash.text.TextField;
 
 import util.GameState;
@@ -594,17 +593,17 @@ class LevelSelectMenu extends Sprite {
                     var x:int = Constants.SCREEN_WIDTH * (c + 1) / (Constants.LEVEL_SELECT_COLUMNS + 1) - Constants.MENU_BUTTON_WIDTH / 2;
                     var y:int = Constants.LEVEL_SELECT_PAGE_TOP_PADDING + pageHeight * r / Constants.LEVEL_SELECT_ROWS;
                     var levelButton:SimpleButton = Menu.getMenuButton(Menu.game.progression[l],
-                                    x,
-                                    y,
+                            x,
+                            y,
                             Menu.onLevelClick);
                     levelButton.name = String(l);
                     var levelRecord:TextField = Menu.getTextField(Constants.LEVEL_SELECT_TIME_RECORD_TEXT + Stopwatch.formatTiming(GameState.getPlayerRecord(l)),
-                                    Constants.MENU_BUTTON_HEIGHT,
-                                    Constants.MENU_BUTTON_WIDTH,
-                                    x,
+                            Constants.MENU_BUTTON_HEIGHT,
+                            Constants.MENU_BUTTON_WIDTH,
+                            x,
                                     y + Constants.MENU_BUTTON_HEIGHT + Constants.LEVEL_SELECT_TIME_RECORD_TOP_PADDING,
-                                    Constants.MENU_FONT,
-                                    Constants.LEVEL_SELECT_TIME_RECORD_FONT_SIZE,
+                            Constants.MENU_FONT,
+                            Constants.LEVEL_SELECT_TIME_RECORD_FONT_SIZE,
                             Constants.LEVEL_SELECT_TIME_RECORD_ALIGNMENT);
                     page.addChild(levelButton);
                     page.addChild(levelRecord);

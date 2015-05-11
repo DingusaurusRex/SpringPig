@@ -1,8 +1,6 @@
 package util {
 import flash.net.SharedObject;
 
-import util.Stopwatch;
-
 /**
  * ...
  * @author Panji Wisesa
