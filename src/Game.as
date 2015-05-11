@@ -501,7 +501,7 @@ package
 		 */
 		private function collidingWithLadder():Boolean
 		{
-			for each (var tile:IntPair in getPlayerTiles()) {
+			for each (var tile:IntPair in getObjectTiles(m_player)) {
 				if (m_board.getTile(tile.x, tile.y) == Constants.LADDER) 
 					return true;
 			}
@@ -670,7 +670,7 @@ package
 		public function displaySign():void
 		{
 			var found:Boolean = false;
-			for each (var tile:IntPair in getPlayerTiles()) {
+			for each (var tile:IntPair in getObjectTiles(m_player)) {
 				var id:int = m_board.getTile(tile.x, tile.y);
 				if (id >= Constants.SIGN1 && id <= Constants.SIGN5)
 				{
@@ -707,7 +707,7 @@ package
 		public function popButtonsUp():void
 		{
 			var popupButtonsTouched:Vector.<int> = new Vector.<int>();
-			for each (var tile:IntPair in getPlayerTiles()) {
+			for each (var tile:IntPair in getObjectTiles(m_player)) {
 				var id:int = m_board.getTile(tile.x, tile.y);
 				if (isPopupButton(id))
 				{
@@ -888,19 +888,25 @@ package
 		 */
 		private function collideWithPlatform(obj:PhysicsObject, direction:int):void
 		{
-			m_player.onPlatform = false;
-			if (isPlatformInPlayerTile()) { // Check that a platform is in a player's tile
+			obj.onPlatform = false;
+			if (isPlatformInObjectTile(obj)) { // Check that a platform is in an object's tile
 				for each (var plat:Bitmap in platforms) {
 					var topPlat:int = plat.y;
 					var bottomPlat:int = plat.y + plat.height * .35;
 					var rightPlat:int = plat.x + plat.width;
 					var leftPlat:int = plat.x;
-					var playerLeft:int = m_player.asset.x + m_player.width * .25;
-					var playerRight:int = m_player.asset.x + m_player.width * .75;
-					var playerTop:int = m_player.asset.y;
-					var playerBottom:int = m_player.asset.y + m_player.height;
 					
-					if (direction == Constants.UP)
+					var playerLeft:int = obj.asset.x + obj.width * .25;
+					var playerRight:int = obj.asset.x + obj.width * .75;
+					var playerTop:int = obj.asset.y;
+					var playerBottom:int = obj.asset.y + obj.height;
+					
+					if (obj is Crate) {
+						playerLeft = obj.asset.x;
+						playerRight = obj.asset.x + obj.width;
+					}
+					
+					if (direction == Constants.UP && obj == m_player)
 					{
 						if (m_player.asset.y <= bottomPlat && m_player.asset.y >= topPlat && 
 							playerRight >= leftPlat && playerLeft <= rightPlat) {
@@ -914,9 +920,13 @@ package
 					{
 						if (playerBottom >= topPlat && playerTop <= bottomPlat &&
 							playerRight >= leftPlat && playerLeft <= rightPlat) {
-							m_player.asset.y = topPlat - m_player.height;
-							m_player.inAir = false;
-							m_player.onPlatform = true;
+							obj.asset.y = topPlat - obj.height;
+							obj.inAir = false;
+							
+							if (obj is Player || (obj.asset.x + obj.width / 2 <= rightPlat && obj.asset.x + obj.width / 2 >= leftPlat)) 
+							{
+								obj.onPlatform = true;
+							}
 						}
 					}
 				}
@@ -1035,15 +1045,15 @@ package
 		
 		
 		/**
-		 * Returns the tile(s) in which the player is located in terms of intpairs
+		 * Returns the tile(s) in which the object is located in terms of intpairs
 		 * @return
 		 */
-		private function getPlayerTiles():Vector.<IntPair> 		
+		private function getObjectTiles(obj:PhysicsObject):Vector.<IntPair> 		
 		{			
-			var lowX:int = (int) (m_player.asset.x / m_board.tileSideLength);
-			var highX:int = (int) ((m_player.asset.x + m_player.width) / m_board.tileSideLength);
-			var highY:int = (int) (m_player.asset.y / m_board.tileSideLength);
-			var lowY:int = (int) ((m_player.asset.y + m_player.height - 1) / m_board.tileSideLength);
+			var lowX:int = (int) (obj.asset.x / m_board.tileSideLength);
+			var highX:int = (int) ((obj.asset.x + obj.width) / m_board.tileSideLength);
+			var highY:int = (int) (obj.asset.y / m_board.tileSideLength);
+			var lowY:int = (int) ((obj.asset.y + obj.height - 1) / m_board.tileSideLength);
 			
 			// Determines if any of the above values are the same (Whether the player is located inside a square or in between two or more squares)
 			var oneX:Boolean = false; 
@@ -1191,9 +1201,9 @@ package
 			return result;
 		}
 		
-		private function isPlatformInPlayerTile():Boolean
+		private function isPlatformInObjectTile(obj:PhysicsObject):Boolean
 		{
-			for each (var tile:IntPair in getPlayerTiles())
+			for each (var tile:IntPair in getObjectTiles(obj))
 			{
 				for each (var platform:Bitmap in platforms) {					
 					if ((platform.x >= tile.x * m_board.tileSideLength || platform.x <= (tile.x + 1) * m_board.tileSideLength) &&

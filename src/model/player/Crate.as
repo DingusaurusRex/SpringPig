@@ -12,7 +12,7 @@ package model.player
 		private var CrateArt:Class;
 		
 		private var m_asset:Bitmap;
-		public var inAir:Boolean = false;
+		private var m_inAir:Boolean = false;
 		public var dy:Number = 0;
 		public var startingPos:IntPair;
 		private var m_onPlatform:Boolean;
@@ -75,6 +75,16 @@ package model.player
 		public function set onPlatform(val:Boolean):void
 		{
 			m_onPlatform = val;
+		}
+		
+		public function set inAir(val:Boolean):void
+		{
+			m_inAir = val;
+		}
+		
+		public function get inAir():Boolean
+		{
+			return m_inAir;
 		}
 	}
 
