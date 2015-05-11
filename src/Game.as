@@ -194,29 +194,7 @@ package
 				m_boardSprite.movePlatforms(m_player, m_board);
 				platforms = m_boardSprite.platforms;
 				
-				popButtonsUp();
-				for (var x:int = 0; x < m_board.width; x++ )
-				{
-					for (var y:int = 0; y < m_board.height; y++)
-					{
-						var tile:IntPair = new IntPair(x, y)
-						var id:int = m_board.getTile(x, y)
-						if (isButton(id))
-						{	
-							if (collidingWithButton(m_player, tile))
-							{
-								setButtonDown(m_board, id);
-							}
-							for each (var crate:Crate in m_board.crates)
-							{
-								if (collidingWithButton(crate, tile))
-								{
-									setButtonDown(m_board, id);
-								}
-							}
-						}
-					}
-				}
+				updateButtons();
 				displaySign();
 				updateCrates();
 				var wasInAir:Boolean = m_player.inAir;
@@ -701,34 +679,43 @@ package
 			}
 		}
 		
-		/**
-		 * Pops up all the popup buttons that are not collided with by player
-		 */
-		public function popButtonsUp():void
+		public function updateButtons():void
 		{
+			// Go through and set every button down that is being touched
 			var popupButtonsTouched:Vector.<int> = new Vector.<int>();
-			for each (var tile:IntPair in getObjectTiles(m_player)) {
-				var id:int = m_board.getTile(tile.x, tile.y);
-				if (isPopupButton(id))
+			for (var x:int = 0; x < m_board.width; x++ )
+			{
+				for (var y:int = 0; y < m_board.height; y++)
 				{
-					if (collidingWithButton(m_player, tile)) {
-						popupButtonsTouched.push(id);
-					}
-					else
-					{
+					var tile:IntPair = new IntPair(x, y)
+					var id:int = m_board.getTile(x, y)
+					if (isButton(id))
+					{	
+						var touched:Boolean = false;
+						if (collidingWithButton(m_player, tile))
+						{
+							setButtonDown(m_board, id);
+							touched = true;
+						}
 						for each (var crate:Crate in m_board.crates)
 						{
 							if (collidingWithButton(crate, tile))
 							{
-								popupButtonsTouched.push(id);
-								break;
+								setButtonDown(m_board, id);
+								touched = true;
 							}
+						}
+						if (isPopupButton(id) && touched)
+						{
+							popupButtonsTouched.push(id);
 						}
 					}
 				}
 			}
 			
-			for (var key:String in popupButtons) {
+			// Go through and set all popup buttons not being touched to up
+			for (var key:String in popupButtons)
+			{
 				id = int(key);
 				if (popupButtons[id] == 0 && popupButtonsTouched.indexOf(id) == -1) { // Buttons is DOWN and not being touched by player
 					setButtonUp(m_board, id);
@@ -1282,6 +1269,11 @@ package
 			return id >= Constants.GATE1 && id <= Constants.GATE5 && gateStatus[id] == 1;
 		}
 		
+		/**
+		 * Returns true if the id is a button or popup-button
+		 * @param	id
+		 * @return
+		 */
 		private function isButton(id:int):Boolean
 		{
 			return id >= Constants.BUTTON1 && id <= Constants.POPUP_BUTTON5;
