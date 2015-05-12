@@ -17,9 +17,15 @@ import flash.text.TextFormat;
 public class Audio {
     [Embed(source = "../../assets/sounds/Spring Pig Loop.mp3")]
     private static var BGM1:Class;
+    [Embed(source = "../../assets/sounds/comedy_spring.mp3")]
+    private static var SFXSpring1:Class;
 
     private static var BGMSound:Sound;
     private static var BGMChannel:SoundChannel;
+
+    private static var SFXSpringSound:Sound;
+    private static var SFXSpringSoundChannel:SoundChannel;
+    private static var SFXSpringTransform:SoundTransform;
 
     private static var defaultTransform:SoundTransform;
 
@@ -63,6 +69,10 @@ public class Audio {
 
         BGMSound = (new BGM1()) as Sound;
         BGMChannel = BGMSound.play(0, int.MAX_VALUE);
+
+        SFXSpringSound = (new SFXSpring1()) as Sound;
+        SFXSpringTransform = new SoundTransform();
+        SFXSpringTransform.volume = Constants.SFX_SPRING_VOLUME;
     }
 
     public static function flipMute():void {
@@ -80,6 +90,11 @@ public class Audio {
 
     public static function onMuteClick(event:MouseEvent):void {
         Audio.flipMute();
+    }
+
+    public static function playSpringSFX():void {
+        SFXSpringSoundChannel = SFXSpringSound.play();
+        SFXSpringSoundChannel.soundTransform = SFXSpringTransform;
     }
 }
 

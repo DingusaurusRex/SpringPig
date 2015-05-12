@@ -192,7 +192,11 @@ package
 		public static const LADDER_DOWN_SPEED:Number = 5;
 		
 		public static const BASE_SIDE_LENGTH:Number = 46;		// The base pixels / block that will result in the above speeds.
-		
+
+        /**
+         * Audio Values
+         */
+        public static const SFX_SPRING_VOLUME:Number = 0.05;
 		
 		/*
 		 * Menu Values
@@ -280,7 +284,7 @@ package
 		public static const CREDITS_TITLE_TOP_PADDING:int = 50;
 		public static const CREDITS_TITLE_FONT_SIZE:int = 80;
 		
-		public static const CREDITS:String = "A game created for:\n\tUW CSE Games Capstone - Spring 2015\nBy:\n- Jack Fancher\n- Marc-Antoine Fontenelle\n- Panji Wisesa\n\nMusic By:\n- Lizzie Siegel";
+		public static const CREDITS:String = "A game created for:\n\tUW CSE Games Capstone - Spring 2015\nBy:\n- Jack Fancher\n- Marc-Antoine Fontenelle\n- Panji Wisesa\n\nMusic By:\n- Lizzie Siegel\n\nSFX from:\n-http://www.freesfx.co.uk";
 		public static const CREDITS_TOP_PADDING:int = 250;
 		public static const CREDITS_HEIGHT:int = 500;
 		public static const CREDITS_WIDTH:int = 400;

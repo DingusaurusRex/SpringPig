@@ -1,6 +1,8 @@
 package 
 {
-	import flash.display.Bitmap;
+import cgs.Audio.Audio;
+
+import flash.display.Bitmap;
 	import flash.display.IDrawCommand;
 	import flash.display.Sprite;
 	import flash.display.Stage;
@@ -20,7 +22,9 @@ package
 	import model.player.Crate;
 	import model.player.PhysicsObject;
 	import model.player.Player;
-	import util.IntPair;
+
+import util.Audio;
+import util.IntPair;
 	import util.Stopwatch;
 	import view.BoardView;
 	import view.MeterView;
@@ -532,6 +536,9 @@ package
 		private function useEnergy(removeMeter:Boolean = true):void
 		{
             var logData:Object = {x:m_player.asset.x, y:m_player.asset.y, power:m_player.energy};
+            if (m_player.energy > 0) {
+                util.Audio.playSpringSFX();
+            }
             m_logger.logAction(Constants.AID_SPRING, logData);
 			m_player.velocity = Constants.JUMP_VELOCITIES[m_player.energy];
 			m_player.inAir = true;
