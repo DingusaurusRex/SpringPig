@@ -122,7 +122,8 @@ package
 					}
 				}
 				
-				m_boardSprite.movePlatforms(m_player, m_board);
+				var playerDir:int = m_boardSprite.movePlatforms(m_player, m_board);
+				checkPlayerCollision(playerDir);
 				platforms = m_boardSprite.platforms;
 				
 				updateButtons();
@@ -180,9 +181,9 @@ package
 						m_player.velocity = Constants.INITIAL_FALL_VELOCITY;
 					}
 					
-					checkPlayerCollision(Constants.UP);
-					checkPlayerCollision(Constants.DOWN); // Sets player.inAir
-					if (!m_player.inAir) { // If player was in air and no longer is, add energy
+					var hitLava:Boolean = checkPlayerCollision(Constants.UP);
+					var hitLava2:Boolean = checkPlayerCollision(Constants.DOWN); // Sets player.inAir
+					if (!m_player.inAir && !hitLava && !hitLava2) { // If player was in air and no longer is, add energy
 						m_player.velocity = 0;
 						if (!collidingWithLadder()) { // Dont add energy if you fall on ladder
 							var energy:int = m_player.startingHeight - getYPositionOfPlayer() - Constants.ENERGY_DOWNGRADE;
@@ -324,10 +325,15 @@ package
 		**/
 		
 		/**
+<<<<<<< HEAD
+		 * Checks collision with the player in a given direction
+		 * Returns true if player collided with lava
+=======
 		 * Handles collision for the player in a given direction
+>>>>>>> origin/master
 		 * @param	direction
 		 */
-		private function checkPlayerCollision(direction:int):void
+		private function checkPlayerCollision(direction:int):Boolean
 		{
 			switch(direction)
 			{
@@ -355,7 +361,8 @@ package
 						if (isPowerUp(id) && m_boardSprite.isPowerupVisible(tile)) {
 							handlePowerUp(id, tile);
 						}
-						checkLavaHit(id, tile);
+						if (checkLavaHit(id, tile))
+							return true;
 						//if (isButton(id) && collidingWithButton(player, tile)) {
 							//setButtonDown(board, id);
 						//}
@@ -386,7 +393,8 @@ package
 					for each (tile in getTilesInDirection(m_player, Constants.LEFT))
 					{
 						id = m_board.getTile(tile.x, tile.y);
-						checkLavaHit(id, tile);
+						if (checkLavaHit(id, tile))
+							return true;
 						if (isPowerUp(id) && m_boardSprite.isPowerupVisible(tile)) {
 							handlePowerUp(id, tile);
 						}
@@ -404,9 +412,8 @@ package
 					for each (tile in getTilesInDirection(m_player, Constants.UP)) {
 						id = m_board.getTile(tile.x, tile.y);
 						if (tile.x * m_board.tileSideLength != m_player.asset.x + m_player.width) {
-							if (checkLavaHit(id, tile)) {
-								break;
-							}
+							if (checkLavaHit(id, tile))
+								return true;
 							if (isPowerUp(id) && m_boardSprite.isPowerupVisible(tile)) {
 								handlePowerUp(id, tile);
 							}
@@ -437,7 +444,7 @@ package
 						if (tile.x * m_board.tileSideLength != m_player.asset.x + m_player.width) {
 							if (checkLavaHit(id, tile, true)) {
 								m_player.inAir = false;
-								break;
+								return true;
 							}
 							//if (isButton(id) && collidingWithButton(player, tile)) {
 								//setButtonDown(board, id);
@@ -451,13 +458,16 @@ package
 								// When player is falling, he should fall on top of ladder every time.
 								// When a player is deliberately pressing down, they should not get y position reset
 								var closeToTop:Boolean = Math.abs(m_player.asset.y + m_player.height - (tile.y * m_board.tileSideLength)) <= m_player.downSpeedY;
-								if (m_player.dy > 0)
+								if (m_player.dy > 0.1) {
+									trace(m_player.dy);
 									closeToTop = true;
+								}
 								if ((tileAboveLadder == Constants.EMPTY || tileAboveLadder == Constants.START || tileAboveLadder == Constants.END)
 									&& tileAboveLadder != -1 && closeToTop && !m_keyDown)
 								{
 									m_player.asset.y = (int) (tile.y * m_board.tileSideLength - m_player.height);
 								}
+								//m_player.velocity = 0;
 								m_player.inAir = false;
 							}
 							else if (isPowerUp(id) && m_boardSprite.isPowerupVisible(tile)) 
@@ -469,6 +479,7 @@ package
 									 id != Constants.START &&
 									 id != Constants.END &&
 									 id != Constants.CRATE &&
+									 id != Constants.LAVA &&
 									 !(id >= Constants.SIGN1 && id <= Constants.SIGN5) &&
 									 !isButton(id) && 
 									 !isOpenGate(id) &&
@@ -498,6 +509,7 @@ package
 				default:
 					break;
 			}
+			return false;
 		}
 		
 		private function isPlayerFinished():Boolean
@@ -1223,7 +1235,7 @@ package
 			var tileLeft:int = tile.x * m_board.tileSideLength;
 			
 			// Check if top or bottom of player is hitting lava
-			if (id == Constants.LAVA) {
+			if (id == Constants.LAVA && !m_player.onPlatform) {
 				if (!playerBottom || (playerBottom && playerLeft <= tileRight && playerRight >= tileLeft)) {
 					var logData:Object = {x:m_player.asset.x, y:m_player.asset.y};
 					m_logger.logAction(Constants.AID_DEATH, logData);
@@ -1410,10 +1422,6 @@ package
 		 * 
 		**/
 		
-		/**
-		 * Test if keys are pressed down
-		 * @param	event
-		 */
 		public function onKeyDown(event:KeyboardEvent):void
 		{
 			var key:uint = event.keyCode;
