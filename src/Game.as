@@ -200,19 +200,19 @@ package
 						}
 					}
 				}
-				for each (var crate:Crate in m_board.crates)
-				{
-					if (!crate.wasBeingPushed && crate.beingPushed)
-					{
-						trace("push");
-					}
-					else if (crate.wasBeingPushed && !crate.beingPushed)
-					{
-						trace("not push");
-						var crateTile:IntPair = getCentralTile(crate);
-						crate.asset.x = crateTile.x * m_board.tileSideLength;
-					}
-				}
+				//for each (var crate:Crate in m_board.crates)
+				//{
+					//if (!crate.wasBeingPushed && crate.beingPushed)
+					//{
+						//trace("push");
+					//}
+					//else if (crate.wasBeingPushed && !crate.beingPushed)
+					//{
+						//trace("not push");
+						//var crateTile:IntPair = getCentralTile(crate);
+						//crate.asset.x = crateTile.x * m_board.tileSideLength;
+					//}
+				//}
 			}
 		}
 		
@@ -340,14 +340,15 @@ package
 						var oldCrateX:Number = crate.asset.x;
 						var oldPlayerX:Number = m_player.asset.x;
 						crate.asset.x += m_player.cratePushSpeed;
-						m_player.inAir ? m_player.asset.x -= m_player.airSpeedX - m_player.cratePushSpeed : m_player.asset.x -= m_player.speedX - m_player.cratePushSpeed;
+						m_player.asset.x = crate.asset.x - m_player.width;
 						if (checkCrateCollision(crate, Constants.RIGHT))
 						{
 							crate.asset.x = oldCrateX;
-							m_player.asset.x = oldPlayerX;
+							m_player.inAir ? m_player.asset.x = m_player.asset.x - m_player.airSpeedX : m_player.asset.x = m_player.asset.x - m_player.speedX;
+							//m_player.asset.x = oldPlayerX;
 						}
 					}
-					// If you ran into a wall, keep the player in the previous square
+					// If you ran into a wall, keep the playeoh fur in the previous square
 					for each (var tile:IntPair in getTilesInDirection(m_player, Constants.RIGHT))
 					{
 						var id:int = m_board.getTile(tile.x, tile.y);
@@ -373,11 +374,12 @@ package
 						oldCrateX = crate.asset.x;
 						oldPlayerX = m_player.asset.x;
 						crate.asset.x -= m_player.cratePushSpeed;
-						m_player.inAir ? m_player.asset.x += m_player.airSpeedX - m_player.cratePushSpeed : m_player.asset.x += m_player.speedX - m_player.cratePushSpeed;
+						m_player.asset.x = crate.asset.x + crate.width;
 						if (checkCrateCollision(crate, Constants.LEFT))
 						{
 							crate.asset.x = oldCrateX;
-							m_player.asset.x = oldPlayerX;
+							m_player.inAir ? m_player.asset.x = m_player.asset.x + m_player.airSpeedX : m_player.asset.x = m_player.asset.x + m_player.speedX;
+							//m_player.asset.x = oldPlayerX;
 						}
 					}
 					// If you ran into a wall, keep the player in the previous square
