@@ -541,10 +541,12 @@ package view
 		/**
 		 * Move the platforms in the direction they are supposed to move in.
 		 * Moves player if he is on a platform
+		 * Returns Direction in which player was moved, if player was moved (-1 otherwise)
 		 * @param	id
 		 */
-		public function movePlatforms(player:Player, board:Board):void
+		public function movePlatforms(player:Player, board:Board):int
 		{
+			var result:int = -1;
 			for (var key:Object in m_platformArts) {
 				var id:int = int(key);
 				var platform:Bitmap = m_platformArts[id];
@@ -558,6 +560,7 @@ package view
 					platform.x += Constants.PLATFORM_SPEED;
 					if (player.onPlatform) {
 						player.asset.x += Constants.PLATFORM_SPEED;
+						result = dir;
 					}
 					for each (var crate:Crate in board.crates)
 					{
@@ -573,6 +576,7 @@ package view
 					platform.x -= Constants.PLATFORM_SPEED;
 					if (player.onPlatform) {
 						player.asset.x -= Constants.PLATFORM_SPEED;
+						result = dir;
 					}
 					for each (crate in board.crates)
 					{
@@ -584,6 +588,7 @@ package view
 					}
 				}
 			}
+			return result;
 		}
 		
 		/**
