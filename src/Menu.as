@@ -573,6 +573,9 @@ class LevelSelectMenu extends Sprite {
         removeChildren();
 
         var levels:int = GameState.getPlayerOverallProgress();
+        if (Constants.SHOW_ALL_LEVELS) {
+            levels = Menu.game.progression.length;
+        }
         var levelsPerPage:int = Constants.LEVEL_SELECT_ROWS * Constants.LEVEL_SELECT_COLUMNS;
         totalPages = levels / levelsPerPage;
         if (levels % levelsPerPage != 0) {

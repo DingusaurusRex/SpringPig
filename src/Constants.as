@@ -12,6 +12,11 @@ package
 		public static const JUMP_HEIGHT_ONE_HIGHER:Boolean = true;
 		public static const HIGHLIGHT_PLAYER_SQUARE:Boolean = true;
 		public static const MOVE_CRATES_IN_AIR:Boolean = true;
+
+        /**
+         * Debug Options
+         */
+        public static const SHOW_ALL_LEVELS:Boolean = false;
 		
         /**
          * Logging info
