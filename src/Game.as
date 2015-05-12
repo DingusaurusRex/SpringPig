@@ -269,9 +269,69 @@ package
 						}
 					}
 				}
+				for each (var crate:Crate in m_board.crates)
+				{
+					if (!crate.wasBeingPushed && crate.beingPushed)
+					{
+						trace("push");
+					}
+					else if (crate.wasBeingPushed && !crate.beingPushed)
+					{
+						trace("not push");
+						var crateTile:IntPair = getCentralTile(crate);
+						crate.asset.x = crateTile.x * m_board.tileSideLength;
+					}
+				}
 			}
 		}
 		
+		/**
+		 * 
+		 *	Player Functions
+		 * 
+		**/
+		
+		/**
+		 * 
+		 *	Button Functions
+		 * 
+		**/
+		
+		/**
+		 * 
+		 *	Crate Functions
+		 * 
+		**/
+		
+		/**
+		 * 
+		 *	Platform Functions
+		 * 
+		**/
+		
+		/**
+		 * 
+		 *	Tile Functions
+		 * 
+		**/
+		
+		/**
+		 * Returns an IntPair representing the tile that the center of the provided PhysicsObject falls in
+		 * @param	obj
+		 * @return
+		 */
+		public function getCentralTile(obj:PhysicsObject):IntPair
+		{
+			var centerX:Number = obj.asset.x + obj.width / 2;
+			var centerY:Number = obj.asset.y + obj.height / 2;
+			return new IntPair(Math.floor(centerX / m_board.tileSideLength), Math.floor(centerY / m_board.tileSideLength));
+		}
+		
+		
+		/**
+		 * Checks collision with the player in a given direction
+		 * @param	direction
+		 */
 		private function checkPlayerCollision(direction:int):void
 		{
 			switch(direction)
@@ -281,12 +341,15 @@ package
 					if (collidingWithCrate(m_player))
 					{
 						var crate:Crate = getCollidingCrate(m_player);
+						crate.beingPushed = true;
+						var oldCrateX:Number = crate.asset.x;
+						var oldPlayerX:Number = m_player.asset.x;
 						crate.asset.x += m_player.cratePushSpeed;
 						m_player.inAir ? m_player.asset.x -= m_player.airSpeedX - m_player.cratePushSpeed : m_player.asset.x -= m_player.speedX - m_player.cratePushSpeed;
 						if (checkCrateCollision(crate, Constants.RIGHT))
 						{
-							crate.asset.x -= m_player.cratePushSpeed;
-							m_player.asset.x -= m_player.cratePushSpeed;
+							crate.asset.x = oldCrateX;
+							m_player.asset.x = oldPlayerX;
 						}
 					}
 					// If you ran into a wall, keep the player in the previous square
@@ -311,12 +374,15 @@ package
 					if (collidingWithCrate(m_player))
 					{
 						crate = getCollidingCrate(m_player);
+						crate.beingPushed = true;
+						var oldCrateX:Number = crate.asset.x;
+						var oldPlayerX:Number = m_player.asset.x;
 						crate.asset.x -= m_player.cratePushSpeed;
 						m_player.inAir ? m_player.asset.x += m_player.airSpeedX - m_player.cratePushSpeed : m_player.asset.x += m_player.speedX - m_player.cratePushSpeed;
 						if (checkCrateCollision(crate, Constants.LEFT))
 						{
-							crate.asset.x += m_player.cratePushSpeed;
-							m_player.asset.x += m_player.cratePushSpeed;
+							crate.asset.x = oldCrateX;
+							m_player.asset.x = oldPlayerX;
 						}
 					}
 					// If you ran into a wall, keep the player in the previous square
@@ -545,6 +611,8 @@ package
 			{
 				crate.updatePosition(m_board.tileSideLength);
 				checkCrateCollision(crate, Constants.DOWN);
+				crate.wasBeingPushed = crate.beingPushed;
+				crate.beingPushed = false;
 			}
 		}
 		

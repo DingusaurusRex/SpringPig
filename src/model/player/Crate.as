@@ -11,10 +11,14 @@ package model.player
 		[Embed(source = "../../../assets/art/tiles/crate.png")]
 		private var CrateArt:Class;
 		
-		private var m_asset:Bitmap;
-		private var m_inAir:Boolean = false;
 		public var dy:Number = 0;
 		public var startingPos:IntPair;
+		
+		public var beingPushed:Boolean;
+		public var wasBeingPushed:Boolean
+		
+		private var m_asset:Bitmap;
+		private var m_inAir:Boolean = false;
 		private var m_onPlatform:Boolean;
 		
 		public function Crate() 
