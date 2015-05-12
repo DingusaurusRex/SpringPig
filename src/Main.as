@@ -52,13 +52,13 @@ package
 			// entry point
 			
 			// Parse LevelProgression JSON
-			var progression:ByteArray = (new TestProgression() as ByteArray); // Change this for progression
+			var progression:ByteArray = (new Progression1() as ByteArray); // Change this for progression
 			var progressionString:String = progression.toString();
 			var prog:Object = JSON.parse(progressionString);
 
             // This is cid in the wiki
             // TODO: change when deploying
-            var versionID:int = 1;
+            var versionID:int = 3;
             var logger:Logger = Logger.initialize(Constants.GID, Constants.DB_NAME, Constants.SKEY, versionID, null, true);
 			
             // Initialization
