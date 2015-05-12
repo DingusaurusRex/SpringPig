@@ -121,6 +121,7 @@ public class Menu {
         stage.removeChildren();
         stage.removeEventListener(KeyboardEvent.KEY_DOWN, game.onKeyDown); // Need to do this whenever leaving game state
         state = Constants.STATE_CREDITS_MENU;
+        creditsMenu.enableResetProgress();
         stage.addChild(creditsMenu);
         stage.focus = stage;
     }
@@ -185,6 +186,12 @@ public class Menu {
 
     public static function onRestartLevelClick(event:MouseEvent):void {
         restartLevel();
+    }
+
+    public static function onResetProgressClick(event:MouseEvent):void {
+        creditsMenu.disableResetProgress();
+        mainMenu.disableContinue();
+        GameState.resetProgress();
     }
 
     public static function onLevelClick(event:MouseEvent):void {
@@ -410,6 +417,12 @@ class MainMenu extends Sprite {
         addChild(creditsButton);
 
         if (GameState.getPlayerLetestProgress() == 0) {
+            disableContinue();
+        }
+    }
+
+    public function disableContinue():void {
+        if (!blocked) {
             continueButton.enabled = false;
             continueButton.mouseEnabled = false;
             addChild(continueButtonCover);
@@ -663,6 +676,8 @@ class CreditsMenu extends Sprite {
     private var mainMenuButton:SimpleButton;
     private var title:TextField;
     private var credits:TextField;
+    private var resetProgress:SimpleButton;
+    private var resetProgressCover:Sprite;
 
     public function CreditsMenu():void {
         // Main menu button
@@ -686,8 +701,38 @@ class CreditsMenu extends Sprite {
                 Constants.CREDITS_FONT_SIZE,
                 Constants.CREDITS_ALIGNMENT);
 
+        // Reset progress
+        resetProgress = Menu.getMenuButton(Constants.CREDITS_RESET_PROGRESS_BUTTON_TEXT,
+                Constants.CREDITS_RESET_PROGRESS_BUTTON_LEFT_PADDING,
+                Constants.SCREEN_HEIGHT - Constants.CREDITS_RESET_PROGRESS_BUTTON_BOTTOM_PADDING,
+                Menu.onResetProgressClick);
+
+        // Cover for the reset progress button
+        resetProgressCover = new Sprite();
+        resetProgressCover.graphics.beginFill(Constants.CONTINUE_BUTTON_COVER_COLOR, Constants.CONTINUE_BUTTON_COVER_OPACITY);
+        resetProgressCover.graphics.drawRect(0, 0, resetProgress.width, resetProgress.height);
+        resetProgressCover.graphics.endFill();
+        resetProgressCover.x = resetProgress.x - Constants.MENU_BUTTON_BORDER_SIZE;
+        resetProgressCover.y = resetProgress.y - Constants.MENU_BUTTON_BORDER_SIZE;
+        resetProgressCover.height = resetProgress.height;
+        resetProgressCover.width = resetProgress.width;
+
         addChild(mainMenuButton);
         addChild(title);
         addChild(credits);
+        addChild(resetProgress);
+    }
+
+    public function enableResetProgress():void {
+        resetProgress.enabled = true;
+        resetProgress.mouseEnabled = true;
+        addChild(resetProgressCover);
+        removeChild(resetProgressCover);
+    }
+
+    public function disableResetProgress():void {
+        resetProgress.enabled = false;
+        resetProgress.mouseEnabled = false;
+        addChild(resetProgressCover);
     }
 }

@@ -20,15 +20,7 @@ public class GameState {
                     !playerData.data.hasOwnProperty("progress") ||
                     !playerData.data.hasOwnProperty("personalRecords") ||
                     !playerData.data.hasOwnProperty("mute")) {
-                playerData.clear();
-                playerData.data.unlocked = 1;
-                playerData.data.progress = 0;
-                var personalRecords:Array = new Array();
-                for (var i:int = 0; i < game.progression.length; i++) {
-                    personalRecords.push(Constants.STOPWATCH_DEFAULT_TIME);
-                }
-                playerData.data.personalRecords = personalRecords;
-                playerData.data.mute = false;
+                resetProgress();
             }
         } catch (e:Error) {
             saveable = false;
@@ -89,6 +81,19 @@ public class GameState {
 
     public static function getPlayerMuteOption():Boolean {
         return playerData.data.mute;
+    }
+
+    public static function resetProgress():void {
+        playerData.clear();
+        playerData.data.unlocked = 1;
+        playerData.data.progress = 0;
+        var personalRecords:Array = new Array();
+        for (var i:int = 0; i < game.progression.length; i++) {
+            personalRecords.push(Constants.STOPWATCH_DEFAULT_TIME);
+        }
+        playerData.data.personalRecords = personalRecords;
+        playerData.data.mute = false;
+        playerData.flush();
     }
 }
 

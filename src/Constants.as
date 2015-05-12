@@ -302,12 +302,16 @@ package
                 "SFX from:\n" +
                 "-http://www.freesfx.co.uk\n" +
                 "-http://www.freesound.org";
-		public static const CREDITS_TOP_PADDING:int = 250;
+		public static const CREDITS_TOP_PADDING:int = 200;
 		public static const CREDITS_HEIGHT:int = 500;
 		public static const CREDITS_WIDTH:int = 400;
 		public static const CREDITS_FONT_SIZE:int = 20;
 		public static const CREDITS_ALIGNMENT:String = "left";
-		
+
+        public static const CREDITS_RESET_PROGRESS_BUTTON_TEXT:String = "Reset Progress";
+        public static const CREDITS_RESET_PROGRESS_BUTTON_LEFT_PADDING:int = 30;
+        public static const CREDITS_RESET_PROGRESS_BUTTON_BOTTOM_PADDING:int = 40;
+
 		// Pause menu
 		public static const PAUSE_TITLE_TEXT:String = "Paused";
 		public static const PAUSE_TITLE_TOP_PADDING:int = 50;
