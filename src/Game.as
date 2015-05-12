@@ -147,6 +147,7 @@ import util.IntPair;
 						m_player.asset.y -= m_player.upSpeedY;
 						checkPlayerCollision(Constants.UP);
 					} else { // Jump
+                        util.Audio.playJumpSFX();
 						m_player.velocity = Constants.JUMP_VELOCITIES[1];
 						m_player.inAir = true;
 						m_player.startingHeight = getYPositionOfPlayer();
@@ -173,6 +174,7 @@ import util.IntPair;
 				if (m_keyR) {
                     var logData:Object = {x:m_player.asset.x, y:m_player.asset.y};
                     m_logger.logAction(Constants.AID_RESET, logData);
+                    util.Audio.playResetSFX();
 					resetPlayer();
 					resetCrates();
 				}
@@ -499,6 +501,7 @@ import util.IntPair;
 					if (isPlayerFinished()) {
 						pause = true; // So that player position is disregarded
                         Stopwatch.pause();
+                        util.Audio.playWinSFX();
                         var logData:Object = {time:Stopwatch.getCurrentTiming()};
                         m_logger.logLevelEnd(logData);
                         GameState.openNextLevelSave();
@@ -1245,6 +1248,7 @@ import util.IntPair;
 				if (!playerBottom || (playerBottom && playerLeft <= tileRight && playerRight >= tileLeft)) {
 					var logData:Object = {x:m_player.asset.x, y:m_player.asset.y};
 					m_logger.logAction(Constants.AID_DEATH, logData);
+                    util.Audio.playDeathSFX();
 					resetPlayer();
 					resetCrates();
 					return true;

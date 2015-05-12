@@ -196,8 +196,8 @@ package
         /**
          * Audio Values
          */
-        public static const SFX_SPRING_VOLUME:Number = 0.05;
-		
+        public static const SFX_VOLUME:Number = 0.2;
+
 		/*
 		 * Menu Values
 		 * 
@@ -284,7 +284,19 @@ package
 		public static const CREDITS_TITLE_TOP_PADDING:int = 50;
 		public static const CREDITS_TITLE_FONT_SIZE:int = 80;
 		
-		public static const CREDITS:String = "A game created for:\n\tUW CSE Games Capstone - Spring 2015\nBy:\n- Jack Fancher\n- Marc-Antoine Fontenelle\n- Panji Wisesa\n\nMusic By:\n- Lizzie Siegel\n\nSFX from:\n-http://www.freesfx.co.uk";
+		public static const CREDITS:String = "A game created for:\n" +
+                "\tUW CSE Games Capstone - Spring 2015\n" +
+                "By:\n" +
+                "- Jack Fancher\n" +
+                "- Marc-Antoine Fontenelle\n" +
+                "- Panji Wisesa\n" +
+                "\n" +
+                "Music By:\n" +
+                "- Lizzie Siegel\n" +
+                "\n" +
+                "SFX from:\n" +
+                "-http://www.freesfx.co.uk\n" +
+                "-http://www.freesound.org";
 		public static const CREDITS_TOP_PADDING:int = 250;
 		public static const CREDITS_HEIGHT:int = 500;
 		public static const CREDITS_WIDTH:int = 400;

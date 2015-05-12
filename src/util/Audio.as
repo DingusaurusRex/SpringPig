@@ -17,15 +17,38 @@ import flash.text.TextFormat;
 public class Audio {
     [Embed(source = "../../assets/sounds/Spring Pig Loop.mp3")]
     private static var BGM1:Class;
+    // http://www.freesfx.co.uk/
     [Embed(source = "../../assets/sounds/comedy_spring.mp3")]
+    private static var SFXJump1:Class;
+    [Embed(source = "../../assets/sounds/bounce_boing_32.mp3")]
     private static var SFXSpring1:Class;
+    [Embed(source = "../../assets/sounds/bacon_frying.mp3")]
+    private static var SFXDeath1:Class;
+    [Embed(source = "../../assets/sounds/teleport.mp3")]
+    private static var SFXReset1:Class;
+    // http://www.freesound.org/people/fins/sounds/171671/
+    [Embed(source = "../../assets/sounds/fins__success-1.mp3")]
+    private static var SFXWin1:Class;
 
     private static var BGMSound:Sound;
     private static var BGMChannel:SoundChannel;
 
+    private static var SFXTransform:SoundTransform;
+
+    private static var SFXJumpSound:Sound;
+    private static var SFXJumpSoundChannel:SoundChannel;
+
     private static var SFXSpringSound:Sound;
     private static var SFXSpringSoundChannel:SoundChannel;
-    private static var SFXSpringTransform:SoundTransform;
+
+    private static var SFXDeathSound:Sound;
+    private static var SFXDeathSoundChannel:SoundChannel;
+
+    private static var SFXResetSound:Sound;
+    private static var SFXResetSoundChannel:SoundChannel;
+
+    private static var SFXWinSound:Sound;
+    private static var SFXWinSoundChannel:SoundChannel;
 
     private static var defaultTransform:SoundTransform;
 
@@ -70,9 +93,14 @@ public class Audio {
         BGMSound = (new BGM1()) as Sound;
         BGMChannel = BGMSound.play(0, int.MAX_VALUE);
 
+        SFXTransform = new SoundTransform();
+        SFXTransform.volume = Constants.SFX_VOLUME;
+
+        SFXJumpSound = (new SFXJump1()) as Sound;
         SFXSpringSound = (new SFXSpring1()) as Sound;
-        SFXSpringTransform = new SoundTransform();
-        SFXSpringTransform.volume = Constants.SFX_SPRING_VOLUME;
+        SFXDeathSound = (new SFXDeath1()) as Sound;
+        SFXResetSound = (new SFXReset1()) as Sound;
+        SFXWinSound = (new SFXWin1()) as Sound;
     }
 
     public static function flipMute():void {
@@ -92,10 +120,31 @@ public class Audio {
         Audio.flipMute();
     }
 
+    public static function playJumpSFX():void {
+        SFXJumpSoundChannel = SFXJumpSound.play();
+        SFXJumpSoundChannel.soundTransform = SFXTransform;
+    }
+
     public static function playSpringSFX():void {
         SFXSpringSoundChannel = SFXSpringSound.play();
-        SFXSpringSoundChannel.soundTransform = SFXSpringTransform;
+        SFXSpringSoundChannel.soundTransform = SFXTransform;
     }
+
+    public static function playDeathSFX():void {
+        SFXDeathSoundChannel = SFXDeathSound.play();
+        SFXDeathSoundChannel.soundTransform = SFXTransform;
+    }
+
+    public static function playResetSFX():void {
+        SFXResetSoundChannel = SFXResetSound.play();
+        SFXResetSoundChannel.soundTransform = SFXTransform;
+    }
+
+    public static function playWinSFX():void {
+        SFXWinSoundChannel = SFXWinSound.play();
+        SFXWinSoundChannel.soundTransform = SFXTransform;
+    }
+
 }
 
 }
