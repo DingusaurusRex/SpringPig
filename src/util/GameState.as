@@ -14,8 +14,13 @@ public class GameState {
         game = g;
         try {
             playerData = SharedObject.getLocal(progressionFileName);
+			//playerData.clear(); // uncomment if save data is corrupted
             saveable = true;
-            if (!playerData.data.hasOwnProperty("unlocked")) {
+            if (!playerData.data.hasOwnProperty("unlocked") ||
+                    !playerData.data.hasOwnProperty("progress") ||
+                    !playerData.data.hasOwnProperty("personalRecords") ||
+                    !playerData.data.hasOwnProperty("mute")) {
+                playerData.clear();
                 playerData.data.unlocked = 1;
                 playerData.data.progress = 0;
                 var personalRecords:Array = new Array();
