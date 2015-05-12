@@ -325,19 +325,15 @@ package
 		**/
 		
 		/**
-<<<<<<< HEAD
 		 * Checks collision with the player in a given direction
 		 * Returns true if player collided with lava
-=======
-		 * Handles collision for the player in a given direction
->>>>>>> origin/master
 		 * @param	direction
 		 */
 		private function checkPlayerCollision(direction:int):Boolean
 		{
 			switch(direction)
 			{
-				case Constants.RIGHT:
+				case Constants.RIGHT: 
 					// If colliding with a crate, move the crate
 					if (collidingWithCrate(m_player))
 					{
