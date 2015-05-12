@@ -117,6 +117,12 @@ import util.IntPair;
 				// Update the stopwatch
 				Stopwatch.updateStopwatchText();
 				
+				if (m_player.bounce) {
+					useEnergy();
+					m_player.updatePosition(m_board.tileSideLength);
+					m_player.bounce = false;
+				}
+				
 				if (Constants.SHOW_JUMP_HEIGHT) {
 					if (!m_player.inAir) 
 					{
@@ -197,8 +203,9 @@ import util.IntPair;
 							
 							if (trampBelowPlayer()) 
 							{
-								useEnergy();
-								m_player.updatePosition(m_board.tileSideLength);
+								m_player.bounce = true;
+								//useEnergy();
+								//m_player.updatePosition(m_board.tileSideLength);
 							}
 						}
 						else
@@ -1165,7 +1172,9 @@ import util.IntPair;
 		private function trampBelowPlayer():Boolean
 		{
 			for each (var tile:IntPair in getTilesInDirection(m_player, Constants.DOWN)) {
-				if (m_board.getTile(tile.x, tile.y) == Constants.TRAMP) 
+				//trace("A:" + (m_player.asset.y + m_player.height - tile.y * m_board.tileSideLength));
+				//trace(m_player.dy);
+				if (m_board.getTile(tile.x, tile.y) == Constants.TRAMP && m_player.asset.y + m_player.height == tile.y * m_board.tileSideLength) 
 					return true;
 			}
 			return false;

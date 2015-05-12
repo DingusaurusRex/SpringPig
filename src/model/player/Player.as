@@ -23,6 +23,8 @@ package model.player
 		private var m_inAir:Boolean = false;
 		private var m_onPlatform:Boolean = false;
 		
+		public var bounce:Boolean = false;
+		
 		public var startingHeight:int = 0;
 		
 		public var dy:Number;
