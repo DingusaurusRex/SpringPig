@@ -24,6 +24,7 @@ package model.player
 		private var m_onPlatform:Boolean = false;
 		
 		public var bounce:Boolean = false;
+		public var times2:Boolean = false;
 		
 		public var startingHeight:int = 0;
 		

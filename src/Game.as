@@ -204,8 +204,6 @@ import util.IntPair;
 							if (trampBelowPlayer()) 
 							{
 								m_player.bounce = true;
-								//useEnergy();
-								//m_player.updatePosition(m_board.tileSideLength);
 							}
 						}
 						else
@@ -564,6 +562,10 @@ import util.IntPair;
 		 */
 		private function incrementEnergy(energy:int):void
 		{
+			if (m_player.times2) {
+				energy *= 2;
+				m_player.times2 = false;
+			}
 			m_player.energy += Math.max(0, energy);
 			if (m_player.energy > 10) 
 				m_player.energy = 10;
@@ -576,6 +578,8 @@ import util.IntPair;
 			m_player.asset.y = m_playerStart.y;
 			m_player.energy = 0;
 			m_player.velocity = 0;
+			m_player.bounce = false;
+			m_player.times2 = false;
 			m_meter.energy = m_player.energy;
 			// Reset the buttons
 			for each (var id:int in buttons) {
@@ -1528,10 +1532,7 @@ import util.IntPair;
 			switch (id)
 			{
 				case Constants.TIMES2:
-					m_player.energy *= 2;
-					if (m_player.energy > 10) 
-						m_player.energy = 10;
-					m_meter.energy = m_player.energy;
+					m_player.times2 = true;
 					break;
 				case Constants.PLUS1:
 					incrementEnergy(1);
