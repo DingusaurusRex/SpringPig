@@ -104,75 +104,6 @@ package
 		}
 		
 		/**
-		 * Starts the level with the given levelName
-		 * levelName must match the name of a specific level
-		 * @param	levelName
-		 */
-		public function startLevel(levelName:String):void
-		{
-			// Get the board for the test level
-			m_board = m_levelReader.parseLevel(levelName);
-			
-			// Get the graphics for the test level
-			if (m_boardSprite)
-			{
-				//stage.removeChild(boardSprite);
-			}
-			m_boardSprite = new BoardView(m_board);
-			
-			// Create the Player
-			m_player = new Player(m_board.tileSideLength);
-			
-			// Position the player
-			var playerStart:IntPair = m_boardSprite.getPlayerStart(); // Top right of the square
-			m_player.height = (int) (m_board.tileSideLength * 3.0 / 4.0);
-			m_player.width = (int) (m_board.tileSideLength * 3.0 / 4.0);
-			m_player.asset.x = playerStart.x;
-			m_player.asset.y = playerStart.y + m_board.tileSideLength - m_player.height;
-			playerStart.y = m_player.asset.y;
-			m_player.energy = 0;
-			m_meter.energy = m_player.energy;
-			m_jumpHeightRects = new Vector.<Sprite>();
-			
-			this.m_playerStart = playerStart;
-			
-			Stopwatch.stopwatchText.x = m_meter.x;
-			Stopwatch.stopwatchText.y = m_meter.y + m_meter.height + Constants.GAME_STOPWATCH_TOP_PADDING;
-			
-			// Add graphics			
-			m_stage.addChild(m_boardSprite);
-			m_stage.addChild(m_meter);
-			m_stage.addChild(Stopwatch.stopwatchText);
-			m_stage.addChild(m_player.asset);
-			
-			// Create Listeners
-			m_stage.addEventListener(KeyboardEvent.KEY_DOWN, onKeyDown);
-			m_stage.addEventListener(KeyboardEvent.KEY_UP, onKeyUp);
-			m_stage.addEventListener(Event.ENTER_FRAME, update);
-			
-			m_stage.focus = m_stage; // Needed to refocus back to the game
-			pause = false; // Reset pause
-			this.m_finishTile = m_boardSprite.getFinishTile();
-			
-			// Buttons and Gates
-			buttons = m_board.getButtons();
-			popupButtons = m_board.getPopupButtons();
-			gates = m_board.getGates();
-			gateStatus = new Dictionary();
-			for each (var id:int in gates) {
-				gateStatus[id] = 0; // CLOSED
-			}
-			initButtonGateDict();
-
-            m_logger.logLevelStart(currLevelIndex + 1, null);
-
-			GameState.currentLevelSave();
-			// Reset and start timing
-			Stopwatch.reset();
-			Stopwatch.start();
-		}
-		
-		/**
 		 * Update loop to process keyboard commands
 		 * @param	e
 		 */
@@ -288,50 +219,118 @@ package
 		
 		/**
 		 * 
+		 *	Level Management
+		 * 
+		**/
+		
+		/**
+		 * Starts the level with the given levelName
+		 * levelName must match the name of a specific level
+		 * @param	levelName
+		 */
+		public function startLevel(levelName:String):void
+		{
+			// Get the board for the test level
+			m_board = m_levelReader.parseLevel(levelName);
+			
+			// Get the graphics for the test level
+			if (m_boardSprite)
+			{
+				//stage.removeChild(boardSprite);
+			}
+			m_boardSprite = new BoardView(m_board);
+			
+			// Create the Player
+			m_player = new Player(m_board.tileSideLength);
+			
+			// Position the player
+			var playerStart:IntPair = m_boardSprite.getPlayerStart(); // Top right of the square
+			m_player.height = (int) (m_board.tileSideLength * 3.0 / 4.0);
+			m_player.width = (int) (m_board.tileSideLength * 3.0 / 4.0);
+			m_player.asset.x = playerStart.x;
+			m_player.asset.y = playerStart.y + m_board.tileSideLength - m_player.height;
+			playerStart.y = m_player.asset.y;
+			m_player.energy = 0;
+			m_meter.energy = m_player.energy;
+			m_jumpHeightRects = new Vector.<Sprite>();
+			
+			this.m_playerStart = playerStart;
+			
+			Stopwatch.stopwatchText.x = m_meter.x;
+			Stopwatch.stopwatchText.y = m_meter.y + m_meter.height + Constants.GAME_STOPWATCH_TOP_PADDING;
+			
+			// Add graphics			
+			m_stage.addChild(m_boardSprite);
+			m_stage.addChild(m_meter);
+			m_stage.addChild(Stopwatch.stopwatchText);
+			m_stage.addChild(m_player.asset);
+			
+			// Create Listeners
+			m_stage.addEventListener(KeyboardEvent.KEY_DOWN, onKeyDown);
+			m_stage.addEventListener(KeyboardEvent.KEY_UP, onKeyUp);
+			m_stage.addEventListener(Event.ENTER_FRAME, update);
+			
+			m_stage.focus = m_stage; // Needed to refocus back to the game
+			pause = false; // Reset pause
+			this.m_finishTile = m_boardSprite.getFinishTile();
+			
+			// Buttons and Gates
+			buttons = m_board.getButtons();
+			popupButtons = m_board.getPopupButtons();
+			gates = m_board.getGates();
+			gateStatus = new Dictionary();
+			for each (var id:int in gates) {
+				gateStatus[id] = 0; // CLOSED
+			}
+			initButtonGateDict();
+
+            m_logger.logLevelStart(currLevelIndex + 1, null);
+
+			GameState.currentLevelSave();
+			// Reset and start timing
+			Stopwatch.reset();
+			Stopwatch.start();
+		}
+		
+		public function startFirstLevel():void
+		{
+			startAtLevel(0);
+		}
+		
+		public function restartLevel():void
+		{
+			startLevel(progression[currLevelIndex]);
+		}
+		
+		public function startNextLevel():void
+		{
+			currLevelIndex++;
+			if (currLevelIndex == progression.length)
+			{
+				currLevelIndex = 0;
+			}
+			startLevel(progression[currLevelIndex]);
+		}
+		
+		public function startAtLevel(l:int):void
+		{
+			currLevelIndex = l;
+			startLevel(progression[currLevelIndex]);
+		}
+		
+		/**
+		 * 
 		 *	Player Functions
 		 * 
 		**/
 		
 		/**
-		 * 
-		 *	Button Functions
-		 * 
-		**/
-		
-		/**
-		 * 
-		 *	Crate Functions
-		 * 
-		**/
-		
-		/**
-		 * 
-		 *	Platform Functions
-		 * 
-		**/
-		
-		/**
-		 * 
-		 *	Tile Functions
-		 * 
-		**/
-		
-		/**
-		 * Returns an IntPair representing the tile that the center of the provided PhysicsObject falls in
-		 * @param	obj
-		 * @return
-		 */
-		public function getCentralTile(obj:PhysicsObject):IntPair
-		{
-			var centerX:Number = obj.asset.x + obj.width / 2;
-			var centerY:Number = obj.asset.y + obj.height / 2;
-			return new IntPair(Math.floor(centerX / m_board.tileSideLength), Math.floor(centerY / m_board.tileSideLength));
-		}
-		
-		
-		/**
+<<<<<<< HEAD
 		 * Checks collision with the player in a given direction
 		 * Returns true if player collided with lava
+=======
+		 * Handles collision for the player in a given direction
+>>>>>>> origin/master
 		 * @param	direction
 		 */
 		private function checkPlayerCollision(direction:int):Boolean
@@ -511,25 +510,19 @@ package
 			return false;
 		}
 		
-		public function startFirstLevel():void {
-			startAtLevel(0);
+		private function isPlayerFinished():Boolean
+		{
+			var midX:int = m_player.asset.x + m_board.tileSideLength / 2;
+			var midY:int = m_player.asset.y + m_board.tileSideLength / 2;
+			return midX >= m_finishTile.x &&
+			midX <= m_finishTile.x + m_board.tileSideLength &&
+			midY >= m_finishTile.y &&
+			midY <= m_finishTile.y + m_board.tileSideLength;
 		}
 		
-		public function restartLevel():void {
-			startLevel(progression[currLevelIndex]);
-		}
-		
-		public function startNextLevel():void {
-			currLevelIndex++;
-			if (currLevelIndex == progression.length) {
-				currLevelIndex = 0;
-			}
-			startLevel(progression[currLevelIndex]);
-		}
-		
-		public function startAtLevel(l:int):void {
-			currLevelIndex = l;
-			startLevel(progression[currLevelIndex]);
+		private function getYPositionOfPlayer():int
+		{
+			return (m_board.boardHeightInPixels - m_player.asset.y - m_player.height ) / m_board.tileSideLength;
 		}
 		
 		/**
@@ -548,30 +541,106 @@ package
 		}
 		
 		/**
-		 * Returns whether the user is colliding with a ladder
-		 * @return
+		 * Add x to energy
+		 * @param	energy
 		 */
-		private function collidingWithLadder():Boolean
+		private function incrementEnergy(energy:int):void
 		{
-			for each (var tile:IntPair in getObjectTiles(m_player)) {
-				if (m_board.getTile(tile.x, tile.y) == Constants.LADDER) 
-					return true;
+			m_player.energy += Math.max(0, energy);
+			if (m_player.energy > 10) 
+				m_player.energy = 10;
+			m_meter.energy = m_player.energy;
+		}
+		
+		private function resetPlayer():void
+		{
+			m_player.asset.x = m_playerStart.x;
+			m_player.asset.y = m_playerStart.y;
+			m_player.energy = 0;
+			m_player.velocity = 0;
+			m_meter.energy = m_player.energy;
+			// Reset the buttons
+			for each (var id:int in buttons) {
+				setButtonUp(m_board, id);
 			}
-			return false;
+			
+			for each (id in gates) {
+				m_boardSprite.closeGate(m_board, id);
+				gateStatus[id] = 0; // CLOSED
+			}
+			
+			m_boardSprite.setPowerupsVisible();
+			
+			Stopwatch.reset();
+			Stopwatch.start();
+		}
+		
+				/**
+		 * Highlights the squares above the player to show how high the player can jump
+		 * based on his energy
+		 */
+		private function showJumpHeight():void
+		{
+			// Pick x value (low or high) on which to show the jump height
+			var lowX:Number = (m_player.asset.x / m_board.tileSideLength);
+			var highX:Number = ((m_player.asset.x + m_player.width) / m_board.tileSideLength);
+			var x:int;
+			if (int(highX) - lowX > highX - int(highX)) {
+				x = int(lowX);
+			} else {
+				x = int(highX);
+			}
+			if (x != m_prevPlayerX) 
+			{
+				removePlayerJumpHeight(x);
+				
+				var y:int = (int) (m_player.asset.y / m_board.tileSideLength);
+				var startingHeight:int = y - 1;
+				var endingHeight:int = y - (m_player.energy - 1);
+				if (Constants.JUMP_HEIGHT_ONE_HIGHER) 
+				{
+					endingHeight = y - m_player.energy;
+				}
+				if (Constants.HIGHLIGHT_PLAYER_SQUARE) 
+				{
+					startingHeight = y;
+				}
+				
+				for (var i:int = startingHeight; i >= endingHeight; i--) 
+				{					
+					var id:int = m_board.getTile(x, i);
+					if (id != Constants.WALL && id != Constants.LADDER && !isClosedGate(id) && id != Constants.LAVA) {
+						var size:int = m_board.tileSideLength;
+						
+						var rect:Sprite = new Sprite();
+						rect.graphics.beginFill(0xFF0000);
+						rect.graphics.drawRect(x * size, i * size, size, size);
+						rect.alpha = .25;
+						rect.graphics.endFill();
+						
+						m_jumpHeightRects.push(rect);
+						m_boardSprite.addChild(rect);
+					} else {
+						break;
+					}
+				}
+			}
+		}
+		
+		private function removePlayerJumpHeight(prevX:int = -1):void
+		{
+			m_prevPlayerX = prevX;
+			for each (var rect:Sprite in m_jumpHeightRects) {
+				m_boardSprite.removeChild(rect);
+			}
+			m_jumpHeightRects = new Vector.<Sprite>();
 		}
 		
 		/**
-		 * Returns true if players is standing on a trampoline
-		 * @return
-		 */
-		private function trampBelowPlayer():Boolean
-		{
-			for each (var tile:IntPair in getTilesInDirection(m_player, Constants.DOWN)) {
-				if (m_board.getTile(tile.x, tile.y) == Constants.TRAMP) 
-					return true;
-			}
-			return false;
-		}
+		 * 
+		 *	Button Functions
+		 * 
+		**/
 		
 		/**
 		 * Sets the given button down, and if it is a popupButton, sets its value to 0 (DOWN)
@@ -591,6 +660,72 @@ package
 				m_boardSprite.openGate(board, gateId);
 				gateStatus[gateId] = 1; // OPEN
 			}
+		}
+		
+		public function updateButtons():void
+		{
+			// Go through and set every button down that is being touched
+			var popupButtonsTouched:Vector.<int> = new Vector.<int>();
+			for (var x:int = 0; x < m_board.width; x++ )
+			{
+				for (var y:int = 0; y < m_board.height; y++)
+				{
+					var tile:IntPair = new IntPair(x, y)
+					var id:int = m_board.getTile(x, y)
+					if (isButton(id))
+					{	
+						var touched:Boolean = false;
+						if (collidingWithButton(m_player, tile))
+						{
+							setButtonDown(m_board, id);
+							touched = true;
+						}
+						for each (var crate:Crate in m_board.crates)
+						{
+							if (collidingWithButton(crate, tile))
+							{
+								setButtonDown(m_board, id);
+								touched = true;
+							}
+						}
+						if (isPopupButton(id) && touched)
+						{
+							popupButtonsTouched.push(id);
+						}
+					}
+				}
+			}
+			
+			// Go through and set all popup buttons not being touched to up
+			for (var key:String in popupButtons)
+			{
+				id = int(key);
+				if (popupButtons[id] == 0 && popupButtonsTouched.indexOf(id) == -1) { // Buttons is DOWN and not being touched by player
+					setButtonUp(m_board, id);
+				}
+			}
+		}
+		
+		/**
+		 * Returns true if the player is colliding with the button 
+		 * (ignoring the white space around the button)
+		 * @param	tile
+		 * @return
+		 */
+		private function collidingWithButton(obj:PhysicsObject, tile:IntPair):Boolean
+		{
+			var result:Boolean = false;
+			var objLeft:Number = obj.asset.x + obj.width * .25;
+			var objRight:Number = obj.asset.x + obj.width * .75;
+			var objY:Number = obj.asset.y + obj.height;
+			var tileLeft:Number = tile.x * m_board.tileSideLength + m_board.tileSideLength * .15;
+			var tileRight:Number = tile.x * m_board.tileSideLength + m_board.tileSideLength * .85;
+			var tileTop:Number = tile.y * m_board.tileSideLength + m_board.tileSideLength * .85;
+			var tileBottom:Number = tile.y * m_board.tileSideLength + m_board.tileSideLength;
+			if (objLeft <= tileRight && objRight >= tileLeft && objY >= tileTop && objY <= tileBottom) {
+				result = true;
+			}
+			return result;
 		}
 		
 		/**
@@ -613,6 +748,68 @@ package
 			}
 		}
 		
+		/**
+		 * Returns true if the id is a button or popup-button
+		 * @param	id
+		 * @return
+		**/
+		private function isButton(id:int):Boolean
+		{
+			return id >= Constants.BUTTON1 && id <= Constants.POPUP_BUTTON5;
+		}
+		
+		private function isPopupButton(id:int):Boolean
+		{
+			return id >= Constants.POPUP_BUTTON1 && id <= Constants.POPUP_BUTTON5;
+		}
+		
+		/**
+		 * 
+		 * Gate Functions
+		 * 
+		**/
+		
+		private function isClosedGate(id:int):Boolean
+		{
+			return id >= Constants.GATE1 && id <= Constants.GATE5 && gateStatus[id] == 0;
+		}
+		
+		private function isOpenGate(id:int):Boolean
+		{
+			return id >= Constants.GATE1 && id <= Constants.GATE5 && gateStatus[id] == 1;
+		}
+		
+				/**
+		 * Describes relationship between the buttons and which gate they open.
+		 */
+		private function initButtonGateDict():void
+		{
+			buttonToGate = new Dictionary();
+			
+			// Normal buttons
+			buttonToGate[Constants.BUTTON1] = Constants.GATE1;
+			buttonToGate[Constants.BUTTON2] = Constants.GATE2;
+			buttonToGate[Constants.BUTTON3] = Constants.GATE3;
+			buttonToGate[Constants.BUTTON4] = Constants.GATE4;
+			buttonToGate[Constants.BUTTON5] = Constants.GATE5;
+			
+			// Popup buttons
+			buttonToGate[Constants.POPUP_BUTTON1] = Constants.GATE1;
+			buttonToGate[Constants.POPUP_BUTTON2] = Constants.GATE2;
+			buttonToGate[Constants.POPUP_BUTTON3] = Constants.GATE3;
+			buttonToGate[Constants.POPUP_BUTTON4] = Constants.GATE4;
+			buttonToGate[Constants.POPUP_BUTTON5] = Constants.GATE5;
+		}
+		
+		/**
+		 * 
+		 *	Crate Functions
+		 * 
+		**/
+		
+		/**
+		 * Updates all crates for falling and beingPushed
+		**/
 		public function updateCrates():void
 		{
 			for each (var crate:Crate in m_board.crates)
@@ -624,6 +821,13 @@ package
 			}
 		}
 		
+		/**
+		 * Handles collisions on the given crate in the given direction
+		 * Returns whether there was a collision
+		 * @param	crate
+		 * @param	direction
+		 * @return
+		 */
 		public function checkCrateCollision(crate:Crate, direction:int):Boolean
 		{
 			switch (direction)
@@ -715,110 +919,6 @@ package
 					break;
 			}
 			return false;
-		}
-		
-		/**
-		 * Determines if the player is on any signs and displays thier text if so.
-		 * Removes the displayed text if there is one and the player is not on a sign.
-		**/
-		public function displaySign():void
-		{
-			var found:Boolean = false;
-			for each (var tile:IntPair in getObjectTiles(m_player)) {
-				var id:int = m_board.getTile(tile.x, tile.y);
-				if (id >= Constants.SIGN1 && id <= Constants.SIGN5)
-				{
-					found = true;
-					if (!m_signText)
-					{
-						m_signText = new TextField();
-						m_signText.text = m_board.getSignText(id);
-						m_signText.x = tile.x * m_board.tileSideLength;
-						m_signText.y = (tile.y - 1) * m_board.tileSideLength;
-						m_signText.background = true;
-						m_signText.backgroundColor = Constants.SIGN_BACKGROUND_COLOR;
-						m_signText.border = true;
-						m_signText.borderColor = Constants.SIGN_BORDER_COLOR;
-						m_signText.wordWrap = true;
-						m_signText.autoSize = TextFieldAutoSize.LEFT
-						var format:TextFormat = m_signText.getTextFormat()
-						format.size = Constants.SIGN_FONT_SIZE;
-						m_signText.setTextFormat(format);
-						m_stage.addChild(m_signText);
-					}
-				}
-			}
-			if (!found && m_signText)
-			{
-				m_stage.removeChild(m_signText);
-				m_signText = null;
-			}
-		}
-		
-		public function updateButtons():void
-		{
-			// Go through and set every button down that is being touched
-			var popupButtonsTouched:Vector.<int> = new Vector.<int>();
-			for (var x:int = 0; x < m_board.width; x++ )
-			{
-				for (var y:int = 0; y < m_board.height; y++)
-				{
-					var tile:IntPair = new IntPair(x, y)
-					var id:int = m_board.getTile(x, y)
-					if (isButton(id))
-					{	
-						var touched:Boolean = false;
-						if (collidingWithButton(m_player, tile))
-						{
-							setButtonDown(m_board, id);
-							touched = true;
-						}
-						for each (var crate:Crate in m_board.crates)
-						{
-							if (collidingWithButton(crate, tile))
-							{
-								setButtonDown(m_board, id);
-								touched = true;
-							}
-						}
-						if (isPopupButton(id) && touched)
-						{
-							popupButtonsTouched.push(id);
-						}
-					}
-				}
-			}
-			
-			// Go through and set all popup buttons not being touched to up
-			for (var key:String in popupButtons)
-			{
-				id = int(key);
-				if (popupButtons[id] == 0 && popupButtonsTouched.indexOf(id) == -1) { // Buttons is DOWN and not being touched by player
-					setButtonUp(m_board, id);
-				}
-			}
-		}
-		
-		/**
-		 * Returns true if the player is colliding with the button 
-		 * (ignoring the white space around the button)
-		 * @param	tile
-		 * @return
-		 */
-		private function collidingWithButton(obj:PhysicsObject, tile:IntPair):Boolean
-		{
-			var result:Boolean = false;
-			var objLeft:Number = obj.asset.x + obj.width * .25;
-			var objRight:Number = obj.asset.x + obj.width * .75;
-			var objY:Number = obj.asset.y + obj.height;
-			var tileLeft:Number = tile.x * m_board.tileSideLength + m_board.tileSideLength * .15;
-			var tileRight:Number = tile.x * m_board.tileSideLength + m_board.tileSideLength * .85;
-			var tileTop:Number = tile.y * m_board.tileSideLength + m_board.tileSideLength * .85;
-			var tileBottom:Number = tile.y * m_board.tileSideLength + m_board.tileSideLength;
-			if (objLeft <= tileRight && objRight >= tileLeft && objY >= tileTop && objY <= tileBottom) {
-				result = true;
-			}
-			return result;
 		}
 		
 		/**
@@ -945,6 +1045,20 @@ package
 			return null;
 		}
 		
+		private function resetCrates():void
+		{
+			for each (var crate:Crate in m_board.crates)
+			{
+				crate.reset();
+			}
+		}
+		
+		/**
+		 * 
+		 *	Platform Functions
+		 * 
+		**/
+		
 		/**
 		 * Collide with a platform, given a direction
 		 * @param	direction
@@ -996,6 +1110,94 @@ package
 			}
 		}
 		
+		private function isPlatformInObjectTile(obj:PhysicsObject):Boolean
+		{
+			for each (var tile:IntPair in getObjectTiles(obj))
+			{
+				for each (var platform:Bitmap in platforms) {					
+					if ((platform.x >= tile.x * m_board.tileSideLength || platform.x <= (tile.x + 1) * m_board.tileSideLength) &&
+						platform.y >= tile.y * m_board.tileSideLength && platform.y <= (tile.y + 1) * m_board.tileSideLength)
+						return true;
+				}
+			}
+			return false;
+		}
+		
+		private function isMovingPlatformStartOrEnd(id:int):Boolean
+		{
+			return id >= Constants.MOVING_PLATFORM_START1 && id <= Constants.LONG_MOVING_PLATFORM_END2;
+		}
+		
+		/**
+		 * 
+		 *	Tile Functions
+		 * 
+		**/
+		
+		/**
+		 * Returns whether the user is colliding with a ladder
+		 * @return
+		 */
+		private function collidingWithLadder():Boolean
+		{
+			for each (var tile:IntPair in getObjectTiles(m_player)) {
+				if (m_board.getTile(tile.x, tile.y) == Constants.LADDER) 
+					return true;
+			}
+			return false;
+		}
+		
+		/**
+		 * Returns true if players is standing on a trampoline
+		 * @return
+		 */
+		private function trampBelowPlayer():Boolean
+		{
+			for each (var tile:IntPair in getTilesInDirection(m_player, Constants.DOWN)) {
+				if (m_board.getTile(tile.x, tile.y) == Constants.TRAMP) 
+					return true;
+			}
+			return false;
+		}
+		
+		/**
+		 * Determines if the player is on any signs and displays thier text if so.
+		 * Removes the displayed text if there is one and the player is not on a sign.
+		**/
+		public function displaySign():void
+		{
+			var found:Boolean = false;
+			for each (var tile:IntPair in getObjectTiles(m_player)) {
+				var id:int = m_board.getTile(tile.x, tile.y);
+				if (id >= Constants.SIGN1 && id <= Constants.SIGN5)
+				{
+					found = true;
+					if (!m_signText)
+					{
+						m_signText = new TextField();
+						m_signText.text = m_board.getSignText(id);
+						m_signText.x = tile.x * m_board.tileSideLength;
+						m_signText.y = (tile.y - 1) * m_board.tileSideLength;
+						m_signText.background = true;
+						m_signText.backgroundColor = Constants.SIGN_BACKGROUND_COLOR;
+						m_signText.border = true;
+						m_signText.borderColor = Constants.SIGN_BORDER_COLOR;
+						m_signText.wordWrap = true;
+						m_signText.autoSize = TextFieldAutoSize.LEFT
+						var format:TextFormat = m_signText.getTextFormat()
+						format.size = Constants.SIGN_FONT_SIZE;
+						m_signText.setTextFormat(format);
+						m_stage.addChild(m_signText);
+					}
+				}
+			}
+			if (!found && m_signText)
+			{
+				m_stage.removeChild(m_signText);
+				m_signText = null;
+			}
+		}
+		
 		/**
 		 * Returns whether the user is on top of ONLY a ladder (EMPTY is okay)
 		 * @return
@@ -1016,96 +1218,44 @@ package
 			return result;
 		}
 		
-		private function isPlayerFinished():Boolean
+		/**
+		 * Returns true if player is colliding with lava. False otherwise
+		 * @param	id - id of tile colliding with
+		 * @param	tile - tile colliding with
+		 * @param	playerBottom - True if bottom of player is hitting lava, false if top of player is hitting lava
+		 * @return
+		 */
+		private function checkLavaHit(id:int, tile:IntPair, playerBottom:Boolean = false):Boolean
 		{
-			var midX:int = m_player.asset.x + m_board.tileSideLength / 2;
-			var midY:int = m_player.asset.y + m_board.tileSideLength / 2;
-			return midX >= m_finishTile.x &&
-			midX <= m_finishTile.x + m_board.tileSideLength &&
-			midY >= m_finishTile.y &&
-			midY <= m_finishTile.y + m_board.tileSideLength;
-		}
-		
-		private function getYPositionOfPlayer():int
-		{
-			return (m_board.boardHeightInPixels - m_player.asset.y - m_player.height ) / m_board.tileSideLength;
+			var playerRight:int = m_player.asset.x + m_player.width * .75;
+			var playerLeft:int = m_player.asset.x + m_player.width * .25;
+			var tileRight:int = (tile.x + 1) * m_board.tileSideLength;
+			var tileLeft:int = tile.x * m_board.tileSideLength;
+			
+			// Check if top or bottom of player is hitting lava
+			if (id == Constants.LAVA && !m_player.onPlatform) {
+				if (!playerBottom || (playerBottom && playerLeft <= tileRight && playerRight >= tileLeft)) {
+					var logData:Object = {x:m_player.asset.x, y:m_player.asset.y};
+					m_logger.logAction(Constants.AID_DEATH, logData);
+					resetPlayer();
+					resetCrates();
+					return true;
+				}
+			}
+			return false;
 		}
 		
 		/**
-		 * Test if keys are pressed down
-		 * @param	event
+		 * Returns an IntPair representing the tile that the center of the provided PhysicsObject falls in
+		 * @param	obj
+		 * @return
 		 */
-		public function onKeyDown(event:KeyboardEvent):void
+		public function getCentralTile(obj:PhysicsObject):IntPair
 		{
-			var key:uint = event.keyCode;
-			switch (key) {
-				case Keyboard.UP :
-					m_keyUp = true;
-					m_keySpace = false;
-					m_keyDown = false;
-					break;
-				case Keyboard.DOWN:
-					m_keyDown = true;
-					m_keyUp = false;
-					m_keySpace = false;
-					break;
-				case Keyboard.RIGHT :
-					m_keyRight = true;
-					m_keyLeft = false;
-					break;
-				case Keyboard.LEFT :
-					m_keyLeft = true;
-					m_keyRight = false;
-					break;
-				case Keyboard.SPACE :
-					m_keySpace = true;
-					m_keyUp = false;
-					m_keyDown = false;
-					break;
-				case Keyboard.R :
-					m_keyR = true;
-					break;
-				case Keyboard.ESCAPE :
-					pause = !pause;
-					if (pause) {
-						Menu.createPauseMenu();
-					} else {
-						Menu.removePauseMenu();
-					}
-					break;
-			}
+			var centerX:Number = obj.asset.x + obj.width / 2;
+			var centerY:Number = obj.asset.y + obj.height / 2;
+			return new IntPair(Math.floor(centerX / m_board.tileSideLength), Math.floor(centerY / m_board.tileSideLength));
 		}
-		
-		/**
-		 * Test if keys are up
-		 * @param	event
-		 */
-		private function onKeyUp(event:KeyboardEvent):void 
-		{
-			var key:uint = event.keyCode;
-			switch (key)
-			{
-				case Keyboard.UP :
-					m_keyUp = false;
-					break;
-				case Keyboard.DOWN :
-					m_keyDown = false;
-					break;
-				case Keyboard.RIGHT :
-					m_keyRight = false;
-					break;
-				case Keyboard.LEFT :
-					m_keyLeft = false;
-					break;
-				case Keyboard.SPACE :
-					m_keySpace = false;
-					break;
-				case Keyboard.R :
-					m_keyR = false;
-					break;
-			}
-		}
-		
 		
 		/**
 		 * Returns the tile(s) in which the object is located in terms of intpairs
@@ -1264,107 +1414,88 @@ package
 			return result;
 		}
 		
-		private function isPlatformInObjectTile(obj:PhysicsObject):Boolean
+		/**
+		 *
+		 * Key Functions
+		 * 
+		**/
+		
+		public function onKeyDown(event:KeyboardEvent):void
 		{
-			for each (var tile:IntPair in getObjectTiles(obj))
-			{
-				for each (var platform:Bitmap in platforms) {					
-					if ((platform.x >= tile.x * m_board.tileSideLength || platform.x <= (tile.x + 1) * m_board.tileSideLength) &&
-						platform.y >= tile.y * m_board.tileSideLength && platform.y <= (tile.y + 1) * m_board.tileSideLength)
-						return true;
-				}
+			var key:uint = event.keyCode;
+			switch (key) {
+				case Keyboard.UP :
+					m_keyUp = true;
+					m_keySpace = false;
+					m_keyDown = false;
+					break;
+				case Keyboard.DOWN:
+					m_keyDown = true;
+					m_keyUp = false;
+					m_keySpace = false;
+					break;
+				case Keyboard.RIGHT :
+					m_keyRight = true;
+					m_keyLeft = false;
+					break;
+				case Keyboard.LEFT :
+					m_keyLeft = true;
+					m_keyRight = false;
+					break;
+				case Keyboard.SPACE :
+					m_keySpace = true;
+					m_keyUp = false;
+					m_keyDown = false;
+					break;
+				case Keyboard.R :
+					m_keyR = true;
+					break;
+				case Keyboard.ESCAPE :
+					pause = !pause;
+					if (pause) {
+						Menu.createPauseMenu();
+					} else {
+						Menu.removePauseMenu();
+					}
+					break;
 			}
-			return false;
 		}
 		
 		/**
-		 * Returns true if player is colliding with lava. False otherwise
-		 * @param	id - id of tile colliding with
-		 * @param	tile - tile colliding with
-		 * @param	playerBottom - True if bottom of player is hitting lava, false if top of player is hitting lava
-		 * @return
+		 * Test if keys are up
+		 * @param	event
 		 */
-		private function checkLavaHit(id:int, tile:IntPair, playerBottom:Boolean = false):Boolean
+		private function onKeyUp(event:KeyboardEvent):void 
 		{
-			var playerRight:int = m_player.asset.x + m_player.width * .75;
-			var playerLeft:int = m_player.asset.x + m_player.width * .25;
-			var tileRight:int = (tile.x + 1) * m_board.tileSideLength;
-			var tileLeft:int = tile.x * m_board.tileSideLength;
-			
-			// Check if top or bottom of player is hitting lava
-			if (id == Constants.LAVA && !m_player.onPlatform) 
+			var key:uint = event.keyCode;
+			switch (key)
 			{
-				if (!playerBottom || (playerBottom && playerLeft <= tileRight && playerRight >= tileLeft)) {
-					var logData:Object = {x:m_player.asset.x, y:m_player.asset.y};
-					m_logger.logAction(Constants.AID_DEATH, logData);
-					resetPlayer();
-					resetCrates();
-					return true;
-				}
+				case Keyboard.UP :
+					m_keyUp = false;
+					break;
+				case Keyboard.DOWN :
+					m_keyDown = false;
+					break;
+				case Keyboard.RIGHT :
+					m_keyRight = false;
+					break;
+				case Keyboard.LEFT :
+					m_keyLeft = false;
+					break;
+				case Keyboard.SPACE :
+					m_keySpace = false;
+					break;
+				case Keyboard.R :
+					m_keyR = false;
+					break;
 			}
-			return false;
-		}
-		
-		private function resetPlayer():void
-		{
-			m_player.asset.x = m_playerStart.x;
-			m_player.asset.y = m_playerStart.y;
-			m_player.energy = 0;
-			m_player.velocity = 0;
-			m_meter.energy = m_player.energy;
-			// Reset the buttons
-			for each (var id:int in buttons) {
-				setButtonUp(m_board, id);
-			}
-			
-			for each (id in gates) {
-				m_boardSprite.closeGate(m_board, id);
-				gateStatus[id] = 0; // CLOSED
-			}
-			
-			m_boardSprite.setPowerupsVisible();
-			
-			Stopwatch.reset();
-			Stopwatch.start();
-		}
-		
-		private function resetCrates():void
-		{
-			for each (var crate:Crate in m_board.crates)
-			{
-				crate.reset();
-			}
-		}
-		
-		private function isClosedGate(id:int):Boolean
-		{
-			return id >= Constants.GATE1 && id <= Constants.GATE5 && gateStatus[id] == 0;
-		}
-		
-		private function isOpenGate(id:int):Boolean
-		{
-			return id >= Constants.GATE1 && id <= Constants.GATE5 && gateStatus[id] == 1;
 		}
 		
 		/**
-		 * Returns true if the id is a button or popup-button
-		 * @param	id
-		 * @return
-		 */
-		private function isButton(id:int):Boolean
-		{
-			return id >= Constants.BUTTON1 && id <= Constants.POPUP_BUTTON5;
-		}
-		
-		private function isPopupButton(id:int):Boolean
-		{
-			return id >= Constants.POPUP_BUTTON1 && id <= Constants.POPUP_BUTTON5;
-		}
-		
-		private function isMovingPlatformStartOrEnd(id:int):Boolean
-		{
-			return id >= Constants.MOVING_PLATFORM_START1 && id <= Constants.LONG_MOVING_PLATFORM_END2;
-		}
+		 * 
+		 * PowerUp Functions
+		 * 
+		**/
 		
 		private function isPowerUp(id:int):Boolean
 		{
@@ -1415,101 +1546,5 @@ package
 			
 			m_boardSprite.setPowerupInvisible(tile);
 		}
-		
-		/**
-		 * Add x to energy
-		 * @param	energy
-		 */
-		private function incrementEnergy(energy:int):void
-		{
-			m_player.energy += Math.max(0, energy);
-			if (m_player.energy > 10) 
-				m_player.energy = 10;
-			m_meter.energy = m_player.energy;
-		}
-		
-		/**
-		 * Describes relationship between the buttons and which gate they open.
-		 */
-		private function initButtonGateDict():void
-		{
-			buttonToGate = new Dictionary();
-			
-			// Normal buttons
-			buttonToGate[Constants.BUTTON1] = Constants.GATE1;
-			buttonToGate[Constants.BUTTON2] = Constants.GATE2;
-			buttonToGate[Constants.BUTTON3] = Constants.GATE3;
-			buttonToGate[Constants.BUTTON4] = Constants.GATE4;
-			buttonToGate[Constants.BUTTON5] = Constants.GATE5;
-			
-			// Popup buttons
-			buttonToGate[Constants.POPUP_BUTTON1] = Constants.GATE1;
-			buttonToGate[Constants.POPUP_BUTTON2] = Constants.GATE2;
-			buttonToGate[Constants.POPUP_BUTTON3] = Constants.GATE3;
-			buttonToGate[Constants.POPUP_BUTTON4] = Constants.GATE4;
-			buttonToGate[Constants.POPUP_BUTTON5] = Constants.GATE5;
-		}
-		
-		/**
-		 * Highlights the squares above the player to show how high the player can jump
-		 * based on his energy
-		 */
-		private function showJumpHeight():void
-		{
-			// Pick x value (low or high) on which to show the jump height
-			var lowX:Number = (m_player.asset.x / m_board.tileSideLength);
-			var highX:Number = ((m_player.asset.x + m_player.width) / m_board.tileSideLength);
-			var x:int;
-			if (int(highX) - lowX > highX - int(highX)) {
-				x = int(lowX);
-			} else {
-				x = int(highX);
-			}
-			if (x != m_prevPlayerX) 
-			{
-				removePlayerJumpHeight(x);
-				
-				var y:int = (int) (m_player.asset.y / m_board.tileSideLength);
-				var startingHeight:int = y - 1;
-				var endingHeight:int = y - (m_player.energy - 1);
-				if (Constants.JUMP_HEIGHT_ONE_HIGHER) 
-				{
-					endingHeight = y - m_player.energy;
-				}
-				if (Constants.HIGHLIGHT_PLAYER_SQUARE) 
-				{
-					startingHeight = y;
-				}
-				
-				for (var i:int = startingHeight; i >= endingHeight; i--) 
-				{					
-					var id:int = m_board.getTile(x, i);
-					if (id != Constants.WALL && id != Constants.LADDER && !isClosedGate(id) && id != Constants.LAVA) {
-						var size:int = m_board.tileSideLength;
-						
-						var rect:Sprite = new Sprite();
-						rect.graphics.beginFill(0xFF0000);
-						rect.graphics.drawRect(x * size, i * size, size, size);
-						rect.alpha = .25;
-						rect.graphics.endFill();
-						
-						m_jumpHeightRects.push(rect);
-						m_boardSprite.addChild(rect);
-					} else {
-						break;
-					}
-				}
-			}
-		}
-		
-		private function removePlayerJumpHeight(prevX:int = -1):void
-		{
-			m_prevPlayerX = prevX;
-			for each (var rect:Sprite in m_jumpHeightRects) {
-				m_boardSprite.removeChild(rect);
-			}
-			m_jumpHeightRects = new Vector.<Sprite>();
-		}
 	}
-
 }
