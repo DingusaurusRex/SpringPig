@@ -375,8 +375,8 @@ package
 					{
 						crate = getCollidingCrate(m_player);
 						crate.beingPushed = true;
-						var oldCrateX:Number = crate.asset.x;
-						var oldPlayerX:Number = m_player.asset.x;
+						oldCrateX = crate.asset.x;
+						oldPlayerX = m_player.asset.x;
 						crate.asset.x -= m_player.cratePushSpeed;
 						m_player.inAir ? m_player.asset.x += m_player.airSpeedX - m_player.cratePushSpeed : m_player.asset.x += m_player.speedX - m_player.cratePushSpeed;
 						if (checkCrateCollision(crate, Constants.LEFT))
