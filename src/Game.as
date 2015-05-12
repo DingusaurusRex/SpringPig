@@ -302,11 +302,17 @@ import util.IntPair;
 
             m_logger.logLevelStart(currLevelIndex + 1, null);
 
+            Menu.setPauseMenuLevelInfo(currLevelIndex + 1, getCurrentLevelName())
 			GameState.currentLevelSave();
 			// Reset and start timing
 			Stopwatch.reset();
 			Stopwatch.start();
 		}
+
+        public function getCurrentLevelName():String
+        {
+            return progression[currLevelIndex];
+        }
 		
 		public function startFirstLevel():void
 		{
@@ -502,7 +508,7 @@ import util.IntPair;
 							}
 						}
 					}
-					
+
 					if (isPlayerFinished()) {
 						pause = true; // So that player position is disregarded
                         Stopwatch.pause();

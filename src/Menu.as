@@ -155,6 +155,10 @@ public class Menu {
         game.restartLevel();
     }
 
+    public static function setPauseMenuLevelInfo(levelNumber:int, levelName:String):void {
+        pauseMenu.setLevelInfo(levelNumber, levelName);
+    }
+
     // Event functions
     public static function onContinueClick(event:MouseEvent):void {
         continueGame();
@@ -355,6 +359,7 @@ import flash.display.SimpleButton;
 import flash.display.Sprite;
 import flash.events.MouseEvent;
 import flash.text.TextField;
+import flash.text.TextFormat;
 
 import util.GameState;
 import util.Stopwatch;
@@ -442,6 +447,8 @@ class MainMenu extends Sprite {
 
 class PauseMenu extends Sprite {
     private var title:TextField;
+    private var levelInfo:TextField;
+    private var levelInfoFormat:TextFormat;
     private var resumeButton:SimpleButton;
     private var mainMenuButton:SimpleButton;
 
@@ -455,6 +462,17 @@ class PauseMenu extends Sprite {
         title = Menu.getMenuTitle(Constants.PAUSE_TITLE_TEXT,
                 Constants.PAUSE_TITLE_TOP_PADDING,
                 Constants.PAUSE_TITLE_FONT_SIZE);
+
+        // Level info
+        levelInfo = Menu.getTextField(Constants.PAUSE_LEVEL_INFO_TEXT,
+                Constants.PAUSE_LEVEL_INFO_HEIGHT,
+                Constants.SCREEN_WIDTH,
+                0,
+                        title.y + title.height + Constants.PAUSE_LEVEL_INFO_TOP_PADDING,
+                Constants.MENU_FONT,
+                Constants.PAUSE_LEVEL_INFO_FONT_SIZE,
+                Constants.PAUSE_LEVEL_INFO_ALIGNMENT);
+        levelInfoFormat = levelInfo.getTextFormat();
 
         // Resume button
         resumeButton = Menu.getMenuButton(Constants.PAUSE_RESUME_BUTTON_TEXT,
@@ -471,6 +489,12 @@ class PauseMenu extends Sprite {
         addChild(title);
         addChild(resumeButton);
         addChild(mainMenuButton);
+    }
+
+    public function setLevelInfo(levelNumber:int, levelName:String):void {
+        levelInfo.text = Constants.PAUSE_LEVEL_INFO_TEXT + levelNumber + ": " + levelName;
+        levelInfo.setTextFormat(levelInfoFormat);
+        addChild(levelInfo);
     }
 }
 

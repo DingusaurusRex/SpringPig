@@ -316,6 +316,12 @@ package
 		public static const PAUSE_TITLE_TEXT:String = "Paused";
 		public static const PAUSE_TITLE_TOP_PADDING:int = 50;
 		public static const PAUSE_TITLE_FONT_SIZE:int = 80;
+
+        public static const PAUSE_LEVEL_INFO_TEXT:String = "Level #";
+        public static const PAUSE_LEVEL_INFO_TOP_PADDING:int = 20;
+        public static const PAUSE_LEVEL_INFO_HEIGHT:int = 25;
+        public static const PAUSE_LEVEL_INFO_FONT_SIZE:int = 20;
+        public static const PAUSE_LEVEL_INFO_ALIGNMENT:String = "center";
 		
 		public static const PAUSE_BACKGROUND_COLOR:uint = 0x000000;
 		public static const PAUSE_BACKGROUND_OPACITY:Number = 0.5;
