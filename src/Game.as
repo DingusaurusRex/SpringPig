@@ -23,8 +23,8 @@ import flash.display.Bitmap;
 	import model.player.PhysicsObject;
 	import model.player.Player;
 
-import util.Audio;
-import util.IntPair;
+	import util.Audio;
+	import util.IntPair;
 	import util.Stopwatch;
 	import view.BoardView;
 	import view.MeterView;
@@ -224,7 +224,7 @@ import util.IntPair;
 						//var crateTile:IntPair = getCentralTile(crate);
 						//crate.asset.x = crateTile.x * m_board.tileSideLength;
 					//}
-					if (crate.inAir)
+					if (crate.inAir && !standingOnCrate(crate))
 					{
 						var crateTile:IntPair = getCentralTile(crate);
 						crate.asset.x = crateTile.x * m_board.tileSideLength;
@@ -359,16 +359,29 @@ import util.IntPair;
 					// If colliding with a crate, move the crate
 					if (collidingWithCrate(m_player))
 					{
-						var crate:Crate = getCollidingCrate(m_player);
-						crate.beingPushed = true;
-						var oldCrateX:Number = crate.asset.x;
-						var oldPlayerX:Number = m_player.asset.x;
-						crate.asset.x += m_player.cratePushSpeed;
-						m_player.asset.x = crate.asset.x - m_player.width;
-						if (checkCrateCollision(crate, Constants.RIGHT) || crate.inAir)
+						var crates:Vector.<Crate> = getCollidingCrates(m_player)
+						var playerTile:IntPair = getCentralTile(m_player);
+						for each (var temp:Crate in crates)
 						{
-							crate.asset.x = oldCrateX;
-							m_player.inAir ? m_player.asset.x = m_player.asset.x - m_player.airSpeedX : m_player.asset.x = m_player.asset.x - m_player.speedX;
+							var crateTile:IntPair = getCentralTile(temp);
+							if (crateTile.x >= playerTile.x && crateTile.y == playerTile.y)
+							{
+								var crate:Crate = temp;
+								break;
+							}
+						}
+						if (crate)
+						{
+							crate.beingPushed = true;
+							var oldCrateX:Number = crate.asset.x;
+							var oldPlayerX:Number = m_player.asset.x;
+							crate.asset.x += m_player.cratePushSpeed;
+							m_player.asset.x = crate.asset.x - m_player.width;
+							if (checkCrateCollision(crate, Constants.RIGHT) || crate.inAir)
+							{
+								crate.asset.x = oldCrateX;
+								m_player.inAir ? m_player.asset.x = m_player.asset.x - m_player.airSpeedX : m_player.asset.x = m_player.asset.x - m_player.speedX;
+							}
 						}
 					}
 					// If you ran into a wall, keep the playeoh fur in the previous square
@@ -393,16 +406,29 @@ import util.IntPair;
 					// If colliding with a crate, move the crate
 					if (collidingWithCrate(m_player))
 					{
-						crate = getCollidingCrate(m_player);
-						crate.beingPushed = true;
-						oldCrateX = crate.asset.x;
-						oldPlayerX = m_player.asset.x;
-						crate.asset.x -= m_player.cratePushSpeed;
-						m_player.asset.x = crate.asset.x + crate.width;
-						if (checkCrateCollision(crate, Constants.LEFT) || crate.inAir)
+						crates = getCollidingCrates(m_player)
+						playerTile = getCentralTile(m_player);
+						for each (temp in crates)
 						{
-							crate.asset.x = oldCrateX;
-							m_player.inAir ? m_player.asset.x = m_player.asset.x + m_player.airSpeedX : m_player.asset.x = m_player.asset.x + m_player.speedX;
+							crateTile = getCentralTile(temp);
+							if (crateTile.x <= playerTile.x && crateTile.y == playerTile.y)
+							{
+								crate = temp;
+								break;
+							}
+						}
+						if (crate)
+						{
+							crate.beingPushed = true;
+							oldCrateX = crate.asset.x;
+							oldPlayerX = m_player.asset.x;
+							crate.asset.x -= m_player.cratePushSpeed;
+							m_player.asset.x = crate.asset.x + crate.width;
+							if (checkCrateCollision(crate, Constants.LEFT) || crate.inAir)
+							{
+								crate.asset.x = oldCrateX;
+								m_player.inAir ? m_player.asset.x = m_player.asset.x + m_player.airSpeedX : m_player.asset.x = m_player.asset.x + m_player.speedX;
+							}
 						}
 					}
 					// If you ran into a wall, keep the player in the previous square
@@ -450,10 +476,23 @@ import util.IntPair;
 						break;
 					else if (standingOnCrate(m_player))
 					{
-						crate = getCollidingCrate(m_player);
-						m_player.asset.y = (int) (crate.asset.y - m_player.height);
-						m_player.velocity = 0;
-						m_player.inAir = false;
+						crates = getCollidingCrates(m_player)
+						playerTile = getCentralTile(m_player);
+						for each (temp in crates)
+						{
+							crateTile = getCentralTile(temp);
+							if (crateTile.y > playerTile.y)
+							{
+								crate = temp;
+								break;
+							}
+						}
+						if (crate)
+						{
+							m_player.asset.y = (int) (crate.asset.y - m_player.height);
+							m_player.velocity = 0;
+							m_player.inAir = false;
+						}
 					}
 					for each (tile in getTilesInDirection(m_player, Constants.DOWN)) {
 						id = m_board.getTile(tile.x, tile.y);
@@ -1045,12 +1084,14 @@ import util.IntPair;
 		 * @param	obj
 		 * @return
 		 */
-		private function getCollidingCrate(obj:PhysicsObject):Crate
+		private function getCollidingCrates(obj:PhysicsObject):Vector.<Crate>
 		{
 			var objLeft:Number = obj.asset.x;
 			var objRight:Number = obj.asset.x + obj.width;
 			var objTop:Number = obj.asset.y;
 			var objBottom:Number = obj.asset.y + obj.height;
+			
+			var result:Vector.<Crate> = new Vector.<Crate>();
 			
 			for each (var crate:Crate in m_board.crates)
 			{
@@ -1065,11 +1106,11 @@ import util.IntPair;
 						(objTop >= crateTop && objTop <= crateBottom ||
 						objBottom >= crateTop && objBottom <= crateBottom))
 						{
-							return crate;
+							result.push(crate);
 						}
 				}
 			}
-			return null;
+			return result;
 		}
 		
 		private function resetCrates():void
