@@ -599,7 +599,6 @@ import util.IntPair;
 			
 			m_boardSprite.setPowerupsVisible();
 			
-			Stopwatch.reset();
 			Stopwatch.start();
 		}
 		
