@@ -1,8 +1,8 @@
 package 
 {
-import cgs.Audio.Audio;
+	import cgs.Audio.Audio;
 
-import flash.display.Bitmap;
+	import flash.display.Bitmap;
 	import flash.display.IDrawCommand;
 	import flash.display.Sprite;
 	import flash.display.Stage;
@@ -1279,7 +1279,10 @@ import flash.display.Bitmap;
 			}
 			if (!found && m_signText)
 			{
-				m_stage.removeChild(m_signText);
+				if (m_stage.contains(m_signText))
+				{
+					m_stage.removeChild(m_signText);
+				}
 				m_signText = null;
 			}
 		}
