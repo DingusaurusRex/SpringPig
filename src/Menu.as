@@ -27,7 +27,8 @@ public class Menu {
     public static var endLevelMenu:EndLevelMenu;
     public static var endGameMenu:EndGameMenu;
     private static var muteButton:SimpleButton;
-    private static var instructions:TextField;
+    private static var menuInstructions:TextField;
+    public static var gameInstructions:TextField;
     private static var state:int;
 
     // TODO: Background
@@ -43,13 +44,22 @@ public class Menu {
         muteButton = Audio.muteButton;
 
         // Instructions
-        instructions = Menu.getTextField(Constants.INSTRUCTIONS,
-                Constants.INSTRUCTIONS_HEIGHT,
-                Constants.INSTRUCTIONS_WIDTH,
-                Constants.INSTRUCTIONS_LEFT_PADDING,
-                Constants.INSTRUCTIONS_TOP_PADDING,
+        menuInstructions = Menu.getTextField(Constants.INSTRUCTIONS_MENU,
+                Constants.INSTRUCTIONS_MENU_HEIGHT,
+                Constants.INSTRUCTIONS_MENU_WIDTH,
+                Constants.INSTRUCTIONS_MENU_LEFT_PADDING,
+                Constants.INSTRUCTIONS_MENU_TOP_PADDING,
                 Constants.MENU_FONT,
-                Constants.INSTRUCTIONS_FONT_SIZE,
+                Constants.INSTRUCTIONS_MENU_FONT_SIZE,
+                Constants.INSTRUCTIONS_ALIGNMENT);
+
+        gameInstructions = Menu.getTextField(Constants.INSTRUCTIONS_GAME,
+                Constants.INSTRUCTIONS_GAME_HEIGHT,
+                Constants.INSTRUCTIONS_GAME_WIDTH,
+                Constants.INSTRUCTIONS_GAME_RIGHT_PADDING,
+                Constants.SCREEN_HEIGHT - Constants.INSTRUCTIONS_GAME_HEIGHT - Constants.INSTRUCTIONS_GAME_BOTTOM_PADDING,
+                Constants.MENU_FONT,
+                Constants.INSTRUCTIONS_GAME_FONT_SIZE,
                 Constants.INSTRUCTIONS_ALIGNMENT);
 
         state = 0;
@@ -61,7 +71,7 @@ public class Menu {
         stage.removeEventListener(KeyboardEvent.KEY_DOWN, game.onKeyDown); // Need to do this whenever leaving game state
         state = Constants.STATE_MAIN_MENU;
         mainMenu.addChild(muteButton);
-        mainMenu.addChild(instructions);
+        mainMenu.addChild(menuInstructions);
         stage.addChild(mainMenu);
         stage.addEventListener(KeyboardEvent.KEY_DOWN, Menu.onKeyDown);
         stage.focus = stage;
@@ -71,7 +81,8 @@ public class Menu {
         Stopwatch.pause();
         state = Constants.STATE_PAUSE_MENU;
         pauseMenu.addChild(muteButton);
-        pauseMenu.addChild(instructions);
+        pauseMenu.addChild(menuInstructions);
+        stage.removeChild(gameInstructions);
         stage.addChild(pauseMenu);
         stage.addEventListener(KeyboardEvent.KEY_DOWN, Menu.onKeyDown);
         stage.focus = stage;
@@ -80,6 +91,7 @@ public class Menu {
     public static function removePauseMenu():void {
         stage.removeEventListener(KeyboardEvent.KEY_DOWN, Menu.onKeyDown);
         stage.removeChild(pauseMenu);
+        stage.addChild(gameInstructions);
         state = Constants.STATE_GAME;
         game.pause = false; // For leaving pause menu using button
         Stopwatch.start();

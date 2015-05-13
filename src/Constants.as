@@ -254,6 +254,20 @@ package
 		public static const MAIN_MENU_BUTTON_TEXT:String = "[M]ain Menu";
 		public static const MAIN_MENU_BUTTON_TOP_PADDING:int = 20;
 		public static const MAIN_MENU_BUTTON_LEFT_PADDING:int = 20;
+
+        public static const INSTRUCTIONS_MENU:String = "How to play:\nMove Left\t: Left Arrow\nMove Right\t: Right Arrow\nJump\t\t: Up Arrow\nSpring\t\t: Space\nReset\t\t: R\nPause\t\t: Escape";
+        public static const INSTRUCTIONS_GAME:String = "Controls:\nLeft\t\t: Left Arrow\nRight\t: Right Arrow\nJump\t: Up Arrow\nSpring\t: Space\nReset\t: R\nPause\t: Escape";
+        public static const INSTRUCTIONS_MENU_TOP_PADDING:int = 460;
+        public static const INSTRUCTIONS_MENU_LEFT_PADDING:int = 30;
+        public static const INSTRUCTIONS_GAME_BOTTOM_PADDING:int = 5;
+        public static const INSTRUCTIONS_GAME_RIGHT_PADDING:int = 30;
+        public static const INSTRUCTIONS_MENU_HEIGHT:int = 150;
+        public static const INSTRUCTIONS_MENU_WIDTH:int = 170;
+        public static const INSTRUCTIONS_GAME_HEIGHT:int = 90;
+        public static const INSTRUCTIONS_GAME_WIDTH:int = 100;
+        public static const INSTRUCTIONS_MENU_FONT_SIZE:int = 15;
+        public static const INSTRUCTIONS_GAME_FONT_SIZE:int = 9;
+        public static const INSTRUCTIONS_ALIGNMENT:String = "left";
 		
 		// Main menu
 		public static const MAIN_TITLE_FONT_SIZE:int = 80;
@@ -265,14 +279,6 @@ package
 
         public static const START_BUTTON_TEXT:String = "[S]tart";
         public static const LEVEL_SELECT_BUTTON_TEXT:String = "Select [L]evel";
-		
-		public static const INSTRUCTIONS:String = "How to play:\nMove Left\t: Left Arrow\nMove Right\t: Right Arrow\nJump\t\t: Up Arrow\nSpring\t\t: Space\nReset\t\t: R\nPause\t\t: Escape";
-		public static const INSTRUCTIONS_TOP_PADDING:int = 460;
-		public static const INSTRUCTIONS_LEFT_PADDING:int = 30;
-		public static const INSTRUCTIONS_HEIGHT:int = 500;
-		public static const INSTRUCTIONS_WIDTH:int = 400;
-		public static const INSTRUCTIONS_FONT_SIZE:int = 15;
-		public static const INSTRUCTIONS_ALIGNMENT:String = "left";
 		
 		public static const MAIN_CREDITS_BUTTON_RIGHT_PADDING:int = 30;
 		public static const MAIN_CREDITS_BUTTON_BOTTOM_PADDING:int = 40;

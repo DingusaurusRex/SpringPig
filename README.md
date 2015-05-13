@@ -16,12 +16,9 @@ TODO:
 	    not falling into holes
 	    jumping up crates
 
-	show at end level
-	show beating record
 	total time if start to finish
 	time record menu
 	star based on times
-	instructions under meter
 
     platforms above lava
     trampoline indicator
