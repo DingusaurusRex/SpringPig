@@ -30,6 +30,7 @@ public class Menu {
     private static var muteButton:SimpleButton;
     private static var menuInstructions:TextField;
     public static var gameInstructions:TextField;
+    private static var previousRecord:TextField;
     private static var playthroughTip:TextField;
     private static var playthroughTime:TextField;
     private static var playthroughTimeTextFormat:TextFormat;
@@ -145,7 +146,7 @@ public class Menu {
         stage.addChild(endLevelMenu);
         Stopwatch.stopwatchMenuText.x = Constants.END_LEVEL_STOPWATCH_LEFT_PADDING;
         Stopwatch.stopwatchMenuText.y = Constants.END_LEVEL_STOPWATCH_TOP_PADDING;
-        var previousRecord:TextField = GameState.getPlayerRecordEndLevelTextField(game.currLevelIndex);
+        previousRecord = GameState.getPlayerRecordEndLevelTextField(game.currLevelIndex);
         previousRecord.x = Stopwatch.stopwatchMenuText.x;
         previousRecord.y = Stopwatch.stopwatchMenuText.y + Constants.PLAYER_RECORD_TIME_END_LEVEL_TOP_PADDING;
         stage.addChild(Stopwatch.stopwatchMenuText);
@@ -165,7 +166,7 @@ public class Menu {
         stage.addChild(endGameMenu);
         Stopwatch.stopwatchMenuText.x = Constants.END_GAME_STOPWATCH_LEFT_PADDING;
         Stopwatch.stopwatchMenuText.y = Constants.END_GAME_STOPWATCH_TOP_PADDING;
-        var previousRecord:TextField = GameState.getPlayerRecordEndLevelTextField(game.currLevelIndex);
+        previousRecord = GameState.getPlayerRecordEndLevelTextField(game.currLevelIndex);
         previousRecord.x = Stopwatch.stopwatchMenuText.x;
         previousRecord.y = Stopwatch.stopwatchMenuText.y + Constants.PLAYER_RECORD_TIME_END_LEVEL_TOP_PADDING;
         stage.addChild(Stopwatch.stopwatchMenuText);
@@ -231,6 +232,8 @@ public class Menu {
     public static function startNextLevel():void {
         stage.removeEventListener(KeyboardEvent.KEY_DOWN, Menu.onKeyDown);
         stage.removeChild(endLevelMenu);
+        stage.removeChild(Stopwatch.stopwatchMenuText);
+        stage.removeChild(previousRecord);
         state = Constants.STATE_GAME;
         if (fullPlaythrough) {
             stage.removeChild(playthroughTime);
@@ -243,6 +246,8 @@ public class Menu {
     public static function restartLevel():void {
         stage.removeEventListener(KeyboardEvent.KEY_DOWN, Menu.onKeyDown);
         stage.removeChild(endLevelMenu);
+        stage.removeChild(Stopwatch.stopwatchMenuText);
+        stage.removeChild(previousRecord);
         state = Constants.STATE_GAME;
         if (fullPlaythrough) {
             stage.removeChild(playthroughTime);
