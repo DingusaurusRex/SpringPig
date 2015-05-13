@@ -408,6 +408,13 @@ package
         public static const TOTAL_TIME_HEIGHT:int = 30;
         public static const TOTAL_TIME_FONT_SIZE:int = 20;
         public static const TOTAL_TIME_ALIGNMENT:String = "center";
+
+        // Best playthrough time
+        public static const BEST_TOTAL_TIME_TEXT:String = "Best Playthrough Time: ";
+        public static const BEST_TOTAL_TIME_BOTTOM_PADDING:int = 45;
+        public static const BEST_TOTAL_TIME_HEIGHT:int = 30;
+        public static const BEST_TOTAL_TIME_FONT_SIZE:int = 20;
+        public static const BEST_TOTAL_TIME_ALIGNMENT:String = "center";
 	}
 
 }

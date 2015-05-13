@@ -35,8 +35,9 @@ public class Menu {
     private static var playthroughTimeTextFormat:TextFormat;
     public static var state:int;
 
-    private static var fullPlaythrough:Boolean;
-    private static var totalTime:int;
+    public static var fullPlaythrough:Boolean;
+    public static var playthroughFinished:Boolean;
+    public static var totalTime:int;
 
     // TODO: Background
     public static function Init(s:Stage, g:Game):void {
@@ -92,6 +93,7 @@ public class Menu {
         state = 0;
 
         fullPlaythrough = false;
+        playthroughFinished = false;
         totalTime = 0;
     }
 
@@ -99,6 +101,7 @@ public class Menu {
     public static function createMainMenu():void {
         stage.removeChildren();
         fullPlaythrough = false;
+        playthroughFinished = false;
         totalTime = 0;
         stage.removeEventListener(KeyboardEvent.KEY_DOWN, game.onKeyDown); // Need to do this whenever leaving game state
         state = Constants.STATE_MAIN_MENU;
@@ -132,6 +135,11 @@ public class Menu {
 
     public static function createEndLevelMenu():void {
         stage.removeChildren();
+        if (fullPlaythrough) {
+            stage.addChild(Menu.playthroughTime);
+        } else {
+            stage.addChild(playthroughTip);
+        }
         state = Constants.STATE_END_LEVEL_MENU;
         endLevelMenu.addChild(muteButton);
         stage.addChild(endLevelMenu);
@@ -142,20 +150,17 @@ public class Menu {
         previousRecord.y = Stopwatch.stopwatchMenuText.y + Constants.PLAYER_RECORD_TIME_END_LEVEL_TOP_PADDING;
         stage.addChild(Stopwatch.stopwatchMenuText);
         stage.addChild(previousRecord);
-        if (fullPlaythrough) {
-            totalTime += Stopwatch.getCurrentTiming();
-            Menu.playthroughTime.text = Constants.TOTAL_TIME_TEXT + Stopwatch.formatTiming(totalTime);
-            Menu.playthroughTime.setTextFormat(Menu.playthroughTimeTextFormat);
-            stage.addChild(Menu.playthroughTime);
-        } else {
-            stage.addChild(playthroughTip);
-        }
         stage.addEventListener(KeyboardEvent.KEY_DOWN, Menu.onKeyDown);
         stage.focus = stage;
     }
 
     public static function createEndGameMenu():void {
         stage.removeChildren();
+        if (fullPlaythrough) {
+            stage.addChild(Menu.playthroughTime);
+        } else {
+            stage.addChild(playthroughTip);
+        }
         state = Constants.STATE_END_GAME_MENU;
         stage.addChild(endGameMenu);
         Stopwatch.stopwatchMenuText.x = Constants.END_GAME_STOPWATCH_LEFT_PADDING;
@@ -165,16 +170,20 @@ public class Menu {
         previousRecord.y = Stopwatch.stopwatchMenuText.y + Constants.PLAYER_RECORD_TIME_END_LEVEL_TOP_PADDING;
         stage.addChild(Stopwatch.stopwatchMenuText);
         stage.addChild(previousRecord);
+        stage.addEventListener(KeyboardEvent.KEY_DOWN, Menu.onKeyDown);
+        stage.focus = stage;
+    }
+
+    public static function updatePlaythroughTime():void {
         if (fullPlaythrough) {
+            if (game.currLevelIndex == game.progression.length - 1) {
+                playthroughFinished = true;
+            }
             totalTime += Stopwatch.getCurrentTiming();
             Menu.playthroughTime.text = Constants.TOTAL_TIME_TEXT + Stopwatch.formatTiming(totalTime);
             Menu.playthroughTime.setTextFormat(Menu.playthroughTimeTextFormat);
-            stage.addChild(Menu.playthroughTime);
-        } else {
-            stage.addChild(playthroughTip);
+            mainMenu.updateBestPlaythroughTime();
         }
-        stage.addEventListener(KeyboardEvent.KEY_DOWN, Menu.onKeyDown);
-        stage.focus = stage;
     }
 
     public static function createLevelSelectMenu():void {
@@ -476,6 +485,10 @@ class MainMenu extends Sprite {
     private var levelSelectButton:SimpleButton;
     private var timeRecordsButton:SimpleButton;
     private var creditsButton:SimpleButton;
+    private var bestPlaythroughTime:TextField;
+    private var bestPlaythroughTimeTextFormat:TextFormat;
+
+    private var bestTime:int;
 
     public var blocked:Boolean;
 
@@ -525,6 +538,18 @@ class MainMenu extends Sprite {
                         Constants.SCREEN_HEIGHT - Constants.MAIN_CREDITS_BUTTON_BOTTOM_PADDING,
                 Menu.onCreditsClick);
 
+        // Best playthrough time
+        bestTime = GameState.getPlayerBestPlaythroughTime();
+        bestPlaythroughTime = Menu.getTextField(Constants.BEST_TOTAL_TIME_TEXT + Stopwatch.formatTiming(bestTime),
+                Constants.BEST_TOTAL_TIME_HEIGHT,
+                Constants.SCREEN_WIDTH,
+                0,
+                        Constants.SCREEN_HEIGHT - Constants.BEST_TOTAL_TIME_BOTTOM_PADDING,
+                Constants.MENU_FONT,
+                Constants.BEST_TOTAL_TIME_FONT_SIZE,
+                Constants.BEST_TOTAL_TIME_ALIGNMENT);
+        bestPlaythroughTimeTextFormat = bestPlaythroughTime.getTextFormat();
+
         // Adding everything
         addChild(title);
         addChild(continueButton);
@@ -532,6 +557,9 @@ class MainMenu extends Sprite {
         addChild(levelSelectButton);
         addChild(timeRecordsButton);
         addChild(creditsButton);
+        if (bestTime != Constants.STOPWATCH_DEFAULT_TIME) {
+            addChild(bestPlaythroughTime);
+        }
 
         if (GameState.getPlayerLetestProgress() == 0) {
             disableContinue();
@@ -553,6 +581,17 @@ class MainMenu extends Sprite {
             continueButton.mouseEnabled = true;
             removeChild(continueButtonCover);
             blocked = false;
+        }
+    }
+
+    public function updateBestPlaythroughTime():void {
+        if (Menu.fullPlaythrough &&
+                Menu.playthroughFinished &&
+                (Menu.totalTime < bestTime || bestTime == Constants.STOPWATCH_DEFAULT_TIME)) {
+            bestTime = Menu.totalTime;
+            bestPlaythroughTime.text = Constants.BEST_TOTAL_TIME_TEXT + Stopwatch.formatTiming(bestTime);
+            bestPlaythroughTime.setTextFormat(bestPlaythroughTimeTextFormat);
+            addChild(bestPlaythroughTime);
         }
     }
 }

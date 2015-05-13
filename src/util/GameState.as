@@ -29,7 +29,8 @@ public class GameState {
             if (!playerData.data.hasOwnProperty("unlocked") ||
                     !playerData.data.hasOwnProperty("progress") ||
                     !playerData.data.hasOwnProperty("personalRecords") ||
-                    !playerData.data.hasOwnProperty("mute")) {
+                    !playerData.data.hasOwnProperty("mute") ||
+                    !playerData.data.hasOwnProperty("playthroughBest")) {
                 resetProgress();
             }
 
@@ -55,6 +56,12 @@ public class GameState {
             playerData.data.progress = game.currLevelIndex + 1;
             if (playerData.data.progress == game.progression.length) {
                 playerData.data.progress--;
+                if (Menu.fullPlaythrough &&
+                        Menu.playthroughFinished &&
+                        (Menu.totalTime < playerData.data.playthroughBest ||
+                                playerData.data.playthroughBest == Constants.STOPWATCH_DEFAULT_TIME)) {
+                    playerData.data.playthroughBest = Menu.totalTime;
+                }
             }
             if (playerData.data.unlocked < playerData.data.progress + 1) {
                 playerData.data.unlocked = playerData.data.progress + 1;
@@ -107,6 +114,13 @@ public class GameState {
         return Constants.STOPWATCH_DEFAULT_TIME;
     }
 
+    public static function getPlayerBestPlaythroughTime():int {
+        if (saveable) {
+            return playerData.data.playthroughBest;
+        }
+        return Constants.STOPWATCH_DEFAULT_TIME;
+    }
+
     public static function getPlayerRecordGameTextField(level:int):TextField {
         if (saveable) {
             playerRecordGameText.text = Constants.PLAYER_RECORD_TIME_GAME_DEFAULT_TEXT + Stopwatch.formatTiming(getPlayerRecord(level));
@@ -143,6 +157,7 @@ public class GameState {
         }
         playerData.data.personalRecords = personalRecords;
         playerData.data.mute = false;
+        playerData.data.playthroughBest = Constants.STOPWATCH_DEFAULT_TIME;
         playerData.flush();
     }
 }

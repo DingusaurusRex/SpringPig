@@ -565,6 +565,7 @@ import flash.display.Bitmap;
                         util.Audio.playWinSFX();
                         var logData:Object = {time:Stopwatch.getCurrentTiming()};
                         m_logger.logLevelEnd(logData);
+                        Menu.updatePlaythroughTime();
                         GameState.openNextLevelSave();
 						if (currLevelIndex == progression.length - 1) {
 							Menu.createEndGameMenu();
@@ -1541,7 +1542,7 @@ import flash.display.Bitmap;
 					m_keyR = true;
 					break;
 				case Keyboard.ESCAPE :
-                    if (Menu.state == Constants.STATE_GAME) {
+                    if (Menu.state == Constants.STATE_GAME || Menu.state == Constants.STATE_PAUSE_MENU) {
                         pause = !pause;
                         if (pause) {
                             Menu.createPauseMenu();
