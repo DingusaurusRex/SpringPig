@@ -388,7 +388,9 @@ import flash.display.Bitmap;
 					for each (var tile:IntPair in getTilesInDirection(m_player, Constants.RIGHT))
 					{
 						var id:int = m_board.getTile(tile.x, tile.y);
-						if (isPowerUp(id) && m_boardSprite.isPowerupVisible(tile)) {
+						if (isPowerUp(id) && m_boardSprite.isPowerupVisible(tile) && 
+							m_player.asset.x + m_player.width != tile.x * m_board.tileSideLength)  // Check that the player does not collide by a simple pixel
+						{
 							handlePowerUp(id, tile);
 						}
 						if (checkLavaHit(id, tile))
@@ -437,7 +439,9 @@ import flash.display.Bitmap;
 						id = m_board.getTile(tile.x, tile.y);
 						if (checkLavaHit(id, tile))
 							return true;
-						if (isPowerUp(id) && m_boardSprite.isPowerupVisible(tile)) {
+						if (isPowerUp(id) && m_boardSprite.isPowerupVisible(tile) &&
+							m_player.asset.x != (tile.x + 1) * m_board.tileSideLength)  // Check that the player does not collide by a simple pixel) 
+						{
 							handlePowerUp(id, tile);
 						}
 						//if (isButton(id) && collidingWithButton(player, tile)) {
