@@ -377,7 +377,7 @@ import flash.display.Bitmap;
 							var oldPlayerX:Number = m_player.asset.x;
 							crate.asset.x += m_player.cratePushSpeed;
 							m_player.asset.x = crate.asset.x - m_player.width;
-							if (checkCrateCollision(crate, Constants.RIGHT) || crate.inAir)
+							if (checkCrateCollision(crate, Constants.RIGHT) || (crate.inAir && !standingOnCrate(crate)))
 							{
 								crate.asset.x = oldCrateX;
 								m_player.inAir ? m_player.asset.x = m_player.asset.x - m_player.airSpeedX : m_player.asset.x = m_player.asset.x - m_player.speedX;
@@ -424,7 +424,7 @@ import flash.display.Bitmap;
 							oldPlayerX = m_player.asset.x;
 							crate.asset.x -= m_player.cratePushSpeed;
 							m_player.asset.x = crate.asset.x + crate.width;
-							if (checkCrateCollision(crate, Constants.LEFT) || crate.inAir)
+							if (checkCrateCollision(crate, Constants.LEFT) || (crate.inAir && !standingOnCrate(crate)))
 							{
 								crate.asset.x = oldCrateX;
 								m_player.inAir ? m_player.asset.x = m_player.asset.x + m_player.airSpeedX : m_player.asset.x = m_player.asset.x + m_player.speedX;
