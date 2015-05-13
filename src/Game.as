@@ -921,7 +921,7 @@ import flash.display.Bitmap;
 							id == Constants.TRAMP ||
 							isClosedGate(id))
 						{
-							crate.asset.x = tile.x * m_board.tileSideLength
+							crate.asset.x = (tile.x - 1) * m_board.tileSideLength
 							return true;
 						}
 					}
