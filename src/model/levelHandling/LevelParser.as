@@ -92,6 +92,9 @@ package model.levelHandling
 		
 		[Embed(source = "../../../assets/levels/level31.json", mimeType = "application/octet-stream")]
 		private var Level31:Class;
+
+        [Embed(source = "../../../assets/levels/level0.json", mimeType = "application/octet-stream")]
+        private var Level0:Class;
 		
 		
 		/**
@@ -131,6 +134,7 @@ package model.levelHandling
 			m_levelNames["level25"] = Level25;
 			m_levelNames["level28"] = Level28;
 			m_levelNames["level31"] = Level31;
+			m_levelNames["level0"] = Level0;
 		}
 		
 		/**
