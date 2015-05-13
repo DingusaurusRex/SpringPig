@@ -204,6 +204,12 @@ package
 							if (trampBelowPlayer()) 
 							{
 								m_player.bounce = true;
+								
+								// Allows for buttons on top of trampolines.
+								var id:int = playerOnButton();
+								if (id != -1) {
+									setButtonDown(m_board, id);
+								}
 							}
 						}
 						else
@@ -800,6 +806,7 @@ package
 			var tileRight:Number = tile.x * m_board.tileSideLength + m_board.tileSideLength * .85;
 			var tileTop:Number = tile.y * m_board.tileSideLength + m_board.tileSideLength * .85;
 			var tileBottom:Number = tile.y * m_board.tileSideLength + m_board.tileSideLength;
+			
 			if (objLeft <= tileRight && objRight >= tileLeft && objY >= tileTop && objY <= tileBottom) {
 				result = true;
 			}
@@ -1238,12 +1245,25 @@ package
 		private function trampBelowPlayer():Boolean
 		{
 			for each (var tile:IntPair in getTilesInDirection(m_player, Constants.DOWN)) {
-				//trace("A:" + (m_player.asset.y + m_player.height - tile.y * m_board.tileSideLength));
-				//trace(m_player.dy);
 				if (m_board.getTile(tile.x, tile.y) == Constants.TRAMP && m_player.asset.y + m_player.height == tile.y * m_board.tileSideLength) 
 					return true;
 			}
 			return false;
+		}
+		
+		/**
+		 * Returns the button below the player, if it exists
+		 * @return id: -1 if does not exist.
+		 */
+		private function playerOnButton():int
+		{
+			for each (var tile:IntPair in getTilesInDirection(m_player, Constants.UP)) {
+				var id:int = m_board.getTile(tile.x, tile.y);
+				trace(id);
+				if (isButton(id)) 
+					return id;
+			}
+			return -1;
 		}
 		
 		/**

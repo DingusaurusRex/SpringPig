@@ -16,6 +16,6 @@
 						1,	1,	1,	1,	1,	1,	1,	1,	1,	1,	1,	1
 					],
 	"signs":	[
-					{"id":54, "text":"Try Not To Land Here!!"}
+					{"id":54, "text":"Try Not To Land Here!! \n(R to reset)"}
 				]
 }
