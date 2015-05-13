@@ -84,16 +84,22 @@ package
 		public static const GAME_STOPWATCH_FONT_SIZE:int = 20;
 		public static const GAME_STOPWATCH_TOP_PADDING:int = 10;
 		
-		public static const MENU_STOPWATCH_TEXT:String = "Your Time: ";
+		public static const MENU_STOPWATCH_DEFAULT_TEXT:String = "Your Time: ";
 		public static const MENU_STOPWATCH_HEIGHT:int = 30;
 		public static const MENU_STOPWATCH_FONT_SIZE:int = 25;
 		public static const MENU_STOPWATCH_TEXT_ALIGNMENT:String = "center";
 
         // GameState Values
-        public static const PLAYER_RECORD_TIME_GAME_DEFAULT_TEXT:String = "Previous Best:\n";
-        public static const PLAYER_RECORD_TIME_GAME_FONT_SIZE:int = 14;
+        public static const PLAYER_RECORD_TIME_GAME_DEFAULT_TEXT:String = "Best Time:\n";
+        public static const PLAYER_RECORD_TIME_GAME_FONT_SIZE:int = 20;
         public static const PLAYER_RECORD_TIME_GAME_TOP_PADDING:int = 30;
-        public static const PLAYER_RECORD_TIME_GAME_TEXT_ALIGNMENT:String = "center";
+        public static const PLAYER_RECORD_TIME_GAME_TEXT_ALIGNMENT:String = "left";
+
+        public static const PLAYER_RECORD_TIME_END_LEVEL_DEFAULT_TEXT:String = "Best Time: ";
+        public static const PLAYER_RECORD_TIME_END_LEVEL_NEW_RECORD_TEXT:String = "\nNEW RECORD!";
+        public static const PLAYER_RECORD_TIME_END_LEVEL_FONT_SIZE:int = 25;
+        public static const PLAYER_RECORD_TIME_END_LEVEL_TOP_PADDING:int = 40;
+        public static const PLAYER_RECORD_TIME_END_LEVEL_TEXT_ALIGNMENT:String = "center";
 
 		// Directions
 		public static const RIGHT:int = 0;
@@ -302,7 +308,7 @@ package
                 "- Marc-Antoine Fontenelle\n" +
                 "- Panji Wisesa\n" +
                 "\n" +
-                "Music By:\n" +
+                "Music by:\n" +
                 "- Lizzie Siegel\n" +
                 "\n" +
                 "SFX from:\n" +
@@ -341,6 +347,8 @@ package
 		
 		public static const END_LEVEL_STOPWATCH_TOP_PADDING:int = 150;
 		public static const END_LEVEL_STOPWATCH_LEFT_PADDING:int = 0;
+
+        public static const END_LEVEL_CREDITS_BUTTON_TOP_PADDING:int = 50;
 		
 		public static const END_LEVEL_NEXT_LEVEL_BUTTON_TEXT:String = "[Space] Next Level";
 		public static const END_LEVEL_RESTART_LEVEL_BUTTON_TEXT:String = "[R]estart Last Level";

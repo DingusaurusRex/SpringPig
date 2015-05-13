@@ -17,6 +17,9 @@ public class GameState {
     private static var playerRecordGameText:TextField = new TextField();
     private static var playerRecordGameDefaultTextFormat:TextFormat = new TextFormat();
 
+    private static var playerRecordEndLevelText:TextField = new TextField();
+    private static var playerRecordEndLevelDefaultTextFormat:TextFormat = new TextFormat();
+
     public static function Init(progressionFileName:String, g:Game):void {
         game = g;
         try {
@@ -29,11 +32,19 @@ public class GameState {
                     !playerData.data.hasOwnProperty("mute")) {
                 resetProgress();
             }
+
             playerRecordGameText.text = Constants.PLAYER_RECORD_TIME_GAME_DEFAULT_TEXT + Constants.STOPWATCH_DEFAULT_TIME;
             playerRecordGameDefaultTextFormat.font = Constants.MENU_FONT;
             playerRecordGameDefaultTextFormat.size = Constants.PLAYER_RECORD_TIME_GAME_FONT_SIZE;
             playerRecordGameDefaultTextFormat.align = Constants.PLAYER_RECORD_TIME_GAME_TEXT_ALIGNMENT;
             playerRecordGameText.setTextFormat(playerRecordGameDefaultTextFormat);
+
+            playerRecordEndLevelText.text = Constants.PLAYER_RECORD_TIME_END_LEVEL_DEFAULT_TEXT + Constants.STOPWATCH_DEFAULT_TIME;
+            playerRecordEndLevelText.width = Constants.SCREEN_WIDTH;
+            playerRecordEndLevelDefaultTextFormat.font = Constants.MENU_FONT;
+            playerRecordEndLevelDefaultTextFormat.size = Constants.PLAYER_RECORD_TIME_END_LEVEL_FONT_SIZE;
+            playerRecordEndLevelDefaultTextFormat.align = Constants.PLAYER_RECORD_TIME_END_LEVEL_TEXT_ALIGNMENT;
+            playerRecordEndLevelText.setTextFormat(playerRecordGameDefaultTextFormat);
         } catch (e:Error) {
             saveable = false;
         }
@@ -101,6 +112,19 @@ public class GameState {
             playerRecordGameText.text = Constants.PLAYER_RECORD_TIME_GAME_DEFAULT_TEXT + Stopwatch.formatTiming(getPlayerRecord(level));
             playerRecordGameText.setTextFormat(playerRecordGameDefaultTextFormat);
             return playerRecordGameText;
+        }
+        return new TextField();
+    }
+
+    public static function getPlayerRecordEndLevelTextField(level:int):TextField {
+        if (saveable) {
+            var playerRecordText:String = Constants.PLAYER_RECORD_TIME_END_LEVEL_DEFAULT_TEXT + Stopwatch.formatTiming(getPlayerRecord(level));
+            if (Stopwatch.getCurrentTiming() == playerData.data.personalRecords[game.currLevelIndex]) {
+                playerRecordText += Constants.PLAYER_RECORD_TIME_END_LEVEL_NEW_RECORD_TEXT;
+            }
+            playerRecordEndLevelText.text = playerRecordText;
+            playerRecordEndLevelText.setTextFormat(playerRecordEndLevelDefaultTextFormat);
+            return playerRecordEndLevelText;
         }
         return new TextField();
     }

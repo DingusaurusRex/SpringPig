@@ -32,7 +32,7 @@ public class Stopwatch {
         stopwatchDefaultTextFormat.size = Constants.GAME_STOPWATCH_FONT_SIZE;
         stopwatchText.setTextFormat(stopwatchDefaultTextFormat);
 
-        stopwatchMenuText.text = Constants.MENU_STOPWATCH_TEXT + Constants.STOPWATCH_DEFAULT_TEXT;
+        stopwatchMenuText.text = Constants.MENU_STOPWATCH_DEFAULT_TEXT + Constants.STOPWATCH_DEFAULT_TEXT;
         stopwatchMenuText.height = Constants.MENU_STOPWATCH_HEIGHT;
         stopwatchMenuText.width = Constants.SCREEN_WIDTH;
 
@@ -98,7 +98,7 @@ public class Stopwatch {
         if (started) {
             stopwatchText.text = formatTiming(getCurrentTiming());
             stopwatchText.setTextFormat(stopwatchDefaultTextFormat);
-            stopwatchMenuText.text = Constants.MENU_STOPWATCH_TEXT + stopwatchText.text;
+            stopwatchMenuText.text = Constants.MENU_STOPWATCH_DEFAULT_TEXT + stopwatchText.text;
             stopwatchMenuText.setTextFormat(stopwatchMenuTextFormat);
         }
     }

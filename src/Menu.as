@@ -93,7 +93,11 @@ public class Menu {
         stage.addChild(endLevelMenu);
         Stopwatch.stopwatchMenuText.x = Constants.END_LEVEL_STOPWATCH_LEFT_PADDING;
         Stopwatch.stopwatchMenuText.y = Constants.END_LEVEL_STOPWATCH_TOP_PADDING;
+        var previousRecord:TextField = GameState.getPlayerRecordEndLevelTextField(game.currLevelIndex);
+        previousRecord.x = Stopwatch.stopwatchMenuText.x;
+        previousRecord.y = Stopwatch.stopwatchMenuText.y + Constants.PLAYER_RECORD_TIME_END_LEVEL_TOP_PADDING;
         stage.addChild(Stopwatch.stopwatchMenuText);
+        stage.addChild(previousRecord);
         stage.addEventListener(KeyboardEvent.KEY_DOWN, Menu.onKeyDown);
         stage.focus = stage;
     }
@@ -104,7 +108,11 @@ public class Menu {
         stage.addChild(endGameMenu);
         Stopwatch.stopwatchMenuText.x = Constants.END_GAME_STOPWATCH_LEFT_PADDING;
         Stopwatch.stopwatchMenuText.y = Constants.END_GAME_STOPWATCH_TOP_PADDING;
+        var previousRecord:TextField = GameState.getPlayerRecordEndLevelTextField(game.currLevelIndex);
+        previousRecord.x = Stopwatch.stopwatchMenuText.x;
+        previousRecord.y = Stopwatch.stopwatchMenuText.y + Constants.PLAYER_RECORD_TIME_END_LEVEL_TOP_PADDING;
         stage.addChild(Stopwatch.stopwatchMenuText);
+        stage.addChild(previousRecord);
         stage.addEventListener(KeyboardEvent.KEY_DOWN, Menu.onKeyDown);
         stage.focus = stage;
     }
@@ -555,7 +563,7 @@ class EndGameMenu extends Sprite {
         // Credits button
         creditsButton = Menu.getMenuButton(Constants.CREDITS_BUTTON_TEXT,
                         (Constants.SCREEN_WIDTH - Constants.MENU_BUTTON_WIDTH) / 2,
-                        Constants.SCREEN_HEIGHT / 2,
+                        Constants.SCREEN_HEIGHT / 2 + Constants.END_LEVEL_CREDITS_BUTTON_TOP_PADDING,
                 Menu.onCreditsClick);
 
         // Main menu button
