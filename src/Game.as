@@ -955,8 +955,8 @@ import util.IntPair;
 		 */
 		private function standingOnCrate(obj:PhysicsObject):Boolean
 		{
-			var objLeft:Number = obj.asset.x + 1;
-			var objRight:Number = obj.asset.x + obj.width - 1;
+			var objLeft:Number = obj.asset.x + m_player.airSpeedX;
+			var objRight:Number = obj.asset.x + obj.width - m_player.airSpeedX;
 			var objTop:Number = obj.asset.y;
 			var objBottom:Number = obj.asset.y + obj.height;
 			
