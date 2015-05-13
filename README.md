@@ -16,8 +16,7 @@ TODO:
 	    not falling into holes
 	    jumping up crates
 
-	don't reset time on reset
-	show in game and end level
+	show at end level
 	show beating record
 	total time if start to finish
 	time record menu

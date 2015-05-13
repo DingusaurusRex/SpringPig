@@ -274,11 +274,16 @@ import util.IntPair;
 			
 			Stopwatch.stopwatchText.x = m_meter.x;
 			Stopwatch.stopwatchText.y = m_meter.y + m_meter.height + Constants.GAME_STOPWATCH_TOP_PADDING;
-			
+
+            var previousRecord:TextField = GameState.getPlayerRecordGameTextField(currLevelIndex);
+            previousRecord.x = Stopwatch.stopwatchText.x;
+            previousRecord.y = Stopwatch.stopwatchText.y + Constants.PLAYER_RECORD_TIME_GAME_TOP_PADDING;
+
 			// Add graphics			
 			m_stage.addChild(m_boardSprite);
 			m_stage.addChild(m_meter);
 			m_stage.addChild(Stopwatch.stopwatchText);
+            m_stage.addChild(previousRecord);
 			m_stage.addChild(m_player.asset);
 			
 			// Create Listeners
@@ -598,7 +603,7 @@ import util.IntPair;
 			}
 			
 			m_boardSprite.setPowerupsVisible();
-			
+
 			Stopwatch.start();
 		}
 		

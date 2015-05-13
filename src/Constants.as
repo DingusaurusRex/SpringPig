@@ -88,7 +88,13 @@ package
 		public static const MENU_STOPWATCH_HEIGHT:int = 30;
 		public static const MENU_STOPWATCH_FONT_SIZE:int = 25;
 		public static const MENU_STOPWATCH_TEXT_ALIGNMENT:String = "center";
-		
+
+        // GameState Values
+        public static const PLAYER_RECORD_TIME_GAME_DEFAULT_TEXT:String = "Previous Best:\n";
+        public static const PLAYER_RECORD_TIME_GAME_FONT_SIZE:int = 14;
+        public static const PLAYER_RECORD_TIME_GAME_TOP_PADDING:int = 30;
+        public static const PLAYER_RECORD_TIME_GAME_TEXT_ALIGNMENT:String = "center";
+
 		// Directions
 		public static const RIGHT:int = 0;
 		public static const LEFT:int = 1;

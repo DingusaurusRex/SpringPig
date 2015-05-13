@@ -1,5 +1,9 @@
 package util {
 import flash.net.SharedObject;
+import flash.text.TextField;
+import flash.text.TextFormat;
+
+import util.Stopwatch;
 
 /**
  * ...
@@ -9,6 +13,9 @@ public class GameState {
     private static var saveable:Boolean;
     private static var playerData:SharedObject;
     private static var game:Game;
+
+    private static var playerRecordGameText:TextField = new TextField();
+    private static var playerRecordGameDefaultTextFormat:TextFormat = new TextFormat();
 
     public static function Init(progressionFileName:String, g:Game):void {
         game = g;
@@ -22,6 +29,11 @@ public class GameState {
                     !playerData.data.hasOwnProperty("mute")) {
                 resetProgress();
             }
+            playerRecordGameText.text = Constants.PLAYER_RECORD_TIME_GAME_DEFAULT_TEXT + Constants.STOPWATCH_DEFAULT_TIME;
+            playerRecordGameDefaultTextFormat.font = Constants.MENU_FONT;
+            playerRecordGameDefaultTextFormat.size = Constants.PLAYER_RECORD_TIME_GAME_FONT_SIZE;
+            playerRecordGameDefaultTextFormat.align = Constants.PLAYER_RECORD_TIME_GAME_TEXT_ALIGNMENT;
+            playerRecordGameText.setTextFormat(playerRecordGameDefaultTextFormat);
         } catch (e:Error) {
             saveable = false;
         }
@@ -57,26 +69,40 @@ public class GameState {
     }
 
     public static function muteSave(mute:Boolean):void {
-        playerData.data.mute = mute;
-        playerData.flush();
+        if (saveable) {
+            playerData.data.mute = mute;
+            playerData.flush();
+        }
     }
 
     public static function getPlayerLetestProgress():int {
         if (saveable) {
             return playerData.data.progress;
         }
-        return -1;
+        return 0;
     }
 
     public static function getPlayerOverallProgress():int {
         if (saveable) {
             return playerData.data.unlocked;
         }
-        return -1;
+        return 1;
     }
 
     public static function getPlayerRecord(level:int):int {
-        return playerData.data.personalRecords[level];
+        if (saveable) {
+            return playerData.data.personalRecords[level];
+        }
+        return Constants.STOPWATCH_DEFAULT_TIME;
+    }
+
+    public static function getPlayerRecordGameTextField(level:int):TextField {
+        if (saveable) {
+            playerRecordGameText.text = Constants.PLAYER_RECORD_TIME_GAME_DEFAULT_TEXT + Stopwatch.formatTiming(getPlayerRecord(level));
+            playerRecordGameText.setTextFormat(playerRecordGameDefaultTextFormat);
+            return playerRecordGameText;
+        }
+        return new TextField();
     }
 
     public static function getPlayerMuteOption():Boolean {
