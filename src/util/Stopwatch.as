@@ -115,7 +115,13 @@ public class Stopwatch {
         if (seconds < 10) {
             time += "0";
         }
-        time += String(seconds) + "." + String(milliseconds);
+        time += String(seconds) + ".";
+        if (milliseconds < 10) {
+            time += "00";
+        } else if (milliseconds < 100) {
+            time += "0";
+        }
+        time += String(milliseconds);
         return time;
     }
 }
