@@ -475,7 +475,6 @@ import util.IntPair;
 								// When a player is deliberately pressing down, they should not get y position reset
 								var closeToTop:Boolean = Math.abs(m_player.asset.y + m_player.height - (tile.y * m_board.tileSideLength)) <= m_player.downSpeedY;
 								if (m_player.dy > 0.1) {
-									trace(m_player.dy);
 									closeToTop = true;
 								}
 								if ((tileAboveLadder == Constants.EMPTY || tileAboveLadder == Constants.START || tileAboveLadder == Constants.END)

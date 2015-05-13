@@ -24,5 +24,5 @@ TODO:
 	star based on times
 	instructions under meter
 
-    platforms above lava
+    platforms above lava - DONE
     trampoline indicator
