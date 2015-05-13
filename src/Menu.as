@@ -26,6 +26,7 @@ public class Menu {
     public static var pauseMenu:PauseMenu;
     public static var endLevelMenu:EndLevelMenu;
     public static var endGameMenu:EndGameMenu;
+    public static var timeRecordsMenu:TimeRecordsMenu;
     private static var muteButton:SimpleButton;
     private static var menuInstructions:TextField;
     public static var gameInstructions:TextField;
@@ -41,6 +42,7 @@ public class Menu {
         pauseMenu = new PauseMenu();
         endLevelMenu = new EndLevelMenu();
         endGameMenu = new EndGameMenu();
+        timeRecordsMenu = new TimeRecordsMenu();
         muteButton = Audio.muteButton;
 
         // Instructions
@@ -137,6 +139,14 @@ public class Menu {
         stage.focus = stage;
     }
 
+    public static function createTimeRecordsMenu():void {
+        stage.removeChildren();
+        timeRecordsMenu.regeneratePages();
+        state = Constants.STATE_TIME_RECORDS_MENU;
+        stage.addChild(timeRecordsMenu);
+        stage.focus = stage;
+    }
+
     public static function createCreditsMenu():void {
         stage.removeChildren();
         stage.removeEventListener(KeyboardEvent.KEY_DOWN, game.onKeyDown); // Need to do this whenever leaving game state
@@ -192,6 +202,10 @@ public class Menu {
         createLevelSelectMenu();
     }
 
+    public static function onTimeRecordsClick(event:MouseEvent):void {
+        createTimeRecordsMenu();
+    }
+
     public static function onCreditsClick(event:MouseEvent):void {
         createCreditsMenu();
     }
@@ -244,6 +258,9 @@ public class Menu {
                     case Keyboard.C:
                         createCreditsMenu();
                         break;
+                    case Keyboard.T:
+                        createTimeRecordsMenu();
+                        break;
                 }
                 break;
             case Constants.STATE_END_LEVEL_MENU:
@@ -277,6 +294,13 @@ public class Menu {
                 }
                 break;
             case Constants.STATE_LEVEL_SELECT_MENU:
+                switch (key) {
+                    case Keyboard.M:
+                        createMainMenu();
+                        break;
+                }
+                break;
+            case Constants.STATE_TIME_RECORDS_MENU:
                 switch (key) {
                     case Keyboard.M:
                         createMainMenu();
@@ -390,6 +414,7 @@ class MainMenu extends Sprite {
     private var continueButtonCover:Sprite;
     private var startButton:SimpleButton;
     private var levelSelectButton:SimpleButton;
+    private var timeRecordsButton:SimpleButton;
     private var creditsButton:SimpleButton;
 
     public var blocked:Boolean;
@@ -428,6 +453,12 @@ class MainMenu extends Sprite {
                         startButton.y + Constants.MENU_BUTTON_PADDING_BETWEEN,
                 Menu.onLevelSelectClick);
 
+        // Time records button
+        timeRecordsButton = Menu.getMenuButton(Constants.TIME_RECORDS_BUTTON_TEXT,
+                        (Constants.SCREEN_WIDTH - Constants.MENU_BUTTON_WIDTH) / 2,
+                        levelSelectButton.y + Constants.MENU_BUTTON_PADDING_BETWEEN,
+                Menu.onTimeRecordsClick);
+
         // Credits button
         creditsButton = Menu.getMenuButton(Constants.CREDITS_BUTTON_TEXT,
                         Constants.SCREEN_WIDTH - Constants.MENU_BUTTON_WIDTH - Constants.MAIN_CREDITS_BUTTON_RIGHT_PADDING,
@@ -439,6 +470,7 @@ class MainMenu extends Sprite {
         addChild(continueButton);
         addChild(startButton);
         addChild(levelSelectButton);
+        addChild(timeRecordsButton);
         addChild(creditsButton);
 
         if (GameState.getPlayerLetestProgress() == 0) {
@@ -715,6 +747,126 @@ class LevelSelectMenu extends Sprite {
         addChild(pages[currentPage]);
     }
 }
+
+class TimeRecordsMenu extends Sprite {
+    private var mainMenuButton:SimpleButton;
+    private var title:TextField;
+
+    private var previousPageButton:SimpleButton;
+    private var nextPageButton:SimpleButton;
+    private var currentPage:int;
+
+    private var pages:Array;
+    private var totalPages:int;
+
+    public function TimeRecordsMenu():void {
+        // Main menu button
+        mainMenuButton = Menu.getMenuButton(Constants.MAIN_MENU_BUTTON_TEXT,
+                Constants.MAIN_MENU_BUTTON_TOP_PADDING,
+                Constants.MAIN_MENU_BUTTON_LEFT_PADDING,
+                Menu.onMainMenuClick);
+
+        // Time Record title
+        title = Menu.getMenuTitle(Constants.TIME_RECORDS_TITLE_TEXT,
+                Constants.TIME_RECORDS_TITLE_TOP_PADDING,
+                Constants.TIME_RECORDS_TITLE_FONT_SIZE);
+
+        // Page buttons
+        previousPageButton = Menu.getMenuButton(Constants.TIME_RECORDS_PREVIOUS_PAGE_BUTTON_TEXT,
+                        Constants.SCREEN_WIDTH / Constants.TIME_RECORDS_PAGE_BUTTON_COLUMNS - Constants.MENU_BUTTON_WIDTH / 2,
+                        Constants.SCREEN_HEIGHT - Constants.TIME_RECORDS_PAGE_BUTTON_BOTTOM_PADDING,
+                onPreviousPageClick);
+
+        nextPageButton = Menu.getMenuButton(Constants.TIME_RECORDS_NEXT_PAGE_BUTTON_TEXT,
+                        Constants.SCREEN_WIDTH * (Constants.TIME_RECORDS_PAGE_BUTTON_COLUMNS - 1) / Constants.TIME_RECORDS_PAGE_BUTTON_COLUMNS - Constants.MENU_BUTTON_WIDTH / 2,
+                        Constants.SCREEN_HEIGHT - Constants.TIME_RECORDS_PAGE_BUTTON_BOTTOM_PADDING,
+                onNextPageClick);
+    }
+
+    public function regeneratePages():void {
+        removeChildren();
+
+        var levels:int = GameState.getPlayerOverallProgress();
+        if (Constants.SHOW_ALL_LEVELS) {
+            levels = Menu.game.progression.length;
+        }
+        var levelsPerPage:int = Constants.TIME_RECORDS_ROWS * Constants.TIME_RECORDS_COLUMNS;
+        totalPages = levels / levelsPerPage;
+        if (levels % levelsPerPage != 0) {
+            totalPages++;
+        }
+
+        var pageHeight:int = Constants.SCREEN_HEIGHT - Constants.TIME_RECORDS_PAGE_TOP_PADDING - Constants.TIME_RECORDS_PAGE_BUTTON_BOTTOM_PADDING;
+        pages = new Array();
+
+        var l:int = 0;
+        var p:int;
+        var r:int;
+        var c:int;
+        PageCreation: for (p = 0; p < totalPages; p++) {
+            var page:Sprite = new Sprite();
+            LevelAddition:for (c = 0; c < Constants.TIME_RECORDS_COLUMNS; c++) {
+                for (r = 0; r < Constants.TIME_RECORDS_ROWS; r++) {
+                    var x:int = Constants.SCREEN_WIDTH * (c + 1) / (Constants.TIME_RECORDS_COLUMNS + 1) - Constants.TIME_RECORDS_TIME_RECORD_WIDTH / 2;
+                    var y:int = Constants.TIME_RECORDS_PAGE_TOP_PADDING + pageHeight * r / Constants.TIME_RECORDS_ROWS;
+                    var levelRecord:TextField = Menu.getTextField(Menu.game.progression[l] + Constants.TIME_RECORDS_TIME_RECORD_TEXT + Stopwatch.formatTiming(GameState.getPlayerRecord(l)),
+                            Constants.TIME_RECORDS_TIME_RECORD_HEIGHT,
+                            Constants.TIME_RECORDS_TIME_RECORD_WIDTH,
+                            x,
+                            y,
+                            Constants.MENU_FONT,
+                            Constants.TIME_RECORDS_TIME_RECORD_FONT_SIZE,
+                            Constants.TIME_RECORDS_TIME_RECORD_ALIGNMENT);
+                    page.addChild(levelRecord);
+                    l++;
+                    if (l == levels) {
+                        break LevelAddition;
+                    }
+                }
+            }
+            pages.push(page);
+            if (l == levels) {
+                break PageCreation;
+            }
+        }
+
+        addChild(mainMenuButton);
+        addChild(title);
+
+        currentPage = 0;
+        if (pages.length == 1) {
+            addChild(pages[currentPage]);
+        } else if (pages.length > 1) {
+            addChild(pages[currentPage]);
+            addChild(nextPageButton);
+        }
+    }
+
+    private function onPreviousPageClick(event:MouseEvent):void {
+        removeChild(pages[currentPage]);
+        if (currentPage == totalPages - 1) {
+            addChild(nextPageButton);
+        }
+        currentPage--;
+        if (currentPage == 0) {
+            removeChild(previousPageButton);
+        }
+        addChild(pages[currentPage]);
+    }
+
+    private function onNextPageClick(event:MouseEvent):void {
+        removeChild(pages[currentPage]);
+        if (currentPage == 0) {
+            addChild(previousPageButton);
+        }
+        currentPage++;
+        if (currentPage == totalPages - 1) {
+            removeChild(nextPageButton);
+        }
+        addChild(pages[currentPage]);
+    }
+}
+
 
 class CreditsMenu extends Sprite {
     private var mainMenuButton:SimpleButton;

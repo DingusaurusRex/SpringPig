@@ -229,6 +229,7 @@ package
         public static const STATE_PAUSE_MENU:int = 4;
         public static const STATE_END_LEVEL_MENU:int = 5;
         public static const STATE_END_GAME_MENU:int = 6;
+        public static const STATE_TIME_RECORDS_MENU:int = 7;
 
 		// General menu
 		public static const MENU_FONT:String = "arial";
@@ -279,7 +280,8 @@ package
 
         public static const START_BUTTON_TEXT:String = "[S]tart";
         public static const LEVEL_SELECT_BUTTON_TEXT:String = "Select [L]evel";
-		
+        public static const TIME_RECORDS_BUTTON_TEXT:String = "[T]ime Records";
+
 		public static const MAIN_CREDITS_BUTTON_RIGHT_PADDING:int = 30;
 		public static const MAIN_CREDITS_BUTTON_BOTTOM_PADDING:int = 40;
 		
@@ -300,7 +302,28 @@ package
         public static const LEVEL_SELECT_TIME_RECORD_TEXT:String = "PB: ";
         public static const LEVEL_SELECT_TIME_RECORD_TOP_PADDING:int = 3;
         public static const LEVEL_SELECT_TIME_RECORD_FONT_SIZE:int = 15;
-        public static const LEVEL_SELECT_TIME_RECORD_ALIGNMENT:String = "left";
+        public static const LEVEL_SELECT_TIME_RECORD_ALIGNMENT:String = "center";
+
+        // Time records menu
+        public static const TIME_RECORDS_TITLE_TEXT:String = "Your Best Times";
+        public static const TIME_RECORDS_TITLE_TOP_PADDING:int = 50;
+        public static const TIME_RECORDS_TITLE_FONT_SIZE:int = 80;
+
+        public static const TIME_RECORDS_ROWS:int = 7;
+        public static const TIME_RECORDS_COLUMNS:int = 2;
+
+        public static const TIME_RECORDS_PREVIOUS_PAGE_BUTTON_TEXT:String = "Previous Page";
+        public static const TIME_RECORDS_NEXT_PAGE_BUTTON_TEXT:String = "Next Page";
+        public static const TIME_RECORDS_PAGE_BUTTON_BOTTOM_PADDING:int = 50;
+        public static const TIME_RECORDS_PAGE_BUTTON_COLUMNS:int = 3;
+
+        public static const TIME_RECORDS_PAGE_TOP_PADDING:int = 160;
+
+        public static const TIME_RECORDS_TIME_RECORD_TEXT:String = ": ";
+        public static const TIME_RECORDS_TIME_RECORD_HEIGHT:int = 25;
+        public static const TIME_RECORDS_TIME_RECORD_WIDTH:int = 170;
+        public static const TIME_RECORDS_TIME_RECORD_FONT_SIZE:int = 20;
+        public static const TIME_RECORDS_TIME_RECORD_ALIGNMENT:String = "left";
 		
 		// Credits menu
 		public static const CREDITS_TITLE_TEXT:String = "Credits";
