@@ -476,7 +476,7 @@ import flash.display.Bitmap;
 						break;
 					else if (standingOnCrate(m_player))
 					{
-						crates = getCollidingCrates(m_player)
+ 						crates = getCollidingCrates(m_player)
 						playerTile = getCentralTile(m_player);
 						for each (temp in crates)
 						{
@@ -1328,8 +1328,12 @@ import flash.display.Bitmap;
 		public function getCentralTile(obj:PhysicsObject):IntPair
 		{
 			var centerX:Number = obj.asset.x + obj.width / 2;
-			var centerY:Number = obj.asset.y + obj.height / 2;
-			return new IntPair(Math.floor(centerX / m_board.tileSideLength), Math.floor(centerY / m_board.tileSideLength));
+			var centerY:Number = obj.asset.y;
+			
+			var tileX:Number = centerX / m_board.tileSideLength;
+			var tileY:Number = centerY / m_board.tileSideLength;
+			
+			return new IntPair(Math.floor(tileX), Math.floor(tileY));
 		}
 		
 		/**
