@@ -13,6 +13,7 @@ package model.player
 		
 		public var dy:Number = 0;
 		public var startingPos:IntPair;
+		public var oldX:Number = 0;
 		
 		public var beingPushed:Boolean;
 		public var wasBeingPushed:Boolean

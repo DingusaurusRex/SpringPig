@@ -254,9 +254,14 @@ package view
 						asset.height = tileSideLength;
 						asset.x = x * tileSideLength;
 						asset.y = y * tileSideLength;
-						addChild(asset);
+						if (!isMovingPlatformStart(id))
+							addChild(asset);
 					}
 				}
+			}
+			
+			for each (var plat:Bitmap in m_platformArts) {
+				addChild(plat);
 			}
 			
 			var grid:Sprite = new Sprite();
@@ -293,7 +298,7 @@ package view
 		private function getAssetBitmap(id:int, tile:IntPair):Bitmap
 		{
 			var result:Bitmap = null;
-			if (id >= Constants.MOVING_PLATFORM_START1 && id <= Constants.LONG_MOVING_PLATFORM_START1)
+			if (isMovingPlatformStart(id))
 			{
 				result = new PlatformArt();
 				m_platformArts[id] = result;

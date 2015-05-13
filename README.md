@@ -20,5 +20,5 @@ TODO:
 	time record menu
 	star based on times
 
-    platforms above lava
+    platforms above lava - DONE
     trampoline indicator
