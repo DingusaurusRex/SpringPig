@@ -1541,12 +1541,14 @@ import flash.display.Bitmap;
 					m_keyR = true;
 					break;
 				case Keyboard.ESCAPE :
-					pause = !pause;
-					if (pause) {
-						Menu.createPauseMenu();
-					} else {
-						Menu.removePauseMenu();
-					}
+                    if (Menu.state == Constants.STATE_GAME) {
+                        pause = !pause;
+                        if (pause) {
+                            Menu.createPauseMenu();
+                        } else {
+                            Menu.removePauseMenu();
+                        }
+                    }
 					break;
 			}
 		}

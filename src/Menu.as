@@ -30,7 +30,13 @@ public class Menu {
     private static var muteButton:SimpleButton;
     private static var menuInstructions:TextField;
     public static var gameInstructions:TextField;
-    private static var state:int;
+    private static var playthroughTip:TextField;
+    private static var playthroughTime:TextField;
+    private static var playthroughTimeTextFormat:TextFormat;
+    public static var state:int;
+
+    private static var fullPlaythrough:Boolean;
+    private static var totalTime:int;
 
     // TODO: Background
     public static function Init(s:Stage, g:Game):void {
@@ -64,12 +70,36 @@ public class Menu {
                 Constants.INSTRUCTIONS_GAME_FONT_SIZE,
                 Constants.INSTRUCTIONS_ALIGNMENT);
 
+        playthroughTip = getTextField(Constants.TOTAL_TIME_TIP_TEXT,
+                Constants.TOTAL_TIME_TIP_HEIGHT,
+                Constants.SCREEN_WIDTH,
+                0,
+                        Constants.SCREEN_HEIGHT - Constants.TOTAL_TIME_TIP_BOTTOM_PADDING,
+                Constants.MENU_FONT,
+                Constants.TOTAL_TIME_TIP_FONT_SIZE,
+                Constants.TOTAL_TIME_TIP_ALIGNMENT);
+
+        playthroughTime = getTextField(Constants.TOTAL_TIME_TEXT + Constants.STOPWATCH_DEFAULT_TEXT,
+                Constants.TOTAL_TIME_HEIGHT,
+                Constants.SCREEN_WIDTH,
+                0,
+                        Constants.SCREEN_HEIGHT - Constants.TOTAL_TIME_BOTTOM_PADDING,
+                Constants.MENU_FONT,
+                Constants.TOTAL_TIME_FONT_SIZE,
+                Constants.TOTAL_TIME_ALIGNMENT);
+        playthroughTimeTextFormat = playthroughTime.getTextFormat();
+
         state = 0;
+
+        fullPlaythrough = false;
+        totalTime = 0;
     }
 
     // Menu creation/deletion functions
     public static function createMainMenu():void {
         stage.removeChildren();
+        fullPlaythrough = false;
+        totalTime = 0;
         stage.removeEventListener(KeyboardEvent.KEY_DOWN, game.onKeyDown); // Need to do this whenever leaving game state
         state = Constants.STATE_MAIN_MENU;
         mainMenu.addChild(muteButton);
@@ -112,6 +142,14 @@ public class Menu {
         previousRecord.y = Stopwatch.stopwatchMenuText.y + Constants.PLAYER_RECORD_TIME_END_LEVEL_TOP_PADDING;
         stage.addChild(Stopwatch.stopwatchMenuText);
         stage.addChild(previousRecord);
+        if (fullPlaythrough) {
+            totalTime += Stopwatch.getCurrentTiming();
+            Menu.playthroughTime.text = Constants.TOTAL_TIME_TEXT + Stopwatch.formatTiming(totalTime);
+            Menu.playthroughTime.setTextFormat(Menu.playthroughTimeTextFormat);
+            stage.addChild(Menu.playthroughTime);
+        } else {
+            stage.addChild(playthroughTip);
+        }
         stage.addEventListener(KeyboardEvent.KEY_DOWN, Menu.onKeyDown);
         stage.focus = stage;
     }
@@ -127,6 +165,14 @@ public class Menu {
         previousRecord.y = Stopwatch.stopwatchMenuText.y + Constants.PLAYER_RECORD_TIME_END_LEVEL_TOP_PADDING;
         stage.addChild(Stopwatch.stopwatchMenuText);
         stage.addChild(previousRecord);
+        if (fullPlaythrough) {
+            totalTime += Stopwatch.getCurrentTiming();
+            Menu.playthroughTime.text = Constants.TOTAL_TIME_TEXT + Stopwatch.formatTiming(totalTime);
+            Menu.playthroughTime.setTextFormat(Menu.playthroughTimeTextFormat);
+            stage.addChild(Menu.playthroughTime);
+        } else {
+            stage.addChild(playthroughTip);
+        }
         stage.addEventListener(KeyboardEvent.KEY_DOWN, Menu.onKeyDown);
         stage.focus = stage;
     }
@@ -168,6 +214,8 @@ public class Menu {
         stage.removeChildren();
         mainMenu.enableContinue();
         state = Constants.STATE_GAME;
+        fullPlaythrough = true;
+        totalTime = 0;
         game.startFirstLevel();
     }
 
@@ -175,6 +223,11 @@ public class Menu {
         stage.removeEventListener(KeyboardEvent.KEY_DOWN, Menu.onKeyDown);
         stage.removeChild(endLevelMenu);
         state = Constants.STATE_GAME;
+        if (fullPlaythrough) {
+            stage.removeChild(playthroughTime);
+        } else {
+            stage.removeChild(playthroughTip);
+        }
         game.startNextLevel();
     }
 
@@ -182,6 +235,13 @@ public class Menu {
         stage.removeEventListener(KeyboardEvent.KEY_DOWN, Menu.onKeyDown);
         stage.removeChild(endLevelMenu);
         state = Constants.STATE_GAME;
+        if (fullPlaythrough) {
+            stage.removeChild(playthroughTime);
+        } else {
+            stage.removeChild(playthroughTip);
+        }
+        fullPlaythrough = false;
+        totalTime = 0;
         game.restartLevel();
     }
 

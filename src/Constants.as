@@ -394,6 +394,20 @@ package
 		public static const END_GAME_SUBTITLE_TEXT:String = "You have beaten Spring Pig";
 		public static const END_GAME_SUBTITLE_TOP_PADDING:int = 150;
 		public static const END_GAME_SUBTITLE_FONT_SIZE:int = 50;
+
+        // Full playthrough tip
+        public static const TOTAL_TIME_TIP_TEXT:String = "Tip: Play through the whole game with no continue and no restart to see playthrough time.";
+        public static const TOTAL_TIME_TIP_BOTTOM_PADDING:int = 40;
+        public static const TOTAL_TIME_TIP_HEIGHT:int = 25;
+        public static const TOTAL_TIME_TIP_FONT_SIZE:int = 15;
+        public static const TOTAL_TIME_TIP_ALIGNMENT:String = "center";
+
+        // Full playthrough time
+        public static const TOTAL_TIME_TEXT:String = "Total Playthrough Time: ";
+        public static const TOTAL_TIME_BOTTOM_PADDING:int = 45;
+        public static const TOTAL_TIME_HEIGHT:int = 30;
+        public static const TOTAL_TIME_FONT_SIZE:int = 20;
+        public static const TOTAL_TIME_ALIGNMENT:String = "center";
 	}
 
 }
