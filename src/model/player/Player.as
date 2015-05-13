@@ -37,8 +37,8 @@ package model.player
 			
 			var frac:Number = tileSideLength / Constants.BASE_SIDE_LENGTH;
 			speedX = Constants.PLAYER_SPEED * frac;
-			//cratePushSpeed = Constants.CRATE_SPEED * frac;
-			cratePushSpeed = 1;
+			cratePushSpeed = Constants.CRATE_SPEED * frac;
+			//cratePushSpeed = 1;
 			upSpeedY = Constants.LADDER_UP_SPEED * frac;
 			downSpeedY = Constants.LADDER_DOWN_SPEED * frac;
 			airSpeedX = Constants.AIR_SPEED * frac;

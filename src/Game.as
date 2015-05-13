@@ -373,13 +373,13 @@ import flash.display.Bitmap;
 						if (crate)
 						{
 							crate.beingPushed = true;
-							var oldCrateX:Number = crate.asset.x;
+							crate.oldX = crate.asset.x;
 							var oldPlayerX:Number = m_player.asset.x;
 							crate.asset.x += m_player.cratePushSpeed;
 							m_player.asset.x = crate.asset.x - m_player.width;
 							if (checkCrateCollision(crate, Constants.RIGHT) || (crate.inAir && !standingOnCrate(crate)))
 							{
-								crate.asset.x = oldCrateX;
+								//crate.asset.x = oldCrateX;
 								m_player.inAir ? m_player.asset.x = m_player.asset.x - m_player.airSpeedX : m_player.asset.x = m_player.asset.x - m_player.speedX;
 							}
 						}
@@ -420,13 +420,13 @@ import flash.display.Bitmap;
 						if (crate)
 						{
 							crate.beingPushed = true;
-							oldCrateX = crate.asset.x;
+							crate.oldX = crate.asset.x;
 							oldPlayerX = m_player.asset.x;
 							crate.asset.x -= m_player.cratePushSpeed;
 							m_player.asset.x = crate.asset.x + crate.width;
 							if (checkCrateCollision(crate, Constants.LEFT) || (crate.inAir && !standingOnCrate(crate)))
 							{
-								crate.asset.x = oldCrateX;
+								//crate.asset.x = oldCrateX;
 								m_player.inAir ? m_player.asset.x = m_player.asset.x + m_player.airSpeedX : m_player.asset.x = m_player.asset.x + m_player.speedX;
 							}
 						}
@@ -902,6 +902,7 @@ import flash.display.Bitmap;
 					// If colliding with a crate, move the crate
 					if (crateAbove(crate) || crate.asset.x + crate.width >= m_board.boardWidthInPixels)
 					{
+						crate.asset.x = crate.oldX;
 						return true;
 					}
 					// If you ran into a wall, keep the player in the previous square
@@ -920,6 +921,7 @@ import flash.display.Bitmap;
 							id == Constants.TRAMP ||
 							isClosedGate(id))
 						{
+							crate.asset.x = tile.x * m_board.tileSideLength
 							return true;
 						}
 					}
@@ -928,6 +930,7 @@ import flash.display.Bitmap;
 					// If colliding with a crate, move the crate
 					if (crateAbove(crate) || crate.asset.x < 0)
 					{
+						crate.asset.x = crate.oldX;
 						return true;
 					}
 					// If you ran into a wall, keep the player in the previous square
@@ -945,6 +948,7 @@ import flash.display.Bitmap;
 							id == Constants.TRAMP ||
 							isClosedGate(id))
 						{
+							crate.asset.x = (tile.x + 1) * m_board.tileSideLength
 							return true;
 						}
 					}
