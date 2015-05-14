@@ -183,8 +183,12 @@ public class Menu {
             totalTime += Stopwatch.getCurrentTiming();
             Menu.playthroughTime.text = Constants.TOTAL_TIME_TEXT + Stopwatch.formatTiming(totalTime);
             Menu.playthroughTime.setTextFormat(Menu.playthroughTimeTextFormat);
+            mainMenu.updateBestPlaythroughTime();
         }
-        mainMenu.updateBestPlaythroughTime();
+    }
+
+    public static function removeBestPlaythroughTime():void {
+        mainMenu.removeBestPlaythroughTime();
     }
 
     public static function createLevelSelectMenu():void {
@@ -598,10 +602,11 @@ class MainMenu extends Sprite {
             bestPlaythroughTime.setTextFormat(bestPlaythroughTimeTextFormat);
             addChild(bestPlaythroughTime);
         }
-        if (GameState.getPlayerBestPlaythroughTime() == Constants.STOPWATCH_DEFAULT_TIME) {
-            addChild(bestPlaythroughTime);
-            removeChild(bestPlaythroughTime);
-        }
+    }
+
+    public function removeBestPlaythroughTime():void {
+        addChild(bestPlaythroughTime);
+        removeChild(bestPlaythroughTime);
     }
 }
 

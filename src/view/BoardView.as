@@ -128,6 +128,23 @@ package view
 		[Embed(source = "../../assets/art/tiles/buttons/purple_up.png")]
 		private var PurpleUpArt:Class
 		
+		[Embed(source = "../../assets/art/tiles/buttons/red_pop_up.png")]
+		private var RedPopUpArt:Class
+		
+		[Embed(source = "../../assets/art/tiles/buttons/blue_pop_up.png")]
+		private var BluePopUpArt:Class
+		
+		[Embed(source = "../../assets/art/tiles/buttons/green_pop_up.png")]
+		private var GreenPopUpArt:Class
+		
+		[Embed(source = "../../assets/art/tiles/buttons/yellow_pop_up.png")]
+		private var YellowPopUpArt:Class
+		
+		[Embed(source = "../../assets/art/tiles/buttons/purple_pop_up.png")]
+		private var PurplePopUpArt:Class
+		
+		
+		
 		/**
 		 * Gate Assets
 		**/
@@ -366,23 +383,23 @@ package view
 						m_buttonArts[id] = result;
 						break;
 					case Constants.POPUP_BUTTON1:
-						result = new RedUpArt();
+						result = new RedPopUpArt();
 						m_buttonArts[id] = result;
 						break;
 					case Constants.POPUP_BUTTON2:
-						result = new BlueUpArt();
+						result = new BluePopUpArt();
 						m_buttonArts[id] = result;
 						break;
 					case Constants.POPUP_BUTTON3:
-						result = new GreenUpArt();
+						result = new GreenPopUpArt();
 						m_buttonArts[id] = result;
 						break;
 					case Constants.POPUP_BUTTON4:
-						result = new PurpleUpArt();
+						result = new PurplePopUpArt();
 						m_buttonArts[id] = result;
 						break;
 					case Constants.POPUP_BUTTON5:
-						result = new YellowUpArt();
+						result = new YellowPopUpArt();
 						m_buttonArts[id] = result;
 						break;
 					case Constants.TIMES2:
@@ -680,19 +697,19 @@ package view
 					m_buttonArts[id] = new YellowUpArt();
 					break;
 				case Constants.POPUP_BUTTON1:
-					m_buttonArts[id] = new RedUpArt();
+					m_buttonArts[id] = new RedPopUpArt();
 					break
 				case Constants.POPUP_BUTTON2:
-					m_buttonArts[id] = new BlueUpArt();
+					m_buttonArts[id] = new BluePopUpArt();
 					break
 				case Constants.POPUP_BUTTON3:
-					m_buttonArts[id] = new GreenUpArt();
+					m_buttonArts[id] = new GreenPopUpArt();
 					break
 				case Constants.POPUP_BUTTON4:
-					m_buttonArts[id] = new PurpleUpArt();
+					m_buttonArts[id] = new PurplePopUpArt();
 					break
 				case Constants.POPUP_BUTTON5:
-					m_buttonArts[id] = new YellowUpArt();
+					m_buttonArts[id] = new YellowPopUpArt();
 					break
 				default:
 					m_buttonArts[id] = new ButtonUpArt();

@@ -16,6 +16,6 @@
 					],
 	"signs":	[
 					{"id":54, "text":"Fall off the ledge to build up energy!"},
-					{"id":55, "text":"Press space to use your stored energy!"}
+					{"id":55, "text":"Press space to spring using your stored energy!"}
 				]
 	}
