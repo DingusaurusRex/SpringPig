@@ -54,7 +54,7 @@ package model.player
 		
 		public function get width():int
 		{
-			return m_asset.width - 1;
+			return m_asset.width;
 		}
 		
 		public function set width(val:int):void
