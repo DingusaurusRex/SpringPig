@@ -830,6 +830,13 @@ package
 				case Constants.LEFT:
 					break;
 				case Constants.DOWN:
+					// Check for crate collisions
+					if (collidingWithCrate(crate, Constants.DOWN))
+					{
+						trace("crate");
+					}
+					
+					// Check for tile collisions
 					for each (var tile:IntPair in getTilesInDirection(crate, Constants.DOWN)) {
 						var id:int = m_board.getTile(tile.x, tile.y);
 						if (tile.x * m_board.tileSideLength != crate.asset.x + crate.width) {
@@ -854,12 +861,65 @@ package
 			return false;
 		}
 		
+		/**
+		 * Resets all crates
+		 */
 		private function resetCrates():void
 		{
 			for each (var crate:Crate in m_board.crates)
 			{
 				crate.reset();
 			}
+		}
+		
+		/**
+		 * Returns whether the given PhysicsObject is colliding with any crates in the given direction
+		 * @param	obj
+		 * @param	direction
+		 * @return	Boolean
+		 */
+		private function collidingWithCrate(obj:PhysicsObject, direction:int):Boolean
+		{
+			var result:Boolean = false;
+			
+			var objLeft:Number = obj.asset.x;
+			var objRight:Number = obj.asset.x + obj.width;
+			var objTop:Number = obj.asset.y;
+			var objBottom:Number = obj.asset.y + obj.height;
+			
+			
+			switch (direction)
+			{
+				case Constants.RIGHT:
+					break;
+				case Constants.LEFT:
+					break;
+				case Constants.UP:
+					break;
+				case Constants.DOWN:
+					for each (var crate:Crate in m_board.crates)
+					{
+						if (obj.asset.y < crate.asset.y)
+						{
+							var crateLeft:Number = crate.asset.x;
+							var crateRight:Number = crate.asset.x + crate.width;
+							var crateTop:Number = crate.asset.y;
+							var crateBottom:Number = crate.asset.y + crate.height;
+							
+							if (((crateLeft <= objLeft && objLeft < crateRight) ||
+							      crateLeft <= objRight && objRight < crateRight) &&
+								((crateTop <= objTop && objTop < crateBottom) ||
+								  crateTop <= objBottom && objBottom < crateBottom))
+								  {
+									  result = true;
+								  }
+						}
+					}
+					break;
+				default:
+					break;
+			}
+			return result;
 		}
 		
 		/**
@@ -977,7 +1037,7 @@ package
 		{
 			for each (var tile:IntPair in getTilesInDirection(m_player, Constants.UP)) {
 				var id:int = m_board.getTile(tile.x, tile.y);
-				trace(id);
+				//trace(id);
 				if (isButton(id)) 
 					return id;
 			}
