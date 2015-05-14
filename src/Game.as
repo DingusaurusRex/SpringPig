@@ -810,6 +810,7 @@ package
 			for each (var crate:Crate in m_board.crates)
 			{
 				crate.updatePosition(m_board.tileSideLength);
+				checkCrateCollision(crate, Constants.DOWN);
 			}
 		}
 		
@@ -829,6 +830,23 @@ package
 				case Constants.LEFT:
 					break;
 				case Constants.DOWN:
+					for each (var tile:IntPair in getTilesInDirection(crate, Constants.DOWN)) {
+						var id:int = m_board.getTile(tile.x, tile.y);
+						if (tile.x * m_board.tileSideLength != crate.asset.x + crate.width) {
+							// If the tile below is something we collide with, collide
+							if (id != Constants.EMPTY &&
+								id != Constants.START &&
+								id != Constants.CRATE &&
+								!isButton(id) && 
+								!isOpenGate(id) &&
+								!isMovingPlatformStartOrEnd(id))
+							{
+								crate.asset.y = (int) (tile.y * m_board.tileSideLength - crate.height);
+								crate.velocity = 0;
+								crate.inAir = false;								
+							}
+						}
+					}
 					break;
 				default:
 					break;
