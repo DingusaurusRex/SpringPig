@@ -139,6 +139,7 @@ package
 				updateButtons();
 				displaySign();
 				updateCrates();
+				
 				var wasInAir:Boolean = m_player.inAir;
 				checkPlayerCollision(Constants.DOWN); // Sets player.inAir
 				// Check if the player has started falling. If so, get his starting height in order to later calculate energy gained.
@@ -216,24 +217,6 @@ package
 						{
 							m_player.startingHeight = getYPositionOfPlayer();
 						}
-					}
-				}
-				for each (var crate:Crate in m_board.crates)
-				{
-					//if (!crate.wasBeingPushed && crate.beingPushed)
-					//{
-						//trace("push");
-					//}
-					//else if (crate.wasBeingPushed && !crate.beingPushed)
-					//{
-						//trace("not push");
-						//var crateTile:IntPair = getCentralTile(crate);
-						//crate.asset.x = crateTile.x * m_board.tileSideLength;
-					//}
-					if (crate.inAir && !standingOnCrate(crate))
-					{
-						var crateTile:IntPair = getCentralTile(crate);
-						crate.asset.x = crateTile.x * m_board.tileSideLength;
 					}
 				}
 			}
@@ -370,34 +353,7 @@ package
 			switch(direction)
 			{
 				case Constants.RIGHT: 
-					// If colliding with a crate, move the crate
-					if (collidingWithCrate(m_player))
-					{
-						var crates:Vector.<Crate> = getCollidingCrates(m_player)
-						var playerTile:IntPair = getCentralTile(m_player);
-						for each (var temp:Crate in crates)
-						{
-							var crateTile:IntPair = getCentralTile(temp);
-							if (crateTile.x >= playerTile.x && crateTile.y == playerTile.y)
-							{
-								var crate:Crate = temp;
-								break;
-							}
-						}
-						if (crate)
-						{
-							crate.beingPushed = true;
-							crate.oldX = crate.asset.x;
-							var oldPlayerX:Number = m_player.asset.x;
-							crate.asset.x += m_player.cratePushSpeed;
-							m_player.asset.x = crate.asset.x - m_player.width;
-							if (checkCrateCollision(crate, Constants.RIGHT) || (crate.inAir && !standingOnCrate(crate)))
-							{
-								//crate.asset.x = oldCrateX;
-								m_player.inAir ? m_player.asset.x = m_player.asset.x - m_player.airSpeedX : m_player.asset.x = m_player.asset.x - m_player.speedX;
-							}
-						}
-					}
+					// Check Crates Here
 					// If you ran into a wall, keep the playeoh fur in the previous square
 					for each (var tile:IntPair in getTilesInDirection(m_player, Constants.RIGHT))
 					{
@@ -419,34 +375,7 @@ package
 					}
 					break;
 				case Constants.LEFT:
-					// If colliding with a crate, move the crate
-					if (collidingWithCrate(m_player))
-					{
-						crates = getCollidingCrates(m_player)
-						playerTile = getCentralTile(m_player);
-						for each (temp in crates)
-						{
-							crateTile = getCentralTile(temp);
-							if (crateTile.x <= playerTile.x && crateTile.y == playerTile.y)
-							{
-								crate = temp;
-								break;
-							}
-						}
-						if (crate)
-						{
-							crate.beingPushed = true;
-							crate.oldX = crate.asset.x;
-							oldPlayerX = m_player.asset.x;
-							crate.asset.x -= m_player.cratePushSpeed;
-							m_player.asset.x = crate.asset.x + crate.width;
-							if (checkCrateCollision(crate, Constants.LEFT) || (crate.inAir && !standingOnCrate(crate)))
-							{
-								//crate.asset.x = oldCrateX;
-								m_player.inAir ? m_player.asset.x = m_player.asset.x + m_player.airSpeedX : m_player.asset.x = m_player.asset.x + m_player.speedX;
-							}
-						}
-					}
+					// Check Crates Here
 					// If you ran into a wall, keep the player in the previous square
 					for each (tile in getTilesInDirection(m_player, Constants.LEFT))
 					{
@@ -492,26 +421,7 @@ package
 					m_player.inAir = true;
 					if (collideWithPlatform(m_player, direction))
 						break;
-					else if (standingOnCrate(m_player))
-					{
- 						crates = getCollidingCrates(m_player)
-						playerTile = getCentralTile(m_player);
-						for each (temp in crates)
-						{
-							crateTile = getCentralTile(temp);
-							if (crateTile.y > playerTile.y)
-							{
-								crate = temp;
-								break;
-							}
-						}
-						if (crate)
-						{
-							m_player.asset.y = (int) (crate.asset.y - m_player.height);
-							m_player.velocity = 0;
-							m_player.inAir = false;
-						}
-					}
+					// Check Crates Here
 					for each (tile in getTilesInDirection(m_player, Constants.DOWN)) {
 						id = m_board.getTile(tile.x, tile.y);
 						if (tile.x * m_board.tileSideLength != m_player.asset.x + m_player.width) {
@@ -900,9 +810,6 @@ package
 			for each (var crate:Crate in m_board.crates)
 			{
 				crate.updatePosition(m_board.tileSideLength);
-				checkCrateCollision(crate, Constants.DOWN);
-				crate.wasBeingPushed = crate.beingPushed;
-				crate.beingPushed = false;
 			}
 		}
 		
@@ -918,222 +825,15 @@ package
 			switch (direction)
 			{
 				case Constants.RIGHT:
-					// If colliding with a crate, move the crate
-					if (crateAbove(crate) || crate.asset.x + crate.width >= m_board.boardWidthInPixels)
-					{
-						crate.asset.x = crate.oldX;
-						return true;
-					}
-					// If you ran into a wall, keep the player in the previous square
-					var tiles:Vector.<IntPair> = getTilesInDirection(crate, Constants.RIGHT)
-					for each (var tile:IntPair in tiles)
-					{
-						var id:int = m_board.getTile(tile.x, tile.y);
-						if (isButton(id) && collidingWithButton(crate, tile))
-						{
-							setButtonDown(m_board, id);
-						}
-						if (id == Constants.WALL ||
-						    id == Constants.LADDER ||
-							id == Constants.LAVA ||
-							id == Constants.END ||
-							id == Constants.TRAMP ||
-							isClosedGate(id))
-						{
-							crate.asset.x = (tile.x - 1) * m_board.tileSideLength
-							return true;
-						}
-					}
 					break;
 				case Constants.LEFT:
-					// If colliding with a crate, move the crate
-					if (crateAbove(crate) || crate.asset.x < 0)
-					{
-						crate.asset.x = crate.oldX;
-						return true;
-					}
-					// If you ran into a wall, keep the player in the previous square
-					for each (tile in getTilesInDirection(crate, Constants.LEFT))
-					{
-						id = m_board.getTile(tile.x, tile.y);
-						if (isButton(id) && collidingWithButton(crate, tile))
-						{
-							setButtonDown(m_board, id);
-						}
-						if (id == Constants.WALL ||
-						    id == Constants.LADDER ||
-							id == Constants.LAVA ||
-							id == Constants.END ||
-							id == Constants.TRAMP ||
-							isClosedGate(id))
-						{
-							crate.asset.x = (tile.x + 1) * m_board.tileSideLength
-							return true;
-						}
-					}
 					break;
 				case Constants.DOWN:
-					crate.inAir = true;
-					if (collideWithPlatform(crate, direction))
-						break;
-					tiles = getTilesInDirection(crate, Constants.DOWN)
-					for each (tile in tiles)
-					{
-						id = m_board.getTile(tile.x, tile.y);
-						if (tile.x * m_board.tileSideLength != crate.asset.x + crate.width) {
-							if (isButton(id) && collidingWithButton(crate, tile)) {
-								setButtonDown(m_board, id);
-							}
-							else if (collidingWithCrate(crate))
-							{
-								crate.asset.y = (int) (tile.y * m_board.tileSideLength - crate.height);
-								crate.velocity = 0;
-								crate.inAir = false;
-							}
-							// If one of the tiles below player is not empty, then player is not falling
-							else if (id != Constants.EMPTY &&
-									 id != Constants.START &&
-									 id != Constants.CRATE &&
-									 !isButton(id) && 
-									!isOpenGate(id) &&
-									!isMovingPlatformStartOrEnd(id)) {
-								crate.asset.y = (int) (tile.y * m_board.tileSideLength - crate.height);
-								crate.velocity = 0;
-								crate.inAir = false;
-							}
-						}
-					}
 					break;
 				default:
 					break;
 			}
 			return false;
-		}
-		
-		/**
-		 * Returns whether the given object is standing on a crate
-		 * @param	obj
-		 * @return
-		 */
-		private function standingOnCrate(obj:PhysicsObject):Boolean
-		{
-			var objLeft:Number = obj.asset.x + m_player.airSpeedX;
-			var objRight:Number = obj.asset.x + obj.width - m_player.airSpeedX;
-			var objTop:Number = obj.asset.y;
-			var objBottom:Number = obj.asset.y + obj.height;
-			
-			for each (var crate:Crate in m_board.crates)
-			{
-				if (obj != crate)
-				{
-					var crateLeft:Number = crate.asset.x;
-					var crateRight:Number = crate.asset.x + crate.width;
-					var crateTop:Number = crate.asset.y;
-					var crateBottom:Number = crate.asset.y + crate.height;
-					if ((objLeft >= crateLeft && objLeft <= crateRight ||
-						objRight >= crateLeft && objRight <= crateRight) &&
-						(objTop >= crateTop && objTop <= crateBottom ||
-						objBottom >= crateTop && objBottom <= crateBottom))
-						{
-							return true;
-						}
-				}
-			}
-			return false;
-		}
-		
-		private function crateAbove(obj:PhysicsObject):Boolean
-		{
-			var objLeft:Number = obj.asset.x + 1;
-			var objRight:Number = obj.asset.x + obj.width - 1;
-			var objTop:Number = obj.asset.y;
-			var objBottom:Number = obj.asset.y + obj.height - 1;
-			
-			for each (var crate:Crate in m_board.crates)
-			{
-				if (obj != crate)
-				{
-					var crateLeft:Number = crate.asset.x;
-					var crateRight:Number = crate.asset.x + crate.width;
-					var crateTop:Number = crate.asset.y;
-					var crateBottom:Number = crate.asset.y + crate.height;
-					if ((objLeft >= crateLeft && objLeft <= crateRight ||
-						objRight >= crateLeft && objRight <= crateRight) &&
-						(objTop >= crateTop && objTop <= crateBottom ||
-						objBottom >= crateTop && objBottom <= crateBottom))
-						{
-							return true;
-						}
-				}
-			}
-			return false;
-		}
-		
-		/**
-		 * Returns whether the given object is colliding with a crate
-		 * @param	obj
-		 * @return
-		 */
-		private function collidingWithCrate(obj:PhysicsObject):Boolean
-		{
-			var objLeft:Number = obj.asset.x + 1;
-			var objRight:Number = obj.asset.x + obj.width - 1;
-			var objTop:Number = obj.asset.y + 1;
-			var objBottom:Number = obj.asset.y + obj.height - 1;
-			
-			for each (var crate:Crate in m_board.crates)
-			{
-				if (obj != crate)
-				{
-					var crateLeft:Number = crate.asset.x;
-					var crateRight:Number = crate.asset.x + crate.width;
-					var crateTop:Number = crate.asset.y;
-					var crateBottom:Number = crate.asset.y + crate.height;
-					if ((objLeft >= crateLeft && objLeft <= crateRight ||
-						objRight >= crateLeft && objRight <= crateRight) &&
-						(objTop >= crateTop && objTop <= crateBottom ||
-						objBottom >= crateTop && objBottom <= crateBottom))
-						{
-							return true;
-						}
-				}
-			}
-			return false;
-		}
-		
-		/**
-		 * Returns the crate that the object is colliding with
-		 * returns null if not colliding with a crate
-		 * @param	obj
-		 * @return
-		 */
-		private function getCollidingCrates(obj:PhysicsObject):Vector.<Crate>
-		{
-			var objLeft:Number = obj.asset.x;
-			var objRight:Number = obj.asset.x + obj.width;
-			var objTop:Number = obj.asset.y;
-			var objBottom:Number = obj.asset.y + obj.height;
-			
-			var result:Vector.<Crate> = new Vector.<Crate>();
-			
-			for each (var crate:Crate in m_board.crates)
-			{
-				if (obj != crate)
-				{
-					var crateLeft:Number = crate.asset.x;
-					var crateRight:Number = crate.asset.x + crate.width;
-					var crateTop:Number = crate.asset.y;
-					var crateBottom:Number = crate.asset.y + crate.height;
-					if ((objLeft >= crateLeft && objLeft <= crateRight ||
-						objRight >= crateLeft && objRight <= crateRight) &&
-						(objTop >= crateTop && objTop <= crateBottom ||
-						objBottom >= crateTop && objBottom <= crateBottom))
-						{
-							result.push(crate);
-						}
-				}
-			}
-			return result;
 		}
 		
 		private function resetCrates():void
