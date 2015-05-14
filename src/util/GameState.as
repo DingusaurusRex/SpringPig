@@ -159,6 +159,7 @@ public class GameState {
         playerData.data.mute = false;
         playerData.data.playthroughBest = Constants.STOPWATCH_DEFAULT_TIME;
         playerData.flush();
+        Menu.updatePlaythroughTime();
     }
 }
 

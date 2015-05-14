@@ -104,6 +104,9 @@ public class Stopwatch {
     }
 
     public static function formatTiming(timing:int):String {
+        if (timing == Constants.STOPWATCH_DEFAULT_TIME) {
+            return "N/A";
+        }
         var time:String = "";
         var minutes:int = timing / 60000;
         var seconds:int = (timing % 60000) / 1000;
