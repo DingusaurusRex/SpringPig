@@ -887,7 +887,6 @@ package
 			var objTop:Number = obj.asset.y;
 			var objBottom:Number = obj.asset.y + obj.height;
 			
-			
 			switch (direction)
 			{
 				case Constants.RIGHT:
@@ -906,10 +905,11 @@ package
 							var crateTop:Number = crate.asset.y;
 							var crateBottom:Number = crate.asset.y + crate.height;
 							
-							if (((crateLeft <= objLeft && objLeft < crateRight) ||
-							      crateLeft <= objRight && objRight < crateRight) &&
-								((crateTop <= objTop && objTop < crateBottom) ||
-								  crateTop <= objBottom && objBottom < crateBottom))
+							if (((crateLeft < objLeft && objLeft < crateRight) ||
+							      crateLeft < objRight && objRight < crateRight ||
+								  crateLeft == objLeft && objRight == crateRight) &&
+								((crateTop < objTop && objTop < crateBottom) ||
+								  crateTop < objBottom && objBottom < crateBottom))
 								  {
 									  result = true;
 								  }
