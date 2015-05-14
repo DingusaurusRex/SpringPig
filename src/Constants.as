@@ -338,7 +338,7 @@ package
                 "- Panji Wisesa\n" +
                 "\n" +
                 "Music by:\n" +
-                "- Lizzie Siegel\n" +
+                "- Lizzie Seigel\n" +
                 "\n" +
                 "SFX from:\n" +
                 "-http://www.freesfx.co.uk\n" +
