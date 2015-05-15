@@ -149,15 +149,18 @@ package
 				}
 				
 				// Process Keyboard controls
-				if (m_keyUp && !m_player.inAir) {
-					if (collidingWithLadder()) { // Go up the ladder
-						m_player.asset.y -= m_player.upSpeedY;
-						checkPlayerCollision(Constants.UP);
-					} else { // Jump
-                        util.Audio.playJumpSFX();
-						m_player.velocity = Constants.JUMP_VELOCITIES[1];
-						m_player.inAir = true;
-						m_player.startingHeight = getYPositionOfPlayer();
+				if (m_keyUp)
+				{
+					if( !m_player.inAir) {
+						if (collidingWithLadder()) { // Go up the ladder
+							m_player.asset.y -= m_player.upSpeedY;
+							checkPlayerCollision(Constants.UP);
+						} else { // Jump
+							util.Audio.playJumpSFX();
+							m_player.velocity = Constants.JUMP_VELOCITIES[1];
+							m_player.inAir = true;
+							m_player.startingHeight = getYPositionOfPlayer();
+						}
 					}
 				}
 				if (m_keyDown && ladderBelowPlayer()) {
@@ -354,6 +357,18 @@ package
 			{
 				case Constants.RIGHT: 
 					// Check Crates Here
+					var crates:Vector.<Crate> = getCollidingCrates(m_player, Constants.RIGHT)
+					if (crates.length > 0)
+					{
+						var newX:Number = m_player.asset.x;
+						for each (var crate:Crate in crates)
+						{
+							crate.asset.x += m_player.cratePushSpeed;
+							checkCrateCollision(crate, Constants.RIGHT)
+							newX = Math.min(newX, crate.asset.x - m_player.width);
+						}
+						m_player.asset.x = newX;
+					}
 					// If you ran into a wall, keep the playeoh fur in the previous square
 					for each (var tile:IntPair in getTilesInDirection(m_player, Constants.RIGHT))
 					{
@@ -376,6 +391,18 @@ package
 					break;
 				case Constants.LEFT:
 					// Check Crates Here
+					crates = getCollidingCrates(m_player, Constants.LEFT)
+					if (crates.length > 0)
+					{
+						newX = m_player.asset.x;
+						for each (crate in crates)
+						{
+							crate.asset.x -= m_player.cratePushSpeed;
+							checkCrateCollision(crate, Constants.LEFT);
+							newX = Math.max(newX, crate.asset.x + crate.width);
+						}
+						m_player.asset.x = newX;
+					}
 					// If you ran into a wall, keep the player in the previous square
 					for each (tile in getTilesInDirection(m_player, Constants.LEFT))
 					{
@@ -398,6 +425,20 @@ package
 					break;
 				case Constants.UP:
 					// Check for Crates Here
+					crates = getCollidingCrates(m_player, Constants.UP)
+					if (crates.length > 0)
+					{
+						var newY:Number = m_player.asset.x;
+						for each (crate in crates)
+						{
+							crate.asset.x -= m_player.cratePushSpeed;
+							checkCrateCollision(crate, Constants.LEFT);
+							newY = Math.max(newY, crate.asset.y + crate.height);
+						}
+						m_player.startingHeight = getYPositionOfPlayer()
+						m_player.asset.y = newY;
+						m_player.velocity = Constants.INITIAL_FALL_VELOCITY;
+					}
 					//Check that the user has not crashed into a wall above him
 					for each (tile in getTilesInDirection(m_player, Constants.UP)) {
 						id = m_board.getTile(tile.x, tile.y);
@@ -409,7 +450,8 @@ package
 							}
 							if (id == Constants.WALL ||
 								id == Constants.TRAMP ||
-								isClosedGate(id)) {
+								isClosedGate(id))
+							{
 								m_player.startingHeight = getYPositionOfPlayer()
 								m_player.asset.y = (tile.y + 1) * m_board.tileSideLength;
 								m_player.velocity = Constants.INITIAL_FALL_VELOCITY;
@@ -423,16 +465,16 @@ package
 					if (collideWithPlatform(m_player, direction))
 						break;
 					// Check Crates Here
-					var crates:Vector.<Crate> = getCollidingCrates(m_player, Constants.DOWN)
+					crates = getCollidingCrates(m_player, Constants.DOWN)
 					if (crates.length > 0)
 					{
 						// Get the minimum y value of the crates you're colliding with
-						var minY:Number = crates[0].asset.y;
-						for each (var temp:Crate in crates)
+						newY = crates[0].asset.y;
+						for each (crate in crates)
 						{
-							minY = Math.min(minY, temp.asset.y);
+							newY = Math.min(newY, crate.asset.y);
 						}
-						m_player.asset.y = minY - m_player.height;
+						m_player.asset.y = newY - m_player.height;
 						m_player.velocity = 0;
 						m_player.inAir = false;
 					}
@@ -842,17 +884,81 @@ package
 			switch (direction)
 			{
 				case Constants.RIGHT:
+					// Check for crate collisions
+					var crates:Vector.<Crate> = getCollidingCrates(crate, Constants.RIGHT)
+					if (crates.length > 0)
+					{
+						// Get the minimum x value of the crates you're colliding with
+						var newX:Number = crate.asset.x;
+						for each (var temp:Crate in crates)
+						{
+							newX = Math.min(newX, temp.asset.x - crate.width);
+						}
+						crate.asset.x = newX;
+						result = true;
+					}
+					else
+					{
+						for each (var tile:IntPair in getTilesInDirection(crate, Constants.RIGHT)) {
+							var id:int = m_board.getTile(tile.x, tile.y);
+							if (tile.x * m_board.tileSideLength != crate.asset.x + crate.width) {
+								// If the tile below is something we collide with, collide
+								if (id != Constants.EMPTY &&
+									id != Constants.START &&
+									id != Constants.CRATE &&
+									!isButton(id) && 
+									!isOpenGate(id) &&
+									!isMovingPlatformStartOrEnd(id))
+								{
+									crate.asset.x = (tile.x * m_board.tileSideLength - crate.width);
+									result = true;
+								}
+							}
+						}
+					}
 					break;
 				case Constants.LEFT:
+					// Check for crate collisions
+					crates = getCollidingCrates(crate, Constants.LEFT)
+					if (crates.length > 0)
+					{
+						// Get the minimum x value of the crates you're colliding with
+						newX = crate.asset.x
+						for each (temp in crates)
+						{
+							newX = Math.max(newX, temp.asset.x + temp.width)
+						}
+						crate.asset.x = newX;
+						result = true;
+					}
+					else
+					{
+						for each (tile in getTilesInDirection(crate, Constants.LEFT)) {
+							id = m_board.getTile(tile.x, tile.y);
+							if (tile.x * m_board.tileSideLength != crate.asset.x + crate.width) {
+								// If the tile below is something we collide with, collide
+								if (id != Constants.EMPTY &&
+									id != Constants.START &&
+									id != Constants.CRATE &&
+									!isButton(id) && 
+									!isOpenGate(id) &&
+									!isMovingPlatformStartOrEnd(id))
+								{
+									crate.asset.x = ((tile.x + 1) * m_board.tileSideLength);
+									result = true;
+								}
+							}
+						}
+					}
 					break;
 				case Constants.DOWN:
 					// Check for crate collisions
-					var crates:Vector.<Crate> = getCollidingCrates(crate, Constants.DOWN)
+					crates = getCollidingCrates(crate, Constants.DOWN)
 					if (crates.length > 0)
 					{
 						// Get the minimum y value of the crates you're colliding with
 						var minY:Number = crates[0].asset.y;
-						for each (var temp:Crate in crates)
+						for each (temp in crates)
 						{
 							minY = Math.min(minY, temp.asset.y);
 						}
@@ -864,8 +970,8 @@ package
 					else
 					{
 						// Check for tile collisions
-						for each (var tile:IntPair in getTilesInDirection(crate, Constants.DOWN)) {
-							var id:int = m_board.getTile(tile.x, tile.y);
+						for each (tile in getTilesInDirection(crate, Constants.DOWN)) {
+							id = m_board.getTile(tile.x, tile.y);
 							if (tile.x * m_board.tileSideLength != crate.asset.x + crate.width) {
 								// If the tile below is something we collide with, collide
 								if (id != Constants.EMPTY &&
@@ -919,20 +1025,79 @@ package
 			switch (direction)
 			{
 				case Constants.RIGHT:
-					break;
-				case Constants.LEFT:
-					break;
-				case Constants.UP:
-					break;
-				case Constants.DOWN:
 					for each (var crate:Crate in m_board.crates)
 					{
-						if (obj.asset.y < crate.asset.y)
+						if (obj != crate)
 						{
 							var crateLeft:Number = crate.asset.x;
 							var crateRight:Number = crate.asset.x + crate.width;
 							var crateTop:Number = crate.asset.y;
 							var crateBottom:Number = crate.asset.y + crate.height;
+							
+							if (((crateLeft < objLeft && objLeft < crateRight) ||
+								  crateLeft < objRight && objRight < crateRight ||
+								  crateLeft == objLeft && objRight == crateRight) &&
+								((crateTop < objTop && objTop < crateBottom) ||
+								  (crateTop < objBottom && objBottom < crateBottom) ||
+								   crateTop == objTop && crateBottom == objBottom))
+							{
+								result.push(crate);
+							}
+						}
+					}
+					break;
+				case Constants.LEFT:
+					for each (crate in m_board.crates)
+					{
+						if (obj != crate)
+						{
+							crateLeft = crate.asset.x;
+							crateRight = crate.asset.x + crate.width;
+							crateTop = crate.asset.y;
+							crateBottom = crate.asset.y + crate.height;
+							
+							if (((crateLeft < objLeft && objLeft < crateRight) ||
+								  crateLeft < objRight && objRight < crateRight ||
+								  crateLeft == objLeft && objRight == crateRight) &&
+								((crateTop < objTop && objTop < crateBottom) ||
+								  (crateTop < objBottom && objBottom < crateBottom) ||
+								   crateTop == objTop && crateBottom == objBottom))
+							{
+								result.push(crate);
+							}
+						}
+					}
+					break;
+				case Constants.UP:
+					for each (crate in m_board.crates)
+					{
+						if (obj.asset.y > crate.asset.y && obj != crate)
+						{
+							crateLeft = crate.asset.x;
+							crateRight = crate.asset.x + crate.width;
+							crateTop = crate.asset.y;
+							crateBottom = crate.asset.y + crate.height;
+							
+							if (((crateLeft < objLeft && objLeft < crateRight) ||
+							      crateLeft < objRight && objRight < crateRight ||
+								  crateLeft == objLeft && objRight == crateRight) &&
+								((crateTop < objTop && objTop < crateBottom) ||
+								  crateTop < objBottom && objBottom < crateBottom))
+								  {
+									  result.push(crate);
+								  }
+						}
+					}
+					break;
+				case Constants.DOWN:
+					for each (crate in m_board.crates)
+					{
+						if (obj.asset.y < crate.asset.y)
+						{
+							crateLeft = crate.asset.x;
+							crateRight = crate.asset.x + crate.width;
+							crateTop = crate.asset.y;
+							crateBottom = crate.asset.y + crate.height;
 							
 							if (((crateLeft < objLeft && objLeft < crateRight) ||
 							      crateLeft < objRight && objRight < crateRight ||
