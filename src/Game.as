@@ -823,6 +823,8 @@ package
 		 */
 		public function checkCrateCollision(crate:Crate, direction:int):Boolean
 		{
+			var result:Boolean = false;
+			
 			switch (direction)
 			{
 				case Constants.RIGHT:
@@ -831,26 +833,40 @@ package
 					break;
 				case Constants.DOWN:
 					// Check for crate collisions
-					if (collidingWithCrate(crate, Constants.DOWN))
+					var crates:Vector.<Crate> = getCollidingCrates(crate, Constants.DOWN)
+					if (crates.length > 0)
 					{
-						trace("crate");
+						// Get the minimum y value of the crates you're colliding with
+						var minY:Number = crates[0].asset.y;
+						for each (var temp:Crate in crates)
+						{
+							minY = Math.min(minY, temp.asset.y);
+						}
+						crate.asset.y = minY - crate.height;
+						crate.velocity = 0;
+						crate.inAir = false;
+						result = true;
+						
 					}
-					
-					// Check for tile collisions
-					for each (var tile:IntPair in getTilesInDirection(crate, Constants.DOWN)) {
-						var id:int = m_board.getTile(tile.x, tile.y);
-						if (tile.x * m_board.tileSideLength != crate.asset.x + crate.width) {
-							// If the tile below is something we collide with, collide
-							if (id != Constants.EMPTY &&
-								id != Constants.START &&
-								id != Constants.CRATE &&
-								!isButton(id) && 
-								!isOpenGate(id) &&
-								!isMovingPlatformStartOrEnd(id))
-							{
-								crate.asset.y = (int) (tile.y * m_board.tileSideLength - crate.height);
-								crate.velocity = 0;
-								crate.inAir = false;								
+					else
+					{
+						// Check for tile collisions
+						for each (var tile:IntPair in getTilesInDirection(crate, Constants.DOWN)) {
+							var id:int = m_board.getTile(tile.x, tile.y);
+							if (tile.x * m_board.tileSideLength != crate.asset.x + crate.width) {
+								// If the tile below is something we collide with, collide
+								if (id != Constants.EMPTY &&
+									id != Constants.START &&
+									id != Constants.CRATE &&
+									!isButton(id) && 
+									!isOpenGate(id) &&
+									!isMovingPlatformStartOrEnd(id))
+								{
+									crate.asset.y = (tile.y * m_board.tileSideLength - crate.height);
+									crate.velocity = 0;
+									crate.inAir = false;
+									result = true;
+								}
 							}
 						}
 					}
@@ -858,7 +874,7 @@ package
 				default:
 					break;
 			}
-			return false;
+			return result;
 		}
 		
 		/**
@@ -878,9 +894,9 @@ package
 		 * @param	direction
 		 * @return	Boolean
 		 */
-		private function collidingWithCrate(obj:PhysicsObject, direction:int):Boolean
+		private function getCollidingCrates(obj:PhysicsObject, direction:int):Vector.<Crate>
 		{
-			var result:Boolean = false;
+			var result:Vector.<Crate> = new Vector.<Crate>();
 			
 			var objLeft:Number = obj.asset.x;
 			var objRight:Number = obj.asset.x + obj.width;
@@ -911,7 +927,7 @@ package
 								((crateTop < objTop && objTop < crateBottom) ||
 								  crateTop < objBottom && objBottom < crateBottom))
 								  {
-									  result = true;
+									  result.push(crate);
 								  }
 						}
 					}
