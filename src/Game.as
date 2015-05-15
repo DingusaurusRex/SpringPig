@@ -397,6 +397,7 @@ package
 					}
 					break;
 				case Constants.UP:
+					// Check for Crates Here
 					//Check that the user has not crashed into a wall above him
 					for each (tile in getTilesInDirection(m_player, Constants.UP)) {
 						id = m_board.getTile(tile.x, tile.y);
@@ -422,6 +423,19 @@ package
 					if (collideWithPlatform(m_player, direction))
 						break;
 					// Check Crates Here
+					var crates:Vector.<Crate> = getCollidingCrates(m_player, Constants.DOWN)
+					if (crates.length > 0)
+					{
+						// Get the minimum y value of the crates you're colliding with
+						var minY:Number = crates[0].asset.y;
+						for each (var temp:Crate in crates)
+						{
+							minY = Math.min(minY, temp.asset.y);
+						}
+						m_player.asset.y = minY - m_player.height;
+						m_player.velocity = 0;
+						m_player.inAir = false;
+					}
 					for each (tile in getTilesInDirection(m_player, Constants.DOWN)) {
 						id = m_board.getTile(tile.x, tile.y);
 						if (tile.x * m_board.tileSideLength != m_player.asset.x + m_player.width) {
@@ -846,7 +860,6 @@ package
 						crate.velocity = 0;
 						crate.inAir = false;
 						result = true;
-						
 					}
 					else
 					{
