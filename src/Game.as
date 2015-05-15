@@ -363,6 +363,7 @@ package
 						var newX:Number = m_player.asset.x;
 						for each (var crate:Crate in crates)
 						{
+							crate.oldX = crate.asset.x;
 							crate.asset.x += m_player.cratePushSpeed;
 							checkCrateCollision(crate, Constants.RIGHT)
 							newX = Math.min(newX, crate.asset.x - m_player.width);
@@ -397,6 +398,7 @@ package
 						newX = m_player.asset.x;
 						for each (crate in crates)
 						{
+							crate.oldX = crate.asset.x;
 							crate.asset.x -= m_player.cratePushSpeed;
 							checkCrateCollision(crate, Constants.LEFT);
 							newX = Math.max(newX, crate.asset.x + crate.width);
@@ -885,12 +887,12 @@ package
 			{
 				case Constants.RIGHT:
 					// Check for crate collisions
-					var crates:Vector.<Crate> = getCollidingCrates(crate, Constants.RIGHT)
-					if (crates.length > 0)
+					var cratesRight:Vector.<Crate> = getCollidingCrates(crate, Constants.RIGHT);
+					if (cratesRight.length > 0)
 					{
 						// Get the minimum x value of the crates you're colliding with
 						var newX:Number = crate.asset.x;
-						for each (var temp:Crate in crates)
+						for each (var temp:Crate in cratesRight)
 						{
 							newX = Math.min(newX, temp.asset.x - crate.width);
 						}
@@ -919,12 +921,12 @@ package
 					break;
 				case Constants.LEFT:
 					// Check for crate collisions
-					crates = getCollidingCrates(crate, Constants.LEFT)
-					if (crates.length > 0)
+					var cratesLeft:Vector.<Crate> = getCollidingCrates(crate, Constants.LEFT)
+					if (cratesLeft.length > 0)
 					{
 						// Get the minimum x value of the crates you're colliding with
 						newX = crate.asset.x
-						for each (temp in crates)
+						for each (temp in cratesLeft)
 						{
 							newX = Math.max(newX, temp.asset.x + temp.width)
 						}
@@ -953,12 +955,12 @@ package
 					break;
 				case Constants.DOWN:
 					// Check for crate collisions
-					crates = getCollidingCrates(crate, Constants.DOWN)
-					if (crates.length > 0)
+					var cratesDown:Vector.<Crate> = getCollidingCrates(crate, Constants.DOWN)
+					if (cratesDown.length > 0)
 					{
 						// Get the minimum y value of the crates you're colliding with
-						var minY:Number = crates[0].asset.y;
-						for each (temp in crates)
+						var minY:Number = cratesDown[0].asset.y;
+						for each (temp in cratesDown)
 						{
 							minY = Math.min(minY, temp.asset.y);
 						}
@@ -1092,7 +1094,7 @@ package
 				case Constants.DOWN:
 					for each (crate in m_board.crates)
 					{
-						if (obj.asset.y < crate.asset.y)
+						if (obj.asset.y < crate.asset.y && obj != crate)
 						{
 							crateLeft = crate.asset.x;
 							crateRight = crate.asset.x + crate.width;
