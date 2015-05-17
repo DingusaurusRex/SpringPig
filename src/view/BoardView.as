@@ -256,7 +256,7 @@ package view
 						var crate:Crate = new Crate();
 						crate.startingPos = new IntPair(x * tileSideLength, y * tileSideLength);
 						board.crates.push(crate);
-						var crateAsset:DisplayObject = crate.asset;
+						var crateAsset:Sprite = crate.asset;
 					}
 					else
 					{
@@ -274,6 +274,7 @@ package view
 						asset.y = y * tileSideLength;
 						if (!isMovingPlatformStart(id))
 							addChild(asset);
+						asset = null;
 					} else if (crateAsset) {
 						if (id >= Constants.LONG_MOVING_PLATFORM_START1 && id <= Constants.LONG_MOVING_PLATFORM_START2) {
 							crateAsset.width = 2 * tileSideLength;
@@ -282,9 +283,11 @@ package view
 						}
 						crateAsset.height = tileSideLength;
 						crateAsset.x = x * tileSideLength;
+						trace(crateAsset.x);
 						crateAsset.y = y * tileSideLength;
 						if (!isMovingPlatformStart(id))
 							addChild(crateAsset);
+						crateAsset = null;
 					}
 				}
 			}

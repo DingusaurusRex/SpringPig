@@ -52,6 +52,7 @@ package model.player
 		
 		public function reset():void
 		{
+			trace(startingPos.x);
 			asset.x = startingPos.x;
 			asset.y = startingPos.y;
 			dy = 0;
