@@ -10,11 +10,11 @@ package model.player
 	 */
 	public class Player implements PhysicsObject 
 	{
-		[Embed(source="../../../assets/art/player/SpringPigWhole.svg")]
+		[Embed(source = "../../../assets/art/player/pig.png")]
 		private var playerArt:Class;
 		
 		public var energy:int = 0;
-		private var m_asset:Sprite;
+		private var m_asset:Bitmap;
 		public var speedX:Number;
 		public var cratePushSpeed:Number;
 		public var upSpeedY:Number; // Speed on ladder
@@ -32,12 +32,7 @@ package model.player
 		
 		public function Player(tileSideLength:int) 
 		{
-			
-			try {
-				m_asset = new playerArt();
-			} catch(error:Error){
-				trace(error);
-			}
+			m_asset = new playerArt();
 			dy = 0;
 			
 			var frac:Number = tileSideLength / Constants.BASE_SIDE_LENGTH;
@@ -60,7 +55,7 @@ package model.player
 			dy = Math.min(value, Constants.TERMINAL_VELOCITY);
 		}
 		
-		public function get asset():Sprite
+		public function get asset():Bitmap
 		{
 			return m_asset;
 		}

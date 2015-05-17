@@ -255,11 +255,11 @@ package view
 						var crate:Crate = new Crate();
 						crate.startingPos = new IntPair(x * tileSideLength, y * tileSideLength);
 						board.crates.push(crate);
-						var crateAsset:Sprite = crate.asset;
+						var asset:Bitmap = crate.asset;
 					}
 					else
 					{
-						var asset:Bitmap = getAssetBitmap(id, tile);
+						asset = getAssetBitmap(id, tile);
 					}
 					if (asset)
 					{

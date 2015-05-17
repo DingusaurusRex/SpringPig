@@ -1,7 +1,6 @@
 package model.player 
 {
 	import flash.display.Bitmap;
-	import flash.display.Sprite;
 	import util.IntPair;
 	/**
 	 * ...
@@ -19,7 +18,7 @@ package model.player
 		public var beingPushed:Boolean;
 		public var wasBeingPushed:Boolean
 		
-		private var m_asset:Sprite;
+		private var m_asset:Bitmap;
 		private var m_inAir:Boolean = false;
 		private var m_onPlatform:Boolean;
 		
@@ -41,7 +40,7 @@ package model.player
 			dy = Math.min(dy + Constants.GRAVITY, Constants.TERMINAL_VELOCITY);
 		}
 		
-		public function get asset():Sprite
+		public function get asset():Bitmap
 		{
 			return m_asset;
 		}
