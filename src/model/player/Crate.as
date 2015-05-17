@@ -9,7 +9,7 @@ package model.player
 	 */
 	public class Crate implements PhysicsObject 
 	{
-		[Embed(source = "../../../assets/art/tiles/crate.svg")]
+		[Embed(source = "../../../assets/art/tiles/crate.png")]
 		private var CrateArt:Class;
 		
 		public var dy:Number = 0;
@@ -25,11 +25,7 @@ package model.player
 		
 		public function Crate() 
 		{
-			try {
-				m_asset = new CrateArt();
-			} catch (error:Error){
-				trace(error);
-			}
+			m_asset = new CrateArt();
 		}
 		
 		/* INTERFACE model.player.PhysicsObject */
