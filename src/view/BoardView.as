@@ -299,7 +299,10 @@ package view
 				grid.graphics.lineTo(i * tileSideLength, m_boardViewHeight)
 			}
 			grid.graphics.endFill();
-			addChild(grid);
+			
+			if (Constants.SHOW_GRID) {
+				addChild(grid);
+			}
 			
 			// Figure out platform directions
 			setInitialPlatformDirections();

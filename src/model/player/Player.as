@@ -4,7 +4,6 @@ package model.player
 	import cgs.engine.view.mouseInteraction.IDraggable;
 	import flash.display.Bitmap;
 	import flash.display.Sprite;
-	import view.PlayerView;
 	/**
 	 * ...
 	 * @author Marc
