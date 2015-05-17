@@ -344,6 +344,9 @@ package
                 "Music by:\n" +
                 "- Lizzie Seigel\n" +
                 "\n" +
+                "Art by:\n" +
+                "- Barbara Krug\n" +
+                "\n" +
                 "SFX from:\n" +
                 "-http://www.freesfx.co.uk\n" +
                 "-http://www.freesound.org";

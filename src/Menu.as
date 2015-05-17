@@ -39,6 +39,9 @@ public class Menu {
     public static var fullPlaythrough:Boolean;
     public static var playthroughFinished:Boolean;
     public static var totalTime:int;
+	
+	[Embed(source = "../assets/art/SplashScreenPig.svg")]
+	private var BackgroundArt:Class;
 
     // TODO: Background
     public static function Init(s:Stage, g:Game):void {
@@ -501,7 +504,17 @@ class MainMenu extends Sprite {
 
     public var blocked:Boolean;
 
+	[Embed(source = "../assets/art/SplashScreenPig.svg")]
+	private var BackgroundArt:Class;
+	
     public function MainMenu():void {
+		var background:Sprite = new BackgroundArt();
+		background.x = 0;
+		background.y = 0;
+		background.width = Constants.SCREEN_WIDTH;
+		background.height = Constants.SCREEN_HEIGHT;
+		addChild(background);
+		
         // Main title
         title = Menu.getMenuTitle(Constants.GAME_TITLE,
                 Constants.MAIN_TITLE_TOP_PADDING,
@@ -616,12 +629,22 @@ class PauseMenu extends Sprite {
     private var levelInfoFormat:TextFormat;
     private var resumeButton:SimpleButton;
     private var mainMenuButton:SimpleButton;
+	
+	[Embed(source = "../assets/art/SplashScreenPig.svg")]
+	private var BackgroundArt:Class;
 
     public function PauseMenu():void {
         // Background
-        this.graphics.beginFill(Constants.PAUSE_BACKGROUND_COLOR, Constants.PAUSE_BACKGROUND_OPACITY);
-        this.graphics.drawRect(0, 0, Constants.SCREEN_WIDTH, Constants.SCREEN_HEIGHT);
-        this.graphics.endFill();
+		var background:Sprite = new BackgroundArt();
+		background.x = 0;
+		background.y = 0;
+		background.width = Constants.SCREEN_WIDTH;
+		background.height = Constants.SCREEN_HEIGHT;
+		addChild(background);
+		
+        //this.graphics.beginFill(Constants.PAUSE_BACKGROUND_COLOR, Constants.PAUSE_BACKGROUND_OPACITY);
+        //this.graphics.drawRect(0, 0, Constants.SCREEN_WIDTH, Constants.SCREEN_HEIGHT);
+        //this.graphics.endFill();
 
         // Pause title
         title = Menu.getMenuTitle(Constants.PAUSE_TITLE_TEXT,
@@ -669,6 +692,9 @@ class EndLevelMenu extends Sprite {
     private var restartLevelButton:SimpleButton;
     private var mainMenuButton:SimpleButton;
 
+	[Embed(source = "../assets/art/SplashScreenPig.svg")]
+	private var BackgroundArt:Class;
+	
     public function EndLevelMenu():void {
         // End level title
         title = Menu.getMenuTitle(Constants.END_LEVEL_TITLE_TEXT,
@@ -706,6 +732,9 @@ class EndGameMenu extends Sprite {
     private var creditsButton:SimpleButton;
     private var mainMenuButton:SimpleButton;
 
+	[Embed(source = "../assets/art/SplashScreenPig.svg")]
+	private var BackgroundArt:Class;
+	
     public function EndGameMenu():void {
         // End level title
         title = Menu.getMenuTitle(Constants.END_GAME_TITLE_TEXT,
@@ -747,6 +776,9 @@ class LevelSelectMenu extends Sprite {
     private var pages:Array;
     private var totalPages:int;
 
+	[Embed(source = "../assets/art/SplashScreenPig.svg")]
+	private var BackgroundArt:Class;
+	
     public function LevelSelectMenu():void {
         // Main menu button
         mainMenuButton = Menu.getMenuButton(Constants.MAIN_MENU_BUTTON_TEXT,
@@ -872,6 +904,9 @@ class TimeRecordsMenu extends Sprite {
     private var pages:Array;
     private var totalPages:int;
 
+	[Embed(source = "../assets/art/SplashScreenPig.svg")]
+	private var BackgroundArt:Class;
+	
     public function TimeRecordsMenu():void {
         // Main menu button
         mainMenuButton = Menu.getMenuButton(Constants.MAIN_MENU_BUTTON_TEXT,
@@ -988,6 +1023,9 @@ class CreditsMenu extends Sprite {
     private var resetProgress:SimpleButton;
     private var resetProgressCover:Sprite;
 
+	[Embed(source = "../assets/art/SplashScreenPig.svg")]
+	private var BackgroundArt:Class;
+	
     public function CreditsMenu():void {
         // Main menu button
         mainMenuButton = Menu.getMenuButton(Constants.MAIN_MENU_BUTTON_TEXT,
