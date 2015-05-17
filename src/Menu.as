@@ -635,16 +635,16 @@ class PauseMenu extends Sprite {
 
     public function PauseMenu():void {
         // Background
-		var background:Sprite = new BackgroundArt();
-		background.x = 0;
-		background.y = 0;
-		background.width = Constants.SCREEN_WIDTH;
-		background.height = Constants.SCREEN_HEIGHT;
-		addChild(background);
+		//var background:Sprite = new BackgroundArt();
+		//background.x = 0;
+		//background.y = 0;
+		//background.width = Constants.SCREEN_WIDTH;
+		//background.height = Constants.SCREEN_HEIGHT;
+		//addChild(background);
 		
-        //this.graphics.beginFill(Constants.PAUSE_BACKGROUND_COLOR, Constants.PAUSE_BACKGROUND_OPACITY);
-        //this.graphics.drawRect(0, 0, Constants.SCREEN_WIDTH, Constants.SCREEN_HEIGHT);
-        //this.graphics.endFill();
+        this.graphics.beginFill(Constants.PAUSE_BACKGROUND_COLOR, Constants.PAUSE_BACKGROUND_OPACITY);
+        this.graphics.drawRect(0, 0, Constants.SCREEN_WIDTH, Constants.SCREEN_HEIGHT);
+        this.graphics.endFill();
 
         // Pause title
         title = Menu.getMenuTitle(Constants.PAUSE_TITLE_TEXT,
