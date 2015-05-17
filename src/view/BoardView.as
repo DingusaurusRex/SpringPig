@@ -167,7 +167,7 @@ package view
 		[Embed(source = "../../assets/art/tiles/gates/yellow_open.svg")]
 		private var YellowOpenArt:Class
 		
-		[Embed(source = "../../assets/art/SplashScreenPig.svg")]
+		[Embed(source="../../assets/art/fence.svg")]
 		private var BackgroundArt:Class;
 
 		protected var m_boardViewWidth:int;		// The actual total width of the BoardView
@@ -221,12 +221,13 @@ package view
 			background.y = 0;
 			background.width = m_boardViewWidth;
 			background.height = m_boardViewHeight;
+			graphics.beginFill(Constants.BACKGROUND_COLOR);
+			graphics.drawRect(0, 0, m_boardViewWidth, m_boardViewHeight);
+			graphics.endFill();			
 			addChild(background);
-			//graphics.beginFill(Constants.BACKGROUND_COLOR);
-			//graphics.drawRect(0, 0, m_boardViewWidth, m_boardViewHeight);
-			//graphics.endFill();
 			
-			// Draw Tiles
+			
+			// Draw Tiles 
 			for (var y:int = 0; y < board.height; y++)
 			{
 				for (var x:int = 0; x < board.width; x++)
