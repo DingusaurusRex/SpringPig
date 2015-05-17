@@ -15,7 +15,7 @@ import flash.text.TextFormat;
  * @author Panji Wisesa
  */
 public class Audio {
-    [Embed(source = "../../assets/sounds/Spring Pig Loop.mp3")]
+    [Embed(source = "../../assets/sounds/Spring Pig Loop (1).mp3")]
     private static var BGM1:Class;
     // http://www.freesfx.co.uk/
     [Embed(source = "../../assets/sounds/comedy_spring.mp3")]
