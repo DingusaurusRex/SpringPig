@@ -2,7 +2,6 @@ package
 {
 	import cgs.Audio.Audio;
 
-	import flash.display.Bitmap;
 	import flash.display.IDrawCommand;
 	import flash.display.Sprite;
 	import flash.display.Stage;
@@ -75,7 +74,7 @@ package
 		private var m_levelReader:LevelParser;
 		
 		// Platforms
-		private var platforms:Vector.<Bitmap>;
+		private var platforms:Vector.<Sprite>;
 		
 		// Signs
 		private var m_signText:TextField;
@@ -1166,7 +1165,7 @@ package
 		{
 			obj.onPlatform = false;
 			if (isPlatformInObjectTile(obj)) { // Check that a platform is in an object's tile
-				for each (var plat:Bitmap in platforms) {
+				for each (var plat:Sprite in platforms) {
 					var topPlat:int = plat.y;
 					var bottomPlat:int = plat.y + plat.height * .35;
 					var rightPlat:int = plat.x + plat.width;
@@ -1213,7 +1212,7 @@ package
 		{
 			for each (var tile:IntPair in getObjectTiles(obj))
 			{
-				for each (var platform:Bitmap in platforms) {					
+				for each (var platform:Sprite in platforms) {					
 					if ((platform.x >= tile.x * m_board.tileSideLength || platform.x <= (tile.x + 1) * m_board.tileSideLength) &&
 						platform.y >= tile.y * m_board.tileSideLength && platform.y <= (tile.y + 1) * m_board.tileSideLength)
 						return true;

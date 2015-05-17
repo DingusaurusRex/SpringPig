@@ -2,7 +2,6 @@ package view
 {
 	import adobe.utils.CustomActions;
 	import cgs.fractionVisualization.fractionAnimators.grid.GridCompareSizeAnimator;
-	import flash.display.Bitmap;
 	import flash.display.DisplayObject;
 	import flash.display.InterpolationMethod;
 	import flash.display.Sprite;
@@ -25,123 +24,111 @@ package view
 		 * Embedded Assets
 		**/
 		
-		[Embed(source = "../../assets/art/tiles/wall.png")]
+		[Embed(source = "../../assets/art/tiles/wall.svg")]
 		private var WallArt:Class;
 		
-		[Embed(source = "../../assets/art/tiles/lava.png")]
+		[Embed(source = "../../assets/art/tiles/lava.svg")]
 		private var LavaArt:Class;
 		
-		[Embed(source = "../../assets/art/tiles/end.png")]
+		[Embed(source = "../../assets/art/tiles/end.svg")]
 		private var EndArt:Class;
 		
-		[Embed(source="../../assets/art/tiles/ladder.png")]
+		[Embed(source="../../assets/art/tiles/ladder.svg")]
 		private var LadderArt:Class;
 		
-		[Embed(source = "../../assets/art/tiles/trampoline.png")]
+		[Embed(source = "../../assets/art/tiles/trampoline.svg")]
 		private var TrampolineArt:Class;
 		
-		[Embed(source = "../../assets/art/tiles/gate.png")]
-		private var ClosedGateArt:Class;
-		
-		[Embed(source = "../../assets/art/tiles/openGate.png")]
-		private var OpenGateArt:Class;
-		
-		[Embed(source = "../../assets/art/tiles/buttonUP.png")]
-		private var ButtonUpArt:Class;
-		
-		[Embed(source = "../../assets/art/tiles/buttonDown.png")]
-		private var ButtonDownArt:Class;
-		
-		[Embed(source = "../../assets/art/tiles/platform.png")]
+		[Embed(source = "../../assets/art/tiles/platform.svg")]
 		private var PlatformArt:Class;
 		
-		[Embed(source = "../../assets/art/tiles/sign.png")]
+		[Embed(source = "../../assets/art/tiles/sign.svg")]
 		private var SignArt:Class;
 		
 		/**
 		 * Powerups
 		 */
 		
-		[Embed(source = "../../assets/art/tiles/PowerUpPlus1.png")]
+		[Embed(source = "../../assets/art/tiles/PowerUpPlus1.svg")]
 		private var Plus1Art:Class;
 		
-		[Embed(source = "../../assets/art/tiles/PowerUpPlus2.png")]
+		[Embed(source = "../../assets/art/tiles/PowerUpPlus2.svg")]
 		private var Plus2Art:Class;
 		
-		[Embed(source = "../../assets/art/tiles/PowerUpPlus3.png")]
+		[Embed(source = "../../assets/art/tiles/PowerUpPlus3.svg")]
 		private var Plus3Art:Class;
 		
-		[Embed(source = "../../assets/art/tiles/PowerUpPlus4.png")]
+		[Embed(source = "../../assets/art/tiles/PowerUpPlus4.svg")]
 		private var Plus4Art:Class;
 		
-		[Embed(source = "../../assets/art/tiles/PowerUpPlus5.png")]
+		[Embed(source = "../../assets/art/tiles/PowerUpPlus5.svg")]
 		private var Plus5Art:Class;
 		
-		[Embed(source = "../../assets/art/tiles/PowerUpPlus6.png")]
+		[Embed(source = "../../assets/art/tiles/PowerUpPlus6.svg")]
 		private var Plus6Art:Class;
 		
-		[Embed(source = "../../assets/art/tiles/PowerUpPlus7.png")]
+		[Embed(source = "../../assets/art/tiles/PowerUpPlus7.svg")]
 		private var Plus7Art:Class;
 		
-		[Embed(source = "../../assets/art/tiles/PowerUpPlus8.png")]
+		[Embed(source = "../../assets/art/tiles/PowerUpPlus8.svg")]
 		private var Plus8Art:Class;
 		
-		[Embed(source = "../../assets/art/tiles/PowerUpPlus9.png")]
+		[Embed(source = "../../assets/art/tiles/PowerUpPlus9.svg")]
 		private var Plus9Art:Class;
 		
-		[Embed(source = "../../assets/art/tiles/PowerUpPlus10.png")]
+		[Embed(source = "../../assets/art/tiles/PowerUpPlus10.svg")]
 		private var Plus10Art:Class;
 		
-		[Embed(source = "../../assets/art/tiles/PowerUpTimes2.png")]
+		[Embed(source = "../../assets/art/tiles/PowerUpTimes2.svg")]
 		private var Time2Art:Class;
 		
 		/**
 		 * Button Assets
 		**/
 		
-		[Embed(source = "../../assets/art/tiles/buttons/blue_down.png")]
+		[Embed(source = "../../assets/art/tiles/buttons/blue_down.svg")]
 		private var BlueDownArt:Class
 		
-		[Embed(source = "../../assets/art/tiles/buttons/red_down.png")]
+		[Embed(source = "../../assets/art/tiles/buttons/red_down.svg")]
 		private var RedDownArt:Class
 		
-		[Embed(source = "../../assets/art/tiles/buttons/yellow_down.png")]
+		[Embed(source = "../../assets/art/tiles/buttons/yellow_down.svg")]
 		private var YellowDownArt:Class
 		
-		[Embed(source = "../../assets/art/tiles/buttons/green_down.png")]
+		[Embed(source = "../../assets/art/tiles/buttons/green_down.svg")]
 		private var GreenDownArt:Class
 		
-		[Embed(source = "../../assets/art/tiles/buttons/purple_down.png")]
+		[Embed(source = "../../assets/art/tiles/buttons/purple_down.svg")]
 		private var PurpleDownArt:Class
 		
-		[Embed(source = "../../assets/art/tiles/buttons/blue_up.png")]
+		[Embed(source = "../../assets/art/tiles/buttons/blue_up.svg")]
 		private var BlueUpArt:Class
 		
-		[Embed(source = "../../assets/art/tiles/buttons/red_up.png")]
+		[Embed(source = "../../assets/art/tiles/buttons/red_up.svg")]
 		private var RedUpArt:Class
 		
-		[Embed(source = "../../assets/art/tiles/buttons/yellow_up.png")]
+		[Embed(source = "../../assets/art/tiles/buttons/yellow_up.svg")]
 		private var YellowUpArt:Class
 		
-		[Embed(source = "../../assets/art/tiles/buttons/green_up.png")]
+		[Embed(source = "../../assets/art/tiles/buttons/green_up.svg")]
 		private var GreenUpArt:Class
 		
-		[Embed(source = "../../assets/art/tiles/buttons/purple_up.png")]
+		[Embed(source = "../../assets/art/tiles/buttons/purple_up.svg")]
 		private var PurpleUpArt:Class
 		
-		[Embed(source = "../../assets/art/tiles/buttons/red_pop_up.png")]
+		[Embed(source = "../../assets/art/tiles/buttons/red_pop_up.svg")]
 		private var RedPopUpArt:Class
 		
-		[Embed(source = "../../assets/art/tiles/buttons/blue_pop_up.png")]
+		[Embed(source = "../../assets/art/tiles/buttons/blue_pop_up.svg")]
 		private var BluePopUpArt:Class
 		
-		[Embed(source = "../../assets/art/tiles/buttons/green_pop_up.png")]
+		[Embed(source = "../../assets/art/tiles/buttons/green_pop_up.svg")]
 		private var GreenPopUpArt:Class
 		
-		[Embed(source = "../../assets/art/tiles/buttons/yellow_pop_up.png")]
+		[Embed(source = "../../assets/art/tiles/buttons/yellow_pop_up.svg")]
 		private var YellowPopUpArt:Class
 		
-		[Embed(source = "../../assets/art/tiles/buttons/purple_pop_up.png")]
+		[Embed(source = "../../assets/art/tiles/buttons/purple_pop_up.svg")]
 		private var PurplePopUpArt:Class
 		
 		
@@ -150,34 +137,34 @@ package view
 		 * Gate Assets
 		**/
 		
-		[Embed(source = "../../assets/art/tiles/gates/blue_closed.png")]
+		[Embed(source = "../../assets/art/tiles/gates/blue_closed.svg")]
 		private var BlueClosedArt:Class
 		
-		[Embed(source = "../../assets/art/tiles/gates/blue_open.png")]
+		[Embed(source = "../../assets/art/tiles/gates/blue_open.svg")]
 		private var BlueOpenArt:Class
 		
-		[Embed(source = "../../assets/art/tiles/gates/green_closed.png")]
+		[Embed(source = "../../assets/art/tiles/gates/green_closed.svg")]
 		private var GreenClosedArt:Class
 		
-		[Embed(source = "../../assets/art/tiles/gates/green_open.png")]
+		[Embed(source = "../../assets/art/tiles/gates/green_open.svg")]
 		private var GreenOpenArt:Class
 		
-		[Embed(source = "../../assets/art/tiles/gates/purple_closed.png")]
+		[Embed(source = "../../assets/art/tiles/gates/purple_closed.svg")]
 		private var PurpleClosedArt:Class
 		
-		[Embed(source = "../../assets/art/tiles/gates/purple_open.png")]
+		[Embed(source = "../../assets/art/tiles/gates/purple_open.svg")]
 		private var PurpleOpenArt:Class
 		
-		[Embed(source = "../../assets/art/tiles/gates/red_closed.png")]
+		[Embed(source = "../../assets/art/tiles/gates/red_closed.svg")]
 		private var RedClosedArt:Class
 		
-		[Embed(source = "../../assets/art/tiles/gates/red_open.png")]
+		[Embed(source = "../../assets/art/tiles/gates/red_open.svg")]
 		private var RedOpenArt:Class
 		
-		[Embed(source = "../../assets/art/tiles/gates/yellow_closed.png")]
+		[Embed(source = "../../assets/art/tiles/gates/yellow_closed.svg")]
 		private var YellowClosedArt:Class
 		
-		[Embed(source = "../../assets/art/tiles/gates/yellow_open.png")]
+		[Embed(source = "../../assets/art/tiles/gates/yellow_open.svg")]
 		private var YellowOpenArt:Class
 		
 		
@@ -192,20 +179,20 @@ package view
 		private var m_buttonArts:Dictionary;
 		private var m_gateArts:Dictionary;
 		
-		private var m_platformArts:Dictionary; // Start ID -> bitmap
+		private var m_platformArts:Dictionary; // Start ID -> Sprite
 		private var m_platformStart:Dictionary; // Start ID -> intPair
 		private var m_platformEnd:Dictionary; // End ID -> intPair
 		private var m_platformDirs:Dictionary; // Start ID -> direction 
 		private var m_platformStartToEnd:Dictionary; // Start IDs -> End IDs
 		
-		private var m_powerUps:Dictionary; // Tile intpair (x/y) -> powerup bitmap
+		private var m_powerUps:Dictionary; // Tile intpair (x/y) -> powerup sprite
 		
 		public function BoardView(board:Board) 
 		{
 			m_buttonArts = new Dictionary();
 			m_gateArts = new Dictionary();
 			for (var i:int = Constants.GATE1; i <= Constants.GATE5; i++) {
-				m_gateArts[i] = new Vector.<Bitmap>();
+				m_gateArts[i] = new Vector.<Sprite>();
 			}
 			
 			m_platformArts = new Dictionary();
@@ -256,11 +243,11 @@ package view
 						var crate:Crate = new Crate();
 						crate.startingPos = new IntPair(x * tileSideLength, y * tileSideLength);
 						board.crates.push(crate);
-						var crateAsset:Sprite = crate.asset;
+						var asset:Sprite = crate.asset;
 					}
 					else
 					{
-						var asset:Bitmap = getAssetBitmap(id, tile);
+						asset = getAssetSprite(id, tile);
 					}
 					if (asset)
 					{
@@ -275,24 +262,11 @@ package view
 						if (!isMovingPlatformStart(id))
 							addChild(asset);
 						asset = null;
-					} else if (crateAsset) {
-						if (id >= Constants.LONG_MOVING_PLATFORM_START1 && id <= Constants.LONG_MOVING_PLATFORM_START2) {
-							crateAsset.width = 2 * tileSideLength;
-						} else {
-							crateAsset.width = tileSideLength;
-						}
-						crateAsset.height = tileSideLength;
-						crateAsset.x = x * tileSideLength;
-						trace(crateAsset.x);
-						crateAsset.y = y * tileSideLength;
-						if (!isMovingPlatformStart(id))
-							addChild(crateAsset);
-						crateAsset = null;
 					}
 				}
 			}
 			
-			for each (var plat:Bitmap in m_platformArts) {
+			for each (var plat:Sprite in m_platformArts) {
 				addChild(plat);
 			}
 			
@@ -330,9 +304,9 @@ package view
 		 * @param	id - the ID of the tile to return the asset of
 		 * @return
 		**/
-		private function getAssetBitmap(id:int, tile:IntPair):Bitmap
+		private function getAssetSprite(id:int, tile:IntPair):Sprite
 		{
-			var result:Bitmap = null;
+			var result:Sprite = null;
 			if (isMovingPlatformStart(id))
 			{
 				result = new PlatformArt();
@@ -478,7 +452,7 @@ package view
 		 */
 		public function setPowerupInvisible(tile:IntPair):void
 		{
-			var powerup:Bitmap = getPowerupBitmap(tile);
+			var powerup:Sprite = getPowerupSprite(tile);
 			if (powerup)
 				powerup.visible = false;
 		}
@@ -489,7 +463,7 @@ package view
 		 */
 		public function setPowerupVisible(tile:IntPair):void
 		{
-			var powerup:Bitmap = getPowerupBitmap(tile);
+			var powerup:Sprite = getPowerupSprite(tile);
 			if (powerup)
 				powerup.visible = true;
 		}
@@ -499,7 +473,7 @@ package view
 		 */
 		public function setPowerupsVisible():void
 		{
-			for each (var pu:Bitmap in m_powerUps) 
+			for each (var pu:Sprite in m_powerUps) 
 			{
 				pu.visible = true;
 			}
@@ -512,28 +486,28 @@ package view
 		 */
 		public function isPowerupVisible(tile:IntPair):Boolean 
 		{
-			var powerup:Bitmap = getPowerupBitmap(tile);
+			var powerup:Sprite = getPowerupSprite(tile);
 			if (powerup)
 				return powerup.visible;
 			else 
 				return false;
 		}
 		
-		private function getPowerupBitmap(tile:IntPair):Bitmap
+		private function getPowerupSprite(tile:IntPair):Sprite
 		{
 			for (var key:Object in m_powerUps) 
 			{
 				if ((key as IntPair).isEqualTo(tile)) {
-					return (m_powerUps[key] as Bitmap);
+					return (m_powerUps[key] as Sprite);
 				}
 			}
 			return null;
 		}
 		
-		public function get platforms():Vector.<Bitmap>
+		public function get platforms():Vector.<Sprite>
 		{
-			var plats:Vector.<Bitmap> = new Vector.<Bitmap>();
-			for each (var plat:Bitmap in m_platformArts) {
+			var plats:Vector.<Sprite> = new Vector.<Sprite>();
+			for each (var plat:Sprite in m_platformArts) {
 				plats.push(plat);
 			}
 			return plats;
@@ -589,7 +563,7 @@ package view
 			var result:int = -1;
 			for (var key:Object in m_platformArts) {
 				var id:int = int(key);
-				var platform:Bitmap = m_platformArts[id];
+				var platform:Sprite = m_platformArts[id];
 				var dir:int = m_platformDirs[id];
 				var start:IntPair = m_platformStart[id];
 				var endId:int = m_platformStartToEnd[id];
@@ -675,7 +649,7 @@ package view
 					m_buttonArts[id] = new YellowDownArt();
 					break
 				default:
-					m_buttonArts[id] = new ButtonDownArt();
+					m_buttonArts[id] = new RedDownArt();
 					break;
 			}
 			
@@ -730,7 +704,7 @@ package view
 					m_buttonArts[id] = new YellowPopUpArt();
 					break
 				default:
-					m_buttonArts[id] = new ButtonUpArt();
+					m_buttonArts[id] = new RedUpArt();
 					break;
 			}
 			
@@ -766,7 +740,7 @@ package view
 					gateArt = YellowOpenArt;
 					break;
 				default:
-					gateArt = OpenGateArt;
+					gateArt = RedOpenArt;
 					break;
 			}
 			replaceGate(board, id, gateArt);
@@ -797,7 +771,7 @@ package view
 					gateArt = YellowClosedArt;
 					break;
 				default:
-					gateArt = ClosedGateArt;
+					gateArt = RedClosedArt;
 					break;
 			}
 			replaceGate(board, id, gateArt);
@@ -805,8 +779,8 @@ package view
 		
 		private function replaceGate(board:Board, id:int, art:Class):void
 		{
-			var newGates:Vector.<Bitmap> = new Vector.<Bitmap>();
-			for each (var gate:Bitmap in m_gateArts[id]) 
+			var newGates:Vector.<Sprite> = new Vector.<Sprite>();
+			for each (var gate:Sprite in m_gateArts[id]) 
 			{
 				var prevX:Number = gate.x;
 				var prevY:Number = gate.y;
@@ -817,7 +791,7 @@ package view
 				catch (error:Error) {
 					trace(error);
 				}
-				var newGate:Bitmap = new art();
+				var newGate:Sprite = new art();
 				
 				newGate.width = board.tileSideLength;
 				newGate.height = board.tileSideLength;

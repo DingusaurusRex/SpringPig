@@ -1,8 +1,5 @@
 package model.player 
 {
-	import adobe.utils.CustomActions;
-	import cgs.engine.view.mouseInteraction.IDraggable;
-	import flash.display.Bitmap;
 	import flash.display.Sprite;
 	/**
 	 * ...

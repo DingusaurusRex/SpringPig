@@ -1,6 +1,5 @@
 package model.player 
 {
-	import flash.display.Bitmap;
 	import flash.display.Sprite;
 	
 	/**
