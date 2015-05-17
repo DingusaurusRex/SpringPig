@@ -149,10 +149,9 @@ package
 				}
 				
 				// Process Keyboard controls
-				if (m_keyUp)
-				{
-					if( !m_player.inAir) {
-						if (collidingWithLadder()) { // Go up the ladder
+				if (m_keyUp && (!m_player.inAir || standingOnCrate(m_player))) {
+						if (collidingWithLadder()) // Go up the ladder
+						{ 
 							m_player.asset.y -= m_player.upSpeedY;
 							checkPlayerCollision(Constants.UP);
 						} else { // Jump
@@ -162,7 +161,6 @@ package
 							m_player.startingHeight = getYPositionOfPlayer();
 						}
 					}
-				}
 				if (m_keyDown && ladderBelowPlayer()) {
 					m_player.asset.y += m_player.downSpeedY;
 				}
@@ -1114,6 +1112,42 @@ package
 					break;
 				default:
 					break;
+			}
+			return result;
+		}
+		
+		/**
+		 * Returns true if obj is standing on a crate
+		 * @param	obj
+		 * @return
+		 */
+		public function standingOnCrate(obj:PhysicsObject):Boolean
+		{
+			var result:Boolean = false;
+			
+			var objLeft:Number = obj.asset.x;
+			var objRight:Number = obj.asset.x + obj.width;
+			var objTop:Number = obj.asset.y + 1;
+			var objBottom:Number = obj.asset.y + obj.height + 1;
+			
+			for each (var crate:Crate in m_board.crates)
+			{
+				if (obj != crate)
+				{
+					var crateLeft:Number = crate.asset.x;
+					var crateRight:Number = crate.asset.x + crate.width;
+					var crateTop:Number = crate.asset.y;
+					var crateBottom:Number = crate.asset.y + crate.height;
+					
+					if (((crateLeft < objLeft && objLeft < crateRight) ||
+						  crateLeft < objRight && objRight < crateRight ||
+						  crateLeft == objLeft && objRight == crateRight) &&
+						((crateTop < objTop && objTop < crateBottom) ||
+						  crateTop < objBottom && objBottom < crateBottom))
+						  {
+							  result = true;
+						  }
+				}
 			}
 			return result;
 		}
