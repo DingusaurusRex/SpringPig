@@ -164,8 +164,11 @@ package
 						checkPlayerCollision(Constants.LEFT);
 					}
 				}
-				if (m_keySpace && !m_player.inAir && !ladderBelowPlayer()) {
-					useEnergy();
+				if (m_keySpace && !m_player.inAir) {
+					// Check that player is on top of ladder
+					if (ladderBelowPlayer && isPlayerAtTopOfLadder() || !ladderBelowPlayer()) {
+						useEnergy();
+					}
 				}
 				if (m_keyR) {
                     var logData:Object = {x:m_player.asset.x, y:m_player.asset.y};
@@ -1243,6 +1246,22 @@ package
 					return true;
 			}
 			return false;
+		}
+		
+		private function isPlayerAtTopOfLadder():Boolean
+		{
+			var result:Boolean = false;
+			for each (var tile:IntPair in getTilesInDirection(m_player, Constants.DOWN)) {
+				var id:int = m_board.getTile(tile.x, tile.y);
+				if (id == Constants.LADDER) {
+					if (m_player.asset.y + m_player.height == tile.y * m_board.tileSideLength) {
+						result = true;
+					} else {
+						result = false;
+					}
+				}
+			}
+			return result;
 		}
 		
 		/**
