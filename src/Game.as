@@ -176,7 +176,7 @@ package
 						checkPlayerCollision(Constants.LEFT);
 					}
 				}
-				if (m_keySpace && !m_player.inAir && !ladderBelowPlayer()) {
+				if (m_keySpace && (!m_player.inAir || standingOnCrate(m_player)) && !ladderBelowPlayer()) {
 					useEnergy();
 				}
 				if (m_keyR) {
