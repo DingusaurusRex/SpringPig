@@ -3,6 +3,7 @@ package view
 	import adobe.utils.CustomActions;
 	import cgs.fractionVisualization.fractionAnimators.grid.GridCompareSizeAnimator;
 	import flash.display.Bitmap;
+	import flash.display.DisplayObject;
 	import flash.display.InterpolationMethod;
 	import flash.display.Sprite;
 	import flash.utils.Dictionary;
@@ -255,7 +256,7 @@ package view
 						var crate:Crate = new Crate();
 						crate.startingPos = new IntPair(x * tileSideLength, y * tileSideLength);
 						board.crates.push(crate);
-						var crateAsset:Sprite = crate.asset;
+						var crateAsset:DisplayObject = crate.asset;
 					}
 					else
 					{
@@ -273,6 +274,17 @@ package view
 						asset.y = y * tileSideLength;
 						if (!isMovingPlatformStart(id))
 							addChild(asset);
+					} else if (crateAsset) {
+						if (id >= Constants.LONG_MOVING_PLATFORM_START1 && id <= Constants.LONG_MOVING_PLATFORM_START2) {
+							crateAsset.width = 2 * tileSideLength;
+						} else {
+							crateAsset.width = tileSideLength;
+						}
+						crateAsset.height = tileSideLength;
+						crateAsset.x = x * tileSideLength;
+						crateAsset.y = y * tileSideLength;
+						if (!isMovingPlatformStart(id))
+							addChild(crateAsset);
 					}
 				}
 			}
