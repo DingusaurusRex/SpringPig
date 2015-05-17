@@ -4,17 +4,18 @@ package model.player
 	import cgs.engine.view.mouseInteraction.IDraggable;
 	import flash.display.Bitmap;
 	import flash.display.Sprite;
+	import view.PlayerView;
 	/**
 	 * ...
 	 * @author Marc
 	 */
 	public class Player implements PhysicsObject 
 	{
-		[Embed(source = "../../../assets/art/player/pig.png")]
+		[Embed(source="../../../assets/art/player/SpringPigWhole.svg")]
 		private var playerArt:Class;
 		
 		public var energy:int = 0;
-		private var m_asset:Bitmap;
+		private var m_asset:Sprite;
 		public var speedX:Number;
 		public var cratePushSpeed:Number;
 		public var upSpeedY:Number; // Speed on ladder
@@ -32,7 +33,12 @@ package model.player
 		
 		public function Player(tileSideLength:int) 
 		{
-			m_asset = new playerArt();
+			
+			try {
+				m_asset = new playerArt();
+			} catch(error:Error){
+				trace(error);
+			}
 			dy = 0;
 			
 			var frac:Number = tileSideLength / Constants.BASE_SIDE_LENGTH;
@@ -55,7 +61,7 @@ package model.player
 			dy = Math.min(value, Constants.TERMINAL_VELOCITY);
 		}
 		
-		public function get asset():Bitmap
+		public function get asset():Sprite
 		{
 			return m_asset;
 		}
