@@ -7,11 +7,15 @@ package
 	public class Constants 
 	{
 		public static const SHOW_JUMP_HEIGHT:Boolean = true;
+		// highlight non-empty tiles too
+		public static const HIGHLIGHT_NON_EMPTY:Boolean = true;
 		
 		// A/B TESTING
 		public static const JUMP_HEIGHT_ONE_HIGHER:Boolean = true;
-		public static const HIGHLIGHT_PLAYER_SQUARE:Boolean = true;
+		public static const HIGHLIGHT_PLAYER_SQUARE:Boolean = false; // highlight the whole square
+		public static const HIGHLIGHT_SMALL_PLAYER_SQUARE:Boolean = false; // highlight only the top part of the square
 		public static const MOVE_CRATES_IN_AIR:Boolean = true;
+		public static const SHOW_GRID:Boolean = false;
 
         /**
          * Debug Options

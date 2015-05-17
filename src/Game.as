@@ -123,15 +123,6 @@ package
 					m_player.bounce = false;
 				}
 				
-				if (Constants.SHOW_JUMP_HEIGHT) {
-					if (!m_player.inAir) 
-					{
-						showJumpHeight();
-					} else {
-						removePlayerJumpHeight();
-					}
-				}
-				
 				var playerDir:int = m_boardSprite.movePlatforms(m_player, m_board);
 				checkPlayerCollision(playerDir);
 				platforms = m_boardSprite.platforms;
@@ -234,6 +225,15 @@ package
 					{
 						var crateTile:IntPair = getCentralTile(crate);
 						crate.asset.x = crateTile.x * m_board.tileSideLength;
+					}
+				}
+				
+				if (Constants.SHOW_JUMP_HEIGHT) {
+					if (!m_player.inAir) 
+					{
+						showJumpHeight();
+					} else {
+						removePlayerJumpHeight();
 					}
 				}
 			}
@@ -666,14 +666,7 @@ package
 		private function showJumpHeight():void
 		{
 			// Pick x value (low or high) on which to show the jump height
-			var lowX:Number = (m_player.asset.x / m_board.tileSideLength);
-			var highX:Number = ((m_player.asset.x + m_player.width) / m_board.tileSideLength);
-			var x:int;
-			if (int(highX) - lowX > highX - int(highX)) {
-				x = int(lowX);
-			} else {
-				x = int(highX);
-			}
+			var x:Number = (m_player.asset.x / m_board.tileSideLength);
 			if (x != m_prevPlayerX) 
 			{
 				removePlayerJumpHeight(x);
@@ -685,25 +678,40 @@ package
 				{
 					endingHeight = y - m_player.energy;
 				}
-				if (Constants.HIGHLIGHT_PLAYER_SQUARE) 
+				if (Constants.HIGHLIGHT_PLAYER_SQUARE || Constants.HIGHLIGHT_SMALL_PLAYER_SQUARE) 
 				{
 					startingHeight = y;
 				}
 				
 				for (var i:int = startingHeight; i >= endingHeight; i--) 
-				{					
+				{
 					var id:int = m_board.getTile(x, i);
-					if (id != Constants.WALL && id != Constants.LADDER && !isClosedGate(id) && id != Constants.LAVA) {
+					if ((id != Constants.WALL && id != Constants.LADDER && !isClosedGate(id) && id != Constants.LAVA) ||
+						Constants.HIGHLIGHT_NON_EMPTY) 
+					{
 						var size:int = m_board.tileSideLength;
 						
-						var rect:Sprite = new Sprite();
-						rect.graphics.beginFill(0xFF0000);
-						rect.graphics.drawRect(x * size, i * size, size, size);
-						rect.alpha = .25;
-						rect.graphics.endFill();
-						
-						m_jumpHeightRects.push(rect);
-						m_boardSprite.addChild(rect);
+						// Highlight the top 1/4 of the player's square
+						if (Constants.HIGHLIGHT_SMALL_PLAYER_SQUARE && i == y) 
+						{
+							var rect:Sprite = new Sprite();
+							rect.graphics.beginFill(0xFF0000);
+							rect.graphics.drawRect(x * size, i * size, m_player.width, size - m_player.height);
+							rect.alpha = .25;
+							rect.graphics.endFill();
+							
+							m_jumpHeightRects.push(rect);
+							m_boardSprite.addChild(rect);
+						} else {
+							rect = new Sprite();
+							rect.graphics.beginFill(0xFF0000);
+							rect.graphics.drawRect(x * size, i * size, m_player.width, size);
+							rect.alpha = .25;
+							rect.graphics.endFill();
+							
+							m_jumpHeightRects.push(rect);
+							m_boardSprite.addChild(rect);
+						}
 					} else {
 						break;
 					}
@@ -1259,7 +1267,6 @@ package
 		{
 			for each (var tile:IntPair in getTilesInDirection(m_player, Constants.UP)) {
 				var id:int = m_board.getTile(tile.x, tile.y);
-				trace(id);
 				if (isButton(id)) 
 					return id;
 			}

@@ -1,6 +1,7 @@
 package model.player 
 {
 	import flash.display.Bitmap;
+	import flash.display.Sprite;
 	
 	/**
 	 * ...
@@ -10,7 +11,7 @@ package model.player
 	{
 		function updatePosition(tileSize:int):void;
 		function set velocity(value:Number):void;
-		function get asset():Bitmap;
+		function get asset():Sprite;
 		function get width():int;
 		function set width(val:int):void;
 		function get height():int;
