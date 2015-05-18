@@ -886,11 +886,22 @@ package
 				case Constants.RIGHT:
 					// Check for crate collisions
 					var cratesRight:Vector.<Crate> = getCollidingCrates(crate, Constants.RIGHT);
-					if (cratesRight.length > 0)
+					var crateOnTop:Boolean = false;
+					
+					for each (var temp:Crate in m_board.crates)
+					{
+						crateOnTop = crateOnTop || isStandingOn(temp, crate)
+					}
+					
+					if (crateOnTop)
+					{
+						crate.asset.x = crate.oldX;
+					}
+					else if (cratesRight.length > 0)
 					{
 						// Get the minimum x value of the crates you're colliding with
 						var newX:Number = crate.asset.x;
-						for each (var temp:Crate in cratesRight)
+						for each (temp in cratesRight)
 						{
 							newX = Math.min(newX, temp.asset.x - crate.width);
 						}
@@ -920,6 +931,17 @@ package
 				case Constants.LEFT:
 					// Check for crate collisions
 					var cratesLeft:Vector.<Crate> = getCollidingCrates(crate, Constants.LEFT)
+					crateOnTop = false;
+					
+					for each (temp in m_board.crates)
+					{
+						crateOnTop = crateOnTop || isStandingOn(temp, crate)
+					}
+					
+					if (crateOnTop)
+					{
+						crate.asset.x = crate.oldX;
+					}
 					if (cratesLeft.length > 0)
 					{
 						// Get the minimum x value of the crates you're colliding with
@@ -1117,6 +1139,39 @@ package
 		}
 		
 		/**
+		 * Returns whether object1 is standing on object 2
+		 * @param	obj1
+		 * @param	obj2
+		 * @return
+		 */
+		public function isStandingOn(obj1:PhysicsObject, obj2:PhysicsObject):Boolean
+		{
+			var result:Boolean = false;
+			
+			var objLeft:Number = obj1.asset.x;
+			var objRight:Number = obj1.asset.x + obj1.width;
+			var objTop:Number = obj1.asset.y + 1;
+			var objBottom:Number = obj1.asset.y + obj1.height + 1;
+			
+			var crateLeft:Number = obj2.asset.x;
+			var crateRight:Number = obj2.asset.x + obj2.width;
+			var crateTop:Number = obj2.asset.y;
+			var crateBottom:Number = obj2.asset.y + obj2.height;
+			
+			if (((crateLeft < objLeft && objLeft < crateRight) ||
+				  crateLeft < objRight && objRight < crateRight ||
+				  crateLeft == objLeft && objRight == crateRight) &&
+				((crateTop < objTop && objTop < crateBottom) ||
+				  crateTop < objBottom && objBottom < crateBottom) && 
+				  obj1 != obj2)
+				  {
+					  result = true;
+				  }
+				  
+			return result;
+		}
+		
+		/**
 		 * Returns true if obj is standing on a crate
 		 * @param	obj
 		 * @return
@@ -1125,29 +1180,9 @@ package
 		{
 			var result:Boolean = false;
 			
-			var objLeft:Number = obj.asset.x;
-			var objRight:Number = obj.asset.x + obj.width;
-			var objTop:Number = obj.asset.y + 1;
-			var objBottom:Number = obj.asset.y + obj.height + 1;
-			
 			for each (var crate:Crate in m_board.crates)
 			{
-				if (obj != crate)
-				{
-					var crateLeft:Number = crate.asset.x;
-					var crateRight:Number = crate.asset.x + crate.width;
-					var crateTop:Number = crate.asset.y;
-					var crateBottom:Number = crate.asset.y + crate.height;
-					
-					if (((crateLeft < objLeft && objLeft < crateRight) ||
-						  crateLeft < objRight && objRight < crateRight ||
-						  crateLeft == objLeft && objRight == crateRight) &&
-						((crateTop < objTop && objTop < crateBottom) ||
-						  crateTop < objBottom && objBottom < crateBottom))
-						  {
-							  result = true;
-						  }
-				}
+				result = result || isStandingOn(obj, crate);
 			}
 			return result;
 		}
