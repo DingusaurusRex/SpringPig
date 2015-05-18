@@ -39,9 +39,6 @@ public class Menu {
     public static var fullPlaythrough:Boolean;
     public static var playthroughFinished:Boolean;
     public static var totalTime:int;
-	
-	[Embed(source = "../assets/art/SplashScreenPig.svg")]
-	private var BackgroundArt:Class;
 
     // TODO: Background
     public static function Init(s:Stage, g:Game):void {
@@ -109,8 +106,10 @@ public class Menu {
         totalTime = 0;
         stage.removeEventListener(KeyboardEvent.KEY_DOWN, game.onKeyDown); // Need to do this whenever leaving game state
         state = Constants.STATE_MAIN_MENU;
+        muteButton.x = Constants.SCREEN_WIDTH - Constants.MENU_BUTTON_WIDTH * 2 - Constants.MAIN_CREDITS_BUTTON_RIGHT_PADDING - Constants.MAIN_MENU_MUTE_BUTTON_RIGHT_PADDING;
+        muteButton.y = Constants.SCREEN_HEIGHT - Constants.MAIN_MENU_MUTE_BUTTON_BOTTOM_PADDING;
         mainMenu.addChild(muteButton);
-        mainMenu.addChild(menuInstructions);
+        //mainMenu.addChild(menuInstructions);
         stage.addChild(mainMenu);
         stage.addEventListener(KeyboardEvent.KEY_DOWN, Menu.onKeyDown);
         stage.focus = stage;
@@ -119,6 +118,8 @@ public class Menu {
     public static function createPauseMenu():void {
         Stopwatch.pause();
         state = Constants.STATE_PAUSE_MENU;
+        muteButton.x = Constants.SCREEN_WIDTH - Constants.MENU_BUTTON_WIDTH - Constants.MUTE_BUTTON_RIGHT_PADDING;
+        muteButton.y = Constants.MUTE_BUTTON_TOP_PADDING;
         pauseMenu.addChild(muteButton);
         pauseMenu.addChild(menuInstructions);
         stage.removeChild(gameInstructions);
@@ -145,6 +146,8 @@ public class Menu {
             stage.addChild(playthroughTip);
         }
         state = Constants.STATE_END_LEVEL_MENU;
+        muteButton.x = Constants.SCREEN_WIDTH - Constants.MENU_BUTTON_WIDTH - Constants.MUTE_BUTTON_RIGHT_PADDING;
+        muteButton.y = Constants.MUTE_BUTTON_TOP_PADDING;
         endLevelMenu.addChild(muteButton);
         stage.addChild(endLevelMenu);
         Stopwatch.stopwatchMenuText.x = Constants.END_LEVEL_STOPWATCH_LEFT_PADDING;
@@ -426,30 +429,56 @@ public class Menu {
         return buttonShape;
     }
 
+    public static function getMainMenuButtonShape():Shape {
+        var buttonShape:Shape = new Shape();
+        buttonShape.graphics.lineStyle(Constants.MAIN_MENU_BUTTON_BORDER_SIZE, Constants.MAIN_MENU_BUTTON_BORDER_COLOR);
+        buttonShape.graphics.beginFill(Constants.MAIN_MENU_BUTTON_COLOR);
+        buttonShape.graphics.drawRect(0, 0, Constants.MAIN_MENU_BUTTON_WIDTH, Constants.MAIN_MENU_BUTTON_HEIGHT);
+        buttonShape.graphics.endFill();
+        return buttonShape;
+    }
+
     public static function getMenuButtonTextFormat():TextFormat {
+        return getTextFormat(Constants.MENU_BUTTON_FONT_SIZE, Constants.MENU_BUTTON_TEXT_ALIGNMENT);
+    }
+
+    public static function getTextFormat(size:int, align:String):TextFormat {
         var buttonTextFormat:TextFormat = new TextFormat();
         buttonTextFormat.font = Constants.MENU_FONT;
-        buttonTextFormat.size = Constants.MENU_BUTTON_FONT_SIZE;
-        buttonTextFormat.align = Constants.MENU_BUTTON_TEXT_ALIGNMENT;
+        buttonTextFormat.size = size;
+        buttonTextFormat.align = align;
         return buttonTextFormat;
     }
 
     public static function getMenuButton(text:String, x:int, y:int, listener:Function):SimpleButton {
+        return getButton(text,
+                Menu.getMenuButtonTextFormat(),
+                Constants.MENU_BUTTON_WIDTH,
+                Constants.MENU_BUTTON_HEIGHT + Constants.MENU_BUTTON_BORDER_SIZE,
+                0,
+                x,
+                y,
+                Menu.getMenuButtonShape(),
+                listener);
+    }
+
+    public static function getButton(text:String, textFormat:TextFormat, textWidth:int, textHeight:int, textTopPadding:int, x:int, y:int, buttonShape:Shape, listener:Function):SimpleButton {
         var buttonText:TextField = new TextField();
         buttonText.text = text;
-        buttonText.width = Constants.MENU_BUTTON_WIDTH;
-        buttonText.height = Constants.MENU_BUTTON_HEIGHT + Constants.MENU_BUTTON_BORDER_SIZE;
-        buttonText.setTextFormat(Menu.getMenuButtonTextFormat());
+        buttonText.width = textWidth;
+        buttonText.height = textHeight;
+        buttonText.y = textTopPadding;
+        buttonText.setTextFormat(textFormat);
 
         var buttonSprite:Sprite = new Sprite();
-        buttonSprite.addChild(Menu.getMenuButtonShape());
+        buttonSprite.addChild(buttonShape);
         buttonSprite.addChild(buttonText);
 
         var button:SimpleButton = new SimpleButton();
         button.upState = buttonSprite;
         button.downState = buttonSprite;
         button.overState = buttonSprite;
-        button.hitTestState = buttonSprite
+        button.hitTestState = buttonSprite;
         button.x = x;
         button.y = y;
 
@@ -460,7 +489,6 @@ public class Menu {
 
     public static function getTextField(text:String, height:int, width:int, x:int, y:int, font:String, fontSize:int, align:String):TextField {
         var textField:TextField = new TextField();
-        textField = new TextField();
         textField.text = text;
         textField.height = height;
         textField.width = width;
@@ -490,6 +518,7 @@ import util.GameState;
 import util.Stopwatch;
 
 class MainMenu extends Sprite {
+    private var logo:Sprite;
     private var title:TextField;
     private var continueButton:SimpleButton;
     private var continueButtonCover:Sprite;
@@ -504,16 +533,16 @@ class MainMenu extends Sprite {
 
     public var blocked:Boolean;
 
-	[Embed(source = "../assets/art/SplashScreenPig.svg")]
+	[Embed(source = "../assets/art/background/SplashScreenPig.svg")]
 	private var BackgroundArt:Class;
 	
     public function MainMenu():void {
-		var background:Sprite = new BackgroundArt();
-		background.x = 0;
-		background.y = 0;
-		background.width = Constants.SCREEN_WIDTH;
-		background.height = Constants.SCREEN_HEIGHT;
-		addChild(background);
+        // Game logo
+        logo = new BackgroundArt();
+		logo.x = Constants.MAIN_LOGO_LEFT_PADDING;
+		logo.y = Constants.MAIN_LOGO_TOP_PADDING;
+        logo.height = Constants.MAIN_LOGO_HEIGHT;
+		logo.width = Constants.MAIN_LOGO_HEIGHT * Constants.MAIN_LOGO_RATIO;
 		
         // Main title
         title = Menu.getMenuTitle(Constants.GAME_TITLE,
@@ -521,9 +550,14 @@ class MainMenu extends Sprite {
                 Constants.MAIN_TITLE_FONT_SIZE);
 
         // Continue button
-        continueButton = Menu.getMenuButton(Constants.CONTINUE_BUTTON_TEXT,
-                        (Constants.SCREEN_WIDTH - Constants.MENU_BUTTON_WIDTH) / 2,
-                        Constants.SCREEN_HEIGHT / 2,
+        continueButton = Menu.getButton(Constants.CONTINUE_BUTTON_TEXT,
+                Menu.getTextFormat(Constants.MAIN_MENU_BUTTON_FONT_SIZE, Constants.MAIN_MENU_BUTTON_TEXT_ALIGNMENT),
+                Constants.MAIN_MENU_BUTTON_WIDTH,
+                Constants.MAIN_MENU_BUTTON_TEXT_HEIGHT,
+                (Constants.MAIN_MENU_BUTTON_HEIGHT - Constants.MAIN_MENU_BUTTON_TEXT_HEIGHT) / 2,
+                Constants.SCREEN_WIDTH * 5 / 6 - Constants.MAIN_MENU_BUTTON_WIDTH / 2,
+                Constants.SCREEN_HEIGHT / 6 - Constants.MAIN_MENU_BUTTON_HEIGHT / 2,
+                Menu.getMainMenuButtonShape(),
                 Menu.onContinueClick);
 
         // Cover for the continue button
@@ -537,21 +571,36 @@ class MainMenu extends Sprite {
         continueButtonCover.width = continueButton.width;
 
         // Start button
-        startButton = Menu.getMenuButton(Constants.START_BUTTON_TEXT,
-                        (Constants.SCREEN_WIDTH - Constants.MENU_BUTTON_WIDTH) / 2,
-                        continueButton.y + Constants.MENU_BUTTON_PADDING_BETWEEN,
+        startButton = Menu.getButton(Constants.START_BUTTON_TEXT,
+                Menu.getTextFormat(Constants.MAIN_MENU_BUTTON_FONT_SIZE, Constants.MAIN_MENU_BUTTON_TEXT_ALIGNMENT),
+                Constants.MAIN_MENU_BUTTON_WIDTH,
+                Constants.MAIN_MENU_BUTTON_TEXT_HEIGHT,
+                        (Constants.MAIN_MENU_BUTTON_HEIGHT - Constants.MAIN_MENU_BUTTON_TEXT_HEIGHT) / 2,
+                        Constants.SCREEN_WIDTH * 5 / 6 - Constants.MAIN_MENU_BUTTON_WIDTH / 2,
+                        continueButton.y + Constants.MAIN_MENU_BUTTON_HEIGHT + Constants.MAIN_MENU_BUTTON_PADDING_BETWEEN,
+                Menu.getMainMenuButtonShape(),
                 Menu.onStartClick);
 
         // Level select button
-        levelSelectButton = Menu.getMenuButton(Constants.LEVEL_SELECT_BUTTON_TEXT,
-                        (Constants.SCREEN_WIDTH - Constants.MENU_BUTTON_WIDTH) / 2,
-                        startButton.y + Constants.MENU_BUTTON_PADDING_BETWEEN,
+        levelSelectButton = Menu.getButton(Constants.LEVEL_SELECT_BUTTON_TEXT,
+                Menu.getTextFormat(Constants.MAIN_MENU_BUTTON_FONT_SIZE, Constants.MAIN_MENU_BUTTON_TEXT_ALIGNMENT),
+                Constants.MAIN_MENU_BUTTON_WIDTH,
+                Constants.MAIN_MENU_BUTTON_TEXT_HEIGHT,
+                        (Constants.MAIN_MENU_BUTTON_HEIGHT - Constants.MAIN_MENU_BUTTON_TEXT_HEIGHT) / 2,
+                        Constants.SCREEN_WIDTH * 5 / 6 - Constants.MAIN_MENU_BUTTON_WIDTH / 2,
+                        startButton.y + Constants.MAIN_MENU_BUTTON_HEIGHT + Constants.MAIN_MENU_BUTTON_PADDING_BETWEEN,
+                Menu.getMainMenuButtonShape(),
                 Menu.onLevelSelectClick);
 
         // Time records button
-        timeRecordsButton = Menu.getMenuButton(Constants.TIME_RECORDS_BUTTON_TEXT,
-                        (Constants.SCREEN_WIDTH - Constants.MENU_BUTTON_WIDTH) / 2,
-                        levelSelectButton.y + Constants.MENU_BUTTON_PADDING_BETWEEN,
+        timeRecordsButton = Menu.getButton(Constants.TIME_RECORDS_BUTTON_TEXT,
+                Menu.getTextFormat(Constants.MAIN_MENU_BUTTON_FONT_SIZE, Constants.MAIN_MENU_BUTTON_TEXT_ALIGNMENT),
+                Constants.MAIN_MENU_BUTTON_WIDTH,
+                Constants.MAIN_MENU_BUTTON_TEXT_HEIGHT,
+                        (Constants.MAIN_MENU_BUTTON_HEIGHT - Constants.MAIN_MENU_BUTTON_TEXT_HEIGHT) / 2,
+                        Constants.SCREEN_WIDTH * 5 / 6 - Constants.MAIN_MENU_BUTTON_WIDTH / 2,
+                        levelSelectButton.y + Constants.MAIN_MENU_BUTTON_HEIGHT + Constants.MAIN_MENU_BUTTON_PADDING_BETWEEN,
+                Menu.getMainMenuButtonShape(),
                 Menu.onTimeRecordsClick);
 
         // Credits button
@@ -565,15 +614,16 @@ class MainMenu extends Sprite {
         bestPlaythroughTime = Menu.getTextField(Constants.BEST_TOTAL_TIME_TEXT + Stopwatch.formatTiming(bestTime),
                 Constants.BEST_TOTAL_TIME_HEIGHT,
                 Constants.BEST_TOTAL_TIME_WIDTH,
-                (Constants.SCREEN_WIDTH - Constants.BEST_TOTAL_TIME_WIDTH) / 2 ,
-                        Constants.SCREEN_HEIGHT - Constants.BEST_TOTAL_TIME_BOTTOM_PADDING,
+                        Constants.SCREEN_WIDTH * 5 / 6 - Constants.BEST_TOTAL_TIME_WIDTH / 2,
+                        timeRecordsButton.y + Constants.MAIN_MENU_BUTTON_HEIGHT + Constants.MAIN_MENU_BUTTON_PADDING_BETWEEN,
                 Constants.MENU_FONT,
                 Constants.BEST_TOTAL_TIME_FONT_SIZE,
                 Constants.BEST_TOTAL_TIME_ALIGNMENT);
         bestPlaythroughTimeTextFormat = bestPlaythroughTime.getTextFormat();
 
         // Adding everything
-        addChild(title);
+        addChild(logo);
+        //addChild(title);
         addChild(continueButton);
         addChild(startButton);
         addChild(levelSelectButton);
@@ -629,19 +679,9 @@ class PauseMenu extends Sprite {
     private var levelInfoFormat:TextFormat;
     private var resumeButton:SimpleButton;
     private var mainMenuButton:SimpleButton;
-	
-	[Embed(source = "../assets/art/SplashScreenPig.svg")]
-	private var BackgroundArt:Class;
 
     public function PauseMenu():void {
         // Background
-		//var background:Sprite = new BackgroundArt();
-		//background.x = 0;
-		//background.y = 0;
-		//background.width = Constants.SCREEN_WIDTH;
-		//background.height = Constants.SCREEN_HEIGHT;
-		//addChild(background);
-		
         this.graphics.beginFill(Constants.PAUSE_BACKGROUND_COLOR, Constants.PAUSE_BACKGROUND_OPACITY);
         this.graphics.drawRect(0, 0, Constants.SCREEN_WIDTH, Constants.SCREEN_HEIGHT);
         this.graphics.endFill();
@@ -691,9 +731,6 @@ class EndLevelMenu extends Sprite {
     private var nextLevelButton:SimpleButton;
     private var restartLevelButton:SimpleButton;
     private var mainMenuButton:SimpleButton;
-
-	[Embed(source = "../assets/art/SplashScreenPig.svg")]
-	private var BackgroundArt:Class;
 	
     public function EndLevelMenu():void {
         // End level title
@@ -731,9 +768,6 @@ class EndGameMenu extends Sprite {
     private var subtitle:TextField;
     private var creditsButton:SimpleButton;
     private var mainMenuButton:SimpleButton;
-
-	[Embed(source = "../assets/art/SplashScreenPig.svg")]
-	private var BackgroundArt:Class;
 	
     public function EndGameMenu():void {
         // End level title
@@ -775,9 +809,6 @@ class LevelSelectMenu extends Sprite {
 
     private var pages:Array;
     private var totalPages:int;
-
-	[Embed(source = "../assets/art/SplashScreenPig.svg")]
-	private var BackgroundArt:Class;
 	
     public function LevelSelectMenu():void {
         // Main menu button
@@ -903,9 +934,6 @@ class TimeRecordsMenu extends Sprite {
 
     private var pages:Array;
     private var totalPages:int;
-
-	[Embed(source = "../assets/art/SplashScreenPig.svg")]
-	private var BackgroundArt:Class;
 	
     public function TimeRecordsMenu():void {
         // Main menu button
@@ -1022,9 +1050,6 @@ class CreditsMenu extends Sprite {
     private var credits:TextField;
     private var resetProgress:SimpleButton;
     private var resetProgressCover:Sprite;
-
-	[Embed(source = "../assets/art/SplashScreenPig.svg")]
-	private var BackgroundArt:Class;
 	
     public function CreditsMenu():void {
         // Main menu button

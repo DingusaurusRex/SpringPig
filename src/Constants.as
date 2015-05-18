@@ -288,7 +288,25 @@ package
 
 		public static const MAIN_CREDITS_BUTTON_RIGHT_PADDING:int = 30;
 		public static const MAIN_CREDITS_BUTTON_BOTTOM_PADDING:int = 40;
-		
+
+        public static const MAIN_LOGO_TOP_PADDING:int = 0;
+        public static const MAIN_LOGO_LEFT_PADDING:int = 0;
+        public static const MAIN_LOGO_RATIO:Number = 0.95839753466872110939907550077042;
+        public static const MAIN_LOGO_HEIGHT:int = 570;
+
+        public static const MAIN_MENU_BUTTON_COLOR:uint = 0xCCCCCC;
+        public static const MAIN_MENU_BUTTON_WIDTH:int = 198;
+        public static const MAIN_MENU_BUTTON_HEIGHT:int = 68;
+        public static const MAIN_MENU_BUTTON_TEXT_HEIGHT:int = 28;
+        public static const MAIN_MENU_BUTTON_FONT_SIZE:int = 20;
+        public static const MAIN_MENU_BUTTON_TEXT_ALIGNMENT:String = "center";
+        public static const MAIN_MENU_BUTTON_BORDER_SIZE:int = 2;
+        public static const MAIN_MENU_BUTTON_BORDER_COLOR:uint = 0x000000;
+        public static const MAIN_MENU_BUTTON_PADDING_BETWEEN:int = 20;
+
+        public static const MAIN_MENU_MUTE_BUTTON_RIGHT_PADDING:int = 20;
+        public static const MAIN_MENU_MUTE_BUTTON_BOTTOM_PADDING:int = 40;
+
 		// Level select menu
 		public static const LEVEL_SELECT_TITLE_TEXT:String = "Level Select";
 		public static const LEVEL_SELECT_TITLE_TOP_PADDING:int = 50;
@@ -417,11 +435,11 @@ package
         public static const TOTAL_TIME_ALIGNMENT:String = "center";
 
         // Best playthrough time
-        public static const BEST_TOTAL_TIME_TEXT:String = "Best Playthrough Time: ";
+        public static const BEST_TOTAL_TIME_TEXT:String = "Best Playthrough Time:\n";
         public static const BEST_TOTAL_TIME_BOTTOM_PADDING:int = 45;
-        public static const BEST_TOTAL_TIME_HEIGHT:int = 30;
-        public static const BEST_TOTAL_TIME_WIDTH:int = 400;
-        public static const BEST_TOTAL_TIME_FONT_SIZE:int = 20;
+        public static const BEST_TOTAL_TIME_HEIGHT:int = 56;
+        public static const BEST_TOTAL_TIME_WIDTH:int = 190;
+        public static const BEST_TOTAL_TIME_FONT_SIZE:int = 18;
         public static const BEST_TOTAL_TIME_ALIGNMENT:String = "center";
 	}
 
