@@ -431,8 +431,6 @@ package
 						var newY:Number = m_player.asset.x;
 						for each (crate in crates)
 						{
-							crate.asset.x -= m_player.cratePushSpeed;
-							checkCrateCollision(crate, Constants.LEFT);
 							newY = Math.max(newY, crate.asset.y + crate.height);
 						}
 						m_player.startingHeight = getYPositionOfPlayer()
