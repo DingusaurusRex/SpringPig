@@ -22,9 +22,12 @@ package
 	import model.player.PhysicsObject;
 	import model.player.Player;
 
-	import util.Audio;
+import mx.utils.ObjectUtil;
+
+import util.Audio;
 	import util.IntPair;
-	import util.Stopwatch;
+import util.PlayState;
+import util.Stopwatch;
 	import view.BoardView;
 	import view.MeterView;
 	import flash.text.TextFieldAutoSize;
@@ -42,7 +45,7 @@ package
 		private var m_keyLeft:Boolean;
 		private var m_keySpace:Boolean;
 		private var m_keyR:Boolean;
-		
+
 		// Player
 		private var m_player:Player;
 		private var m_playerStart:IntPair;
@@ -64,8 +67,9 @@ package
 		
 		// Gates and Buttons
 		public var gates:Vector.<int>;
-		public var gateStatus:Dictionary;
+		public var gateStatus:Object;
 		public var buttons:Vector.<int>;
+        public var buttonStatus:Object;
 		public var popupButtons:Dictionary;
 		public var buttonToGate:Dictionary; // Buttons map to the gate they open
 				
@@ -81,6 +85,8 @@ package
 
         // Logger
         private var m_logger:Logger;
+
+        private var ps:PlayState;
 		
 		/**
 		 * Begins the game
@@ -308,10 +314,14 @@ package
 			
 			// Buttons and Gates
 			buttons = m_board.getButtons();
+            buttonStatus = new Object();
+            for each (var id:int in buttons) {
+                buttonStatus[id] = 1; // UP
+            }
 			popupButtons = m_board.getPopupButtons();
 			gates = m_board.getGates();
 			gateStatus = new Dictionary();
-			for each (var id:int in gates) {
+			for each (id in gates) {
 				gateStatus[id] = 0; // CLOSED
 			}
 			initButtonGateDict();
@@ -746,7 +756,9 @@ package
 			m_boardSprite.setButtonDown(board, id);
 			if (isPopupButton(id)) {
 				popupButtons[id] = 0;
-			}
+			} else {
+                buttonStatus[id] = 0; // DOWN
+            }
 			
 			var gateId:int = buttonToGate[id];
 			if (gateStatus[gateId] == 0) 
@@ -833,7 +845,9 @@ package
 			m_boardSprite.setButtonUp(board, id);
 			if (isPopupButton(id)) {
 				popupButtons[id] = 1;
-			}
+			} else {
+                buttonStatus[id] = 1; // UP
+            }
 			
 			var gateId:int = buttonToGate[id];
 			if (gateStatus[gateId] == 1) 
@@ -1589,6 +1603,28 @@ package
 				case Keyboard.R :
 					m_keyR = true;
 					break;
+				case Keyboard.T :
+                    ps = new PlayState(m_player, gateStatus, buttonStatus);
+					break;
+				case Keyboard.Y :
+                    m_player.replace(ps.player);
+                    gateStatus = ObjectUtil.copy(ps.gateStatus);
+                    for each (var id:int in gates) {
+                        if (gateStatus[id] == 1) {
+                            m_boardSprite.openGate(m_board, id);
+                        } else {
+                            m_boardSprite.closeGate(m_board, id);
+                        }
+                    }
+                    buttonStatus = ObjectUtil.copy(ps.buttonStatus);
+                    for each (id in buttons) {
+                        if (buttonStatus[id] == 1) {
+                            setButtonUp(m_board, id);
+                        } else {
+                            setButtonDown(m_board, id);
+                        }
+                    }
+					break;
 				case Keyboard.ESCAPE :
                     if (Menu.state == Constants.STATE_GAME || Menu.state == Constants.STATE_PAUSE_MENU) {
                         pause = !pause;
@@ -1601,7 +1637,7 @@ package
 					break;
 			}
 		}
-		
+
 		/**
 		 * Test if keys are up
 		 * @param	event

@@ -101,5 +101,42 @@ package model.player
 		{
 			return m_inAir;
 		}
+
+        public function clone():Player {
+            var player:Player = new Player(0);
+            player.energy = this.energy;
+            player.m_asset = new playerArt();
+            player.m_asset.x = this.m_asset.x;
+            player.m_asset.y = this.m_asset.y;
+            player.speedX = this.speedX;
+            player.cratePushSpeed = this.cratePushSpeed;
+            player.upSpeedY = this.upSpeedY;
+            player.downSpeedY = this.downSpeedY;
+            player.airSpeedX = this.airSpeedX;
+            player.m_inAir = this.m_inAir;
+            player.m_onPlatform = this.m_onPlatform;
+            player.bounce = this.bounce;
+            player.times2 = this.times2;
+            player.startingHeight = this.startingHeight;
+            player.dy = this.dy;
+            return player;
+        }
+
+        public function replace(player:Player):void {
+            this.energy = player.energy;
+            this.m_asset.x = player.m_asset.x;
+            this.m_asset.y = player.m_asset.y;
+            this.speedX = player.speedX;
+            this.cratePushSpeed = player.cratePushSpeed;
+            this.upSpeedY = player.upSpeedY;
+            this.downSpeedY = player.downSpeedY;
+            this.airSpeedX = player.airSpeedX;
+            this.m_inAir = player.m_inAir;
+            this.m_onPlatform = player.m_onPlatform;
+            this.bounce = player.bounce;
+            this.times2 = player.times2;
+            this.startingHeight = player.startingHeight;
+            this.dy = player.dy;
+        }
 	}
 }
