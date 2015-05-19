@@ -27,10 +27,10 @@ package view
 		[Embed(source = "../../assets/art/tiles/wall.svg")]
 		private var WallArt:Class;
 		
-		[Embed(source = "../../assets/art/tiles/lava.svg")]
+		[Embed(source = "../../assets/art/tiles/lava2.svg")]
 		private var LavaArt:Class;
 		
-		[Embed(source = "../../assets/art/tiles/end.svg")]
+		[Embed(source = "../../assets/art/tiles/flag.svg")]
 		private var EndArt:Class;
 		
 		[Embed(source="../../assets/art/tiles/ladder.svg")]
