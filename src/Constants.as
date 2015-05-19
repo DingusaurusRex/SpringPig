@@ -25,7 +25,7 @@ package
         /**
          * Logging info
          */
-        public static const LOG:Boolean = true;
+        public static const LOG:Boolean = false;
 
         public static const GID:int = 116;
         public static const DB_NAME:String = "cgs_gc_SpringMan";
