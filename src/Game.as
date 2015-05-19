@@ -1604,7 +1604,7 @@ import util.Stopwatch;
 					m_keyR = true;
 					break;
 				case Keyboard.T :
-                    ps = new PlayState(m_player, gateStatus, buttonStatus);
+                    ps = new PlayState(m_player, gateStatus, buttonStatus, m_board.crates);
 					break;
 				case Keyboard.Y :
                     m_player.replace(ps.player);
@@ -1623,6 +1623,11 @@ import util.Stopwatch;
                         } else {
                             setButtonDown(m_board, id);
                         }
+                    }
+                    for each (var c:Crate in m_board.crates) {
+                        c.asset.x = ps.crates[c].x;
+                        c.asset.y = ps.crates[c].y;
+                        c.dy = ps.crates[c].dy;
                     }
 					break;
 				case Keyboard.ESCAPE :
