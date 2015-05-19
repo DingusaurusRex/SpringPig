@@ -136,7 +136,7 @@ import util.Stopwatch;
                     }
                     return;
                 }
-                
+
                 // Record condition
                 playStates.push(new PlayState(m_player, gateStatus, buttonStatus, m_board.crates, m_boardSprite.m_platformArts));
                 if (playStates.length >= Constants.RECORDED_FRAMES) {
