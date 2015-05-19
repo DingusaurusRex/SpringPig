@@ -44,8 +44,8 @@ import util.Stopwatch;
 		private var m_keyRight:Boolean;
 		private var m_keyLeft:Boolean;
 		private var m_keySpace:Boolean;
+		private var m_keyY:Boolean;
 		private var m_keyR:Boolean;
-		private var m_keyT:Boolean;
 
 		// Player
 		private var m_player:Player;
@@ -128,7 +128,7 @@ import util.Stopwatch;
                 Stopwatch.updateStopwatchText();
 
                 // Rewind
-                if (m_keyT) {
+                if (m_keyR) {
                     ticker++;
                     ticker %= Constants.UPDATES_BEFORE_REWIND;
                     if (playStates.length > 0 && ticker == 0) {
@@ -197,7 +197,7 @@ import util.Stopwatch;
 						useEnergy();
 					}
 				}
-				if (m_keyR) {
+				if (m_keyY) {
                     var logData:Object = {x:m_player.asset.x, y:m_player.asset.y};
                     m_logger.logAction(Constants.AID_RESET, logData);
                     util.Audio.playResetSFX();
@@ -1658,11 +1658,11 @@ import util.Stopwatch;
 					m_keyUp = false;
 					m_keyDown = false;
 					break;
-				case Keyboard.R :
-					m_keyR = true;
+				case Keyboard.Y :
+					m_keyY = true;
 					break;
-				case Keyboard.T :
-                    m_keyT = true;
+				case Keyboard.R :
+                    m_keyR = true;
                     break;
 				case Keyboard.ESCAPE :
                     if (Menu.state == Constants.STATE_GAME || Menu.state == Constants.STATE_PAUSE_MENU) {
@@ -1701,11 +1701,11 @@ import util.Stopwatch;
 				case Keyboard.SPACE :
 					m_keySpace = false;
 					break;
+				case Keyboard.Y :
+					m_keyY = false;
+					break;
 				case Keyboard.R :
 					m_keyR = false;
-					break;
-				case Keyboard.T :
-					m_keyT = false;
 					break;
 			}
 		}
