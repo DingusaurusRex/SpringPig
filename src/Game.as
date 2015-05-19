@@ -722,6 +722,10 @@ import util.Stopwatch;
 			
 			m_boardSprite.setPowerupsVisible();
 
+            // Reset rewind
+            playStates.splice();
+            ticker = 0;
+
 			Stopwatch.start();
 		}
 		
