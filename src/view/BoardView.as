@@ -180,7 +180,7 @@ package view
 		private var m_buttonArts:Dictionary;
 		private var m_gateArts:Dictionary;
 		
-		private var m_platformArts:Dictionary; // Start ID -> Sprite
+		public var m_platformArts:Dictionary; // Start ID -> Sprite
 		private var m_platformStart:Dictionary; // Start ID -> intPair
 		private var m_platformEnd:Dictionary; // End ID -> intPair
 		private var m_platformDirs:Dictionary; // Start ID -> direction 

@@ -1604,7 +1604,7 @@ import util.Stopwatch;
 					m_keyR = true;
 					break;
 				case Keyboard.T :
-                    ps = new PlayState(m_player, gateStatus, buttonStatus, m_board.crates);
+                    ps = new PlayState(m_player, gateStatus, buttonStatus, m_board.crates, m_boardSprite.m_platformArts);
 					break;
 				case Keyboard.Y :
                     m_player.replace(ps.player);
@@ -1628,6 +1628,10 @@ import util.Stopwatch;
                         c.asset.x = ps.crates[c].x;
                         c.asset.y = ps.crates[c].y;
                         c.dy = ps.crates[c].dy;
+                    }
+                    for each (var p:Sprite in m_boardSprite.m_platformArts) {
+                        p.x = ps.platforms[p].x;
+                        p.y = ps.platforms[p].y;
                     }
 					break;
 				case Keyboard.ESCAPE :
