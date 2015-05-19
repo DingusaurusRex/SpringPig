@@ -21,7 +21,13 @@ package
          * Debug Options
          */
         public static const SHOW_ALL_LEVELS:Boolean = false;
-		
+
+        /**
+         * Rewind Options
+         */
+        public static const RECORDED_FRAMES:int = 300;
+        public static const UPDATES_BEFORE_REWIND:int = 3;
+
         /**
          * Logging info
          */

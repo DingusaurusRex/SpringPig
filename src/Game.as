@@ -45,6 +45,7 @@ import util.Stopwatch;
 		private var m_keyLeft:Boolean;
 		private var m_keySpace:Boolean;
 		private var m_keyR:Boolean;
+		private var m_keyT:Boolean;
 
 		// Player
 		private var m_player:Player;
@@ -86,7 +87,9 @@ import util.Stopwatch;
         // Logger
         private var m_logger:Logger;
 
-        private var ps:PlayState;
+        // Rewind
+        private var playStates:Array;
+        private var ticker:int;
 		
 		/**
 		 * Begins the game
@@ -110,6 +113,8 @@ import util.Stopwatch;
 			this.m_levelReader = new LevelParser();
 
             this.m_logger = logger;
+
+            this.playStates = new Array();
 		}
 		
 		/**
@@ -118,20 +123,36 @@ import util.Stopwatch;
 		 */
 		private function update(e:Event = null):void
 		{
-			if (!pause) {
-				// Update the stopwatch
-				Stopwatch.updateStopwatchText();
-				
+            if (!pause) {
+                // Update the stopwatch
+                Stopwatch.updateStopwatchText();
+
+                // Rewind
+                if (m_keyT) {
+                    ticker++;
+                    ticker %= Constants.UPDATES_BEFORE_REWIND;
+                    if (playStates.length > 0 && ticker == 0) {
+                        refreshGame(playStates.pop());
+                    }
+                    return;
+                }
+                
+                // Record condition
+                playStates.push(new PlayState(m_player, gateStatus, buttonStatus, m_board.crates, m_boardSprite.m_platformArts));
+                if (playStates.length >= Constants.RECORDED_FRAMES) {
+                    playStates.shift();
+                }
+
 				if (m_player.bounce) {
 					useEnergy();
 					m_player.updatePosition(m_board.tileSideLength);
 					m_player.bounce = false;
 				}
-				
+
 				var playerDir:int = m_boardSprite.movePlatforms(m_player, m_board);
 				checkPlayerCollision(playerDir);
 				platforms = m_boardSprite.platforms;
-				
+
 				updateButtons();
 				displaySign();
 				updateCrates();
@@ -142,7 +163,7 @@ import util.Stopwatch;
 					m_player.startingHeight = getYPositionOfPlayer();
 					m_player.velocity = Constants.INITIAL_FALL_VELOCITY;
 				}
-				
+
 				// Process Keyboard controls
 				if (m_keyUp && !m_player.inAir) {
 					if (collidingWithLadder()) { // Go up the ladder
@@ -162,7 +183,7 @@ import util.Stopwatch;
 					if (m_player.asset.x < m_board.boardWidthInPixels - m_player.width - 5) {
 						m_player.inAir ? m_player.asset.x += m_player.airSpeedX : m_player.asset.x += m_player.speedX;
 						checkPlayerCollision(Constants.RIGHT);
-					}						
+					}
 				}
 				if (m_keyLeft) {
 					if (m_player.asset.x > 0) {
@@ -185,13 +206,13 @@ import util.Stopwatch;
 				}
 				if (m_player.inAir || collidingWithLadder()) {
 					m_player.updatePosition(m_board.tileSideLength);
-					
+
 					if (m_player.asset.y <= 0) {
 						m_player.startingHeight = getYPositionOfPlayer();
 						m_player.asset.y = 0;
 						m_player.velocity = Constants.INITIAL_FALL_VELOCITY;
 					}
-					
+
 					var hitLava:Boolean = checkPlayerCollision(Constants.UP);
 					var hitLava2:Boolean = checkPlayerCollision(Constants.DOWN); // Sets player.inAir
 					if (!m_player.inAir && !hitLava && !hitLava2) { // If player was in air and no longer is, add energy
@@ -199,11 +220,11 @@ import util.Stopwatch;
 						if (!collidingWithLadder()) { // Dont add energy if you fall on ladder
 							var energy:int = m_player.startingHeight - getYPositionOfPlayer() - Constants.ENERGY_DOWNGRADE;
 							incrementEnergy(energy);
-							
-							if (trampBelowPlayer()) 
+
+							if (trampBelowPlayer())
 							{
 								m_player.bounce = true;
-								
+
 								// Allows for buttons on top of trampolines.
 								var id:int = playerOnButton();
 								if (id != -1) {
@@ -235,9 +256,9 @@ import util.Stopwatch;
 						crate.asset.x = crateTile.x * m_board.tileSideLength;
 					}
 				}
-				
+
 				if (Constants.SHOW_JUMP_HEIGHT) {
-					if (!m_player.inAir) 
+					if (!m_player.inAir)
 					{
 						showJumpHeight();
 					} else {
@@ -246,6 +267,35 @@ import util.Stopwatch;
 				}
 			}
 		}
+
+        private function refreshGame(ps:PlayState):void {
+            m_player.replace(ps.player);
+            gateStatus = ObjectUtil.copy(ps.gateStatus);
+            for each (var id:int in gates) {
+                if (gateStatus[id] == 1) {
+                    m_boardSprite.openGate(m_board, id);
+                } else {
+                    m_boardSprite.closeGate(m_board, id);
+                }
+            }
+            buttonStatus = ObjectUtil.copy(ps.buttonStatus);
+            for each (id in buttons) {
+                if (buttonStatus[id] == 1) {
+                    setButtonUp(m_board, id);
+                } else {
+                    setButtonDown(m_board, id);
+                }
+            }
+            for each (var c:Crate in m_board.crates) {
+                c.asset.x = ps.crates[c].x;
+                c.asset.y = ps.crates[c].y;
+                c.dy = ps.crates[c].dy;
+            }
+            for each (var p:Sprite in m_boardSprite.m_platformArts) {
+                p.x = ps.platforms[p].x;
+                p.y = ps.platforms[p].y;
+            }
+        }
 		
 		/**
 		 * 
@@ -262,6 +312,10 @@ import util.Stopwatch;
 		{
 			// Get the board for the test level
 			m_board = m_levelReader.parseLevel(levelName);
+
+            // Clear rewind
+            playStates.splice();
+            ticker = 0;
 			
 			// Get the graphics for the test level
 			if (m_boardSprite)
@@ -1604,36 +1658,8 @@ import util.Stopwatch;
 					m_keyR = true;
 					break;
 				case Keyboard.T :
-                    ps = new PlayState(m_player, gateStatus, buttonStatus, m_board.crates, m_boardSprite.m_platformArts);
-					break;
-				case Keyboard.Y :
-                    m_player.replace(ps.player);
-                    gateStatus = ObjectUtil.copy(ps.gateStatus);
-                    for each (var id:int in gates) {
-                        if (gateStatus[id] == 1) {
-                            m_boardSprite.openGate(m_board, id);
-                        } else {
-                            m_boardSprite.closeGate(m_board, id);
-                        }
-                    }
-                    buttonStatus = ObjectUtil.copy(ps.buttonStatus);
-                    for each (id in buttons) {
-                        if (buttonStatus[id] == 1) {
-                            setButtonUp(m_board, id);
-                        } else {
-                            setButtonDown(m_board, id);
-                        }
-                    }
-                    for each (var c:Crate in m_board.crates) {
-                        c.asset.x = ps.crates[c].x;
-                        c.asset.y = ps.crates[c].y;
-                        c.dy = ps.crates[c].dy;
-                    }
-                    for each (var p:Sprite in m_boardSprite.m_platformArts) {
-                        p.x = ps.platforms[p].x;
-                        p.y = ps.platforms[p].y;
-                    }
-					break;
+                    m_keyT = true;
+                    break;
 				case Keyboard.ESCAPE :
                     if (Menu.state == Constants.STATE_GAME || Menu.state == Constants.STATE_PAUSE_MENU) {
                         pause = !pause;
@@ -1673,6 +1699,9 @@ import util.Stopwatch;
 					break;
 				case Keyboard.R :
 					m_keyR = false;
+					break;
+				case Keyboard.T :
+					m_keyT = false;
 					break;
 			}
 		}
