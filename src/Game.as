@@ -263,11 +263,11 @@ package
 			
 			this.m_playerStart = playerStart;
 			
-			Stopwatch.stopwatchText.x = m_meter.x;
-			Stopwatch.stopwatchText.y = m_meter.y + m_meter.height + Constants.GAME_STOPWATCH_TOP_PADDING;
+			Stopwatch.stopwatchText.x = Constants.GAME_STOPWATCH_LEFT_PADDING;
+			Stopwatch.stopwatchText.y = Constants.SCREEN_HEIGHT - Constants.GAME_STOPWATCH_HEIGHT - Constants.GAME_STOPWATCH_BOTTOM_PADDING;
 
             var previousRecord:TextField = GameState.getPlayerRecordGameTextField(currLevelIndex);
-            previousRecord.x = Stopwatch.stopwatchText.x;
+            previousRecord.x = Stopwatch.stopwatchText.x + Constants.GAME_STOPWATCH_WIDTH + Constants.PLAYER_RECORD_TIME_GAME_LEFT_PADDING;
             previousRecord.y = Stopwatch.stopwatchText.y + Constants.PLAYER_RECORD_TIME_GAME_TOP_PADDING;
 
 			// Add graphics			
