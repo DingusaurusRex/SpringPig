@@ -15,7 +15,8 @@ package
 		public static const HIGHLIGHT_PLAYER_SQUARE:Boolean = false; // highlight the whole square
 		public static const HIGHLIGHT_SMALL_PLAYER_SQUARE:Boolean = false; // highlight only the top part of the square
 		public static const MOVE_CRATES_IN_AIR:Boolean = true;
-		public static const SHOW_GRID:Boolean = true;
+		public static const SHOW_BACKGROUND:Boolean = true;
+		public static const SHOW_GRID:Boolean = false;
 
         /**
          * Debug Options
@@ -72,7 +73,7 @@ package
 		public static const SCREEN_WIDTH:int = 800;
 		public static const SCREEN_HEIGHT:int = 600;
 		
-		public static const SIDEBAR_WIDTH:int = 100;
+		public static const SIDEBAR_WIDTH:int = 0;
 		
 		public static const BOARD_WIDTH:int = SCREEN_WIDTH - SIDEBAR_WIDTH;
 		public static const BOARD_HEIGHT:int = SCREEN_HEIGHT;
