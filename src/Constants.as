@@ -30,6 +30,9 @@ package
         public static const RECORDED_FRAMES:int = 300;
         public static const UPDATES_BEFORE_REWIND:int = 1;
 
+        public static const REWIND_SYMBOL_WIDTH:int = 229;
+        public static const REWIND_SYMBOL_HEIGHT:int = 243;
+
         /**
          * Logging info
          */

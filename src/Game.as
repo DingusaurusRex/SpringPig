@@ -102,7 +102,11 @@ import util.Stopwatch;
         private var playStates:Array;
         private var ticker:int;
         private var framesRewound:int;
-        private var rewindLogged:Boolean;
+        private var rewindStarted:Boolean;
+
+        [Embed(source = "../assets/art/rewind.svg")]
+        private var rewindPicture:Class;
+        private var rewindSymbol:Sprite;
 
 		/**
 		 * Begins the game
@@ -128,6 +132,10 @@ import util.Stopwatch;
             this.m_logger = logger;
 
             this.playStates = new Array();
+
+            rewindSymbol = new rewindPicture();
+            rewindSymbol.width = Constants.REWIND_SYMBOL_WIDTH;
+            rewindSymbol.height = Constants.REWIND_SYMBOL_HEIGHT;
 		}
 		
 		/**
@@ -401,9 +409,12 @@ import util.Stopwatch;
             totalRewinds = 0;
 
             framesRewound = 0;
-            rewindLogged = false;
+            rewindStarted = false;
 
-            Menu.setPauseMenuLevelInfo(currLevelIndex + 1, getCurrentLevelName())
+            rewindSymbol.x = (m_boardSprite.width - Constants.REWIND_SYMBOL_WIDTH) / 2;
+            rewindSymbol.y = (m_boardSprite.height - Constants.REWIND_SYMBOL_HEIGHT) / 2;
+
+            Menu.setPauseMenuLevelInfo(currLevelIndex + 1, getCurrentLevelName());
 			GameState.currentLevelSave();
 			// Reset and start timing
 			Stopwatch.reset();
@@ -746,7 +757,7 @@ import util.Stopwatch;
             totalSprings = 0;
 
             totalRewinds = 0;
-            rewindLogged = false;
+            rewindStarted = false;
 
 			Stopwatch.start();
 		}
@@ -1764,12 +1775,13 @@ import util.Stopwatch;
 					break;
 				case Keyboard.R :
                     m_keyR = true;
-                    if (!rewindLogged) {
+                    if (!rewindStarted) {
                         totalRewinds++;
                         framesRewound = 0;
                         var logData:Object = {x: m_player.asset.x, y: m_player.asset.y, power: m_player.energy};
                         m_logger.logAction(Constants.AID_START_REWIND, logData);
-                        rewindLogged = true;
+                        rewindStarted = true;
+                        m_stage.addChild(rewindSymbol);
                     }
                     break;
 				case Keyboard.ESCAPE :
@@ -1814,9 +1826,12 @@ import util.Stopwatch;
 					break;
 				case Keyboard.R :
 					m_keyR = false;
-                    var logData:Object = {x:m_player.asset.x, y:m_player.asset.y, power:m_player.energy, frames:framesRewound};
-                    m_logger.logAction(Constants.AID_END_REWIND, logData);
-                    rewindLogged = false;
+                    if (rewindStarted) {
+                        var logData:Object = {x: m_player.asset.x, y: m_player.asset.y, power: m_player.energy, frames: framesRewound};
+                        m_logger.logAction(Constants.AID_END_REWIND, logData);
+                        rewindStarted = false;
+                        m_stage.removeChild(rewindSymbol);
+                    }
 					break;
 			}
 		}
