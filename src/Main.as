@@ -58,8 +58,8 @@ package
 
             // This is cid in the wiki
             // TODO: change when deploying
-            var versionID:int = 43;
-            var logger:Logger = Logger.initialize(Constants.GID, Constants.DB_NAME, Constants.SKEY, versionID, null, true);
+            var versionID:int = 110;
+            var logger:Logger = Logger.initialize(Constants.GID, Constants.DB_NAME, Constants.SKEY, versionID, null, false);
 			
             // Initialization
 			var game:Game = new Game(stage, prog, logger);
