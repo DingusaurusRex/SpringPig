@@ -413,6 +413,7 @@ package
 		public static const PAUSE_BACKGROUND_OPACITY:Number = 0.5;
 		
 		public static const PAUSE_RESUME_BUTTON_TEXT:String = "R[e]sume";
+        public static const PAUSE_RESTART_LEVEL_BUTTON_TEXT:String = "[Y] Restart Level";
 		
 		// End level menu
 		public static const END_LEVEL_TITLE_TEXT:String = "Level Finished!";

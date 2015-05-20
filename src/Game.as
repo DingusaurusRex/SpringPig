@@ -1747,7 +1747,7 @@ import util.Stopwatch;
                     springed = false;
 					break;
 				case Keyboard.Y :
-					m_keyR = true;
+					m_keyY = true;
                     resetted = false;
 					break;
 				case Keyboard.R :
