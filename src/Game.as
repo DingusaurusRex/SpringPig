@@ -117,7 +117,7 @@ package
 				Stopwatch.updateStopwatchText();
 				
 				if (m_player.bounce) {
-					useEnergy();
+					useEnergy(false);
 					m_player.updatePosition(m_board.tileSideLength);
 					m_player.bounce = false;
 				}
@@ -169,7 +169,7 @@ package
 				if (m_keySpace && (!m_player.inAir || standingOnCrate(m_player))) {
 					// Check that player is on top of ladder
 					if (ladderBelowPlayer && isPlayerAtTopOfLadder() || !ladderBelowPlayer()) {
-						useEnergy();
+						useEnergy(true);
 					}
 				}
 				if (m_keyR) {
@@ -566,11 +566,18 @@ package
 		/**
 		 * Uses up the player's energy, and makes him jump a value based on that energy.
 		 */
-		private function useEnergy(removeMeter:Boolean = true):void
+		private function useEnergy(manual:Boolean, removeMeter:Boolean = true):void
 		{
             var logData:Object = {x:m_player.asset.x, y:m_player.asset.y, power:m_player.energy};
             if (m_player.energy > 0) {
                 util.Audio.playSpringSFX();
+                if (manual) {
+                    m_logger.logAction(Constants.AID_SUCCESSFUL_SPRING, logData);
+                } else {
+                    m_logger.logAction(Constants.AID_TRAMPOLINE_SPRING, logData);
+                }
+            } else if (manual) {
+                m_logger.logAction(Constants.AID_FAILED_SPRING, logData);
             }
             m_logger.logAction(Constants.AID_SPRING, logData);
 			m_player.velocity = Constants.JUMP_VELOCITIES[m_player.energy];

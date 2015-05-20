@@ -36,6 +36,9 @@ package
         public static const AID_SPRING:int = 1;
         public static const AID_RESET:int = 2;
         public static const AID_DEATH:int = 3;
+        public static const AID_SUCCESSFUL_SPRING:int = 4;
+        public static const AID_FAILED_SPRING:int = 5;
+        public static const AID_TRAMPOLINE_SPRING:int = 6;
 
 		/**
 		 * Colors
