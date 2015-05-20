@@ -27,10 +27,10 @@ package view
 		[Embed(source = "../../assets/art/tiles/wall.svg")]
 		private var WallArt:Class;
 		
-		[Embed(source = "../../assets/art/tiles/lava.svg")]
+		[Embed(source = "../../assets/art/tiles/lava2.svg")]
 		private var LavaArt:Class;
 		
-		[Embed(source = "../../assets/art/tiles/end.svg")]
+		[Embed(source = "../../assets/art/tiles/flag.svg")]
 		private var EndArt:Class;
 		
 		[Embed(source="../../assets/art/tiles/ladder.svg")]
@@ -167,7 +167,7 @@ package view
 		[Embed(source = "../../assets/art/tiles/gates/yellow_open.svg")]
 		private var YellowOpenArt:Class
 		
-		[Embed(source="../../assets/art/fence.svg")]
+		[Embed(source="../../assets/art/background/gameBackground.svg")]
 		private var BackgroundArt:Class;
 
 		protected var m_boardViewWidth:int;		// The actual total width of the BoardView
@@ -216,15 +216,18 @@ package view
 			m_boardViewHeight = board.height * tileSideLength
 			
 			// Draw background
-			var background:Sprite = new BackgroundArt();
-			background.x = 0;
-			background.y = 0;
-			background.width = m_boardViewWidth;
-			background.height = m_boardViewHeight;
+			if (Constants.SHOW_BACKGROUND) {
+				var background:Sprite = new BackgroundArt();
+				background.x = 0;
+				background.y = 0;
+				background.width = m_boardViewWidth;
+				background.height = m_boardViewHeight;
+				addChild(background);
+			}
+			
 			graphics.beginFill(Constants.BACKGROUND_COLOR);
 			graphics.drawRect(0, 0, m_boardViewWidth, m_boardViewHeight);
 			graphics.endFill();			
-			addChild(background);
 			
 			
 			// Draw Tiles 

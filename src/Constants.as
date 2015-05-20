@@ -31,7 +31,7 @@ package
         /**
          * Logging info
          */
-        public static const LOG:Boolean = true;
+        public static const LOG:Boolean = false;
 
         public static const GID:int = 116;
         public static const DB_NAME:String = "cgs_gc_SpringMan";
@@ -203,7 +203,9 @@ package
 		
 		public static const NORMAL_JUMP_HEIGHT:int = 1;			// The height of a normal jump 
 		
-		public static const JUMP_VELOCITIES:Array = new Array(0, -.3, -.375, -.45, -.5, -.56, -.61, -.66, -.7, -.74, -.78);		// Jump velocities
+		
+		//public static const JUMP_VELOCITIES:Array = new Array(0, -.3, -.375, -.45, -.5, -.56, -.61, -.66, -.7, -.74, -.78);		// Jump velocities
+		public static const JUMP_VELOCITIES:Array = new Array(0, -.26, -.35, -.426, -.49, -.546, -.598, -.645, -.689, -.73, -.77);		// Jump velocities
 																																// Index in the array indicates the power of the jump (number of blocks the jump with go up)
 																																// units are blocks / update
 		
