@@ -283,6 +283,11 @@ import util.Stopwatch;
                 p.x = ps.platforms[p].x;
                 p.y = ps.platforms[p].y;
             }
+            if (m_signText != null && m_stage.contains(m_signText))
+            {
+                m_stage.removeChild(m_signText);
+            }
+            m_signText = null;
         }
 		
 		/**
