@@ -26,7 +26,7 @@ package
         /**
          * Logging info
          */
-        public static const LOG:Boolean = false;
+        public static const LOG:Boolean = true;
 
         public static const GID:int = 116;
         public static const DB_NAME:String = "cgs_gc_SpringMan";
@@ -38,7 +38,8 @@ package
         public static const AID_DEATH:int = 3;
         public static const AID_SUCCESSFUL_SPRING:int = 4;
         public static const AID_FAILED_SPRING:int = 5;
-        public static const AID_TRAMPOLINE_SPRING:int = 6;
+        public static const AID_SUCCESSFUL_TRAMPOLINE_SPRING:int = 6;
+        public static const AID_FAILED_TRAMPOLINE_SPRING:int = 7;
 
 		/**
 		 * Colors

@@ -81,7 +81,14 @@ package
 
         // Logger
         private var m_logger:Logger;
-		
+        private var successfulSprings:int;
+        private var failedSprings:int;
+        private var successfulTrampolineSprings:int;
+        private var failedTrampolineSprings:int;
+        private var totalSprings:int;
+        private var resetted:Boolean;
+        private var springed:Boolean;
+
 		/**
 		 * Begins the game
 		 * @param	p - Player Object (added to stage in main)
@@ -166,15 +173,17 @@ package
 						checkPlayerCollision(Constants.LEFT);
 					}
 				}
-				if (m_keySpace && (!m_player.inAir || standingOnCrate(m_player))) {
+				if (m_keySpace && (!m_player.inAir || standingOnCrate(m_player)) && !springed) {
 					// Check that player is on top of ladder
 					if (ladderBelowPlayer && isPlayerAtTopOfLadder() || !ladderBelowPlayer()) {
 						useEnergy(true);
 					}
+                    springed = true;
 				}
-				if (m_keyR) {
+				if (m_keyR && !resetted) {
                     var logData:Object = {x:m_player.asset.x, y:m_player.asset.y};
                     m_logger.logAction(Constants.AID_RESET, logData);
+                    resetted = true;
                     util.Audio.playResetSFX();
 					resetPlayer();
 					resetCrates();
@@ -296,7 +305,13 @@ package
 			}
 			initButtonGateDict();
 
+            // Set up logging
             m_logger.logLevelStart(currLevelIndex + 1, null);
+            successfulSprings = 0;
+            failedSprings = 0;
+            successfulTrampolineSprings = 0;
+            failedTrampolineSprings = 0;
+            totalSprings = 0;
 
             Menu.setPauseMenuLevelInfo(currLevelIndex + 1, getCurrentLevelName())
 			GameState.currentLevelSave();
@@ -531,7 +546,7 @@ package
 						pause = true; // So that player position is disregarded
                         Stopwatch.pause();
                         util.Audio.playWinSFX();
-                        var logData:Object = {time:Stopwatch.getCurrentTiming()};
+                        var logData:Object = {time:Stopwatch.getCurrentTiming(), ss:successfulSprings, fs:failedSprings, sts:successfulTrampolineSprings, fts:failedTrampolineSprings, ts:totalSprings};
                         m_logger.logLevelEnd(logData);
                         Menu.updatePlaythroughTime();
                         GameState.openNextLevelSave();
@@ -573,19 +588,28 @@ package
                 util.Audio.playSpringSFX();
                 if (manual) {
                     m_logger.logAction(Constants.AID_SUCCESSFUL_SPRING, logData);
+                    successfulSprings++;
                 } else {
-                    m_logger.logAction(Constants.AID_TRAMPOLINE_SPRING, logData);
+                    m_logger.logAction(Constants.AID_SUCCESSFUL_TRAMPOLINE_SPRING, logData);
+                    successfulTrampolineSprings++;
                 }
-            } else if (manual) {
-                m_logger.logAction(Constants.AID_FAILED_SPRING, logData);
+                m_player.velocity = Constants.JUMP_VELOCITIES[m_player.energy];
+                m_player.inAir = true;
+                m_player.startingHeight = getYPositionOfPlayer() + m_player.energy;
+                m_player.energy = 0;
+                if (removeMeter)
+                    m_meter.energy = m_player.energy;
+            } else {
+                if (manual) {
+                    m_logger.logAction(Constants.AID_FAILED_SPRING, logData);
+                    failedSprings++;
+                } else {
+                    m_logger.logAction(Constants.AID_FAILED_TRAMPOLINE_SPRING, logData);
+                    failedTrampolineSprings++;
+                }
             }
             m_logger.logAction(Constants.AID_SPRING, logData);
-			m_player.velocity = Constants.JUMP_VELOCITIES[m_player.energy];
-			m_player.inAir = true;
-			m_player.startingHeight = getYPositionOfPlayer() + m_player.energy;
-			m_player.energy = 0;
-			if (removeMeter)
-				m_meter.energy = m_player.energy;
+            totalSprings++;
 		}
 		
 		/**
@@ -624,6 +648,12 @@ package
 			}
 			
 			m_boardSprite.setPowerupsVisible();
+
+            successfulSprings = 0;
+            failedSprings = 0;
+            successfulTrampolineSprings = 0;
+            failedTrampolineSprings = 0;
+            totalSprings = 0;
 
 			Stopwatch.start();
 		}
@@ -1629,9 +1659,11 @@ package
 					m_keySpace = true;
 					m_keyUp = false;
 					m_keyDown = false;
+                    springed = false;
 					break;
 				case Keyboard.R :
 					m_keyR = true;
+                    resetted = false;
 					break;
 				case Keyboard.ESCAPE :
                     if (Menu.state == Constants.STATE_GAME || Menu.state == Constants.STATE_PAUSE_MENU) {
