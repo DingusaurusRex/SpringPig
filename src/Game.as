@@ -96,11 +96,14 @@ import util.Stopwatch;
         private var resetted:Boolean;
         private var springed:Boolean;
 
+        private var totalRewinds:int;
 
         // Rewind
         private var playStates:Array;
         private var ticker:int;
-		
+        private var framesRewound:int;
+        private var rewindLogged:Boolean;
+
 		/**
 		 * Begins the game
 		 * @param	p - Player Object (added to stage in main)
@@ -143,6 +146,7 @@ import util.Stopwatch;
                     ticker %= Constants.UPDATES_BEFORE_REWIND;
                     if (playStates.length > 0 && ticker == 0) {
                         refreshGame(playStates.pop());
+                        framesRewound++;
                     }
                     return;
                 }
@@ -394,6 +398,11 @@ import util.Stopwatch;
             failedTrampolineSprings = 0;
             totalSprings = 0;
 
+            totalRewinds = 0;
+
+            framesRewound = 0;
+            rewindLogged = false;
+
             Menu.setPauseMenuLevelInfo(currLevelIndex + 1, getCurrentLevelName())
 			GameState.currentLevelSave();
 			// Reset and start timing
@@ -627,7 +636,7 @@ import util.Stopwatch;
 						pause = true; // So that player position is disregarded
                         Stopwatch.pause();
                         util.Audio.playWinSFX();
-                        var logData:Object = {time:Stopwatch.getCurrentTiming(), ss:successfulSprings, fs:failedSprings, sts:successfulTrampolineSprings, fts:failedTrampolineSprings, ts:totalSprings};
+                        var logData:Object = {time:Stopwatch.getCurrentTiming(), ss:successfulSprings, fs:failedSprings, sts:successfulTrampolineSprings, fts:failedTrampolineSprings, ts:totalSprings, r:totalRewinds};
                         m_logger.logLevelEnd(logData);
                         Menu.updatePlaythroughTime();
                         GameState.openNextLevelSave();
@@ -735,6 +744,9 @@ import util.Stopwatch;
             successfulTrampolineSprings = 0;
             failedTrampolineSprings = 0;
             totalSprings = 0;
+
+            totalRewinds = 0;
+            rewindLogged = false;
 
 			Stopwatch.start();
 		}
@@ -1752,6 +1764,13 @@ import util.Stopwatch;
 					break;
 				case Keyboard.R :
                     m_keyR = true;
+                    if (!rewindLogged) {
+                        totalRewinds++;
+                        framesRewound = 0;
+                        var logData:Object = {x: m_player.asset.x, y: m_player.asset.y, power: m_player.energy};
+                        m_logger.logAction(Constants.AID_START_REWIND, logData);
+                        rewindLogged = true;
+                    }
                     break;
 				case Keyboard.ESCAPE :
                     if (Menu.state == Constants.STATE_GAME || Menu.state == Constants.STATE_PAUSE_MENU) {
@@ -1795,6 +1814,9 @@ import util.Stopwatch;
 					break;
 				case Keyboard.R :
 					m_keyR = false;
+                    var logData:Object = {x:m_player.asset.x, y:m_player.asset.y, power:m_player.energy, frames:framesRewound};
+                    m_logger.logAction(Constants.AID_END_REWIND, logData);
+                    rewindLogged = false;
 					break;
 			}
 		}

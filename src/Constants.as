@@ -47,6 +47,8 @@ package
         public static const AID_FAILED_SPRING:int = 5;
         public static const AID_SUCCESSFUL_TRAMPOLINE_SPRING:int = 6;
         public static const AID_FAILED_TRAMPOLINE_SPRING:int = 7;
+        public static const AID_START_REWIND:int = 8;
+        public static const AID_END_REWIND:int = 9;
 
 		/**
 		 * Colors

@@ -58,7 +58,7 @@ package
 
             // This is cid in the wiki
             // TODO: change when deploying
-            var versionID:int = 10;
+            var versionID:int = 36;
             var logger:Logger = Logger.initialize(Constants.GID, Constants.DB_NAME, Constants.SKEY, versionID, null, true);
 			
             // Initialization
