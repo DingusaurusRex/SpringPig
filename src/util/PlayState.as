@@ -17,8 +17,9 @@ public class PlayState {
     public var buttonStatus:Object;
     public var crates:Dictionary;
     public var platforms:Dictionary;
+    public var powerupUsed:IntPair;
 
-    public function PlayState(p:Player, gs:Object, bs:Object, cs:Array, pls:Dictionary) {
+    public function PlayState(p:Player, gs:Object, bs:Object, cs:Array, pls:Dictionary, puu:IntPair = null) {
         player = p.clone();
         gateStatus = ObjectUtil.copy(gs);
         buttonStatus = ObjectUtil.copy(bs);
@@ -36,6 +37,10 @@ public class PlayState {
             tp.x = pl.x;
             tp.y = pl.y;
             platforms[pl] = tp;
+        }
+        powerupUsed = puu;
+        if (puu != null) {
+            powerupUsed = puu.clone();
         }
     }
 }

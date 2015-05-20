@@ -103,6 +103,7 @@ import util.Stopwatch;
         private var ticker:int;
         private var framesRewound:int;
         private var rewindStarted:Boolean;
+        private var powerupUsed:IntPair;
 
         [Embed(source = "../assets/art/rewind.svg")]
         private var rewindPicture:Class;
@@ -133,6 +134,8 @@ import util.Stopwatch;
 
             this.playStates = new Array();
 
+            powerupUsed = null;
+
             rewindSymbol = new rewindPicture();
             rewindSymbol.width = Constants.REWIND_SYMBOL_WIDTH;
             rewindSymbol.height = Constants.REWIND_SYMBOL_HEIGHT;
@@ -160,7 +163,12 @@ import util.Stopwatch;
                 }
 
                 // Record condition
-                playStates.push(new PlayState(m_player, gateStatus, buttonStatus, m_board.crates, m_boardSprite.m_platformArts));
+                if (powerupUsed != null) {
+                    playStates.push(new PlayState(m_player, gateStatus, buttonStatus, m_board.crates, m_boardSprite.m_platformArts, powerupUsed));
+                    powerupUsed = null;
+                } else {
+                    playStates.push(new PlayState(m_player, gateStatus, buttonStatus, m_board.crates, m_boardSprite.m_platformArts));
+                }
                 if (Constants.LIMIT_RECORD && playStates.length >= Constants.RECORDED_FRAMES) {
                     playStates.shift();
                 }
@@ -316,6 +324,9 @@ import util.Stopwatch;
             } else {
                 removePlayerJumpHeight();
             }
+            if (ps.powerupUsed != null) {
+                m_boardSprite.setPowerupVisible(ps.powerupUsed);
+            }
         }
 		
 		/**
@@ -410,6 +421,7 @@ import util.Stopwatch;
 
             framesRewound = 0;
             rewindStarted = false;
+            powerupUsed = null;
 
             rewindSymbol.x = (m_boardSprite.width - Constants.REWIND_SYMBOL_WIDTH) / 2;
             rewindSymbol.y = (m_boardSprite.height - Constants.REWIND_SYMBOL_HEIGHT) / 2;
@@ -490,6 +502,7 @@ import util.Stopwatch;
 							m_player.asset.x + m_player.width != tile.x * m_board.tileSideLength)  // Check that the player does not collide by a simple pixel
 						{
 							handlePowerUp(id, tile);
+                            powerupUsed = tile.clone();
 						}
 						if (checkLavaHit(id, tile))
 							return true;
@@ -527,6 +540,7 @@ import util.Stopwatch;
 							m_player.asset.x != (tile.x + 1) * m_board.tileSideLength)  // Check that the player does not collide by a simple pixel) 
 						{
 							handlePowerUp(id, tile);
+                            powerupUsed = tile.clone();
 						}
 						//if (isButton(id) && collidingWithButton(player, tile)) {
 							//setButtonDown(board, id);
@@ -559,6 +573,7 @@ import util.Stopwatch;
 								return true;
 							if (isPowerUp(id) && m_boardSprite.isPowerupVisible(tile)) {
 								handlePowerUp(id, tile);
+                                powerupUsed = tile.clone();
 							}
 							if (id == Constants.WALL ||
 								id == Constants.TRAMP ||
@@ -623,6 +638,7 @@ import util.Stopwatch;
 							else if (isPowerUp(id) && m_boardSprite.isPowerupVisible(tile)) 
 							{
 								handlePowerUp(id, tile);
+                                powerupUsed = tile.clone();
 							}
 							// If one of the tiles below player is not empty, then player is not falling
 							else if (id != Constants.EMPTY &&
