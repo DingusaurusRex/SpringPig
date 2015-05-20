@@ -392,7 +392,7 @@ package
         public static const PAUSE_LEVEL_INFO_FONT_SIZE:int = 20;
         public static const PAUSE_LEVEL_INFO_ALIGNMENT:String = "center";
 		
-		public static const PAUSE_BACKGROUND_COLOR:uint = 0x000000;
+		public static const PAUSE_BACKGROUND_COLOR:uint = 0xFFFFFF;
 		public static const PAUSE_BACKGROUND_OPACITY:Number = 0.5;
 		
 		public static const PAUSE_RESUME_BUTTON_TEXT:String = "R[e]sume";
