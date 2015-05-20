@@ -26,6 +26,7 @@ package
         /**
          * Rewind Options
          */
+        public static const LIMIT_RECORD:Boolean = false;
         public static const RECORDED_FRAMES:int = 300;
         public static const UPDATES_BEFORE_REWIND:int = 1;
 

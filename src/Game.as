@@ -139,7 +139,7 @@ import util.Stopwatch;
 
                 // Record condition
                 playStates.push(new PlayState(m_player, gateStatus, buttonStatus, m_board.crates, m_boardSprite.m_platformArts));
-                if (playStates.length >= Constants.RECORDED_FRAMES) {
+                if (Constants.LIMIT_RECORD && playStates.length >= Constants.RECORDED_FRAMES) {
                     playStates.shift();
                 }
 
@@ -203,6 +203,11 @@ import util.Stopwatch;
                     var logData:Object = {x:m_player.asset.x, y:m_player.asset.y};
                     m_logger.logAction(Constants.AID_RESET, logData);
                     util.Audio.playResetSFX();
+
+                    // Reset rewind
+                    playStates.length = 0;
+                    ticker = 0;
+
 					resetPlayer();
 					resetCrates();
 				}
@@ -297,7 +302,7 @@ import util.Stopwatch;
 			m_board = m_levelReader.parseLevel(levelName);
 
             // Clear rewind
-            playStates.splice();
+            playStates.length = 0;
             ticker = 0;
 			
 			// Get the graphics for the test level
@@ -684,10 +689,6 @@ import util.Stopwatch;
 			}
 			
 			m_boardSprite.setPowerupsVisible();
-
-            // Reset rewind
-            playStates.splice();
-            ticker = 0;
 
 			Stopwatch.start();
 		}
