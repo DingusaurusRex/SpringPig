@@ -267,6 +267,17 @@ public class Menu {
         game.restartLevel();
     }
 
+    public static function restartLevelFromPause():void {
+        stage.removeEventListener(KeyboardEvent.KEY_DOWN, Menu.onKeyDown);
+        stage.removeChild(pauseMenu);
+        state = Constants.STATE_GAME;
+        game.pause = false; // For leaving pause menu using button
+        fullPlaythrough = false;
+        totalTime = 0;
+        game.restartLevel();
+        stage.focus = stage;
+    }
+
     public static function setPauseMenuLevelInfo(levelNumber:int, levelName:String):void {
         pauseMenu.setLevelInfo(levelNumber, levelName);
     }
@@ -306,6 +317,10 @@ public class Menu {
 
     public static function onRestartLevelClick(event:MouseEvent):void {
         restartLevel();
+    }
+
+    public static function onRestartLevelFromPauseClick(event:MouseEvent):void {
+        restartLevelFromPause();
     }
 
     public static function onResetProgressClick(event:MouseEvent):void {
@@ -393,6 +408,9 @@ public class Menu {
                 switch (key) {
                     case Keyboard.E:
                         removePauseMenu();
+                        break;
+                    case Keyboard.Y:
+                        restartLevelFromPause();
                         break;
                     case Keyboard.M:
                         createMainMenu();
@@ -676,6 +694,7 @@ class PauseMenu extends Sprite {
     private var levelInfo:TextField;
     private var levelInfoFormat:TextFormat;
     private var resumeButton:SimpleButton;
+    private var restartLevelButton:SimpleButton;
     private var mainMenuButton:SimpleButton;
 
     public function PauseMenu():void {
@@ -706,14 +725,21 @@ class PauseMenu extends Sprite {
                         Constants.SCREEN_HEIGHT / 2,
                 Menu.onResumeClick);
 
+        // Restart level button
+        restartLevelButton = Menu.getMenuButton(Constants.PAUSE_RESTART_LEVEL_BUTTON_TEXT,
+                        (Constants.SCREEN_WIDTH - Constants.MENU_BUTTON_WIDTH) / 2,
+                        resumeButton.y + Constants.MENU_BUTTON_PADDING_BETWEEN,
+                Menu.onRestartLevelFromPauseClick);
+
         // Main menu button
         mainMenuButton = Menu.getMenuButton(Constants.MAIN_MENU_BUTTON_TEXT,
                         (Constants.SCREEN_WIDTH - Constants.MENU_BUTTON_WIDTH) / 2,
-                        resumeButton.y + Constants.MENU_BUTTON_PADDING_BETWEEN,
+                        restartLevelButton.y + Constants.MENU_BUTTON_PADDING_BETWEEN,
                 Menu.onMainMenuClick);
 
         addChild(title);
         addChild(resumeButton);
+        addChild(restartLevelButton);
         addChild(mainMenuButton);
     }
 
