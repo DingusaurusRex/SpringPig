@@ -24,7 +24,7 @@ package view
 		 * Embedded Assets
 		**/
 		
-		[Embed(source = "../../assets/art/tiles/wall.svg")]
+		[Embed(source = "../../assets/art/tiles/wall2.svg")]
 		private var WallArt:Class;
 		
 		[Embed(source = "../../assets/art/tiles/lava2.svg")]

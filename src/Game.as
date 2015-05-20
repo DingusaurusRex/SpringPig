@@ -696,7 +696,7 @@ package
 							var rect:Sprite = new Sprite();
 							rect.graphics.beginFill(0xFF0000);
 							rect.graphics.drawRect(x * size, i * size, m_player.width, size - m_player.height);
-							rect.alpha = .25;
+							rect.alpha = .5;
 							rect.graphics.endFill();
 							
 							m_jumpHeightRects.push(rect);
