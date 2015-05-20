@@ -122,7 +122,6 @@ public class Menu {
         muteButton.y = Constants.MUTE_BUTTON_TOP_PADDING;
         pauseMenu.addChild(muteButton);
         pauseMenu.addChild(menuInstructions);
-        stage.removeChild(gameInstructions);
         stage.addChild(pauseMenu);
         stage.addEventListener(KeyboardEvent.KEY_DOWN, Menu.onKeyDown);
         stage.focus = stage;
@@ -131,7 +130,6 @@ public class Menu {
     public static function removePauseMenu():void {
         stage.removeEventListener(KeyboardEvent.KEY_DOWN, Menu.onKeyDown);
         stage.removeChild(pauseMenu);
-        stage.addChild(gameInstructions);
         state = Constants.STATE_GAME;
         game.pause = false; // For leaving pause menu using button
         Stopwatch.start();
