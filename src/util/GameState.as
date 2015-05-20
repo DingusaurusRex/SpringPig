@@ -124,6 +124,7 @@ public class GameState {
     public static function getPlayerRecordGameTextField(level:int):TextField {
         if (saveable) {
             playerRecordGameText.text = Constants.PLAYER_RECORD_TIME_GAME_DEFAULT_TEXT + Stopwatch.formatTiming(getPlayerRecord(level));
+            playerRecordGameText.width = Constants.PLAYER_RECORD_TIME_GAME_WIDTH;
             playerRecordGameText.setTextFormat(playerRecordGameDefaultTextFormat);
             return playerRecordGameText;
         }

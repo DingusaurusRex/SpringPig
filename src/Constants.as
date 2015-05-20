@@ -33,7 +33,7 @@ package
         /**
          * Logging info
          */
-        public static const LOG:Boolean = false;
+        public static const LOG:Boolean = true;
 
         public static const GID:int = 116;
         public static const DB_NAME:String = "cgs_gc_SpringMan";
@@ -43,6 +43,10 @@ package
         public static const AID_SPRING:int = 1;
         public static const AID_RESET:int = 2;
         public static const AID_DEATH:int = 3;
+        public static const AID_SUCCESSFUL_SPRING:int = 4;
+        public static const AID_FAILED_SPRING:int = 5;
+        public static const AID_SUCCESSFUL_TRAMPOLINE_SPRING:int = 6;
+        public static const AID_FAILED_TRAMPOLINE_SPRING:int = 7;
 
 		/**
 		 * Colors
@@ -94,17 +98,23 @@ package
 		
 		public static const GAME_STOPWATCH_FONT:String = "arial";
 		public static const GAME_STOPWATCH_FONT_SIZE:int = 20;
+		public static const GAME_STOPWATCH_WIDTH:int = 100;
+		public static const GAME_STOPWATCH_HEIGHT:int = 25;
 		public static const GAME_STOPWATCH_TOP_PADDING:int = 10;
-		
+		public static const GAME_STOPWATCH_BOTTOM_PADDING:int = 5;
+		public static const GAME_STOPWATCH_LEFT_PADDING:int = 5;
+
 		public static const MENU_STOPWATCH_DEFAULT_TEXT:String = "Your Time: ";
 		public static const MENU_STOPWATCH_HEIGHT:int = 30;
 		public static const MENU_STOPWATCH_FONT_SIZE:int = 25;
 		public static const MENU_STOPWATCH_TEXT_ALIGNMENT:String = "center";
 
         // GameState Values
-        public static const PLAYER_RECORD_TIME_GAME_DEFAULT_TEXT:String = "Best Time:\n";
-        public static const PLAYER_RECORD_TIME_GAME_FONT_SIZE:int = 20;
-        public static const PLAYER_RECORD_TIME_GAME_TOP_PADDING:int = 30;
+        public static const PLAYER_RECORD_TIME_GAME_DEFAULT_TEXT:String = "Best Time: ";
+        public static const PLAYER_RECORD_TIME_GAME_FONT_SIZE:int = 15;
+        public static const PLAYER_RECORD_TIME_GAME_WIDTH:int = 150;
+        public static const PLAYER_RECORD_TIME_GAME_TOP_PADDING:int = 5;
+        public static const PLAYER_RECORD_TIME_GAME_LEFT_PADDING:int = 20;
         public static const PLAYER_RECORD_TIME_GAME_TEXT_ALIGNMENT:String = "left";
 
         public static const PLAYER_RECORD_TIME_END_LEVEL_DEFAULT_TEXT:String = "Best Time: ";
@@ -399,7 +409,7 @@ package
         public static const PAUSE_LEVEL_INFO_FONT_SIZE:int = 20;
         public static const PAUSE_LEVEL_INFO_ALIGNMENT:String = "center";
 		
-		public static const PAUSE_BACKGROUND_COLOR:uint = 0x000000;
+		public static const PAUSE_BACKGROUND_COLOR:uint = 0xFFFFFF;
 		public static const PAUSE_BACKGROUND_OPACITY:Number = 0.5;
 		
 		public static const PAUSE_RESUME_BUTTON_TEXT:String = "R[e]sume";

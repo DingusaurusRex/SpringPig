@@ -86,6 +86,16 @@ import util.Stopwatch;
 
         // Logger
         private var m_logger:Logger;
+        // 5 below are not reset when rewind is called so a complete solution
+        // can include springs rewinded
+        private var successfulSprings:int;
+        private var failedSprings:int;
+        private var successfulTrampolineSprings:int;
+        private var failedTrampolineSprings:int;
+        private var totalSprings:int;
+        private var resetted:Boolean;
+        private var springed:Boolean;
+
 
         // Rewind
         private var playStates:Array;
@@ -144,7 +154,7 @@ import util.Stopwatch;
                 }
 
 				if (m_player.bounce) {
-					useEnergy();
+					useEnergy(false);
 					m_player.updatePosition(m_board.tileSideLength);
 					m_player.bounce = false;
 				}
@@ -193,15 +203,17 @@ import util.Stopwatch;
 						checkPlayerCollision(Constants.LEFT);
 					}
 				}
-				if (m_keySpace && (!m_player.inAir || standingOnCrate(m_player))) {
+				if (m_keySpace && (!m_player.inAir || standingOnCrate(m_player)) && !springed) {
 					// Check that player is on top of ladder
 					if (ladderBelowPlayer && isPlayerAtTopOfLadder() || !ladderBelowPlayer()) {
-						useEnergy();
+						useEnergy(true);
 					}
+                    springed = true;
 				}
-				if (m_keyY) {
+				if (m_keyY && !resetted) {
                     var logData:Object = {x:m_player.asset.x, y:m_player.asset.y};
                     m_logger.logAction(Constants.AID_RESET, logData);
+                    resetted = true;
                     util.Audio.playResetSFX();
 
                     // Reset rewind
@@ -337,21 +349,18 @@ import util.Stopwatch;
 			
 			this.m_playerStart = playerStart;
 			
-			Stopwatch.stopwatchText.x = m_meter.x;
-			Stopwatch.stopwatchText.y = m_meter.y + m_meter.height + Constants.GAME_STOPWATCH_TOP_PADDING;
+			Stopwatch.stopwatchText.x = Constants.GAME_STOPWATCH_LEFT_PADDING;
+			Stopwatch.stopwatchText.y = Constants.SCREEN_HEIGHT - Constants.GAME_STOPWATCH_HEIGHT - Constants.GAME_STOPWATCH_BOTTOM_PADDING;
 
             var previousRecord:TextField = GameState.getPlayerRecordGameTextField(currLevelIndex);
-            previousRecord.x = Stopwatch.stopwatchText.x;
+            previousRecord.x = Stopwatch.stopwatchText.x + Constants.GAME_STOPWATCH_WIDTH + Constants.PLAYER_RECORD_TIME_GAME_LEFT_PADDING;
             previousRecord.y = Stopwatch.stopwatchText.y + Constants.PLAYER_RECORD_TIME_GAME_TOP_PADDING;
-
-            Menu.gameInstructions.x = previousRecord.x;
 
 			// Add graphics			
 			m_stage.addChild(m_boardSprite);
 			m_stage.addChild(m_meter);
 			m_stage.addChild(Stopwatch.stopwatchText);
             m_stage.addChild(previousRecord);
-            m_stage.addChild(Menu.gameInstructions);
 			m_stage.addChild(m_player.asset);
 			
 			// Create Listeners
@@ -377,7 +386,13 @@ import util.Stopwatch;
 			}
 			initButtonGateDict();
 
+            // Set up logging
             m_logger.logLevelStart(currLevelIndex + 1, null);
+            successfulSprings = 0;
+            failedSprings = 0;
+            successfulTrampolineSprings = 0;
+            failedTrampolineSprings = 0;
+            totalSprings = 0;
 
             Menu.setPauseMenuLevelInfo(currLevelIndex + 1, getCurrentLevelName())
 			GameState.currentLevelSave();
@@ -612,7 +627,7 @@ import util.Stopwatch;
 						pause = true; // So that player position is disregarded
                         Stopwatch.pause();
                         util.Audio.playWinSFX();
-                        var logData:Object = {time:Stopwatch.getCurrentTiming()};
+                        var logData:Object = {time:Stopwatch.getCurrentTiming(), ss:successfulSprings, fs:failedSprings, sts:successfulTrampolineSprings, fts:failedTrampolineSprings, ts:totalSprings};
                         m_logger.logLevelEnd(logData);
                         Menu.updatePlaythroughTime();
                         GameState.openNextLevelSave();
@@ -647,19 +662,35 @@ import util.Stopwatch;
 		/**
 		 * Uses up the player's energy, and makes him jump a value based on that energy.
 		 */
-		private function useEnergy(removeMeter:Boolean = true):void
+		private function useEnergy(manual:Boolean, removeMeter:Boolean = true):void
 		{
             var logData:Object = {x:m_player.asset.x, y:m_player.asset.y, power:m_player.energy};
             if (m_player.energy > 0) {
                 util.Audio.playSpringSFX();
+                if (manual) {
+                    m_logger.logAction(Constants.AID_SUCCESSFUL_SPRING, logData);
+                    successfulSprings++;
+                } else {
+                    m_logger.logAction(Constants.AID_SUCCESSFUL_TRAMPOLINE_SPRING, logData);
+                    successfulTrampolineSprings++;
+                }
+                m_player.velocity = Constants.JUMP_VELOCITIES[m_player.energy];
+                m_player.inAir = true;
+                m_player.startingHeight = getYPositionOfPlayer() + m_player.energy;
+                m_player.energy = 0;
+                if (removeMeter)
+                    m_meter.energy = m_player.energy;
+            } else {
+                if (manual) {
+                    m_logger.logAction(Constants.AID_FAILED_SPRING, logData);
+                    failedSprings++;
+                } else {
+                    m_logger.logAction(Constants.AID_FAILED_TRAMPOLINE_SPRING, logData);
+                    failedTrampolineSprings++;
+                }
             }
             m_logger.logAction(Constants.AID_SPRING, logData);
-			m_player.velocity = Constants.JUMP_VELOCITIES[m_player.energy];
-			m_player.inAir = true;
-			m_player.startingHeight = getYPositionOfPlayer() + m_player.energy;
-			m_player.energy = 0;
-			if (removeMeter)
-				m_meter.energy = m_player.energy;
+            totalSprings++;
 		}
 		
 		/**
@@ -698,6 +729,12 @@ import util.Stopwatch;
 			}
 			
 			m_boardSprite.setPowerupsVisible();
+
+            successfulSprings = 0;
+            failedSprings = 0;
+            successfulTrampolineSprings = 0;
+            failedTrampolineSprings = 0;
+            totalSprings = 0;
 
 			Stopwatch.start();
 		}
@@ -1707,9 +1744,11 @@ import util.Stopwatch;
 					m_keySpace = true;
 					m_keyUp = false;
 					m_keyDown = false;
+                    springed = false;
 					break;
 				case Keyboard.Y :
-					m_keyY = true;
+					m_keyR = true;
+                    resetted = false;
 					break;
 				case Keyboard.R :
                     m_keyR = true;
