@@ -346,9 +346,10 @@ package
 		
 		public static const LEVEL_SELECT_PAGE_TOP_PADDING:int = 200;
 
-        public static const LEVEL_SELECT_TIME_RECORD_TEXT:String = "PB: ";
+        public static const LEVEL_SELECT_TIME_RECORD_TEXT:String = "Personal Best:\n";
         public static const LEVEL_SELECT_TIME_RECORD_TOP_PADDING:int = 3;
         public static const LEVEL_SELECT_TIME_RECORD_FONT_SIZE:int = 15;
+        public static const LEVEL_SELECT_TIME_RECORD_HEIGHT:int = 40;
         public static const LEVEL_SELECT_TIME_RECORD_ALIGNMENT:String = "center";
 
         // Time records menu
