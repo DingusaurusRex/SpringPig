@@ -25,7 +25,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -41,7 +41,7 @@
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
      inkscape:window-width="640"
-     inkscape:window-height="480"
+     inkscape:window-height="714"
      id="namedview3478"
      showgrid="false"
      inkscape:zoom="2.5147112"
@@ -55,16 +55,14 @@
      width="93.847755"
      height="93.847755"
      preserveAspectRatio="none"
-     xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGQAAABkCAYAAABw4pVUAAAABGdBTUEAALGPC/xhBQAAAAlwSFlz
-AAAOwAAADsABataJCQAAABh0RVh0U29mdHdhcmUAcGFpbnQubmV0IDQuMC41ZYUyZQAAAUJJREFU
-eF7t0bFNBEEUBNFNj0SJBheHGLAugYXDO6mMkTCqjTKeNCpnpN/Xfd8ZgjEejPFgjAdjPBjjwRgP
-xngwxoMxHozxYIwHYzwY48EYD8Z4MMaDMR6M8WCMB2M8GOPBGA/GeDDGgzEejPFgjAdjPBjjwRgP
-xngwxoMxHozxYIwHYzwY48EYD8Z4MMaDMR6M8WCMB2M8GOPBGA/GeDDGgzEejPFgjAdjPBjjwRgP
-xngwxoMxHozxYIwHYzwY48EYD8Z4MMaDMR6M8WCMB2M8GOPBGA/GeDDGg/HEx/v19v15feXV8y50
-r1MYTzw/vx+/z7z4uwvc6xTGEw3CGmRMg4xpkDENMqZBxjTImAYZ0yBjGmRMg4xpkDENMqZBxjTI
-mAYZ0yBjGmRMg4xpkDENMqZBxjTImAYZ0yBj/jfIff0AJtI1rT7TKsoAAAAASUVORK5CYII=
-"
+     xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGQAAABkCAYAAABw4pVUAAAABGdBTUEAALGPC/xhBQAAAAlwSFlz AAAOwAAADsABataJCQAAABh0RVh0U29mdHdhcmUAcGFpbnQubmV0IDQuMC41ZYUyZQAAAUJJREFU eF7t0bFNBEEUBNFNj0SJBheHGLAugYXDO6mMkTCqjTKeNCpnpN/Xfd8ZgjEejPFgjAdjPBjjwRgP xngwxoMxHozxYIwHYzwY48EYD8Z4MMaDMR6M8WCMB2M8GOPBGA/GeDDGgzEejPFgjAdjPBjjwRgP xngwxoMxHozxYIwHYzwY48EYD8Z4MMaDMR6M8WCMB2M8GOPBGA/GeDDGgzEejPFgjAdjPBjjwRgP xngwxoMxHozxYIwHYzwY48EYD8Z4MMaDMR6M8WCMB2M8GOPBGA/GeDDGg/HEx/v19v15feXV8y50 r1MYTzw/vx+/z7z4uwvc6xTGEw3CGmRMg4xpkDENMqZBxjTImAYZ0yBjGmRMg4xpkDENMqZBxjTI mAYZ0yBjGmRMg4xpkDENMqZBxjTImAYZ0yBj/jfIff0AJtI1rT7TKsoAAAAASUVORK5CYII= "
      id="image3484"
      x="0"
-     y="0" />
+     y="0"
+     style="fill:#00ffff" />
+  <path
+     style="fill:#00ffff;fill-opacity:1"
+     d="m 14.31576,81.520295 0,-11.929799 32.210458,0 32.210459,0 0,11.929799 0,11.9298 -32.210459,0 -32.210458,0 0,-11.9298 z"
+     id="path3436"
+     inkscape:connector-curvature="0" />
 </svg>

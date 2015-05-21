@@ -25,7 +25,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -41,12 +41,12 @@
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
      inkscape:window-width="640"
-     inkscape:window-height="480"
+     inkscape:window-height="674"
      id="namedview3458"
      showgrid="false"
      inkscape:zoom="2.5147112"
-     inkscape:cx="46.923878"
-     inkscape:cy="46.923878"
+     inkscape:cx="37.009345"
+     inkscape:cy="86.727591"
      inkscape:window-x="0"
      inkscape:window-y="0"
      inkscape:window-maximized="0"
@@ -55,16 +55,13 @@
      width="93.847755"
      height="93.847755"
      preserveAspectRatio="none"
-     xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGQAAABkCAYAAABw4pVUAAAABGdBTUEAALGPC/xhBQAAAAlwSFlz
-AAAOwAAADsABataJCQAAABh0RVh0U29mdHdhcmUAcGFpbnQubmV0IDQuMC41ZYUyZQAAATRJREFU
-eF7t0aENAlEQBuFXwNVB/81gqAFFA48LjjBikxODGPGZMZv8u/be+SMY48EYD8Z4MMaDMR6M8WCM
-B2M8GOPBGA/GeDDGgzEejPFgjAdjPBjjwRgPxngwxoMxHozxYIwHYzwY48EYD8Z4MMaDMR6M8WCM
-B2M8GOPBGA/GeDDGgzEejPFgjAdjPBjjwRgPxngwxoMxHozxYIwHYzwY48EYD8Z4MMaDMR6M8WCM
-B2M8GOPBGA/GeDDGgzEejPFgjAdjPBjjwRgPxngwxoMxHozxYIwHYzwY48EYD8Z4MMaDMR6M8WCM
-B2M8GOPBGA/GeDDGgzEejPFgjAdjPBjjwRgPxngwxoMxHozxYIwHYzwYR17rON3y48C9hjBOPO/r
-cR7f+fbZBfaawjjRQ9i1h+z1BupieRVQC46uAAAAAElFTkSuQmCC
-"
+     xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGQAAABkCAYAAABw4pVUAAAABGdBTUEAALGPC/xhBQAAAAlwSFlz AAAOwAAADsABataJCQAAABh0RVh0U29mdHdhcmUAcGFpbnQubmV0IDQuMC41ZYUyZQAAATRJREFU eF7t0aENAlEQBuFXwNVB/81gqAFFA48LjjBikxODGPGZMZv8u/be+SMY48EYD8Z4MMaDMR6M8WCM B2M8GOPBGA/GeDDGgzEejPFgjAdjPBjjwRgPxngwxoMxHozxYIwHYzwY48EYD8Z4MMaDMR6M8WCM B2M8GOPBGA/GeDDGgzEejPFgjAdjPBjjwRgPxngwxoMxHozxYIwHYzwY48EYD8Z4MMaDMR6M8WCM B2M8GOPBGA/GeDDGgzEejPFgjAdjPBjjwRgPxngwxoMxHozxYIwHYzwY48EYD8Z4MMaDMR6M8WCM B2M8GOPBGA/GeDDGgzEejPFgjAdjPBjjwRgPxngwxoMxHozxYIwHYzwYR17rON3y48C9hjBOPO/r cR7f+fbZBfaawjjRQ9i1h+z1BupieRVQC46uAAAAAElFTkSuQmCC "
      id="image3464"
      x="0"
      y="0" />
+  <path
+     style="fill:#00ffff;fill-opacity:1"
+     d="m 14.31576,92.853605 c 0,-0.525304 3.844047,-0.59649 32.210458,-0.59649 28.366411,0 32.210459,0.07119 32.210459,0.59649 0,0.525304 -3.844048,0.59649 -32.210459,0.59649 -28.366411,0 -32.210458,-0.07119 -32.210458,-0.59649 z"
+     id="path3422"
+     inkscape:connector-curvature="0" />
 </svg>
