@@ -109,6 +109,10 @@ import util.Stopwatch;
         private var rewindPicture:Class;
         private var rewindSymbol:Sprite;
 
+        private var rewindBarBackground:Sprite;
+        private var rewindBar:Sprite;
+        private var initialFrames:Number;
+
 		/**
 		 * Begins the game
 		 * @param	p - Player Object (added to stage in main)
@@ -139,6 +143,24 @@ import util.Stopwatch;
             rewindSymbol = new rewindPicture();
             rewindSymbol.width = Constants.REWIND_SYMBOL_WIDTH;
             rewindSymbol.height = Constants.REWIND_SYMBOL_HEIGHT;
+
+            rewindBarBackground = new Sprite();
+            rewindBarBackground.x = Constants.SCREEN_WIDTH / 2 + Constants.REWIND_BAR_LEFT_PADDING;
+            rewindBarBackground.y = Constants.SCREEN_HEIGHT - Constants.REWIND_BAR_HEIGHT - Constants.REWIND_BAR_BOTTOM_PADDING;
+            rewindBarBackground.graphics.beginFill(Constants.REWIND_BAR_BACKGROUND_COLOR);
+            rewindBarBackground.graphics.drawRect(0,
+                    0,
+                    Constants.SCREEN_WIDTH / 2 - Constants.REWIND_BAR_LEFT_PADDING - Constants.REWIND_BAR_RIGHT_PADDING,
+                    Constants.REWIND_BAR_HEIGHT);
+
+            rewindBar = new Sprite();
+            rewindBar.x = Constants.SCREEN_WIDTH / 2 + Constants.REWIND_BAR_LEFT_PADDING + Constants.REWIND_BAR_INNER_PADDING;
+            rewindBar.y = Constants.SCREEN_HEIGHT - Constants.REWIND_BAR_HEIGHT - Constants.REWIND_BAR_BOTTOM_PADDING + Constants.REWIND_BAR_INNER_PADDING;
+            rewindBar.graphics.beginFill(Constants.REWIND_BAR_COLOR);
+            rewindBar.graphics.drawRect(0,
+                    0,
+                            Constants.SCREEN_WIDTH / 2 - Constants.REWIND_BAR_LEFT_PADDING - Constants.REWIND_BAR_RIGHT_PADDING - Constants.REWIND_BAR_INNER_PADDING * 2,
+                    Constants.REWIND_BAR_HEIGHT - Constants.REWIND_BAR_INNER_PADDING * 2);
 		}
 		
 		/**
@@ -157,6 +179,7 @@ import util.Stopwatch;
                     ticker %= Constants.UPDATES_BEFORE_REWIND;
                     if (playStates.length > 0 && ticker == 0) {
                         refreshGame(playStates.pop());
+                        rewindBar.scaleX = playStates.length / initialFrames;
                         framesRewound++;
                     }
                     return;
@@ -379,7 +402,7 @@ import util.Stopwatch;
             previousRecord.x = Stopwatch.stopwatchText.x + Constants.GAME_STOPWATCH_WIDTH + Constants.PLAYER_RECORD_TIME_GAME_LEFT_PADDING;
             previousRecord.y = Stopwatch.stopwatchText.y + Constants.PLAYER_RECORD_TIME_GAME_TOP_PADDING;
 
-			// Add graphics			
+			// Add graphics
 			m_stage.addChild(m_boardSprite);
 			m_stage.addChild(m_meter);
 			m_stage.addChild(Stopwatch.stopwatchText);
@@ -425,6 +448,8 @@ import util.Stopwatch;
 
             rewindSymbol.x = (m_boardSprite.width - Constants.REWIND_SYMBOL_WIDTH) / 2;
             rewindSymbol.y = (m_boardSprite.height - Constants.REWIND_SYMBOL_HEIGHT) / 2;
+
+            initialFrames = 0;
 
             Menu.setPauseMenuLevelInfo(currLevelIndex + 1, getCurrentLevelName());
 			GameState.currentLevelSave();
@@ -1797,7 +1822,10 @@ import util.Stopwatch;
                         var logData:Object = {x: m_player.asset.x, y: m_player.asset.y, power: m_player.energy};
                         m_logger.logAction(Constants.AID_START_REWIND, logData);
                         rewindStarted = true;
+                        initialFrames = playStates.length;
                         m_stage.addChild(rewindSymbol);
+                        m_stage.addChild(rewindBarBackground);
+                        m_stage.addChild(rewindBar);
                     }
                     break;
 				case Keyboard.ESCAPE :
@@ -1847,6 +1875,8 @@ import util.Stopwatch;
                         m_logger.logAction(Constants.AID_END_REWIND, logData);
                         rewindStarted = false;
                         m_stage.removeChild(rewindSymbol);
+                        m_stage.removeChild(rewindBarBackground);
+                        m_stage.removeChild(rewindBar);
                     }
 					break;
 			}
