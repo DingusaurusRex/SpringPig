@@ -14,6 +14,7 @@ package model.levelHandling
 		private var m_height:int;
 		private var m_board:Array;
 		private var m_signs:Array;
+		private var m_name:String;
 		public var crates:Array;
 		
 		private var m_tileSideLength:int;			// The length of the side of a single tile (in pixels)
@@ -26,6 +27,7 @@ package model.levelHandling
 			m_height = level.height;
 			m_board = level.board_array;
 			m_signs = level.signs;
+			m_name = level.name;
 			crates = new Array();
 			
 			var tileWidth:int = Constants.BOARD_WIDTH / m_width;
@@ -62,6 +64,14 @@ package model.levelHandling
 		public function get height():int
 		{
 			return m_height;
+		}
+		
+		/**
+		 * Return the name of the level
+		**/
+		public function get name():String
+		{
+			return m_name;
 		}
 		
 		/**
