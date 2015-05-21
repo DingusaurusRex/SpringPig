@@ -1,5 +1,5 @@
 {
-	"name":		"level5",
+	"name":		"Sidestep",
 	"width":	12,
 	"height":	11,
 	"board_array":	[	
@@ -16,6 +16,6 @@
 						1,	1,	1,	1,	1,	1,	1,	1,	1,	1,	1,	1
 					],
 	"signs":	[
-					{"id":54, "text":"Try Not To Land Here!! \n(R to reset)"}
+					{"id":54, "text":"Try Not To Land Here!! \n (R to rewind)"}
 				]
 }
