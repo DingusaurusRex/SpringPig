@@ -22,7 +22,17 @@ package
          * Debug Options
          */
         public static const SHOW_ALL_LEVELS:Boolean = false;
-		
+
+        /**
+         * Rewind Options
+         */
+        public static const LIMIT_RECORD:Boolean = false;
+        public static const RECORDED_FRAMES:int = 300;
+        public static const UPDATES_BEFORE_REWIND:int = 1;
+
+        public static const REWIND_SYMBOL_WIDTH:int = 229;
+        public static const REWIND_SYMBOL_HEIGHT:int = 243;
+
         /**
          * Logging info
          */
@@ -40,6 +50,8 @@ package
         public static const AID_FAILED_SPRING:int = 5;
         public static const AID_SUCCESSFUL_TRAMPOLINE_SPRING:int = 6;
         public static const AID_FAILED_TRAMPOLINE_SPRING:int = 7;
+        public static const AID_START_REWIND:int = 8;
+        public static const AID_END_REWIND:int = 9;
 
 		/**
 		 * Colors
@@ -273,15 +285,15 @@ package
 		public static const MAIN_MENU_BUTTON_TOP_PADDING:int = 20;
 		public static const MAIN_MENU_BUTTON_LEFT_PADDING:int = 20;
 
-        public static const INSTRUCTIONS_MENU:String = "How to play:\nMove Left\t: Left Arrow\nMove Right\t: Right Arrow\nJump\t\t: Up Arrow\nSpring\t\t: Space\nReset\t\t: R\nPause\t\t: Escape";
-        public static const INSTRUCTIONS_GAME:String = "Controls:\nLeft\t: Left Arrow\nRight\t: Right Arrow\nJump\t: Up Arrow\nSpring\t: Space\nReset\t: R\nPause\t: Escape";
-        public static const INSTRUCTIONS_MENU_TOP_PADDING:int = 460;
+        public static const INSTRUCTIONS_MENU:String = "How to play:\nMove Left\t: Left Arrow\nMove Right\t: Right Arrow\nJump\t\t: Up Arrow\nSpring\t\t: Space\nRewind\t\t: R\nReset\t\t: Y\nPause\t\t: Escape";
+        public static const INSTRUCTIONS_GAME:String = "Controls:\nLeft\t: Left Arrow\nRight\t: Right Arrow\nJump\t: Up Arrow\nSpring\t: Space\nRewind\t: R\nReset\t: Y\nPause\t: Escape";
+        public static const INSTRUCTIONS_MENU_TOP_PADDING:int = 440;
         public static const INSTRUCTIONS_MENU_LEFT_PADDING:int = 30;
         public static const INSTRUCTIONS_GAME_BOTTOM_PADDING:int = 5;
         public static const INSTRUCTIONS_GAME_RIGHT_PADDING:int = 30;
         public static const INSTRUCTIONS_MENU_HEIGHT:int = 150;
         public static const INSTRUCTIONS_MENU_WIDTH:int = 500;
-        public static const INSTRUCTIONS_GAME_HEIGHT:int = 90;
+        public static const INSTRUCTIONS_GAME_HEIGHT:int = 100;
         public static const INSTRUCTIONS_GAME_WIDTH:int = 500;
         public static const INSTRUCTIONS_MENU_FONT_SIZE:int = 15;
         public static const INSTRUCTIONS_GAME_FONT_SIZE:int = 9;

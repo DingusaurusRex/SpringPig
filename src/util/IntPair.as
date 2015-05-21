@@ -25,7 +25,10 @@ package util
 			else 
 				return false;
 		}
-		
+
+        public function clone():IntPair {
+            return new IntPair(x, y);
+        }
 	}
 
 }

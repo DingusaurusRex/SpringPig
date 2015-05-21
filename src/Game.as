@@ -22,9 +22,12 @@ package
 	import model.player.PhysicsObject;
 	import model.player.Player;
 
-	import util.Audio;
+import mx.utils.ObjectUtil;
+
+import util.Audio;
 	import util.IntPair;
-	import util.Stopwatch;
+import util.PlayState;
+import util.Stopwatch;
 	import view.BoardView;
 	import view.MeterView;
 	import flash.text.TextFieldAutoSize;
@@ -41,8 +44,9 @@ package
 		private var m_keyRight:Boolean;
 		private var m_keyLeft:Boolean;
 		private var m_keySpace:Boolean;
+		private var m_keyY:Boolean;
 		private var m_keyR:Boolean;
-		
+
 		// Player
 		private var m_player:Player;
 		private var m_playerStart:IntPair;
@@ -64,8 +68,9 @@ package
 		
 		// Gates and Buttons
 		public var gates:Vector.<int>;
-		public var gateStatus:Dictionary;
+		public var gateStatus:Object;
 		public var buttons:Vector.<int>;
+        public var buttonStatus:Object;
 		public var popupButtons:Dictionary;
 		public var buttonToGate:Dictionary; // Buttons map to the gate they open
 				
@@ -81,6 +86,8 @@ package
 
         // Logger
         private var m_logger:Logger;
+        // 5 below are not reset when rewind is called so a complete solution
+        // can include springs rewinded
         private var successfulSprings:int;
         private var failedSprings:int;
         private var successfulTrampolineSprings:int;
@@ -88,6 +95,19 @@ package
         private var totalSprings:int;
         private var resetted:Boolean;
         private var springed:Boolean;
+
+        private var totalRewinds:int;
+
+        // Rewind
+        private var playStates:Array;
+        private var ticker:int;
+        private var framesRewound:int;
+        private var rewindStarted:Boolean;
+        private var powerupUsed:IntPair;
+
+        [Embed(source = "../assets/art/rewind.svg")]
+        private var rewindPicture:Class;
+        private var rewindSymbol:Sprite;
 
 		/**
 		 * Begins the game
@@ -111,6 +131,14 @@ package
 			this.m_levelReader = new LevelParser();
 
             this.m_logger = logger;
+
+            this.playStates = new Array();
+
+            powerupUsed = null;
+
+            rewindSymbol = new rewindPicture();
+            rewindSymbol.width = Constants.REWIND_SYMBOL_WIDTH;
+            rewindSymbol.height = Constants.REWIND_SYMBOL_HEIGHT;
 		}
 		
 		/**
@@ -119,20 +147,42 @@ package
 		 */
 		private function update(e:Event = null):void
 		{
-			if (!pause) {
-				// Update the stopwatch
-				Stopwatch.updateStopwatchText();
-				
+            if (!pause) {
+                // Update the stopwatch
+                Stopwatch.updateStopwatchText();
+
+                // Rewind
+                if (m_keyR) {
+                    ticker++;
+                    ticker %= Constants.UPDATES_BEFORE_REWIND;
+                    if (playStates.length > 0 && ticker == 0) {
+                        refreshGame(playStates.pop());
+                        framesRewound++;
+                    }
+                    return;
+                }
+
+                // Record condition
+                if (powerupUsed != null) {
+                    playStates.push(new PlayState(m_player, gateStatus, buttonStatus, m_board.crates, m_boardSprite.m_platformArts, powerupUsed));
+                    powerupUsed = null;
+                } else {
+                    playStates.push(new PlayState(m_player, gateStatus, buttonStatus, m_board.crates, m_boardSprite.m_platformArts));
+                }
+                if (Constants.LIMIT_RECORD && playStates.length >= Constants.RECORDED_FRAMES) {
+                    playStates.shift();
+                }
+
 				if (m_player.bounce) {
 					useEnergy(false);
 					m_player.updatePosition(m_board.tileSideLength);
 					m_player.bounce = false;
 				}
-				
+
 				var playerDir:int = m_boardSprite.movePlatforms(m_player, m_board);
 				checkPlayerCollision(playerDir);
 				platforms = m_boardSprite.platforms;
-				
+
 				updateButtons();
 				displaySign();
 				updateCrates();
@@ -144,7 +194,7 @@ package
 					m_player.startingHeight = getYPositionOfPlayer();
 					m_player.velocity = Constants.INITIAL_FALL_VELOCITY;
 				}
-				
+
 				// Process Keyboard controls
 				if (m_keyUp && (!m_player.inAir || standingOnCrate(m_player))) {
 						if (collidingWithLadder()) // Go up the ladder
@@ -165,7 +215,7 @@ package
 					if (m_player.asset.x < m_board.boardWidthInPixels - m_player.width - 5) {
 						m_player.inAir ? m_player.asset.x += m_player.airSpeedX : m_player.asset.x += m_player.speedX;
 						checkPlayerCollision(Constants.RIGHT);
-					}						
+					}
 				}
 				if (m_keyLeft) {
 					if (m_player.asset.x > 0) {
@@ -180,23 +230,28 @@ package
 					}
                     springed = true;
 				}
-				if (m_keyR && !resetted) {
+				if (m_keyY && !resetted) {
                     var logData:Object = {x:m_player.asset.x, y:m_player.asset.y};
                     m_logger.logAction(Constants.AID_RESET, logData);
                     resetted = true;
                     util.Audio.playResetSFX();
+
+                    // Reset rewind
+                    playStates.length = 0;
+                    ticker = 0;
+
 					resetPlayer();
 					resetCrates();
 				}
 				if (m_player.inAir || collidingWithLadder()) {
 					m_player.updatePosition(m_board.tileSideLength);
-					
+
 					if (m_player.asset.y <= 0) {
 						m_player.startingHeight = getYPositionOfPlayer();
 						m_player.asset.y = 0;
 						m_player.velocity = Constants.INITIAL_FALL_VELOCITY;
 					}
-					
+
 					var hitLava:Boolean = checkPlayerCollision(Constants.UP);
 					var hitLava2:Boolean = checkPlayerCollision(Constants.DOWN); // Sets player.inAir
 					if (!m_player.inAir && !hitLava && !hitLava2) { // If player was in air and no longer is, add energy
@@ -204,11 +259,11 @@ package
 						if (!collidingWithLadder()) { // Dont add energy if you fall on ladder
 							var energy:int = m_player.startingHeight - getYPositionOfPlayer() - Constants.ENERGY_DOWNGRADE;
 							incrementEnergy(energy);
-							
-							if (trampBelowPlayer()) 
+
+							if (trampBelowPlayer())
 							{
 								m_player.bounce = true;
-								
+
 								// Allows for buttons on top of trampolines.
 								var id:int = playerOnButton();
 								if (id != -1) {
@@ -223,7 +278,7 @@ package
 					}
 				}
 				if (Constants.SHOW_JUMP_HEIGHT) {
-					if (!m_player.inAir) 
+					if (!m_player.inAir)
 					{
 						showJumpHeight();
 					} else {
@@ -232,6 +287,47 @@ package
 				}
 			}
 		}
+
+        private function refreshGame(ps:PlayState):void {
+            m_player.replace(ps.player);
+            gateStatus = ObjectUtil.copy(ps.gateStatus);
+            for each (var id:int in gates) {
+                if (gateStatus[id] == 1) {
+                    m_boardSprite.openGate(m_board, id);
+                } else {
+                    m_boardSprite.closeGate(m_board, id);
+                }
+            }
+            buttonStatus = ObjectUtil.copy(ps.buttonStatus);
+            for each (id in buttons) {
+                if (buttonStatus[id] == 1) {
+                    setButtonUp(m_board, id);
+                } else {
+                    setButtonDown(m_board, id);
+                }
+            }
+            for each (var c:Crate in m_board.crates) {
+                c.asset.x = ps.crates[c].x;
+                c.asset.y = ps.crates[c].y;
+                c.dy = ps.crates[c].dy;
+            }
+            for each (var p:Sprite in m_boardSprite.m_platformArts) {
+                p.x = ps.platforms[p].x;
+                p.y = ps.platforms[p].y;
+            }
+            if (m_signText != null && m_stage.contains(m_signText)) {
+                m_stage.removeChild(m_signText);
+            }
+            m_signText = null;
+            if (!m_player.inAir) {
+                showJumpHeight();
+            } else {
+                removePlayerJumpHeight();
+            }
+            if (ps.powerupUsed != null) {
+                m_boardSprite.setPowerupVisible(ps.powerupUsed);
+            }
+        }
 		
 		/**
 		 * 
@@ -248,6 +344,10 @@ package
 		{
 			// Get the board for the test level
 			m_board = m_levelReader.parseLevel(levelName);
+
+            // Clear rewind
+            playStates.length = 0;
+            ticker = 0;
 			
 			// Get the graphics for the test level
 			if (m_boardSprite)
@@ -297,10 +397,14 @@ package
 			
 			// Buttons and Gates
 			buttons = m_board.getButtons();
+            buttonStatus = new Object();
+            for each (var id:int in buttons) {
+                buttonStatus[id] = 1; // UP
+            }
 			popupButtons = m_board.getPopupButtons();
 			gates = m_board.getGates();
 			gateStatus = new Dictionary();
-			for each (var id:int in gates) {
+			for each (id in gates) {
 				gateStatus[id] = 0; // CLOSED
 			}
 			initButtonGateDict();
@@ -313,7 +417,16 @@ package
             failedTrampolineSprings = 0;
             totalSprings = 0;
 
-            Menu.setPauseMenuLevelInfo(currLevelIndex + 1, getCurrentLevelName())
+            totalRewinds = 0;
+
+            framesRewound = 0;
+            rewindStarted = false;
+            powerupUsed = null;
+
+            rewindSymbol.x = (m_boardSprite.width - Constants.REWIND_SYMBOL_WIDTH) / 2;
+            rewindSymbol.y = (m_boardSprite.height - Constants.REWIND_SYMBOL_HEIGHT) / 2;
+
+            Menu.setPauseMenuLevelInfo(currLevelIndex + 1, getCurrentLevelName());
 			GameState.currentLevelSave();
 			// Reset and start timing
 			Stopwatch.reset();
@@ -389,6 +502,7 @@ package
 							m_player.asset.x + m_player.width != tile.x * m_board.tileSideLength)  // Check that the player does not collide by a simple pixel
 						{
 							handlePowerUp(id, tile);
+                            powerupUsed = tile.clone();
 						}
 						if (checkLavaHit(id, tile))
 							return true;
@@ -426,6 +540,7 @@ package
 							m_player.asset.x != (tile.x + 1) * m_board.tileSideLength)  // Check that the player does not collide by a simple pixel) 
 						{
 							handlePowerUp(id, tile);
+                            powerupUsed = tile.clone();
 						}
 						//if (isButton(id) && collidingWithButton(player, tile)) {
 							//setButtonDown(board, id);
@@ -458,6 +573,7 @@ package
 								return true;
 							if (isPowerUp(id) && m_boardSprite.isPowerupVisible(tile)) {
 								handlePowerUp(id, tile);
+                                powerupUsed = tile.clone();
 							}
 							if (id == Constants.WALL ||
 								id == Constants.TRAMP ||
@@ -522,6 +638,7 @@ package
 							else if (isPowerUp(id) && m_boardSprite.isPowerupVisible(tile)) 
 							{
 								handlePowerUp(id, tile);
+                                powerupUsed = tile.clone();
 							}
 							// If one of the tiles below player is not empty, then player is not falling
 							else if (id != Constants.EMPTY &&
@@ -546,7 +663,7 @@ package
 						pause = true; // So that player position is disregarded
                         Stopwatch.pause();
                         util.Audio.playWinSFX();
-                        var logData:Object = {time:Stopwatch.getCurrentTiming(), ss:successfulSprings, fs:failedSprings, sts:successfulTrampolineSprings, fts:failedTrampolineSprings, ts:totalSprings};
+                        var logData:Object = {time:Stopwatch.getCurrentTiming(), ss:successfulSprings, fs:failedSprings, sts:successfulTrampolineSprings, fts:failedTrampolineSprings, ts:totalSprings, r:totalRewinds};
                         m_logger.logLevelEnd(logData);
                         Menu.updatePlaythroughTime();
                         GameState.openNextLevelSave();
@@ -655,6 +772,9 @@ package
             failedTrampolineSprings = 0;
             totalSprings = 0;
 
+            totalRewinds = 0;
+            rewindStarted = false;
+
 			Stopwatch.start();
 		}
 		
@@ -743,7 +863,9 @@ package
 			m_boardSprite.setButtonDown(board, id);
 			if (isPopupButton(id)) {
 				popupButtons[id] = 0;
-			}
+			} else {
+                buttonStatus[id] = 0; // DOWN
+            }
 			
 			var gateId:int = buttonToGate[id];
 			if (gateStatus[gateId] == 0) 
@@ -830,7 +952,9 @@ package
 			m_boardSprite.setButtonUp(board, id);
 			if (isPopupButton(id)) {
 				popupButtons[id] = 1;
-			}
+			} else {
+                buttonStatus[id] = 1; // UP
+            }
 			
 			var gateId:int = buttonToGate[id];
 			if (gateStatus[gateId] == 1) 
@@ -1661,10 +1785,21 @@ package
 					m_keyDown = false;
                     springed = false;
 					break;
-				case Keyboard.R :
-					m_keyR = true;
+				case Keyboard.Y :
+					m_keyY = true;
                     resetted = false;
 					break;
+				case Keyboard.R :
+                    m_keyR = true;
+                    if (!rewindStarted) {
+                        totalRewinds++;
+                        framesRewound = 0;
+                        var logData:Object = {x: m_player.asset.x, y: m_player.asset.y, power: m_player.energy};
+                        m_logger.logAction(Constants.AID_START_REWIND, logData);
+                        rewindStarted = true;
+                        m_stage.addChild(rewindSymbol);
+                    }
+                    break;
 				case Keyboard.ESCAPE :
                     if (Menu.state == Constants.STATE_GAME || Menu.state == Constants.STATE_PAUSE_MENU) {
                         pause = !pause;
@@ -1677,7 +1812,7 @@ package
 					break;
 			}
 		}
-		
+
 		/**
 		 * Test if keys are up
 		 * @param	event
@@ -1702,8 +1837,17 @@ package
 				case Keyboard.SPACE :
 					m_keySpace = false;
 					break;
+				case Keyboard.Y :
+					m_keyY = false;
+					break;
 				case Keyboard.R :
 					m_keyR = false;
+                    if (rewindStarted) {
+                        var logData:Object = {x: m_player.asset.x, y: m_player.asset.y, power: m_player.energy, frames: framesRewound};
+                        m_logger.logAction(Constants.AID_END_REWIND, logData);
+                        rewindStarted = false;
+                        m_stage.removeChild(rewindSymbol);
+                    }
 					break;
 			}
 		}
