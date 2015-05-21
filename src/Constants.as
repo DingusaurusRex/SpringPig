@@ -33,6 +33,14 @@ package
         public static const REWIND_SYMBOL_WIDTH:int = 229;
         public static const REWIND_SYMBOL_HEIGHT:int = 243;
 
+        public static const REWIND_BAR_HEIGHT:int = 20;
+        public static const REWIND_BAR_BOTTOM_PADDING:int = 5;
+        public static const REWIND_BAR_LEFT_PADDING:int = 5;
+        public static const REWIND_BAR_RIGHT_PADDING:int = 5;
+        public static const REWIND_BAR_INNER_PADDING:int = 4;
+        public static const REWIND_BAR_BACKGROUND_COLOR:uint = 0xFFFF66;
+        public static const REWIND_BAR_COLOR:uint = 0x30EAEA;
+
         /**
          * Logging info
          */

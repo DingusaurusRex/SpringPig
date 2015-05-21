@@ -9,8 +9,6 @@ Panji Wisesa -- panjiw
 TODO:
 	star based on times
 
-    rewind indicator
-
     Switch up level with 3 gates
 
     victory animation
