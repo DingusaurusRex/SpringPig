@@ -45,6 +45,9 @@ public class Menu {
 
     [Embed(source = "../assets/art/background/WinBackground.svg")]
     public static var endLevelBackgroundArt:Class;
+	
+	[Embed(source = "../assets/art/background/WinGameBackground.svg")]
+    public static var endGameBackgroundArt:Class;
 
     // TODO: Background
     public static function Init(s:Stage, g:Game):void {
@@ -819,7 +822,7 @@ class EndGameMenu extends Sprite {
 	
     public function EndGameMenu():void {
         // Game logo
-        background = new Menu.endLevelBackgroundArt();
+        background = new Menu.endGameBackgroundArt();
         background.x = 0;
         background.y = 0;
         background.height = Constants.SCREEN_HEIGHT;
@@ -849,7 +852,7 @@ class EndGameMenu extends Sprite {
 
         addChild(background);
         //addChild(title);
-        addChild(subtitle);
+        //addChild(subtitle);
         addChild(creditsButton);
         addChild(mainMenuButton);
     }

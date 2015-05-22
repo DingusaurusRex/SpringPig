@@ -458,7 +458,7 @@ package
 		public static const END_GAME_STOPWATCH_LEFT_PADDING:int = 0;
 		
 		public static const END_GAME_SUBTITLE_TEXT:String = "You have beaten Spring Pig";
-		public static const END_GAME_SUBTITLE_TOP_PADDING:int = 150;
+		public static const END_GAME_SUBTITLE_TOP_PADDING:int = 300;
 		public static const END_GAME_SUBTITLE_FONT_SIZE:int = 50;
 
         // Full playthrough tip
