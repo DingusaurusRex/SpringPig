@@ -21,13 +21,11 @@ package
 	import model.player.Crate;
 	import model.player.PhysicsObject;
 	import model.player.Player;
-
-import mx.utils.ObjectUtil;
-
-import util.Audio;
+	import mx.utils.ObjectUtil;
+	import util.Audio;
 	import util.IntPair;
-import util.PlayState;
-import util.Stopwatch;
+	import util.PlayState;
+	import util.Stopwatch;
 	import view.BoardView;
 	import view.MeterView;
 	import flash.text.TextFieldAutoSize;
@@ -587,7 +585,7 @@ import util.Stopwatch;
 					crates = getCollidingCrates(m_player, Constants.UP)
 					if (crates.length > 0)
 					{
-						var newY:Number = m_player.asset.x;
+						var newY:Number = m_player.asset.y;
 						for each (crate in crates)
 						{
 							newY = Math.max(newY, crate.asset.y + crate.height);
