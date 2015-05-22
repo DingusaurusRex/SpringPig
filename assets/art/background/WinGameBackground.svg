@@ -16,7 +16,7 @@
    width="750.78204"
    height="563.08655"
    viewBox="0 0 750.78204 563.08655"
-   sodipodi:docname="WinBackground.svg">
+   sodipodi:docname="WinGameBackground.svg">
   <metadata
      id="metadata3716">
     <rdf:RDF>
@@ -25,7 +25,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title />
+        <dc:title></dc:title>
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -44,9 +44,9 @@
      inkscape:window-height="1018"
      id="namedview3712"
      showgrid="false"
-     inkscape:zoom="0.76720004"
-     inkscape:cx="1041.1398"
-     inkscape:cy="302.12536"
+     inkscape:zoom="0.54249235"
+     inkscape:cx="429.01654"
+     inkscape:cy="302.67249"
      inkscape:window-x="-8"
      inkscape:window-y="-8"
      inkscape:window-maximized="1"
@@ -205,4 +205,22 @@
          id="tspan3648"
          sodipodi:role="line">YOU WON!</tspan></text>
   </g>
+  <rect
+     style="fill:#ffffff"
+     id="rect3386"
+     width="349.31369"
+     height="66.82122"
+     x="208.29787"
+     y="169.99345" />
+  <text
+     xml:space="preserve"
+     style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:40px;line-height:125%;font-family:'Cooper Black';-inkscape-font-specification:'Cooper Black, ';letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+     x="177.78519"
+     y="186.03339"
+     id="text3388"
+     sodipodi:linespacing="125%"><tspan
+       sodipodi:role="line"
+       id="tspan3390"
+       x="177.78519"
+       y="186.03339">You Beat Spring Pig!</tspan></text>
 </svg>
