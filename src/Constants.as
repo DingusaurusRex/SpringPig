@@ -482,6 +482,15 @@ package
         public static const BEST_TOTAL_TIME_WIDTH:int = 190;
         public static const BEST_TOTAL_TIME_FONT_SIZE:int = 18;
         public static const BEST_TOTAL_TIME_ALIGNMENT:String = "center";
+
+        // Rewind tutorial
+        public static const REWIND_INSTRUCTION_TEXT:String = "Rewind: R\tReset: Y";
+        public static const REWIND_INSTRUCTION_BOTTOM_PADDING:int = 8;
+        public static const REWIND_INSTRUCTION_LEFT_PADDING:int = 5;
+        public static const REWIND_INSTRUCTION_HEIGHT:int = 16;
+        public static const REWIND_INSTRUCTION_WIDTH:int = 130;
+        public static const REWIND_INSTRUCTION_FONT_SIZE:int = 12;
+        public static const REWIND_INSTRUCTION_ALIGNMENT:String = "left";
 	}
 
 }

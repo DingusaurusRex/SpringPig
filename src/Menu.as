@@ -36,6 +36,8 @@ public class Menu {
     private static var playthroughTimeTextFormat:TextFormat;
     public static var state:int;
 
+    public static var rewindInstructions:TextField;
+
     public static var fullPlaythrough:Boolean;
     public static var playthroughFinished:Boolean;
     public static var totalTime:int;
@@ -96,6 +98,15 @@ public class Menu {
                 Constants.TOTAL_TIME_FONT_SIZE,
                 Constants.TOTAL_TIME_ALIGNMENT);
         playthroughTimeTextFormat = playthroughTime.getTextFormat();
+
+        rewindInstructions = getTextField(Constants.REWIND_INSTRUCTION_TEXT,
+                Constants.REWIND_INSTRUCTION_HEIGHT,
+                Constants.REWIND_INSTRUCTION_WIDTH,
+                Constants.SCREEN_WIDTH / 2 + Constants.REWIND_INSTRUCTION_LEFT_PADDING,
+                Constants.SCREEN_HEIGHT - Constants.REWIND_INSTRUCTION_HEIGHT - Constants.REWIND_INSTRUCTION_BOTTOM_PADDING,
+                Constants.MENU_FONT,
+                Constants.REWIND_INSTRUCTION_FONT_SIZE,
+                Constants.REWIND_INSTRUCTION_ALIGNMENT);
 
         state = 0;
 

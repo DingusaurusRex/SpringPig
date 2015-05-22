@@ -411,7 +411,8 @@ package
 			m_stage.addChild(Stopwatch.stopwatchText);
             m_stage.addChild(previousRecord);
 			m_stage.addChild(m_player.asset);
-			
+			m_stage.addChild(Menu.rewindInstructions);
+
 			// Create Listeners
 			m_stage.addEventListener(KeyboardEvent.KEY_DOWN, onKeyDown);
 			m_stage.addEventListener(KeyboardEvent.KEY_UP, onKeyUp);
