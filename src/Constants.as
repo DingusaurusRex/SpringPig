@@ -440,7 +440,7 @@ package
 		public static const END_LEVEL_TITLE_TOP_PADDING:int = 50;
 		public static const END_LEVEL_TITLE_FONT_SIZE:int = 80;
 		
-		public static const END_LEVEL_STOPWATCH_TOP_PADDING:int = 450;
+		public static const END_LEVEL_STOPWATCH_TOP_PADDING:int = 430;
 		public static const END_LEVEL_STOPWATCH_LEFT_PADDING:int = 0;
 
         public static const END_LEVEL_CREDITS_BUTTON_TOP_PADDING:int = 50;
@@ -454,7 +454,7 @@ package
 		public static const END_GAME_TITLE_TOP_PADDING:int = 50;
 		public static const END_GAME_TITLE_FONT_SIZE:int = 80;
 		
-		public static const END_GAME_STOPWATCH_TOP_PADDING:int = 220;
+		public static const END_GAME_STOPWATCH_TOP_PADDING:int = 430;
 		public static const END_GAME_STOPWATCH_LEFT_PADDING:int = 0;
 		
 		public static const END_GAME_SUBTITLE_TEXT:String = "You have beaten Spring Pig";

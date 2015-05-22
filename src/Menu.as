@@ -849,7 +849,7 @@ class EndGameMenu extends Sprite {
 
         addChild(background);
         //addChild(title);
-        addChild(subtitle);
+        //addChild(subtitle);
         addChild(creditsButton);
         addChild(mainMenuButton);
     }
