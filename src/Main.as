@@ -55,7 +55,7 @@ package
 			// entry point
 			
 			// Parse LevelProgression JSON
-			var progression:ByteArray = (new TestProgression2() as ByteArray); // Change this for progression
+			var progression:ByteArray = (new Progression1() as ByteArray); // Change this for progression
 			var progressionString:String = progression.toString();
 			var prog:Object = JSON.parse(progressionString);
 
