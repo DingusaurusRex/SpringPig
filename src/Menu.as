@@ -529,6 +529,8 @@ import flash.display.Sprite;
 import flash.events.MouseEvent;
 import flash.text.TextField;
 import flash.text.TextFormat;
+import model.levelHandling.Board;
+import model.levelHandling.LevelParser;
 
 import util.GameState;
 import util.Stopwatch;
@@ -884,7 +886,10 @@ class LevelSelectMenu extends Sprite {
                 for (c = 0; c < Constants.LEVEL_SELECT_COLUMNS; c++) {
                     var x:int = Constants.SCREEN_WIDTH * (c + 1) / (Constants.LEVEL_SELECT_COLUMNS + 1) - Constants.MENU_BUTTON_WIDTH / 2;
                     var y:int = Constants.LEVEL_SELECT_PAGE_TOP_PADDING + pageHeight * r / Constants.LEVEL_SELECT_ROWS;
-                    var levelButton:SimpleButton = Menu.getMenuButton(Menu.game.progression[l],
+					var levelReader:LevelParser = new LevelParser();
+					var board:Board = levelReader.parseLevel(Menu.game.progression[l]);
+                    var levelButton:SimpleButton = Menu.getMenuButton(
+							board.name,
                             x,
                             y,
                             Menu.onLevelClick);

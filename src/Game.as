@@ -460,7 +460,8 @@ import util.Stopwatch;
 
         public function getCurrentLevelName():String
         {
-            return progression[currLevelIndex];
+			return m_board.name;
+            //return progression[currLevelIndex];
         }
 		
 		public function startFirstLevel():void

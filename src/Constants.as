@@ -418,7 +418,7 @@ package
 		public static const PAUSE_TITLE_FONT_SIZE:int = 80;
 
         public static const PAUSE_LEVEL_INFO_TEXT:String = "Level #";
-        public static const PAUSE_LEVEL_INFO_TOP_PADDING:int = 20;
+        public static const PAUSE_LEVEL_INFO_TOP_PADDING:int = 40;
         public static const PAUSE_LEVEL_INFO_HEIGHT:int = 25;
         public static const PAUSE_LEVEL_INFO_FONT_SIZE:int = 20;
         public static const PAUSE_LEVEL_INFO_ALIGNMENT:String = "center";
