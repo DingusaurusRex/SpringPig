@@ -40,6 +40,12 @@ public class Menu {
     public static var playthroughFinished:Boolean;
     public static var totalTime:int;
 
+    [Embed(source = "../assets/art/background/SplashScreenPig.svg")]
+    public static var mainMenuBackgroundArt:Class;
+
+    [Embed(source = "../assets/art/background/SplashScreenPig.svg")]
+    public static var endLevelBackgroundArt:Class;
+
     // TODO: Background
     public static function Init(s:Stage, g:Game):void {
         stage = s;
@@ -557,13 +563,10 @@ class MainMenu extends Sprite {
     private var bestTime:int;
 
     public var blocked:Boolean;
-
-	[Embed(source = "../assets/art/background/SplashScreenPig.svg")]
-	private var BackgroundArt:Class;
 	
     public function MainMenu():void {
         // Game logo
-        logo = new BackgroundArt();
+        logo = new Menu.mainMenuBackgroundArt();
 		logo.x = Constants.MAIN_LOGO_LEFT_PADDING;
 		logo.y = Constants.MAIN_LOGO_TOP_PADDING;
         logo.height = Constants.MAIN_LOGO_HEIGHT;
@@ -760,12 +763,20 @@ class PauseMenu extends Sprite {
 }
 
 class EndLevelMenu extends Sprite {
+    private var background:Sprite;
     private var title:TextField;
     private var nextLevelButton:SimpleButton;
     private var restartLevelButton:SimpleButton;
     private var mainMenuButton:SimpleButton;
 	
     public function EndLevelMenu():void {
+        // Game logo
+        background = new Menu.endLevelBackgroundArt();
+        background.x = 0;
+        background.y = 0;
+        background.height = Constants.SCREEN_HEIGHT;
+        background.width = Constants.SCREEN_WIDTH;
+
         // End level title
         title = Menu.getMenuTitle(Constants.END_LEVEL_TITLE_TEXT,
                 Constants.END_LEVEL_TITLE_TOP_PADDING,
@@ -789,6 +800,7 @@ class EndLevelMenu extends Sprite {
                         restartLevelButton.y + Constants.MENU_BUTTON_PADDING_BETWEEN,
                 Menu.onMainMenuClick);
 
+        addChild(background);
         addChild(title);
         addChild(nextLevelButton);
         addChild(restartLevelButton);
@@ -797,12 +809,20 @@ class EndLevelMenu extends Sprite {
 }
 
 class EndGameMenu extends Sprite {
+    private var background:Sprite;
     private var title:TextField;
     private var subtitle:TextField;
     private var creditsButton:SimpleButton;
     private var mainMenuButton:SimpleButton;
 	
     public function EndGameMenu():void {
+        // Game logo
+        background = new Menu.endLevelBackgroundArt();
+        background.x = 0;
+        background.y = 0;
+        background.height = Constants.SCREEN_HEIGHT;
+        background.width = Constants.SCREEN_WIDTH;
+
         // End level title
         title = Menu.getMenuTitle(Constants.END_GAME_TITLE_TEXT,
                 Constants.END_GAME_TITLE_TOP_PADDING,
@@ -825,6 +845,7 @@ class EndGameMenu extends Sprite {
                         creditsButton.y + Constants.MENU_BUTTON_PADDING_BETWEEN,
                 Menu.onMainMenuClick);
 
+        addChild(background);
         addChild(title);
         addChild(subtitle);
         addChild(creditsButton);
