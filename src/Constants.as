@@ -274,7 +274,7 @@ package
 		
 		// General menu button
 		public static const MENU_BUTTON_COLOR:uint = 0xCCCCCC;
-		public static const MENU_BUTTON_WIDTH:int = 118;
+		public static const MENU_BUTTON_WIDTH:int = 123;
 		public static const MENU_BUTTON_HEIGHT:int = 18;
 		public static const MENU_BUTTON_FONT_SIZE:int = 12;
 		public static const MENU_BUTTON_TEXT_ALIGNMENT:String = "center";
@@ -284,8 +284,8 @@ package
 		
 		// Mute button
 		public static const MUTE_BUTTON_TEXT:String = "Mute: ";
-		public static const MUTE_BUTTON_TOP_PADDING:int = 20;
-		public static const MUTE_BUTTON_RIGHT_PADDING:int = 20;
+		public static const MUTE_BUTTON_TOP_PADDING:int = 15;
+		public static const MUTE_BUTTON_RIGHT_PADDING:int = 15;
 		
 		// Menus
 		public static const CREDITS_BUTTON_TEXT:String = "[C]redits";
@@ -440,13 +440,13 @@ package
 		public static const END_LEVEL_TITLE_TOP_PADDING:int = 50;
 		public static const END_LEVEL_TITLE_FONT_SIZE:int = 80;
 		
-		public static const END_LEVEL_STOPWATCH_TOP_PADDING:int = 150;
+		public static const END_LEVEL_STOPWATCH_TOP_PADDING:int = 450;
 		public static const END_LEVEL_STOPWATCH_LEFT_PADDING:int = 0;
 
         public static const END_LEVEL_CREDITS_BUTTON_TOP_PADDING:int = 50;
 		
 		public static const END_LEVEL_NEXT_LEVEL_BUTTON_TEXT:String = "[Space] Next Level";
-		public static const END_LEVEL_RESTART_LEVEL_BUTTON_TEXT:String = "[R]estart Last Level";
+		public static const END_LEVEL_RESTART_LEVEL_BUTTON_TEXT:String = "[Y] Restart Last Level";
 		public static const END_LEVEL_MAIN_MENU_BUTTON_TEXT:String = "[M]ain Menu";
 		
 		// End game menu

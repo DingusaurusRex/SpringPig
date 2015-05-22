@@ -144,16 +144,17 @@ public class Menu {
 
     public static function createEndLevelMenu():void {
         stage.removeChildren();
-        if (fullPlaythrough) {
-            stage.addChild(Menu.playthroughTime);
-        } else {
-            stage.addChild(playthroughTip);
-        }
+        stage.removeEventListener(KeyboardEvent.KEY_DOWN, game.onKeyDown); // Need to do this whenever leaving game state
         state = Constants.STATE_END_LEVEL_MENU;
         muteButton.x = Constants.SCREEN_WIDTH - Constants.MENU_BUTTON_WIDTH - Constants.MUTE_BUTTON_RIGHT_PADDING;
         muteButton.y = Constants.MUTE_BUTTON_TOP_PADDING;
         endLevelMenu.addChild(muteButton);
         stage.addChild(endLevelMenu);
+        if (fullPlaythrough) {
+            stage.addChild(Menu.playthroughTime);
+        } else {
+            stage.addChild(playthroughTip);
+        }
         Stopwatch.stopwatchMenuText.x = Constants.END_LEVEL_STOPWATCH_LEFT_PADDING;
         Stopwatch.stopwatchMenuText.y = Constants.END_LEVEL_STOPWATCH_TOP_PADDING;
         previousRecord = GameState.getPlayerRecordEndLevelTextField(game.currLevelIndex);
@@ -167,13 +168,14 @@ public class Menu {
 
     public static function createEndGameMenu():void {
         stage.removeChildren();
+        stage.removeEventListener(KeyboardEvent.KEY_DOWN, game.onKeyDown); // Need to do this whenever leaving game state
+        state = Constants.STATE_END_GAME_MENU;
+        stage.addChild(endGameMenu);
         if (fullPlaythrough) {
             stage.addChild(Menu.playthroughTime);
         } else {
             stage.addChild(playthroughTip);
         }
-        state = Constants.STATE_END_GAME_MENU;
-        stage.addChild(endGameMenu);
         Stopwatch.stopwatchMenuText.x = Constants.END_GAME_STOPWATCH_LEFT_PADDING;
         Stopwatch.stopwatchMenuText.y = Constants.END_GAME_STOPWATCH_TOP_PADDING;
         previousRecord = GameState.getPlayerRecordEndLevelTextField(game.currLevelIndex);
@@ -371,7 +373,7 @@ public class Menu {
                     case Keyboard.SPACE:
                         startNextLevel();
                         break;
-                    case Keyboard.R:
+                    case Keyboard.Y:
                         restartLevel();
                         break;
                     case Keyboard.M:
