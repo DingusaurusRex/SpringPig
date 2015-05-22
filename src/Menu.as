@@ -43,7 +43,7 @@ public class Menu {
     [Embed(source = "../assets/art/background/SplashScreenPig.svg")]
     public static var mainMenuBackgroundArt:Class;
 
-    [Embed(source = "../assets/art/background/SplashScreenPig.svg")]
+    [Embed(source = "../assets/art/background/WinBackground.svg")]
     public static var endLevelBackgroundArt:Class;
 
     // TODO: Background
@@ -801,7 +801,7 @@ class EndLevelMenu extends Sprite {
                 Menu.onMainMenuClick);
 
         addChild(background);
-        addChild(title);
+        //addChild(title);
         addChild(nextLevelButton);
         addChild(restartLevelButton);
         addChild(mainMenuButton);
@@ -846,7 +846,7 @@ class EndGameMenu extends Sprite {
                 Menu.onMainMenuClick);
 
         addChild(background);
-        addChild(title);
+        //addChild(title);
         addChild(subtitle);
         addChild(creditsButton);
         addChild(mainMenuButton);
