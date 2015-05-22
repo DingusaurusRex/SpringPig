@@ -437,19 +437,26 @@ public class Menu {
     }
 
     public static function getMenuButtonShape():Shape {
-        var buttonShape:Shape = new Shape();
-        buttonShape.graphics.lineStyle(Constants.MENU_BUTTON_BORDER_SIZE, Constants.MENU_BUTTON_BORDER_COLOR);
-        buttonShape.graphics.beginFill(Constants.MENU_BUTTON_COLOR);
-        buttonShape.graphics.drawRect(0, 0, Constants.MENU_BUTTON_WIDTH, Constants.MENU_BUTTON_HEIGHT);
-        buttonShape.graphics.endFill();
-        return buttonShape;
+        return getButtonShape(Constants.MENU_BUTTON_COLOR,
+                Constants.MENU_BUTTON_WIDTH,
+                Constants.MENU_BUTTON_HEIGHT,
+                Constants.MENU_BUTTON_BORDER_COLOR,
+                Constants.MENU_BUTTON_BORDER_SIZE);
     }
 
     public static function getMainMenuButtonShape():Shape {
+        return getButtonShape(Constants.MAIN_MENU_BUTTON_COLOR,
+                Constants.MAIN_MENU_BUTTON_WIDTH,
+                Constants.MAIN_MENU_BUTTON_HEIGHT,
+                Constants.MAIN_MENU_BUTTON_BORDER_COLOR,
+                Constants.MAIN_MENU_BUTTON_BORDER_SIZE);
+    }
+
+    public static function getButtonShape(color:uint, width:int, height:int, borderColor:uint, borderSize:int):Shape {
         var buttonShape:Shape = new Shape();
-        buttonShape.graphics.lineStyle(Constants.MAIN_MENU_BUTTON_BORDER_SIZE, Constants.MAIN_MENU_BUTTON_BORDER_COLOR);
-        buttonShape.graphics.beginFill(Constants.MAIN_MENU_BUTTON_COLOR);
-        buttonShape.graphics.drawRect(0, 0, Constants.MAIN_MENU_BUTTON_WIDTH, Constants.MAIN_MENU_BUTTON_HEIGHT);
+        buttonShape.graphics.lineStyle(borderSize, borderColor);
+        buttonShape.graphics.beginFill(color);
+        buttonShape.graphics.drawRect(0, 0, width, height);
         buttonShape.graphics.endFill();
         return buttonShape;
     }
@@ -884,21 +891,30 @@ class LevelSelectMenu extends Sprite {
             var page:Sprite = new Sprite();
             LevelAddition:for (r = 0; r < Constants.LEVEL_SELECT_ROWS; r++) {
                 for (c = 0; c < Constants.LEVEL_SELECT_COLUMNS; c++) {
-                    var x:int = Constants.SCREEN_WIDTH * (c + 1) / (Constants.LEVEL_SELECT_COLUMNS + 1) - Constants.MENU_BUTTON_WIDTH / 2;
+                    var x:int = Constants.SCREEN_WIDTH * (c + 1) / (Constants.LEVEL_SELECT_COLUMNS + 1) - Constants.LEVEL_SELECT_BUTTON_WIDTH / 2;
                     var y:int = Constants.LEVEL_SELECT_PAGE_TOP_PADDING + pageHeight * r / Constants.LEVEL_SELECT_ROWS;
 					var levelReader:LevelParser = new LevelParser();
 					var board:Board = levelReader.parseLevel(Menu.game.progression[l]);
-                    var levelButton:SimpleButton = Menu.getMenuButton(
-							board.name,
+                    var levelButton:SimpleButton = Menu.getButton(board.name,
+                            Menu.getMenuButtonTextFormat(),
+                            Constants.LEVEL_SELECT_BUTTON_WIDTH,
+                                    Constants.LEVEL_SELECT_BUTTON_HEIGHT + Constants.LEVEL_SELECT_BUTTON_BORDER_SIZE,
+                            0,
                             x,
                             y,
+                            Menu.getButtonShape(Constants.LEVEL_SELECT_BUTTON_COLOR,
+                                    Constants.LEVEL_SELECT_BUTTON_WIDTH,
+                                    Constants.LEVEL_SELECT_BUTTON_HEIGHT,
+                                    Constants.LEVEL_SELECT_BUTTON_BORDER_COLOR,
+                                    Constants.LEVEL_SELECT_BUTTON_BORDER_SIZE),
                             Menu.onLevelClick);
                     levelButton.name = String(l);
+
                     var levelRecord:TextField = Menu.getTextField(Constants.LEVEL_SELECT_TIME_RECORD_TEXT + Stopwatch.formatTiming(GameState.getPlayerRecord(l)),
                             Constants.LEVEL_SELECT_TIME_RECORD_HEIGHT,
-                            Constants.MENU_BUTTON_WIDTH,
+                            Constants.LEVEL_SELECT_BUTTON_WIDTH,
                             x,
-                                    y + Constants.MENU_BUTTON_HEIGHT + Constants.LEVEL_SELECT_TIME_RECORD_TOP_PADDING,
+                                    y + Constants.LEVEL_SELECT_BUTTON_HEIGHT + Constants.LEVEL_SELECT_TIME_RECORD_TOP_PADDING,
                             Constants.MENU_FONT,
                             Constants.LEVEL_SELECT_TIME_RECORD_FONT_SIZE,
                             Constants.LEVEL_SELECT_TIME_RECORD_ALIGNMENT);

@@ -347,7 +347,13 @@ package
 		
 		public static const LEVEL_SELECT_ROWS:int = 3;
 		public static const LEVEL_SELECT_COLUMNS:int = 3;
-		
+
+        public static const LEVEL_SELECT_BUTTON_COLOR:uint = 0xCCCCCC;
+        public static const LEVEL_SELECT_BUTTON_HEIGHT:int = 18;
+        public static const LEVEL_SELECT_BUTTON_WIDTH:int = 158;
+        public static const LEVEL_SELECT_BUTTON_BORDER_COLOR:uint = 0x000000;
+        public static const LEVEL_SELECT_BUTTON_BORDER_SIZE:int = 2;
+
 		public static const LEVEL_SELECT_PREVIOUS_PAGE_BUTTON_TEXT:String = "Previous Page";
 		public static const LEVEL_SELECT_NEXT_PAGE_BUTTON_TEXT:String = "Next Page";
 		public static const LEVEL_SELECT_PAGE_BUTTON_BOTTOM_PADDING:int = 50;
