@@ -18,8 +18,9 @@ public class PlayState {
     public var crates:Dictionary;
     public var platforms:Dictionary;
     public var powerupUsed:IntPair;
+    public var invincibles:Array;
 
-    public function PlayState(p:Player, gs:Object, bs:Object, cs:Array, pls:Dictionary, puu:IntPair = null) {
+    public function PlayState(p:Player, gs:Object, bs:Object, cs:Array, pls:Dictionary, puu:IntPair = null, inv:Array = null) {
         player = p.clone();
         gateStatus = ObjectUtil.copy(gs);
         buttonStatus = ObjectUtil.copy(bs);
@@ -41,6 +42,13 @@ public class PlayState {
         powerupUsed = puu;
         if (puu != null) {
             powerupUsed = puu.clone();
+        }
+        invincibles = null;
+        if (inv != null) {
+            invincibles = new Array();
+            for each (var t:IntPair in inv) {
+                invincibles.push(t.clone());
+            }
         }
     }
 }

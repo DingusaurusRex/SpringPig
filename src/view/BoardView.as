@@ -482,12 +482,17 @@ package view
 		/**
 		 * Sets ALL powerups visible
 		 */
-		public function setPowerupsVisible():void
+		public function setPowerupsVisible():Array
 		{
-			for each (var pu:Sprite in m_powerUps) 
-			{
-				pu.visible = true;
-			}
+            var invincibles:Array = new Array();
+            for (var key:Object in m_powerUps)
+            {
+                if (!m_powerUps[key].visible) {
+                    invincibles.push(key);
+                }
+                m_powerUps[key].visible = true;
+            }
+            return invincibles;
 		}		
 		
 		/**

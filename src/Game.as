@@ -350,6 +350,11 @@ import util.Stopwatch;
             if (ps.powerupUsed != null) {
                 m_boardSprite.setPowerupVisible(ps.powerupUsed);
             }
+            if (ps.invincibles != null) {
+                for each (var t:IntPair in ps.invincibles) {
+                    m_boardSprite.setPowerupInvisible(t);
+                }
+            }
         }
 		
 		/**
@@ -790,7 +795,9 @@ import util.Stopwatch;
 				gateStatus[id] = 0; // CLOSED
 			}
 			
-			m_boardSprite.setPowerupsVisible();
+			var invincibles:Array = m_boardSprite.setPowerupsVisible();
+
+            playStates.push(new PlayState(m_player, gateStatus, buttonStatus, m_board.crates, m_boardSprite.m_platformArts, null, invincibles));
 
             successfulSprings = 0;
             failedSprings = 0;
