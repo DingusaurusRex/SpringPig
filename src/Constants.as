@@ -372,7 +372,7 @@ package
         public static const TIME_RECORDS_TITLE_FONT_SIZE:int = 80;
 
         public static const TIME_RECORDS_ROWS:int = 7;
-        public static const TIME_RECORDS_COLUMNS:int = 2;
+        public static const TIME_RECORDS_COLUMNS:int = 1;
 
         public static const TIME_RECORDS_PREVIOUS_PAGE_BUTTON_TEXT:String = "Previous Page";
         public static const TIME_RECORDS_NEXT_PAGE_BUTTON_TEXT:String = "Next Page";
@@ -383,8 +383,8 @@ package
 
         public static const TIME_RECORDS_TIME_RECORD_TEXT:String = ": ";
         public static const TIME_RECORDS_TIME_RECORD_HEIGHT:int = 25;
-        public static const TIME_RECORDS_TIME_RECORD_WIDTH:int = 170;
-        public static const TIME_RECORDS_TIME_RECORD_FONT_SIZE:int = 20;
+        public static const TIME_RECORDS_TIME_RECORD_WIDTH:int = 400;
+        public static const TIME_RECORDS_TIME_RECORD_FONT_SIZE:int = 18;
         public static const TIME_RECORDS_TIME_RECORD_ALIGNMENT:String = "left";
 		
 		// Credits menu

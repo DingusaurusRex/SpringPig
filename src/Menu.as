@@ -1067,7 +1067,9 @@ class TimeRecordsMenu extends Sprite {
                 for (r = 0; r < Constants.TIME_RECORDS_ROWS; r++) {
                     var x:int = Constants.SCREEN_WIDTH * (c + 1) / (Constants.TIME_RECORDS_COLUMNS + 1) - Constants.TIME_RECORDS_TIME_RECORD_WIDTH / 2;
                     var y:int = Constants.TIME_RECORDS_PAGE_TOP_PADDING + pageHeight * r / Constants.TIME_RECORDS_ROWS;
-                    var levelRecord:TextField = Menu.getTextField(Menu.game.progression[l] + Constants.TIME_RECORDS_TIME_RECORD_TEXT + Stopwatch.formatTiming(GameState.getPlayerRecord(l)),
+					var levelReader:LevelParser = new LevelParser();
+					var board:Board = levelReader.parseLevel(Menu.game.progression[l]);
+                    var levelRecord:TextField = Menu.getTextField(board.name + Constants.TIME_RECORDS_TIME_RECORD_TEXT + Stopwatch.formatTiming(GameState.getPlayerRecord(l)),
                             Constants.TIME_RECORDS_TIME_RECORD_HEIGHT,
                             Constants.TIME_RECORDS_TIME_RECORD_WIDTH,
                             x,
