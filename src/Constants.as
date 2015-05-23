@@ -44,7 +44,7 @@ package
         /**
          * Logging info
          */
-        public static const LOG:Boolean = false;
+        public static const LOG:Boolean = true;
 
         public static const GID:int = 116;
         public static const DB_NAME:String = "cgs_gc_SpringMan";
@@ -389,7 +389,7 @@ package
 		
 		// Credits menu
 		public static const CREDITS_TITLE_TEXT:String = "Credits";
-		public static const CREDITS_TITLE_TOP_PADDING:int = 50;
+		public static const CREDITS_TITLE_TOP_PADDING:int = 20;
 		public static const CREDITS_TITLE_FONT_SIZE:int = 80;
 		
 		public static const CREDITS:String = "A game created for:\n" +
@@ -407,8 +407,10 @@ package
                 "\n" +
                 "SFX from:\n" +
                 "-http://www.freesfx.co.uk\n" +
-                "-http://www.freesound.org";
-		public static const CREDITS_TOP_PADDING:int = 200;
+                "-http://www.freesound.org" + 
+				"\n\n" + 
+				"Presented by AlbinoBlackSheep";
+		public static const CREDITS_TOP_PADDING:int = 100;
 		public static const CREDITS_HEIGHT:int = 500;
 		public static const CREDITS_WIDTH:int = 400;
 		public static const CREDITS_FONT_SIZE:int = 20;
