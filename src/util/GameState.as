@@ -31,7 +31,7 @@ public class GameState {
                     !playerData.data.hasOwnProperty("personalRecords") ||
                     !playerData.data.hasOwnProperty("mute") ||
                     !playerData.data.hasOwnProperty("playthroughBest")) {
-                resetProgress();
+                resetProgress(false);
             }
 
             playerRecordGameText.text = Constants.PLAYER_RECORD_TIME_GAME_DEFAULT_TEXT + Constants.STOPWATCH_DEFAULT_TIME;
@@ -47,6 +47,8 @@ public class GameState {
             playerRecordEndLevelDefaultTextFormat.align = Constants.PLAYER_RECORD_TIME_END_LEVEL_TEXT_ALIGNMENT;
             playerRecordEndLevelText.setTextFormat(playerRecordGameDefaultTextFormat);
         } catch (e:Error) {
+            trace(e);
+            trace(e.getStackTrace());
             saveable = false;
         }
     }
@@ -148,7 +150,7 @@ public class GameState {
         return playerData.data.mute;
     }
 
-    public static function resetProgress():void {
+    public static function resetProgress(removeBestTimeText:Boolean = true):void {
         playerData.clear();
         playerData.data.unlocked = 1;
         playerData.data.progress = 0;
@@ -160,7 +162,9 @@ public class GameState {
         playerData.data.mute = false;
         playerData.data.playthroughBest = Constants.STOPWATCH_DEFAULT_TIME;
         playerData.flush();
-        Menu.removeBestPlaythroughTime()
+        if (removeBestTimeText) {
+            Menu.removeBestPlaythroughTime();
+        }
     }
 }
 
