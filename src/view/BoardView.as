@@ -5,7 +5,10 @@ package view
 	import flash.display.DisplayObject;
 	import flash.display.InterpolationMethod;
 	import flash.display.Sprite;
-	import flash.utils.Dictionary;
+import flash.text.TextField;
+import flash.text.TextFieldAutoSize;
+import flash.text.TextFormat;
+import flash.utils.Dictionary;
 	import model.button.Button;
 	import model.levelHandling.Board;
 	import model.player.Crate;
@@ -228,7 +231,8 @@ package view
 			graphics.beginFill(Constants.BACKGROUND_COLOR);
 			graphics.drawRect(0, 0, m_boardViewWidth, m_boardViewHeight);
 			graphics.endFill();			
-			
+
+            var signs:Array = new Array();
 			
 			// Draw Tiles 
 			for (var y:int = 0; y < board.height; y++)
@@ -258,20 +262,32 @@ package view
 					}
 					else
 					{
-						asset = getAssetSprite(id, tile);
+						asset = getAssetSprite(id, tile, board);
 					}
 					if (asset)
 					{
-						if (id >= Constants.LONG_MOVING_PLATFORM_START1 && id <= Constants.LONG_MOVING_PLATFORM_START2) {
-							asset.width = 2 * tileSideLength;
-						} else {
-							asset.width = tileSideLength;
-						}
-						asset.height = tileSideLength;
-						asset.x = x * tileSideLength;
-						asset.y = y * tileSideLength;
-						if (!isMovingPlatformStart(id))
-							addChild(asset);
+                        if (id >= Constants.SIGN1 && id <= Constants.SIGN5) {
+                            asset.x = x * tileSideLength;
+                            if (x > 0) {
+                                asset.x -= tileSideLength;
+                            }
+                            asset.y = y * tileSideLength;
+                            if (y > 0) {
+                                asset.y -= tileSideLength / 4;
+                            }
+                            signs.push(asset);
+                        } else {
+                            if (id >= Constants.LONG_MOVING_PLATFORM_START1 && id <= Constants.LONG_MOVING_PLATFORM_START2) {
+                                asset.width = 2 * tileSideLength;
+                            } else {
+                                asset.width = tileSideLength;
+                            }
+                            asset.height = tileSideLength;
+                            asset.x = x * tileSideLength;
+                            asset.y = y * tileSideLength;
+                            if (!isMovingPlatformStart(id))
+                                addChild(asset);
+                        }
 						asset = null;
 					}
 				}
@@ -303,6 +319,10 @@ package view
 			if (Constants.SHOW_GRID) {
 				addChild(grid);
 			}
+
+            for each (var s:Sprite in signs) {
+                addChild(s);
+            }
 			
 			// Figure out platform directions
 			setInitialPlatformDirections();
@@ -315,7 +335,7 @@ package view
 		 * @param	id - the ID of the tile to return the asset of
 		 * @return
 		**/
-		private function getAssetSprite(id:int, tile:IntPair):Sprite
+		private function getAssetSprite(id:int, tile:IntPair, board:Board):Sprite
 		{
 			var result:Sprite = null;
 			if (isMovingPlatformStart(id))
@@ -325,7 +345,25 @@ package view
 			}
 			else if (id >= Constants.SIGN1 && id <= Constants.SIGN5)
 			{
-				result = new SignArt();
+                var signText:TextField = new TextField();
+                signText.text = board.getSignText(id);
+                signText.x = 0;
+                signText.y = 0;
+                //m_signText.background = true;
+                //m_signText.backgroundColor = Constants.SIGN_BACKGROUND_COLOR;
+                //m_signText.border = true;
+                //m_signText.borderColor = Constants.SIGN_BORDER_COLOR;
+                signText.wordWrap = true;
+                signText.autoSize = TextFieldAutoSize.CENTER;
+                signText.textColor = Constants.SIGN_TEXT_COLOR;
+                signText.alpha = Constants.SIGN_TEXT_ALPHA;
+                signText.width = board.tileSideLength * 3;
+                var signFormat:TextFormat = new TextFormat();
+                signFormat.size = Constants.SIGN_TEXT_FONT_SIZE;
+                signFormat.align = Constants.SIGN_TEXT_ALIGNMENT;
+                signText.setTextFormat(signFormat);
+                result = new Sprite();
+                result.addChild(signText);
 			}
 			else {
 				switch (id)
