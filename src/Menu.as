@@ -43,7 +43,7 @@ public class Menu {
     public static var totalTime:int;
 
     [Embed(source = "../assets/art/background/SplashScreenPig.svg")]
-    public static var mainMenuBackgroundArt:Class;
+    public static var mainMenuLogoArt:Class;
 
     [Embed(source = "../assets/art/background/WinBackground.svg")]
     public static var endLevelBackgroundArt:Class;
@@ -53,6 +53,9 @@ public class Menu {
 
 	[Embed(source = "../assets/art/Buttons/button.svg")]
     public static var buttonBackgroundArt:Class;
+
+    [Embed(source="../assets/art/background/gameBackground.svg")]
+    public static var mainMenuBackgroundArt:Class;
 
     // TODO: Background
     public static function Init(s:Stage, g:Game):void {
@@ -587,6 +590,7 @@ import util.GameState;
 import util.Stopwatch;
 
 class MainMenu extends Sprite {
+    private var background:Sprite;
     private var logo:Sprite;
     private var title:TextField;
     private var continueButton:SimpleButton;
@@ -603,8 +607,13 @@ class MainMenu extends Sprite {
     public var blocked:Boolean;
 	
     public function MainMenu():void {
+        // Main menu background
+        background = new Menu.mainMenuBackgroundArt();
+        background.width = Constants.SCREEN_WIDTH;
+        background.height = Constants.SCREEN_HEIGHT;
+
         // Game logo
-        logo = new Menu.mainMenuBackgroundArt();
+        logo = new Menu.mainMenuLogoArt();
 		logo.x = Constants.MAIN_LOGO_LEFT_PADDING;
 		logo.y = Constants.MAIN_LOGO_TOP_PADDING;
         logo.height = Constants.MAIN_LOGO_HEIGHT;
@@ -688,6 +697,7 @@ class MainMenu extends Sprite {
         bestPlaythroughTimeTextFormat = bestPlaythroughTime.getTextFormat();
 
         // Adding everything
+        addChild(background);
         addChild(logo);
         //addChild(title);
         addChild(continueButton);
