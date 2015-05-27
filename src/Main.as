@@ -57,14 +57,31 @@ package
 			removeEventListener(Event.ADDED_TO_STAGE, init);
 			// entry point
 			
+			/*
+			var num:Number = Math.random();
+			var useHardProg:Boolean = true;
+			if (num >= .5) {
+				useHardProg = false;
+			}
+			trace(useHardProg);
+			
 			// Parse LevelProgression JSON
-			var progression:ByteArray = (new EasyProgression() as ByteArray); // Change this for progression
+			var progression:ByteArray; // Change this for progression
+			var versionID:int; // This is cid in the wiki
+			if (useHardProg) {
+				progression = new EasyProgression() as ByteArray;
+				versionID = 302;
+			} else {
+				progression = new Progression1() as ByteArray;
+				versionID = 300;
+			}
+			*/
+			var progression:ByteArray = new EasyProgression(); // Change this for progression
+			var versionID:int = 302; // This is cid in the wiki
 			var progressionString:String = progression.toString();
 			var prog:Object = JSON.parse(progressionString);
 
-            // This is cid in the wiki
-            // TODO: change when deploying
-            var versionID:int = 300;
+           
             var logger:Logger = Logger.initialize(Constants.GID, Constants.DB_NAME, Constants.SKEY, versionID, null, false);
 			
             // Initialization
