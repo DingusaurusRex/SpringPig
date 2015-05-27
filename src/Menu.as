@@ -51,6 +51,9 @@ public class Menu {
 	[Embed(source = "../assets/art/background/WinGameBackground.svg")]
     public static var endGameBackgroundArt:Class;
 
+	[Embed(source = "../assets/art/Buttons/button.svg")]
+    public static var buttonBackgroundArt:Class;
+
     // TODO: Background
     public static function Init(s:Stage, g:Game):void {
         stage = s;
@@ -483,6 +486,25 @@ public class Menu {
         return buttonShape;
     }
 
+    public static function getMenuButtonBackground():Sprite {
+        return getButtonBackground(Constants.MENU_BUTTON_WIDTH,
+                Constants.MENU_BUTTON_HEIGHT,
+                Constants.MENU_BUTTON_BORDER_SIZE);
+    }
+
+    public static function getMainMenuButtonBackground():Sprite {
+        return getButtonBackground(Constants.MAIN_MENU_BUTTON_WIDTH,
+                Constants.MAIN_MENU_BUTTON_HEIGHT,
+                Constants.MAIN_MENU_BUTTON_BORDER_SIZE);
+    }
+
+    public static function getButtonBackground(width:int, height:int, borderSize:int):Sprite {
+        var buttonBackground:Sprite = new buttonBackgroundArt();
+        buttonBackground.width = width + borderSize;
+        buttonBackground.height = height + borderSize;
+        return buttonBackground;
+    }
+
     public static function getMenuButtonTextFormat():TextFormat {
         return getTextFormat(Constants.MENU_BUTTON_FONT_SIZE, Constants.MENU_BUTTON_TEXT_ALIGNMENT);
     }
@@ -503,11 +525,11 @@ public class Menu {
                 0,
                 x,
                 y,
-                Menu.getMenuButtonShape(),
+                Menu.getMenuButtonBackground(),
                 listener);
     }
 
-    public static function getButton(text:String, textFormat:TextFormat, textWidth:int, textHeight:int, textTopPadding:int, x:int, y:int, buttonShape:Shape, listener:Function):SimpleButton {
+    public static function getButton(text:String, textFormat:TextFormat, textWidth:int, textHeight:int, textTopPadding:int, x:int, y:int, buttonBackground:Sprite, listener:Function):SimpleButton {
         var buttonText:TextField = new TextField();
         buttonText.text = text;
         buttonText.width = textWidth;
@@ -516,7 +538,7 @@ public class Menu {
         buttonText.setTextFormat(textFormat);
 
         var buttonSprite:Sprite = new Sprite();
-        buttonSprite.addChild(buttonShape);
+        buttonSprite.addChild(buttonBackground);
         buttonSprite.addChild(buttonText);
 
         var button:SimpleButton = new SimpleButton();
@@ -601,7 +623,7 @@ class MainMenu extends Sprite {
                 (Constants.MAIN_MENU_BUTTON_HEIGHT - Constants.MAIN_MENU_BUTTON_TEXT_HEIGHT) / 2,
                 Constants.SCREEN_WIDTH * 5 / 6 - Constants.MAIN_MENU_BUTTON_WIDTH / 2,
                 Constants.SCREEN_HEIGHT / 6 - Constants.MAIN_MENU_BUTTON_HEIGHT / 2,
-                Menu.getMainMenuButtonShape(),
+                Menu.getMainMenuButtonBackground(),
                 Menu.onContinueClick);
 
         // Cover for the continue button
@@ -622,7 +644,7 @@ class MainMenu extends Sprite {
                         (Constants.MAIN_MENU_BUTTON_HEIGHT - Constants.MAIN_MENU_BUTTON_TEXT_HEIGHT) / 2,
                         Constants.SCREEN_WIDTH * 5 / 6 - Constants.MAIN_MENU_BUTTON_WIDTH / 2,
                         continueButton.y + Constants.MAIN_MENU_BUTTON_HEIGHT + Constants.MAIN_MENU_BUTTON_PADDING_BETWEEN,
-                Menu.getMainMenuButtonShape(),
+                Menu.getMainMenuButtonBackground(),
                 Menu.onStartClick);
 
         // Level select button
@@ -633,7 +655,7 @@ class MainMenu extends Sprite {
                         (Constants.MAIN_MENU_BUTTON_HEIGHT - Constants.MAIN_MENU_BUTTON_TEXT_HEIGHT) / 2,
                         Constants.SCREEN_WIDTH * 5 / 6 - Constants.MAIN_MENU_BUTTON_WIDTH / 2,
                         startButton.y + Constants.MAIN_MENU_BUTTON_HEIGHT + Constants.MAIN_MENU_BUTTON_PADDING_BETWEEN,
-                Menu.getMainMenuButtonShape(),
+                Menu.getMainMenuButtonBackground(),
                 Menu.onLevelSelectClick);
 
         // Time records button
@@ -644,7 +666,7 @@ class MainMenu extends Sprite {
                         (Constants.MAIN_MENU_BUTTON_HEIGHT - Constants.MAIN_MENU_BUTTON_TEXT_HEIGHT) / 2,
                         Constants.SCREEN_WIDTH * 5 / 6 - Constants.MAIN_MENU_BUTTON_WIDTH / 2,
                         levelSelectButton.y + Constants.MAIN_MENU_BUTTON_HEIGHT + Constants.MAIN_MENU_BUTTON_PADDING_BETWEEN,
-                Menu.getMainMenuButtonShape(),
+                Menu.getMainMenuButtonBackground(),
                 Menu.onTimeRecordsClick);
 
         // Credits button
@@ -939,10 +961,8 @@ class LevelSelectMenu extends Sprite {
                             0,
                             x,
                             y,
-                            Menu.getButtonShape(Constants.LEVEL_SELECT_BUTTON_COLOR,
-                                    Constants.LEVEL_SELECT_BUTTON_WIDTH,
+                            Menu.getButtonBackground(Constants.LEVEL_SELECT_BUTTON_WIDTH,
                                     Constants.LEVEL_SELECT_BUTTON_HEIGHT,
-                                    Constants.LEVEL_SELECT_BUTTON_BORDER_COLOR,
                                     Constants.LEVEL_SELECT_BUTTON_BORDER_SIZE),
                             Menu.onLevelClick);
                     levelButton.name = String(l);

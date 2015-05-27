@@ -55,7 +55,7 @@ public class Audio {
     public static var mute:Boolean;
     private static var muteButtonText:TextField;
     private static var muteButtonTextFormat:TextFormat;
-    private static var muteButtonShape:Shape;
+    private static var muteButtonBackground:Sprite;
     private static var muteButtonSprite:Sprite;
     public static var muteButton:SimpleButton;
     private static var muteTransform:SoundTransform;
@@ -74,10 +74,10 @@ public class Audio {
         muteButtonTextFormat = Menu.getMenuButtonTextFormat();
         flipMute();
 
-        muteButtonShape = Menu.getMenuButtonShape();
+        muteButtonBackground = Menu.getMenuButtonBackground();
 
         muteButtonSprite = new Sprite();
-        muteButtonSprite.addChild(muteButtonShape);
+        muteButtonSprite.addChild(muteButtonBackground);
         muteButtonSprite.addChild(muteButtonText);
 
         muteButton = new SimpleButton();
