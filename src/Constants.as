@@ -239,7 +239,7 @@ package
 		public static const TERMINAL_VELOCITY:Number = .75;		// Maximum Velocity (game might break if exceeded)
 		public static const GRAVITY:Number = .03;				// change in blocks / update ^2
 		
-		public static const PLAYER_SPEED:Number = 5;
+		public static const PLAYER_SPEED:Number = 5.5;
 		public static const CRATE_SPEED:Number = 2;
 		public static const AIR_SPEED:Number = 5;
 		public static const LADDER_UP_SPEED:Number = 8;
