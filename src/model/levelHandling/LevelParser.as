@@ -54,6 +54,9 @@ package model.levelHandling
 		[Embed(source = "../../../assets/levels/level8.json", mimeType = "application/octet-stream")]
 		private var Level8:Class;
 		
+		[Embed(source = "../../../assets/levels/level8B.json", mimeType = "application/octet-stream")]
+		private var Level8B:Class;
+		
 		[Embed(source = "../../../assets/levels/level9.json", mimeType = "application/octet-stream")]
 		private var Level9:Class;
 		
@@ -120,6 +123,9 @@ package model.levelHandling
 		[Embed(source = "../../../assets/levels/resetTutorial.json", mimeType = "application/octet-stream")]
 		private var ResetTutorial:Class;
 		
+		[Embed(source = "../../../assets/levels/ladderTutorial.json", mimeType = "application/octet-stream")]
+		private var LadderTutorial:Class;
+		
 		
 		/**
 		 *	Level Names Dictionary
@@ -167,6 +173,8 @@ package model.levelHandling
 			m_levelNames["level21"] = Level21;
 			m_levelNames["level24"] = Level24;
 			m_levelNames["resetTutorial"] = ResetTutorial;
+			m_levelNames["ladderTutorial"] = LadderTutorial;
+			m_levelNames["level8B"] = Level8B;
 		}
 		
 		/**

@@ -21,7 +21,7 @@ package
         /**
          * Debug Options
          */
-        public static const SHOW_ALL_LEVELS:Boolean = false;
+        public static const SHOW_ALL_LEVELS:Boolean = true;
 
         /**
          * Rewind Options
