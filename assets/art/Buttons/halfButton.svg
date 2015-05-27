@@ -9,21 +9,21 @@
    xmlns="http://www.w3.org/2000/svg"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   width="194.48029mm"
-   height="107.42814mm"
-   viewBox="0 0 689.10338 380.65086"
+   width="116.41708mm"
+   height="107.24323mm"
+   viewBox="0 0 412.50148 379.99568"
    id="svg2"
    version="1.1"
    inkscape:version="0.91 r13725"
-   sodipodi:docname="button.svg">
+   sodipodi:docname="halfButton.svg">
   <defs
      id="defs4">
     <inkscape:perspective
        sodipodi:type="inkscape:persp3d"
-       inkscape:vp_x="313.99678 : 74.122368 : 1"
+       inkscape:vp_x="313.99681 : 74.122368 : 1"
        inkscape:vp_y="0 : 102.24189 : 0"
-       inkscape:vp_z="1578.1863 : 14.122371 : 1"
-       inkscape:persp3d-origin="768.94868 : -3.8102116 : 1"
+       inkscape:vp_z="1578.1864 : 14.122371 : 1"
+       inkscape:persp3d-origin="768.94874 : -3.8102116 : 1"
        id="perspective3368" />
   </defs>
   <sodipodi:namedview
@@ -35,7 +35,7 @@
      inkscape:pageshadow="2"
      inkscape:zoom="0.70000001"
      inkscape:cx="384.2429"
-     inkscape:cy="240.38666"
+     inkscape:cy="239.73147"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
@@ -65,16 +65,9 @@
      inkscape:groupmode="layer"
      id="layer1"
      transform="translate(-13.363357,-234.5685)">
-    <rect
-       style="fill:#ffaaaa"
-       id="rect3384"
-       width="631.42859"
-       height="348.57144"
-       x="40"
-       y="266.64792" />
     <path
        style="fill:#ed9cf2;fill-opacity:1"
-       d="m 40.331833,440.99275 0,-173.57142 313.487117,0 c 249.22093,0 313.72405,0.36607 314.64285,1.78571 0.63566,0.98214 1.32906,79.08929 1.54088,173.57143 l 0.38514,171.78571 -315.028,0 -315.027987,0 0,-173.57143 z"
+       d="m 40.331833,440.99275 0,-173.57142 176.304267,0 c 140.16115,0 176.43752,0.36607 176.95425,1.78571 0.35749,0.98214 0.74746,79.08929 0.86658,173.57143 l 0.21661,171.78571 -177.17086,0 -177.170847,0 0,-173.57143 z"
        id="path3414"
        inkscape:connector-curvature="0" />
     <g
@@ -93,7 +86,7 @@
          style="fill:#efb8f4;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
     </g>
     <g
-       transform="matrix(0,1,-1,0,936.14759,226.54486)"
+       transform="matrix(0,1,-1,0,660.43331,226.54486)"
        id="g5688-1">
       <path
          sodipodi:nodetypes="ccc"
