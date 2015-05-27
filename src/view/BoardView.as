@@ -269,7 +269,7 @@ import flash.utils.Dictionary;
                         if (id >= Constants.SIGN1 && id <= Constants.SIGN5) {
                             asset.x = x * tileSideLength;
                             if (x > 0) {
-                                asset.x -= tileSideLength;
+                                asset.x -= tileSideLength / 2;
                             }
                             asset.y = y * tileSideLength;
                             if (y > 0) {
@@ -349,15 +349,15 @@ import flash.utils.Dictionary;
                 signText.text = board.getSignText(id);
                 signText.x = 0;
                 signText.y = 0;
-                //m_signText.background = true;
-                //m_signText.backgroundColor = Constants.SIGN_BACKGROUND_COLOR;
-                //m_signText.border = true;
-                //m_signText.borderColor = Constants.SIGN_BORDER_COLOR;
+                signText.background = true;
+                signText.backgroundColor = Constants.SIGN_BACKGROUND_COLOR;
+                signText.border = true;
+                signText.borderColor = Constants.SIGN_BORDER_COLOR;
                 signText.wordWrap = true;
                 signText.autoSize = TextFieldAutoSize.CENTER;
                 signText.textColor = Constants.SIGN_TEXT_COLOR;
                 signText.alpha = Constants.SIGN_TEXT_ALPHA;
-                signText.width = board.tileSideLength * 3;
+                signText.width = board.tileSideLength * 2;
                 var signFormat:TextFormat = new TextFormat();
                 signFormat.size = Constants.SIGN_TEXT_FONT_SIZE;
                 signFormat.align = Constants.SIGN_TEXT_ALIGNMENT;

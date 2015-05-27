@@ -45,6 +45,9 @@ package
 		
 		[Embed(source = "../assets/progressions/easyProgression.json", mimeType = "application/octet-stream")]
 		private var EasyProgression:Class;
+
+		[Embed(source = "../assets/progressions/signsProgression.json", mimeType = "application/octet-stream")]
+		private var signsProgression:Class;
 		
 		public function Main():void 
 		{
@@ -58,7 +61,7 @@ package
 			// entry point
 			
 			// Parse LevelProgression JSON
-			var progression:ByteArray = (new EasyProgression() as ByteArray); // Change this for progression
+			var progression:ByteArray = (new signsProgression() as ByteArray); // Change this for progression
 			var progressionString:String = progression.toString();
 			var prog:Object = JSON.parse(progressionString);
 
