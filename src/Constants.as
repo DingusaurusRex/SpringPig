@@ -407,9 +407,9 @@ package
                 "\n" +
                 "SFX from:\n" +
                 "-http://www.freesfx.co.uk\n" +
-                "-http://www.freesound.org" + 
+                "-http://www.freesound.org"/* + 
 				"\n\n" + 
-				"Presented by AlbinoBlackSheep";
+				"Presented by AlbinoBlackSheep"*/;
 		public static const CREDITS_TOP_PADDING:int = 100;
 		public static const CREDITS_HEIGHT:int = 500;
 		public static const CREDITS_WIDTH:int = 400;
