@@ -54,6 +54,9 @@ public class Menu {
 	[Embed(source = "../assets/art/Buttons/button.svg")]
     public static var buttonBackgroundArt:Class;
 
+	[Embed(source = "../assets/art/Buttons/buttonCover.svg")]
+    public static var buttonCoverArt:Class;
+
     [Embed(source="../assets/art/background/gameBackground.svg")]
     public static var mainMenuBackgroundArt:Class;
 
@@ -636,12 +639,13 @@ class MainMenu extends Sprite {
                 Menu.onContinueClick);
 
         // Cover for the continue button
-        continueButtonCover = new Sprite();
+        continueButtonCover = new Menu.buttonCoverArt();/*
         continueButtonCover.graphics.beginFill(Constants.CONTINUE_BUTTON_COVER_COLOR, Constants.CONTINUE_BUTTON_COVER_OPACITY);
         continueButtonCover.graphics.drawRect(0, 0, continueButton.width, continueButton.height);
-        continueButtonCover.graphics.endFill();
-        continueButtonCover.x = continueButton.x - Constants.MENU_BUTTON_BORDER_SIZE;
-        continueButtonCover.y = continueButton.y - Constants.MENU_BUTTON_BORDER_SIZE;
+        continueButtonCover.graphics.endFill();*/
+        continueButtonCover.x = continueButton.x;
+        continueButtonCover.y = continueButton.y;
+        continueButtonCover.alpha = 0.5;
         continueButtonCover.height = continueButton.height;
         continueButtonCover.width = continueButton.width;
 
