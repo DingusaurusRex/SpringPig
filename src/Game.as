@@ -176,6 +176,9 @@ package
                     ticker++;
                     ticker %= Constants.UPDATES_BEFORE_REWIND;
                     if (playStates.length > 0 && ticker == 0) {
+                        if (playStates.length > 2) {
+                            refreshGame(playStates.pop());
+                        }
                         refreshGame(playStates.pop());
                         rewindBar.scaleX = playStates.length / initialFrames;
                         framesRewound++;
