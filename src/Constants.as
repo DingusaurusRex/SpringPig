@@ -412,7 +412,7 @@ package
                 "-http://www.freesound.org"/* + 
 				"\n\n" + 
 				"Presented by AlbinoBlackSheep"*/;
-		public static const CREDITS_TOP_PADDING:int = 100;
+		public static const CREDITS_TOP_PADDING:int = 130;
 		public static const CREDITS_HEIGHT:int = 500;
 		public static const CREDITS_WIDTH:int = 400;
 		public static const CREDITS_FONT_SIZE:int = 20;
@@ -421,6 +421,10 @@ package
         public static const CREDITS_RESET_PROGRESS_BUTTON_TEXT:String = "Reset Progress";
         public static const CREDITS_RESET_PROGRESS_BUTTON_LEFT_PADDING:int = 30;
         public static const CREDITS_RESET_PROGRESS_BUTTON_BOTTOM_PADDING:int = 40;
+        public static const CREDITS_RESET_PROGRESS_BUTTON_COVER_OPACITY:Number = 0.5;
+
+        public static const CREDITS_BACKGROUND_COVER_COLOR:uint = 0xFFFFFF;
+        public static const CREDITS_BACKGROUND_COVER_OPACITY:Number = 0.5;
 
 		// Pause menu
 		public static const PAUSE_TITLE_TEXT:String = "Paused";

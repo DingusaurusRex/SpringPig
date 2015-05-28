@@ -68,8 +68,6 @@ package
 			trace(useHardProg);
 			
 			// Parse LevelProgression JSON
-			var progression:ByteArray; // Change this for progression
-			var versionID:int; // This is cid in the wiki
 			if (useHardProg) {
 				progression = new EasyProgression() as ByteArray;
 				versionID = 302;

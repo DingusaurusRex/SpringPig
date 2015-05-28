@@ -58,7 +58,10 @@ public class Menu {
     public static var menuButtonBackgroundArt:Class;
 
 	[Embed(source = "../assets/art/Buttons/buttonCover.svg")]
-    public static var buttonCoverArt:Class;
+    public static var mainMenuButtonCoverArt:Class;
+
+	[Embed(source = "../assets/art/Buttons/halfButtonCover.svg")]
+    public static var menuButtonCoverArt:Class;
 
     [Embed(source="../assets/art/background/gameBackground.svg")]
     public static var menuBackgroundArt:Class;
@@ -590,6 +593,7 @@ import flash.display.SimpleButton;
 import flash.display.Sprite;
 import flash.events.MouseEvent;
 import flash.text.TextField;
+import flash.text.TextFieldAutoSize;
 import flash.text.TextFormat;
 import model.levelHandling.Board;
 import model.levelHandling.LevelParser;
@@ -644,13 +648,13 @@ class MainMenu extends Sprite {
                 Menu.onContinueClick);
 
         // Cover for the continue button
-        continueButtonCover = new Menu.buttonCoverArt();/*
+        continueButtonCover = new Menu.mainMenuButtonCoverArt();/*
         continueButtonCover.graphics.beginFill(Constants.CONTINUE_BUTTON_COVER_COLOR, Constants.CONTINUE_BUTTON_COVER_OPACITY);
         continueButtonCover.graphics.drawRect(0, 0, continueButton.width, continueButton.height);
         continueButtonCover.graphics.endFill();*/
         continueButtonCover.x = continueButton.x;
         continueButtonCover.y = continueButton.y;
-        continueButtonCover.alpha = 0.5;
+        continueButtonCover.alpha = Constants.CONTINUE_BUTTON_COVER_OPACITY;
         continueButtonCover.height = continueButton.height;
         continueButtonCover.width = continueButton.width;
 
@@ -1183,6 +1187,7 @@ class TimeRecordsMenu extends Sprite {
 
 class CreditsMenu extends Sprite {
     private var background:Sprite;
+    private var backgroundCover:Sprite;
     private var mainMenuButton:SimpleButton;
     private var title:TextField;
     private var credits:TextField;
@@ -1194,6 +1199,12 @@ class CreditsMenu extends Sprite {
         background = new Menu.menuBackgroundArt();
         background.width = Constants.SCREEN_WIDTH;
         background.height = Constants.SCREEN_HEIGHT;
+
+        // Background cover
+        backgroundCover = new Sprite();
+        backgroundCover.graphics.beginFill(Constants.CREDITS_BACKGROUND_COVER_COLOR, Constants.CREDITS_BACKGROUND_COVER_OPACITY);
+        backgroundCover.graphics.drawRect(0, 0, Constants.SCREEN_WIDTH, Constants.SCREEN_HEIGHT);
+        backgroundCover.graphics.endFill();
 
         // Main menu button
         mainMenuButton = Menu.getMenuButton(Constants.MAIN_MENU_BUTTON_TEXT,
@@ -1215,6 +1226,7 @@ class CreditsMenu extends Sprite {
                 Constants.MENU_FONT,
                 Constants.CREDITS_FONT_SIZE,
                 Constants.CREDITS_ALIGNMENT);
+        credits.autoSize = TextFieldAutoSize.LEFT;
 
         // Reset progress
         resetProgress = Menu.getMenuButton(Constants.CREDITS_RESET_PROGRESS_BUTTON_TEXT,
@@ -1223,19 +1235,21 @@ class CreditsMenu extends Sprite {
                 Menu.onResetProgressClick);
 
         // Cover for the reset progress button
-        resetProgressCover = new Sprite();
+        resetProgressCover = new Menu.menuButtonCoverArt();/*
         resetProgressCover.graphics.beginFill(Constants.CONTINUE_BUTTON_COVER_COLOR, Constants.CONTINUE_BUTTON_COVER_OPACITY);
         resetProgressCover.graphics.drawRect(0, 0, resetProgress.width, resetProgress.height);
-        resetProgressCover.graphics.endFill();
-        resetProgressCover.x = resetProgress.x - Constants.MENU_BUTTON_BORDER_SIZE;
-        resetProgressCover.y = resetProgress.y - Constants.MENU_BUTTON_BORDER_SIZE;
-        resetProgressCover.height = resetProgress.height;
+        resetProgressCover.graphics.endFill();*/
+        resetProgressCover.x = resetProgress.x;
+        resetProgressCover.y = resetProgress.y;
+        resetProgressCover.alpha = Constants.CREDITS_RESET_PROGRESS_BUTTON_COVER_OPACITY;
+        resetProgressCover.height = resetProgress.height - 2;
         resetProgressCover.width = resetProgress.width;
 
         addChild(background);
-        addChild(mainMenuButton);
+        addChild(backgroundCover);
         addChild(title);
         addChild(credits);
+        addChild(mainMenuButton);
         addChild(resetProgress);
     }
 
