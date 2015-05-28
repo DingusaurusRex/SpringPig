@@ -112,6 +112,9 @@ package
         private var rewindBar:Sprite;
         private var initialFrames:Number;
 
+
+       private var background:Sprite;
+
 		/**
 		 * Begins the game
 		 * @param	p - Player Object (added to stage in main)
@@ -160,6 +163,10 @@ package
                     0,
                             Constants.SCREEN_WIDTH / 2 - Constants.REWIND_BAR_LEFT_PADDING - Constants.REWIND_BAR_RIGHT_PADDING - Constants.REWIND_BAR_INNER_PADDING * 2,
                     Constants.REWIND_BAR_HEIGHT - Constants.REWIND_BAR_INNER_PADDING * 2);
+
+            background = new Menu.menuBackgroundArt;
+            background.width = Constants.SCREEN_WIDTH;
+            background.height = Constants.SCREEN_HEIGHT;
 		}
 		
 		/**
@@ -377,15 +384,60 @@ package
 			{
 				removeChild(getChildAt(i));
 			}
-			
-			// Add yourself Game as child to stage
-			m_stage.addChild(this);
+
+            if (Constants.SHOW_BACKGROUND) {
+                m_stage.addChild(background);
+            }
 			
 			// Get the board for the test level
 			m_board = m_levelReader.parseLevel(levelName);
 			
 			// Center the Game
-			this.x = (Constants.BOARD_WIDTH - m_board.boardWidthInPixels) / 2
+			this.x = (Constants.BOARD_WIDTH - m_board.boardWidthInPixels) / 2;
+            this.y = (Constants.BOARD_HEIGHT - m_board.boardHeightInPixels) / 2;
+
+            if (Constants.SCREEN_WIDTH != m_board.boardWidthInPixels) {
+                var leftWall:Sprite = new Sprite();
+                leftWall.graphics.beginFill(Constants.WALL_COLOR);
+                leftWall.graphics.drawRect(0, 0, this.x, Constants.SCREEN_HEIGHT);
+                leftWall.graphics.endFill();
+                m_stage.addChild(leftWall);
+
+                var rightWall:Sprite = new Sprite();
+                rightWall.graphics.beginFill(Constants.WALL_COLOR);
+                rightWall.graphics.drawRect(Constants.SCREEN_WIDTH - this.x, 0, this.x, Constants.SCREEN_HEIGHT);
+                rightWall.graphics.endFill();
+                m_stage.addChild(rightWall);
+            }
+
+            if (Constants.SCREEN_HEIGHT != m_board.boardHeightInPixels) {
+                var topWall:Sprite = new Sprite();
+                topWall.graphics.beginFill(Constants.WALL_COLOR);
+                topWall.graphics.drawRect(0, 0, Constants.SCREEN_WIDTH, this.y);
+                topWall.graphics.endFill();
+                m_stage.addChild(topWall);
+
+                var bottomWall:Sprite = new Sprite();
+                bottomWall.graphics.beginFill(Constants.WALL_COLOR);
+                bottomWall.graphics.drawRect(0, Constants.SCREEN_HEIGHT - this.y, Constants.SCREEN_WIDTH, this.y);
+                bottomWall.graphics.endFill();
+                m_stage.addChild(bottomWall);
+            }
+
+            // Add yourself Game as child to stage
+            m_stage.addChild(this);
+
+            // Add info on top of the game
+            Stopwatch.stopwatchText.x = Constants.GAME_STOPWATCH_LEFT_PADDING;
+            Stopwatch.stopwatchText.y = Constants.SCREEN_HEIGHT - Constants.GAME_STOPWATCH_HEIGHT - Constants.GAME_STOPWATCH_BOTTOM_PADDING;
+
+            var previousRecord:TextField = GameState.getPlayerRecordGameTextField(currLevelIndex);
+            previousRecord.x = Stopwatch.stopwatchText.x + Constants.GAME_STOPWATCH_WIDTH + Constants.PLAYER_RECORD_TIME_GAME_LEFT_PADDING;
+            previousRecord.y = Stopwatch.stopwatchText.y + Constants.PLAYER_RECORD_TIME_GAME_TOP_PADDING;
+
+            m_stage.addChild(Menu.rewindInstructions);
+            m_stage.addChild(Stopwatch.stopwatchText);
+            m_stage.addChild(previousRecord);
 
             // Clear rewind
             playStates.length = 0;
@@ -413,21 +465,11 @@ package
 			m_jumpHeightRects = new Vector.<Sprite>();
 			
 			this.m_playerStart = playerStart;
-			
-			Stopwatch.stopwatchText.x = Constants.GAME_STOPWATCH_LEFT_PADDING;
-			Stopwatch.stopwatchText.y = Constants.SCREEN_HEIGHT - Constants.GAME_STOPWATCH_HEIGHT - Constants.GAME_STOPWATCH_BOTTOM_PADDING;
-
-            var previousRecord:TextField = GameState.getPlayerRecordGameTextField(currLevelIndex);
-            previousRecord.x = Stopwatch.stopwatchText.x + Constants.GAME_STOPWATCH_WIDTH + Constants.PLAYER_RECORD_TIME_GAME_LEFT_PADDING;
-            previousRecord.y = Stopwatch.stopwatchText.y + Constants.PLAYER_RECORD_TIME_GAME_TOP_PADDING;
 
 			// Add graphics
 			addChild(m_boardSprite);
 			addChild(m_meter);
-			addChild(Stopwatch.stopwatchText);
-            addChild(previousRecord);
 			addChild(m_player.asset);
-			addChild(Menu.rewindInstructions);
 
 			// Create Listeners
 			m_stage.addEventListener(KeyboardEvent.KEY_DOWN, onKeyDown);
@@ -1847,8 +1889,8 @@ package
                         rewindStarted = true;
                         initialFrames = playStates.length;
                         addChild(rewindSymbol);
-                        addChild(rewindBarBackground);
-                        addChild(rewindBar);
+                        m_stage.addChild(rewindBarBackground);
+                        m_stage.addChild(rewindBar);
                     }
                     break;
 				case Keyboard.ESCAPE :
@@ -1898,8 +1940,8 @@ package
                         m_logger.logAction(Constants.AID_END_REWIND, logData);
                         rewindStarted = false;
                         removeChild(rewindSymbol);
-                        removeChild(rewindBarBackground);
-                        removeChild(rewindBar);
+                        m_stage.removeChild(rewindBarBackground);
+                        m_stage.removeChild(rewindBar);
                     }
 					break;
 			}

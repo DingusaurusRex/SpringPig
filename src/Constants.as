@@ -66,7 +66,8 @@ package
 		**/
 		
 		public static const BACKGROUND_COLOR:uint = 0xcceaff;
-		
+		public static const WALL_COLOR:uint = 0xA0A0A0;
+
 		// Grid values
 		public static const GRID_THICKNESS:Number = 1;
 		public static const GRID_COLOR:uint = 0x000000;

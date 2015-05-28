@@ -213,21 +213,11 @@ import flash.utils.Dictionary;
 			
 			
 			m_boardViewWidth = board.width * tileSideLength;
-			m_boardViewHeight = board.height * tileSideLength
+			m_boardViewHeight = board.height * tileSideLength;
 			
-			// Draw background
-			if (Constants.SHOW_BACKGROUND) {
-				var background:Sprite = new Menu.menuBackgroundArt();
-				background.x = 0;
-				background.y = 0;
-				background.width = m_boardViewWidth;
-				background.height = m_boardViewHeight;
-				addChild(background);
-			}
-			
-			graphics.beginFill(Constants.BACKGROUND_COLOR);
-			graphics.drawRect(0, 0, m_boardViewWidth, m_boardViewHeight);
-			graphics.endFill();			
+			//graphics.beginFill(Constants.BACKGROUND_COLOR);
+			//graphics.drawRect(0, 0, m_boardViewWidth, m_boardViewHeight);
+			//graphics.endFill();
 
             var signs:Array = new Array();
 			
