@@ -66,7 +66,7 @@ package
 		**/
 		
 		public static const BACKGROUND_COLOR:uint = 0xcceaff;
-		public static const WALL_COLOR:uint = 0xA0A0A0;
+		public static const WALL_COLOR:uint = 0xD0D0D0;
 
 		public static const IN_GAME_TEXT_COLOR:uint = 0x000080;
 
