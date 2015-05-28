@@ -166,9 +166,6 @@ package view
 		
 		[Embed(source = "../../assets/art/tiles/gates/yellow_open.svg")]
 		private var YellowOpenArt:Class
-		
-		[Embed(source="../../assets/art/background/gameBackground.svg")]
-		private var BackgroundArt:Class;
 
 		protected var m_boardViewWidth:int;		// The actual total width of the BoardView
 		protected var m_boardViewHeight:int;	// The actual total height of the BoardView
@@ -217,7 +214,7 @@ package view
 			
 			// Draw background
 			if (Constants.SHOW_BACKGROUND) {
-				var background:Sprite = new BackgroundArt();
+				var background:Sprite = new Menu.mainMenuBackgroundArt();
 				background.x = 0;
 				background.y = 0;
 				background.width = m_boardViewWidth;
