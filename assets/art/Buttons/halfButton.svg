@@ -9,9 +9,9 @@
    xmlns="http://www.w3.org/2000/svg"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   width="116.41708mm"
-   height="107.24323mm"
-   viewBox="0 0 412.50148 379.99568"
+   width="194.22978mm"
+   height="56.846405mm"
+   viewBox="0 0 688.21577 201.42426"
    id="svg2"
    version="1.1"
    inkscape:version="0.91 r13725"
@@ -20,10 +20,10 @@
      id="defs4">
     <inkscape:perspective
        sodipodi:type="inkscape:persp3d"
-       inkscape:vp_x="313.99681 : 74.122368 : 1"
+       inkscape:vp_x="313.99679 : 74.122368 : 1"
        inkscape:vp_y="0 : 102.24189 : 0"
        inkscape:vp_z="1578.1864 : 14.122371 : 1"
-       inkscape:persp3d-origin="768.94874 : -3.8102116 : 1"
+       inkscape:persp3d-origin="768.94871 : -3.8102116 : 1"
        id="perspective3368" />
   </defs>
   <sodipodi:namedview
@@ -34,8 +34,8 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="0.70000001"
-     inkscape:cx="384.2429"
-     inkscape:cy="239.73147"
+     inkscape:cx="173.52862"
+     inkscape:cy="61.16004"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
@@ -67,7 +67,7 @@
      transform="translate(-13.363357,-234.5685)">
     <path
        style="fill:#ed9cf2;fill-opacity:1"
-       d="m 40.331833,440.99275 0,-173.57142 176.304267,0 c 140.16115,0 176.43752,0.36607 176.95425,1.78571 0.35749,0.98214 0.74746,79.08929 0.86658,173.57143 l 0.21661,171.78571 -177.17086,0 -177.170847,0 0,-173.57143 z"
+       d="m 40.331833,351.70704 0,-84.28571 313.487117,0 c 249.22093,0 313.72405,0.17776 314.64285,0.86714 0.63566,0.47692 1.32906,38.40549 1.54088,84.28571 l 0.38514,83.41857 -315.028,0 -315.027987,0 0,-84.28571 z"
        id="path3414"
        inkscape:connector-curvature="0" />
     <g
@@ -86,7 +86,7 @@
          style="fill:#efb8f4;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
     </g>
     <g
-       transform="matrix(0,1,-1,0,660.43331,226.54486)"
+       transform="matrix(0,1,-1,0,936.14759,226.54486)"
        id="g5688-1">
       <path
          sodipodi:nodetypes="ccc"
