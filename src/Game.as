@@ -115,7 +115,7 @@ package
 
        private var background:Sprite;
 
-        public var version:String;
+        public static var version:String;
 
 		/**
 		 * Begins the game
@@ -138,7 +138,7 @@ package
 			
 			this.m_levelReader = new LevelParser();
 
-            this.m_logger = logger;
+            m_logger = logger;
 
             this.playStates = new Array();
 
@@ -218,7 +218,9 @@ package
 				platforms = m_boardSprite.platforms;
 
 				updateButtons();
-				//displaySign();
+                if (version == Constants.VERSION_A) {
+                    displaySign();
+                }
 				updateCrates();
 				
 				var wasInAir:Boolean = m_player.inAir;

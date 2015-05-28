@@ -253,7 +253,7 @@ import flash.utils.Dictionary;
 					}
 					if (asset)
 					{
-                        if (id >= Constants.SIGN1 && id <= Constants.SIGN5) {
+                        if (id >= Constants.PLASTERED_SIGN1 && id <= Constants.PLASTERED_SIGN5) {
                             asset.x = x * tileSideLength;
                             if (x > 0) {
                                 asset.x -= tileSideLength / 2;
@@ -263,7 +263,7 @@ import flash.utils.Dictionary;
                                 asset.y -= tileSideLength / 4;
                             }
                             signs.push(asset);
-                        } else {
+                        } else if ((Game.version == Constants.VERSION_B && (id < Constants.SIGN1 || id > Constants.SIGN5)) || Game.version == Constants.VERSION_A) {
                             if (id >= Constants.LONG_MOVING_PLATFORM_START1 && id <= Constants.LONG_MOVING_PLATFORM_START2) {
                                 asset.width = 2 * tileSideLength;
                             } else {
@@ -307,8 +307,10 @@ import flash.utils.Dictionary;
 				addChild(grid);
 			}
 
-            for each (var s:Sprite in signs) {
-                addChild(s);
+            if (Game.version == Constants.VERSION_B) {
+                for each (var s:Sprite in signs) {
+                    addChild(s);
+                }
             }
 			
 			// Figure out platform directions
@@ -331,6 +333,10 @@ import flash.utils.Dictionary;
 				m_platformArts[id] = result;
 			}
 			else if (id >= Constants.SIGN1 && id <= Constants.SIGN5)
+			{
+                result = new SignArt();
+            }
+			else if (id >= Constants.PLASTERED_SIGN1 && id <= Constants.PLASTERED_SIGN5)
 			{
                 var signText:TextField = new TextField();
                 signText.text = board.getSignText(id);

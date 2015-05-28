@@ -122,17 +122,19 @@ package
                 if (num >= .5) {
                     useA = false;
                 }
+                //trace("rand");
                 if (useA) {
-                    game.version = Constants.VERSION_A;
+                    Game.version = Constants.VERSION_A;
                     versionID = 303;
                 } else {
-                    game.version = Constants.VERSION_B;
+                    Game.version = Constants.VERSION_B;
                     versionID = 302;
                 }
-                GameState.savePlayerVersion(game.version);
+                GameState.savePlayerVersion(Game.version);
             } else {
-                game.version = GameState.getPlayerVersion();
+                Game.version = GameState.getPlayerVersion();
             }
+            //trace("version: " + Game.version);
 
             var logger:Logger = Logger.initialize(Constants.GID, Constants.DB_NAME, Constants.SKEY, versionID, null, false);
             game.m_logger = logger;

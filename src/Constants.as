@@ -217,6 +217,13 @@ package
 		public static const SIGN3:int = 56;
 		public static const SIGN4:int = 57;
 		public static const SIGN5:int = 58;
+
+		// plastered Signs
+		public static const PLASTERED_SIGN1:int = 71;
+		public static const PLASTERED_SIGN2:int = 72;
+		public static const PLASTERED_SIGN3:int = 73;
+		public static const PLASTERED_SIGN4:int = 74;
+		public static const PLASTERED_SIGN5:int = 75;
 		
 		// POWERUPS
 		public static const TIMES2:int = 60;
