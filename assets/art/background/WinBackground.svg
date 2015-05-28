@@ -60,7 +60,7 @@
      x="0"
      y="0" />
   <rect
-     style="fill:#ffffff;fill-opacity:1"
+     style="fill:#ffffff;fill-opacity:0.5"
      id="rect3823"
      width="745.63263"
      height="195.33942"
@@ -191,7 +191,7 @@
          y="24.368948"
          x="-237.77406"
          id="tspan3644"
-         sodipodi:role="line">CONGRATULAT     ONS</tspan></text>
+         sodipodi:role="line">CONGRATULATIONS</tspan></text>
     <text
        sodipodi:linespacing="125%"
        id="text3646"
@@ -201,8 +201,8 @@
        xml:space="preserve"><tspan
          style="font-size:85.00000763px"
          y="168.84015"
-         x="46.86042"
+         x="-96.86042"
          id="tspan3648"
-         sodipodi:role="line">YOU WON!</tspan></text>
+         sodipodi:role="line">Level Complete!</tspan></text>
   </g>
 </svg>

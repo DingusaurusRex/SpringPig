@@ -60,7 +60,7 @@
      x="0"
      y="0" />
   <rect
-     style="fill:#ffffff;fill-opacity:1"
+     style="fill:#ffffff;fill-opacity:0.5"
      id="rect3823"
      width="745.63263"
      height="195.33942"
@@ -191,7 +191,7 @@
          y="24.368948"
          x="-237.77406"
          id="tspan3644"
-         sodipodi:role="line">CONGRATULAT     ONS</tspan></text>
+         sodipodi:role="line">CONGRATULATIONS</tspan></text>
     <text
        sodipodi:linespacing="125%"
        id="text3646"
@@ -221,6 +221,6 @@
      sodipodi:linespacing="125%"><tspan
        sodipodi:role="line"
        id="tspan3390"
-       x="177.78519"
-       y="186.03339">You Beat Spring Pig!</tspan></text>
+       x="77.78519"
+       y="186.03339">You Have Beaten Spring Pig!</tspan></text>
 </svg>
