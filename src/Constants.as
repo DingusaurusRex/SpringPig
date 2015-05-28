@@ -497,11 +497,11 @@ package
 
         // Rewind tutorial
         public static const REWIND_INSTRUCTION_TEXT:String = "Rewind: R\tReset: Y";
-        public static const REWIND_INSTRUCTION_BOTTOM_PADDING:int = 8;
+        public static const REWIND_INSTRUCTION_BOTTOM_PADDING:int = 3;
         public static const REWIND_INSTRUCTION_LEFT_PADDING:int = 5;
-        public static const REWIND_INSTRUCTION_HEIGHT:int = 16;
-        public static const REWIND_INSTRUCTION_WIDTH:int = 130;
-        public static const REWIND_INSTRUCTION_FONT_SIZE:int = 12;
+        public static const REWIND_INSTRUCTION_HEIGHT:int = 25;
+        public static const REWIND_INSTRUCTION_WIDTH:int = 220;
+        public static const REWIND_INSTRUCTION_FONT_SIZE:int = 20;
         public static const REWIND_INSTRUCTION_ALIGNMENT:String = "left";
 	}
 
