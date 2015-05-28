@@ -720,7 +720,8 @@ package
 								if (m_player.dy > 0.1) {
 									closeToTop = true;
 								}
-								if ((tileAboveLadder == Constants.EMPTY || tileAboveLadder == Constants.START || tileAboveLadder == Constants.END)
+								if ((tileAboveLadder == Constants.EMPTY || tileAboveLadder == Constants.START || tileAboveLadder == Constants.END ||
+									(tileAboveLadder >= Constants.PLASTERED_SIGN1 && tileAboveLadder <= Constants.PLASTERED_SIGN5))
 									&& tileAboveLadder != -1 && closeToTop && !m_keyDown)
 								{
 									m_player.asset.y = (int) (tile.y * m_board.tileSideLength - m_player.height);
@@ -740,6 +741,7 @@ package
 									 id != Constants.CRATE &&
 									 id != Constants.LAVA &&
 									 !(id >= Constants.SIGN1 && id <= Constants.SIGN5) &&
+									 !(id >= Constants.PLASTERED_SIGN1 && id <= Constants.PLASTERED_SIGN5) && 
 									 !isButton(id) && 
 									 !isOpenGate(id) &&
 									 !isMovingPlatformStartOrEnd(id) &&
@@ -1177,6 +1179,7 @@ package
 								if (id != Constants.EMPTY &&
 									id != Constants.START &&
 									id != Constants.CRATE &&
+									!(id >= Constants.PLASTERED_SIGN1 && id <= Constants.PLASTERED_SIGN5) &&
 									!isButton(id) && 
 									!isOpenGate(id) &&
 									!isMovingPlatformStartOrEnd(id))
@@ -1222,6 +1225,7 @@ package
 								if (id != Constants.EMPTY &&
 									id != Constants.START &&
 									id != Constants.CRATE &&
+									!(id >= Constants.PLASTERED_SIGN1 && id <= Constants.PLASTERED_SIGN5) && 
 									!isButton(id) && 
 									!isOpenGate(id) &&
 									!isMovingPlatformStartOrEnd(id))
@@ -1259,6 +1263,7 @@ package
 								if (id != Constants.EMPTY &&
 									id != Constants.START &&
 									id != Constants.CRATE &&
+									!(id >= Constants.PLASTERED_SIGN1 && id <= Constants.PLASTERED_SIGN5) && 
 									!isButton(id) && 
 									!isOpenGate(id) &&
 									!isMovingPlatformStartOrEnd(id))
@@ -1637,7 +1642,8 @@ package
 				var id:int = m_board.getTile(tile.x, tile.y);
 				if (id == Constants.LADDER) {
 					result = true;
-				} else if (id != Constants.EMPTY && id != Constants.START && id != Constants.END) {
+				} else if (id != Constants.EMPTY && id != Constants.START && id != Constants.END &&
+					!(id >= Constants.PLASTERED_SIGN1 && id <= Constants.PLASTERED_SIGN5)) {
 					result = false;
 					break;
 				}

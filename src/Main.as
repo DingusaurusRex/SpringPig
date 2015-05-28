@@ -134,7 +134,6 @@ package
             } else {
                 Game.version = GameState.getPlayerVersion();
             }
-            //trace("version: " + Game.version);
 
             var logger:Logger = Logger.initialize(Constants.GID, Constants.DB_NAME, Constants.SKEY, versionID, null, false);
             game.m_logger = logger;
