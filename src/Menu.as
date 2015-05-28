@@ -61,7 +61,7 @@ public class Menu {
     public static var buttonCoverArt:Class;
 
     [Embed(source="../assets/art/background/gameBackground.svg")]
-    public static var mainMenuBackgroundArt:Class;
+    public static var menuBackgroundArt:Class;
 
     // TODO: Background
     public static function Init(s:Stage, g:Game):void {
@@ -616,7 +616,7 @@ class MainMenu extends Sprite {
 	
     public function MainMenu():void {
         // Main menu background
-        background = new Menu.mainMenuBackgroundArt();
+        background = new Menu.menuBackgroundArt();
         background.width = Constants.SCREEN_WIDTH;
         background.height = Constants.SCREEN_HEIGHT;
 
@@ -911,6 +911,7 @@ class EndGameMenu extends Sprite {
 }
 
 class LevelSelectMenu extends Sprite {
+    private var background:Sprite;
     private var mainMenuButton:SimpleButton;
     private var title:TextField;
 
@@ -922,6 +923,11 @@ class LevelSelectMenu extends Sprite {
     private var totalPages:int;
 	
     public function LevelSelectMenu():void {
+        // Background
+        background = new Menu.menuBackgroundArt();
+        background.width = Constants.SCREEN_WIDTH;
+        background.height = Constants.SCREEN_HEIGHT;
+
         // Main menu button
         mainMenuButton = Menu.getMenuButton(Constants.MAIN_MENU_BUTTON_TEXT,
                 Constants.MAIN_MENU_BUTTON_TOP_PADDING,
@@ -947,6 +953,7 @@ class LevelSelectMenu extends Sprite {
 
     public function regeneratePages():void {
         removeChildren();
+        addChild(background);
 
         var levels:int = GameState.getPlayerOverallProgress();
         if (Constants.SHOW_ALL_LEVELS) {
@@ -977,7 +984,7 @@ class LevelSelectMenu extends Sprite {
                             Menu.getMenuButtonTextFormat(),
                             Constants.LEVEL_SELECT_BUTTON_WIDTH,
                                     Constants.LEVEL_SELECT_BUTTON_HEIGHT + Constants.LEVEL_SELECT_BUTTON_BORDER_SIZE,
-                            0,
+                            Constants.MENU_BUTTON_TEXT_TOP_PADDING,
                             x,
                             y,
                             Menu.getButtonBackground(Constants.LEVEL_SELECT_BUTTON_WIDTH,
@@ -1046,6 +1053,7 @@ class LevelSelectMenu extends Sprite {
 }
 
 class TimeRecordsMenu extends Sprite {
+    private var background:Sprite;
     private var mainMenuButton:SimpleButton;
     private var title:TextField;
 
@@ -1057,6 +1065,11 @@ class TimeRecordsMenu extends Sprite {
     private var totalPages:int;
 	
     public function TimeRecordsMenu():void {
+        // Background
+        background = new Menu.menuBackgroundArt();
+        background.width = Constants.SCREEN_WIDTH;
+        background.height = Constants.SCREEN_HEIGHT;
+
         // Main menu button
         mainMenuButton = Menu.getMenuButton(Constants.MAIN_MENU_BUTTON_TEXT,
                 Constants.MAIN_MENU_BUTTON_TOP_PADDING,
@@ -1082,6 +1095,7 @@ class TimeRecordsMenu extends Sprite {
 
     public function regeneratePages():void {
         removeChildren();
+        addChild(background);
 
         var levels:int = GameState.getPlayerOverallProgress();
         if (Constants.SHOW_ALL_LEVELS) {
@@ -1168,6 +1182,7 @@ class TimeRecordsMenu extends Sprite {
 
 
 class CreditsMenu extends Sprite {
+    private var background:Sprite;
     private var mainMenuButton:SimpleButton;
     private var title:TextField;
     private var credits:TextField;
@@ -1175,6 +1190,11 @@ class CreditsMenu extends Sprite {
     private var resetProgressCover:Sprite;
 	
     public function CreditsMenu():void {
+        // Background
+        background = new Menu.menuBackgroundArt();
+        background.width = Constants.SCREEN_WIDTH;
+        background.height = Constants.SCREEN_HEIGHT;
+
         // Main menu button
         mainMenuButton = Menu.getMenuButton(Constants.MAIN_MENU_BUTTON_TEXT,
                 Constants.MAIN_MENU_BUTTON_TOP_PADDING,
@@ -1212,6 +1232,7 @@ class CreditsMenu extends Sprite {
         resetProgressCover.height = resetProgress.height;
         resetProgressCover.width = resetProgress.width;
 
+        addChild(background);
         addChild(mainMenuButton);
         addChild(title);
         addChild(credits);

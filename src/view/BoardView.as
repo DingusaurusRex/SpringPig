@@ -214,7 +214,7 @@ package view
 			
 			// Draw background
 			if (Constants.SHOW_BACKGROUND) {
-				var background:Sprite = new Menu.mainMenuBackgroundArt();
+				var background:Sprite = new Menu.menuBackgroundArt();
 				background.x = 0;
 				background.y = 0;
 				background.width = m_boardViewWidth;
