@@ -71,6 +71,7 @@ public class Audio {
         muteButtonText = new TextField();
         muteButtonText.width = Constants.MENU_BUTTON_WIDTH;
         muteButtonText.height = Constants.MENU_BUTTON_HEIGHT;
+        muteButtonText.y = Constants.MENU_BUTTON_TEXT_TOP_PADDING;
         muteButtonTextFormat = Menu.getMenuButtonTextFormat();
         flipMute();
 

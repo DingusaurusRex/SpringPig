@@ -52,7 +52,10 @@ public class Menu {
     public static var endGameBackgroundArt:Class;
 
 	[Embed(source = "../assets/art/Buttons/button.svg")]
-    public static var buttonBackgroundArt:Class;
+    public static var mainMenuButtonBackgroundArt:Class;
+
+	[Embed(source = "../assets/art/Buttons/halfButton.svg")]
+    public static var menuButtonBackgroundArt:Class;
 
 	[Embed(source = "../assets/art/Buttons/buttonCover.svg")]
     public static var buttonCoverArt:Class;
@@ -493,19 +496,21 @@ public class Menu {
     }
 
     public static function getMenuButtonBackground():Sprite {
-        return getButtonBackground(Constants.MENU_BUTTON_WIDTH,
-                Constants.MENU_BUTTON_HEIGHT,
-                Constants.MENU_BUTTON_BORDER_SIZE);
+        var buttonBackground:Sprite = new menuButtonBackgroundArt();
+        buttonBackground.width = Constants.MENU_BUTTON_WIDTH + Constants.MENU_BUTTON_BORDER_SIZE;
+        buttonBackground.height = Constants.MENU_BUTTON_HEIGHT + Constants.MENU_BUTTON_BORDER_SIZE;
+        return buttonBackground;
     }
 
     public static function getMainMenuButtonBackground():Sprite {
-        return getButtonBackground(Constants.MAIN_MENU_BUTTON_WIDTH,
-                Constants.MAIN_MENU_BUTTON_HEIGHT,
-                Constants.MAIN_MENU_BUTTON_BORDER_SIZE);
+        var buttonBackground:Sprite = new mainMenuButtonBackgroundArt();
+        buttonBackground.width = Constants.MAIN_MENU_BUTTON_WIDTH + Constants.MAIN_MENU_BUTTON_BORDER_SIZE;
+        buttonBackground.height = Constants.MAIN_MENU_BUTTON_HEIGHT + Constants.MAIN_MENU_BUTTON_BORDER_SIZE;
+        return buttonBackground;
     }
 
     public static function getButtonBackground(width:int, height:int, borderSize:int):Sprite {
-        var buttonBackground:Sprite = new buttonBackgroundArt();
+        var buttonBackground:Sprite = new menuButtonBackgroundArt();
         buttonBackground.width = width + borderSize;
         buttonBackground.height = height + borderSize;
         return buttonBackground;
@@ -528,7 +533,7 @@ public class Menu {
                 Menu.getMenuButtonTextFormat(),
                 Constants.MENU_BUTTON_WIDTH,
                 Constants.MENU_BUTTON_HEIGHT + Constants.MENU_BUTTON_BORDER_SIZE,
-                0,
+                Constants.MENU_BUTTON_TEXT_TOP_PADDING,
                 x,
                 y,
                 Menu.getMenuButtonBackground(),
@@ -632,7 +637,7 @@ class MainMenu extends Sprite {
                 Menu.getTextFormat(Constants.MAIN_MENU_BUTTON_FONT_SIZE, Constants.MAIN_MENU_BUTTON_TEXT_ALIGNMENT),
                 Constants.MAIN_MENU_BUTTON_WIDTH,
                 Constants.MAIN_MENU_BUTTON_TEXT_HEIGHT,
-                (Constants.MAIN_MENU_BUTTON_HEIGHT - Constants.MAIN_MENU_BUTTON_TEXT_HEIGHT) / 2,
+                (Constants.MAIN_MENU_BUTTON_HEIGHT - Constants.MAIN_MENU_BUTTON_TEXT_HEIGHT) / 2 + Constants.MAIN_MENU_BUTTON_TEXT_TOP_PADDING,
                 Constants.SCREEN_WIDTH * 5 / 6 - Constants.MAIN_MENU_BUTTON_WIDTH / 2,
                 Constants.SCREEN_HEIGHT / 6 - Constants.MAIN_MENU_BUTTON_HEIGHT / 2,
                 Menu.getMainMenuButtonBackground(),
@@ -654,7 +659,7 @@ class MainMenu extends Sprite {
                 Menu.getTextFormat(Constants.MAIN_MENU_BUTTON_FONT_SIZE, Constants.MAIN_MENU_BUTTON_TEXT_ALIGNMENT),
                 Constants.MAIN_MENU_BUTTON_WIDTH,
                 Constants.MAIN_MENU_BUTTON_TEXT_HEIGHT,
-                        (Constants.MAIN_MENU_BUTTON_HEIGHT - Constants.MAIN_MENU_BUTTON_TEXT_HEIGHT) / 2,
+                        (Constants.MAIN_MENU_BUTTON_HEIGHT - Constants.MAIN_MENU_BUTTON_TEXT_HEIGHT) / 2 + Constants.MAIN_MENU_BUTTON_TEXT_TOP_PADDING,
                         Constants.SCREEN_WIDTH * 5 / 6 - Constants.MAIN_MENU_BUTTON_WIDTH / 2,
                         continueButton.y + Constants.MAIN_MENU_BUTTON_HEIGHT + Constants.MAIN_MENU_BUTTON_PADDING_BETWEEN,
                 Menu.getMainMenuButtonBackground(),
@@ -665,7 +670,7 @@ class MainMenu extends Sprite {
                 Menu.getTextFormat(Constants.MAIN_MENU_BUTTON_FONT_SIZE, Constants.MAIN_MENU_BUTTON_TEXT_ALIGNMENT),
                 Constants.MAIN_MENU_BUTTON_WIDTH,
                 Constants.MAIN_MENU_BUTTON_TEXT_HEIGHT,
-                        (Constants.MAIN_MENU_BUTTON_HEIGHT - Constants.MAIN_MENU_BUTTON_TEXT_HEIGHT) / 2,
+                        (Constants.MAIN_MENU_BUTTON_HEIGHT - Constants.MAIN_MENU_BUTTON_TEXT_HEIGHT) / 2 + Constants.MAIN_MENU_BUTTON_TEXT_TOP_PADDING,
                         Constants.SCREEN_WIDTH * 5 / 6 - Constants.MAIN_MENU_BUTTON_WIDTH / 2,
                         startButton.y + Constants.MAIN_MENU_BUTTON_HEIGHT + Constants.MAIN_MENU_BUTTON_PADDING_BETWEEN,
                 Menu.getMainMenuButtonBackground(),
@@ -676,7 +681,7 @@ class MainMenu extends Sprite {
                 Menu.getTextFormat(Constants.MAIN_MENU_BUTTON_FONT_SIZE, Constants.MAIN_MENU_BUTTON_TEXT_ALIGNMENT),
                 Constants.MAIN_MENU_BUTTON_WIDTH,
                 Constants.MAIN_MENU_BUTTON_TEXT_HEIGHT,
-                        (Constants.MAIN_MENU_BUTTON_HEIGHT - Constants.MAIN_MENU_BUTTON_TEXT_HEIGHT) / 2,
+                        (Constants.MAIN_MENU_BUTTON_HEIGHT - Constants.MAIN_MENU_BUTTON_TEXT_HEIGHT) / 2 + Constants.MAIN_MENU_BUTTON_TEXT_TOP_PADDING,
                         Constants.SCREEN_WIDTH * 5 / 6 - Constants.MAIN_MENU_BUTTON_WIDTH / 2,
                         levelSelectButton.y + Constants.MAIN_MENU_BUTTON_HEIGHT + Constants.MAIN_MENU_BUTTON_PADDING_BETWEEN,
                 Menu.getMainMenuButtonBackground(),

@@ -274,9 +274,10 @@ package
 		
 		// General menu button
 		public static const MENU_BUTTON_COLOR:uint = 0xCCCCCC;
-		public static const MENU_BUTTON_WIDTH:int = 123;
+		public static const MENU_BUTTON_WIDTH:int = 130;
 		public static const MENU_BUTTON_HEIGHT:int = 18;
 		public static const MENU_BUTTON_FONT_SIZE:int = 12;
+		public static const MENU_BUTTON_TEXT_TOP_PADDING:int = 2;
 		public static const MENU_BUTTON_TEXT_ALIGNMENT:String = "center";
 		public static const MENU_BUTTON_BORDER_SIZE:int = 2;
 		public static const MENU_BUTTON_BORDER_COLOR:uint = 0x000000;
@@ -332,6 +333,7 @@ package
         public static const MAIN_MENU_BUTTON_HEIGHT:int = 68;
         public static const MAIN_MENU_BUTTON_TEXT_HEIGHT:int = 28;
         public static const MAIN_MENU_BUTTON_FONT_SIZE:int = 20;
+        public static const MAIN_MENU_BUTTON_TEXT_TOP_PADDING:int = 4;
         public static const MAIN_MENU_BUTTON_TEXT_ALIGNMENT:String = "center";
         public static const MAIN_MENU_BUTTON_BORDER_SIZE:int = 2;
         public static const MAIN_MENU_BUTTON_BORDER_COLOR:uint = 0x000000;
