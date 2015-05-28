@@ -209,7 +209,7 @@ package
 				platforms = m_boardSprite.platforms;
 
 				updateButtons();
-				displaySign();
+				//displaySign();
 				updateCrates();
 				
 				var wasInAir:Boolean = m_player.inAir;
@@ -1562,7 +1562,7 @@ package
 						m_signText.wordWrap = true;
 						m_signText.autoSize = TextFieldAutoSize.LEFT
 						var format:TextFormat = m_signText.getTextFormat()
-						format.size = Constants.SIGN_FONT_SIZE;
+						format.size = Constants.SIGN_TEXT_FONT_SIZE;
 						m_signText.setTextFormat(format);
 						addChild(m_signText);
 					}

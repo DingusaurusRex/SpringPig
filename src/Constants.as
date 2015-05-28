@@ -80,10 +80,14 @@ package
 		public static const METER_LINES_TICKNESS:uint = 1;
 		
 		// Sign Colors
-		public static const SIGN_BORDER_COLOR:uint = 0x000000;
-		public static const SIGN_BACKGROUND_COLOR:uint = 0xffffff;
-		public static const SIGN_FONT_SIZE:int = 15;
-		
+		public static const SIGN_BORDER_COLOR:uint = 0x8B4513;
+		public static const SIGN_BACKGROUND_COLOR:uint = 0xEECBAD;
+
+		public static const SIGN_TEXT_FONT_SIZE:int = 17;
+		public static const SIGN_TEXT_COLOR:uint = 0x8B4513;
+		public static const SIGN_TEXT_ALPHA:Number = 0.6;
+		public static const SIGN_TEXT_ALIGNMENT:String = "center";
+
 		/**
 		 * Screen Values
 		**/

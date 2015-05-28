@@ -45,6 +45,9 @@ package
 		
 		[Embed(source = "../assets/progressions/easyProgression.json", mimeType = "application/octet-stream")]
 		private var EasyProgression:Class;
+
+		[Embed(source = "../assets/progressions/signsProgression.json", mimeType = "application/octet-stream")]
+		private var signsProgression:Class;
 		
 		public function Main():void 
 		{
