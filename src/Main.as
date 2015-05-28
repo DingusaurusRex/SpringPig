@@ -56,10 +56,7 @@ package
 		{
 			removeEventListener(Event.ADDED_TO_STAGE, init);
 			// entry point
-			
-			var progression:ByteArray; // Change this for progression
-			var versionID:int; // This is cid in the wiki
-			
+			/*
 			var num:Number = Math.random();
 			var useHardProg:Boolean = true;
 			if (num >= .5) {
@@ -76,9 +73,9 @@ package
 			} else {
 				progression = new Progression1() as ByteArray;
 				versionID = 300;
-			}
-			//var progression:ByteArray = new EasyProgression(); // Change this for progression
-			//var versionID:int = 302; // This is cid in the wiki
+			}*/
+			var progression:ByteArray = new EasyProgression(); // Change this for progression
+			var versionID:int = 302; // This is cid in the wiki
 			var progressionString:String = progression.toString();
 			var prog:Object = JSON.parse(progressionString);
 
