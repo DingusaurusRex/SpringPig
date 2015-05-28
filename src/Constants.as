@@ -271,6 +271,9 @@ package
 		// General menu
 		public static const MENU_FONT:String = "arial";
 		public static const MENU_TITLE_ALIGNMENT:String = "center";
+
+        public static const MENU_BACKGROUND_COVER_COLOR:uint = 0xFFFFFF;
+        public static const MENU_BACKGROUND_COVER_OPACITY:Number = 0.5;
 		
 		// General menu button
 		public static const MENU_BUTTON_COLOR:uint = 0xCCCCCC;
@@ -374,7 +377,7 @@ package
         public static const TIME_RECORDS_TITLE_FONT_SIZE:int = 80;
 
         public static const TIME_RECORDS_ROWS:int = 7;
-        public static const TIME_RECORDS_COLUMNS:int = 1;
+        public static const TIME_RECORDS_COLUMNS:int = 2;
 
         public static const TIME_RECORDS_PREVIOUS_PAGE_BUTTON_TEXT:String = "Previous Page";
         public static const TIME_RECORDS_NEXT_PAGE_BUTTON_TEXT:String = "Next Page";
@@ -385,7 +388,7 @@ package
 
         public static const TIME_RECORDS_TIME_RECORD_TEXT:String = ": ";
         public static const TIME_RECORDS_TIME_RECORD_HEIGHT:int = 25;
-        public static const TIME_RECORDS_TIME_RECORD_WIDTH:int = 400;
+        public static const TIME_RECORDS_TIME_RECORD_WIDTH:int = 300;
         public static const TIME_RECORDS_TIME_RECORD_FONT_SIZE:int = 18;
         public static const TIME_RECORDS_TIME_RECORD_ALIGNMENT:String = "left";
 		
@@ -422,9 +425,6 @@ package
         public static const CREDITS_RESET_PROGRESS_BUTTON_LEFT_PADDING:int = 30;
         public static const CREDITS_RESET_PROGRESS_BUTTON_BOTTOM_PADDING:int = 40;
         public static const CREDITS_RESET_PROGRESS_BUTTON_COVER_OPACITY:Number = 0.5;
-
-        public static const CREDITS_BACKGROUND_COVER_COLOR:uint = 0xFFFFFF;
-        public static const CREDITS_BACKGROUND_COVER_OPACITY:Number = 0.5;
 
 		// Pause menu
 		public static const PAUSE_TITLE_TEXT:String = "Paused";

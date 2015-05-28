@@ -916,6 +916,7 @@ class EndGameMenu extends Sprite {
 
 class LevelSelectMenu extends Sprite {
     private var background:Sprite;
+    private var backgroundCover:Sprite;
     private var mainMenuButton:SimpleButton;
     private var title:TextField;
 
@@ -931,6 +932,12 @@ class LevelSelectMenu extends Sprite {
         background = new Menu.menuBackgroundArt();
         background.width = Constants.SCREEN_WIDTH;
         background.height = Constants.SCREEN_HEIGHT;
+
+        // Background cover
+        backgroundCover = new Sprite();
+        backgroundCover.graphics.beginFill(Constants.MENU_BACKGROUND_COVER_COLOR, Constants.MENU_BACKGROUND_COVER_OPACITY);
+        backgroundCover.graphics.drawRect(0, 0, Constants.SCREEN_WIDTH, Constants.SCREEN_HEIGHT);
+        backgroundCover.graphics.endFill();
 
         // Main menu button
         mainMenuButton = Menu.getMenuButton(Constants.MAIN_MENU_BUTTON_TEXT,
@@ -958,6 +965,7 @@ class LevelSelectMenu extends Sprite {
     public function regeneratePages():void {
         removeChildren();
         addChild(background);
+        addChild(backgroundCover);
 
         var levels:int = GameState.getPlayerOverallProgress();
         if (Constants.SHOW_ALL_LEVELS) {
@@ -1058,6 +1066,7 @@ class LevelSelectMenu extends Sprite {
 
 class TimeRecordsMenu extends Sprite {
     private var background:Sprite;
+    private var backgroundCover:Sprite;
     private var mainMenuButton:SimpleButton;
     private var title:TextField;
 
@@ -1073,6 +1082,12 @@ class TimeRecordsMenu extends Sprite {
         background = new Menu.menuBackgroundArt();
         background.width = Constants.SCREEN_WIDTH;
         background.height = Constants.SCREEN_HEIGHT;
+
+        // Background cover
+        backgroundCover = new Sprite();
+        backgroundCover.graphics.beginFill(Constants.MENU_BACKGROUND_COVER_COLOR, Constants.MENU_BACKGROUND_COVER_OPACITY);
+        backgroundCover.graphics.drawRect(0, 0, Constants.SCREEN_WIDTH, Constants.SCREEN_HEIGHT);
+        backgroundCover.graphics.endFill();
 
         // Main menu button
         mainMenuButton = Menu.getMenuButton(Constants.MAIN_MENU_BUTTON_TEXT,
@@ -1100,6 +1115,7 @@ class TimeRecordsMenu extends Sprite {
     public function regeneratePages():void {
         removeChildren();
         addChild(background);
+        addChild(backgroundCover);
 
         var levels:int = GameState.getPlayerOverallProgress();
         if (Constants.SHOW_ALL_LEVELS) {
@@ -1122,7 +1138,7 @@ class TimeRecordsMenu extends Sprite {
             var page:Sprite = new Sprite();
             LevelAddition:for (c = 0; c < Constants.TIME_RECORDS_COLUMNS; c++) {
                 for (r = 0; r < Constants.TIME_RECORDS_ROWS; r++) {
-                    var x:int = Constants.SCREEN_WIDTH * (c + 1) / (Constants.TIME_RECORDS_COLUMNS + 1) - Constants.TIME_RECORDS_TIME_RECORD_WIDTH / 2;
+                    var x:int = Constants.SCREEN_WIDTH * (c * 2 + 1) / (Constants.TIME_RECORDS_COLUMNS + 2) - Constants.TIME_RECORDS_TIME_RECORD_WIDTH / 2;
                     var y:int = Constants.TIME_RECORDS_PAGE_TOP_PADDING + pageHeight * r / Constants.TIME_RECORDS_ROWS;
 					var levelReader:LevelParser = new LevelParser();
 					var board:Board = levelReader.parseLevel(Menu.game.progression[l]);
@@ -1202,7 +1218,7 @@ class CreditsMenu extends Sprite {
 
         // Background cover
         backgroundCover = new Sprite();
-        backgroundCover.graphics.beginFill(Constants.CREDITS_BACKGROUND_COVER_COLOR, Constants.CREDITS_BACKGROUND_COVER_OPACITY);
+        backgroundCover.graphics.beginFill(Constants.MENU_BACKGROUND_COVER_COLOR, Constants.MENU_BACKGROUND_COVER_OPACITY);
         backgroundCover.graphics.drawRect(0, 0, Constants.SCREEN_WIDTH, Constants.SCREEN_HEIGHT);
         backgroundCover.graphics.endFill();
 
