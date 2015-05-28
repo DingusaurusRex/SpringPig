@@ -56,6 +56,39 @@ package
 		{
 			removeEventListener(Event.ADDED_TO_STAGE, init);
 			// entry point
+            var progression:ByteArray;
+            var versionID:int;
+
+            var progression1:ByteArray = new Progression1() as ByteArray;
+            var progression2:ByteArray = new EasyProgression() as ByteArray;
+
+            //GameState.clearSaveFile(SHA256.computeDigest(progression1));
+            //GameState.clearSaveFile(SHA256.computeDigest(progression2));
+            if (GameState.checkSaveFile(SHA256.computeDigest(progression1))) {
+                progression = progression1;
+                versionID = 300;
+                //trace("1");
+            } else if (GameState.checkSaveFile(SHA256.computeDigest(progression2))) {
+                progression = progression2;
+                versionID = 302;
+                //trace("2");
+            } else {
+                var num:Number = Math.random();
+                var useHardProg:Boolean = true;
+                if (num >= .5) {
+                    useHardProg = false;
+                }
+                //trace("3");
+                trace(useHardProg);
+
+                if (useHardProg) {
+                    progression = new EasyProgression() as ByteArray;
+                    versionID = 302;
+                } else {
+                    progression = new Progression1() as ByteArray;
+                    versionID = 300;
+                }
+            }
 			/*
 			var num:Number = Math.random();
 			var useHardProg:Boolean = true;
@@ -72,8 +105,8 @@ package
 				progression = new Progression1() as ByteArray;
 				versionID = 300;
 			}*/
-			var progression:ByteArray = new EasyProgression(); // Change this for progression
-			var versionID:int = 302; // This is cid in the wiki
+			//var progression:ByteArray = new EasyProgression(); // Change this for progression
+			//var versionID:int = 302; // This is cid in the wiki
 			var progressionString:String = progression.toString();
 			var prog:Object = JSON.parse(progressionString);
 

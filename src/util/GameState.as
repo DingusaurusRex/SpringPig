@@ -53,6 +53,35 @@ public class GameState {
         }
     }
 
+    public static function checkSaveFile(progressionFileName:String):Boolean {
+        try {
+            var data:SharedObject = SharedObject.getLocal(progressionFileName);
+            if (!data.data.hasOwnProperty("unlocked") ||
+                    !data.data.hasOwnProperty("progress") ||
+                    !data.data.hasOwnProperty("personalRecords") ||
+                    !data.data.hasOwnProperty("mute") ||
+                    !data.data.hasOwnProperty("playthroughBest")) {
+                data.clear();
+                return false;
+            }
+        } catch (e:Error) {
+            trace(e);
+            trace(e.getStackTrace());
+            return false;
+        }
+        return true;
+    }
+
+    public static function clearSaveFile(progressionFileName:String):void {
+        try {
+            var data:SharedObject = SharedObject.getLocal(progressionFileName);
+            data.clear();
+        } catch (e:Error) {
+            trace(e);
+            trace(e.getStackTrace());
+        }
+    }
+
     public static function openNextLevelSave():void {
         if (saveable) {
             playerData.data.progress = game.currLevelIndex + 1;
