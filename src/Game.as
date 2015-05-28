@@ -1,6 +1,7 @@
 package 
 {
 	import cgs.Audio.Audio;
+	import flash.display.DisplayObject;
 
 	import flash.display.IDrawCommand;
 	import flash.display.Sprite;
@@ -34,7 +35,7 @@ package
 	 * ...
 	 * @author Marc
 	 */
-	public class Game 
+	public class Game extends Sprite
 	{
 		// Keys
 		private var m_keyUp:Boolean;
@@ -340,7 +341,7 @@ package
                 p.y = ps.platforms[p].y;
             }
             if (m_signText != null && m_stage.contains(m_signText)) {
-                m_stage.removeChild(m_signText);
+                removeChild(m_signText);
             }
             m_signText = null;
             if (!m_player.inAir) {
@@ -371,8 +372,20 @@ package
 		 */
 		public function startLevel(levelName:String):void
 		{
+			// remove all old children
+			for (var i:int = 0; i < numChildren; i++)
+			{
+				removeChild(getChildAt(i));
+			}
+			
+			// Add yourself Game as child to stage
+			m_stage.addChild(this);
+			
 			// Get the board for the test level
 			m_board = m_levelReader.parseLevel(levelName);
+			
+			// Center the Game
+			this.x = (Constants.BOARD_WIDTH - m_board.boardWidthInPixels) / 2
 
             // Clear rewind
             playStates.length = 0;
@@ -409,12 +422,12 @@ package
             previousRecord.y = Stopwatch.stopwatchText.y + Constants.PLAYER_RECORD_TIME_GAME_TOP_PADDING;
 
 			// Add graphics
-			m_stage.addChild(m_boardSprite);
-			m_stage.addChild(m_meter);
-			m_stage.addChild(Stopwatch.stopwatchText);
-            m_stage.addChild(previousRecord);
-			m_stage.addChild(m_player.asset);
-			m_stage.addChild(Menu.rewindInstructions);
+			addChild(m_boardSprite);
+			addChild(m_meter);
+			addChild(Stopwatch.stopwatchText);
+            addChild(previousRecord);
+			addChild(m_player.asset);
+			addChild(Menu.rewindInstructions);
 
 			// Create Listeners
 			m_stage.addEventListener(KeyboardEvent.KEY_DOWN, onKeyDown);
@@ -1551,7 +1564,7 @@ package
 						var format:TextFormat = m_signText.getTextFormat()
 						format.size = Constants.SIGN_FONT_SIZE;
 						m_signText.setTextFormat(format);
-						m_stage.addChild(m_signText);
+						addChild(m_signText);
 					}
 				}
 			}
@@ -1559,7 +1572,7 @@ package
 			{
 				if (m_stage.contains(m_signText))
 				{
-					m_stage.removeChild(m_signText);
+					removeChild(m_signText);
 				}
 				m_signText = null;
 			}
@@ -1833,9 +1846,9 @@ package
                         m_logger.logAction(Constants.AID_START_REWIND, logData);
                         rewindStarted = true;
                         initialFrames = playStates.length;
-                        m_stage.addChild(rewindSymbol);
-                        m_stage.addChild(rewindBarBackground);
-                        m_stage.addChild(rewindBar);
+                        addChild(rewindSymbol);
+                        addChild(rewindBarBackground);
+                        addChild(rewindBar);
                     }
                     break;
 				case Keyboard.ESCAPE :
@@ -1884,9 +1897,9 @@ package
                         var logData:Object = {x: m_player.asset.x, y: m_player.asset.y, power: m_player.energy, frames: framesRewound};
                         m_logger.logAction(Constants.AID_END_REWIND, logData);
                         rewindStarted = false;
-                        m_stage.removeChild(rewindSymbol);
-                        m_stage.removeChild(rewindBarBackground);
-                        m_stage.removeChild(rewindBar);
+                        removeChild(rewindSymbol);
+                        removeChild(rewindBarBackground);
+                        removeChild(rewindBar);
                     }
 					break;
 			}
