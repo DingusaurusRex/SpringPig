@@ -434,6 +434,7 @@ package
             var previousRecord:TextField = GameState.getPlayerRecordGameTextField(currLevelIndex);
             previousRecord.x = Stopwatch.stopwatchText.x + Constants.GAME_STOPWATCH_WIDTH + Constants.PLAYER_RECORD_TIME_GAME_LEFT_PADDING;
             previousRecord.y = Stopwatch.stopwatchText.y + Constants.PLAYER_RECORD_TIME_GAME_TOP_PADDING;
+            previousRecord.textColor = Constants.IN_GAME_TEXT_COLOR;
 
             m_stage.addChild(Menu.rewindInstructions);
             m_stage.addChild(Stopwatch.stopwatchText);

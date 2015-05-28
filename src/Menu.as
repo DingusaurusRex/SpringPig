@@ -120,11 +120,12 @@ public class Menu {
         rewindInstructions = getTextField(Constants.REWIND_INSTRUCTION_TEXT,
                 Constants.REWIND_INSTRUCTION_HEIGHT,
                 Constants.REWIND_INSTRUCTION_WIDTH,
-                Constants.SCREEN_WIDTH / 2 + Constants.REWIND_INSTRUCTION_LEFT_PADDING,
+                Constants.SCREEN_WIDTH - Constants.REWIND_INSTRUCTION_RIGHT_PADDING - Constants.REWIND_INSTRUCTION_WIDTH,
                 Constants.SCREEN_HEIGHT - Constants.REWIND_INSTRUCTION_HEIGHT - Constants.REWIND_INSTRUCTION_BOTTOM_PADDING,
                 Constants.MENU_FONT,
                 Constants.REWIND_INSTRUCTION_FONT_SIZE,
-                Constants.REWIND_INSTRUCTION_ALIGNMENT);
+                Constants.REWIND_INSTRUCTION_ALIGNMENT,
+                Constants.IN_GAME_TEXT_COLOR);
 
         state = 0;
 
@@ -568,13 +569,14 @@ public class Menu {
         return button;
     }
 
-    public static function getTextField(text:String, height:int, width:int, x:int, y:int, font:String, fontSize:int, align:String):TextField {
+    public static function getTextField(text:String, height:int, width:int, x:int, y:int, font:String, fontSize:int, align:String, textColor:uint = 0x000000):TextField {
         var textField:TextField = new TextField();
         textField.text = text;
         textField.height = height;
         textField.width = width;
         textField.x = x;
         textField.y = y;
+        textField.textColor = textColor;
 
         var textFormat:TextFormat = new TextFormat();
         textFormat.font = font;

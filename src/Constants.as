@@ -68,6 +68,8 @@ package
 		public static const BACKGROUND_COLOR:uint = 0xcceaff;
 		public static const WALL_COLOR:uint = 0xA0A0A0;
 
+		public static const IN_GAME_TEXT_COLOR:uint = 0x000080;
+
 		// Grid values
 		public static const GRID_THICKNESS:Number = 1;
 		public static const GRID_COLOR:uint = 0x000000;
@@ -500,8 +502,9 @@ package
         public static const REWIND_INSTRUCTION_TEXT:String = "Rewind: R\tReset: Y";
         public static const REWIND_INSTRUCTION_BOTTOM_PADDING:int = 3;
         public static const REWIND_INSTRUCTION_LEFT_PADDING:int = 5;
+        public static const REWIND_INSTRUCTION_RIGHT_PADDING:int = 5;
         public static const REWIND_INSTRUCTION_HEIGHT:int = 25;
-        public static const REWIND_INSTRUCTION_WIDTH:int = 220;
+        public static const REWIND_INSTRUCTION_WIDTH:int = 210;
         public static const REWIND_INSTRUCTION_FONT_SIZE:int = 20;
         public static const REWIND_INSTRUCTION_ALIGNMENT:String = "left";
 	}
