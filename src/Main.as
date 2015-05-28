@@ -85,11 +85,11 @@ package
                 trace(useHardProg);
 
                 if (useHardProg) {
-                    progression = new EasyProgression() as ByteArray;
-                    versionID = 302;
+                    progression = progression1;
+                    versionID = 303;
                 } else {
-                    progression = new Progression1() as ByteArray;
-                    versionID = 300;
+                    progression = progression2;
+                    versionID = 302;
                 }
             }
 			/*
