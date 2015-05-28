@@ -30,7 +30,8 @@ public class GameState {
                     !playerData.data.hasOwnProperty("progress") ||
                     !playerData.data.hasOwnProperty("personalRecords") ||
                     !playerData.data.hasOwnProperty("mute") ||
-                    !playerData.data.hasOwnProperty("playthroughBest")) {
+                    !playerData.data.hasOwnProperty("playthroughBest") ||
+                    !playerData.data.hasOwnProperty("version")) {
                 resetProgress(false);
             }
 
@@ -60,7 +61,8 @@ public class GameState {
                     !data.data.hasOwnProperty("progress") ||
                     !data.data.hasOwnProperty("personalRecords") ||
                     !data.data.hasOwnProperty("mute") ||
-                    !data.data.hasOwnProperty("playthroughBest")) {
+                    !data.data.hasOwnProperty("playthroughBest") ||
+                    !data.data.hasOwnProperty("version")) {
                 data.clear();
                 return false;
             }
@@ -152,6 +154,20 @@ public class GameState {
         return Constants.STOPWATCH_DEFAULT_TIME;
     }
 
+    public static function getPlayerVersion():String {
+        if (saveable) {
+            return playerData.data.version;
+        }
+        return Constants.VERSION_A;
+    }
+
+    public static function savePlayerVersion(version:String):void {
+        if (saveable) {
+            playerData.data.version = version;
+            playerData.flush();
+        }
+    }
+
     public static function getPlayerRecordGameTextField(level:int):TextField {
         if (saveable) {
             playerRecordGameText.text = Constants.PLAYER_RECORD_TIME_GAME_DEFAULT_TEXT + Stopwatch.formatTiming(getPlayerRecord(level));
@@ -190,6 +206,7 @@ public class GameState {
         playerData.data.personalRecords = personalRecords;
         playerData.data.mute = false;
         playerData.data.playthroughBest = Constants.STOPWATCH_DEFAULT_TIME;
+        playerData.data.version = Constants.VERSION_NULL;
         playerData.flush();
         if (removeBestTimeText) {
             Menu.removeBestPlaythroughTime();

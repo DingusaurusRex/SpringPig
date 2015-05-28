@@ -61,6 +61,11 @@ package
         public static const AID_START_REWIND:int = 8;
         public static const AID_END_REWIND:int = 9;
 
+        // Versions
+        public static const VERSION_NULL:String = "NULL";
+        public static const VERSION_A:String = "A";
+        public static const VERSION_B:String = "B";
+
 		/**
 		 * Colors
 		**/

@@ -84,7 +84,7 @@ package
 		private var m_signText:TextField;
 
         // Logger
-        private var m_logger:Logger;
+        public var m_logger:Logger;
         // 5 below are not reset when rewind is called so a complete solution
         // can include springs rewinded
         private var successfulSprings:int;
@@ -114,6 +114,8 @@ package
 
 
        private var background:Sprite;
+
+        public var version:String;
 
 		/**
 		 * Begins the game
