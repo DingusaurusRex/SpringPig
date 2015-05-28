@@ -69,7 +69,7 @@ package
             //GameState.clearSaveFile(SHA256.computeDigest(progression2));
             if (GameState.checkSaveFile(SHA256.computeDigest(progression1))) {
                 progression = progression1;
-                versionID = 300;
+                versionID = 303;
                 //trace("1");
             } else if (GameState.checkSaveFile(SHA256.computeDigest(progression2))) {
                 progression = progression2;
