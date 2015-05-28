@@ -244,15 +244,19 @@ package
 					m_player.asset.y += m_player.downSpeedY;
 				}
 				if (m_keyRight) {
-					if (m_player.asset.x < m_board.boardWidthInPixels - m_player.width - 5) {
+					if (m_player.asset.x + m_player.width < m_board.boardWidthInPixels) {
 						m_player.inAir ? m_player.asset.x += m_player.airSpeedX : m_player.asset.x += m_player.speedX;
 						checkPlayerCollision(Constants.RIGHT);
+					} else {
+						m_player.asset.x = m_board.boardWidthInPixels - m_player.width;
 					}
 				}
 				if (m_keyLeft) {
 					if (m_player.asset.x > 0) {
 						m_player.inAir ? m_player.asset.x -= m_player.airSpeedX : m_player.asset.x -= m_player.speedX;
 						checkPlayerCollision(Constants.LEFT);
+					} else {
+						m_player.asset.x = 0;
 					}
 				}
 				if (m_keySpace && (!m_player.inAir || standingOnCrate(m_player)) && !springed) {
