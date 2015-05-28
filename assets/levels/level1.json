@@ -6,16 +6,18 @@
 						0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,
 						0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,
 						0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,
-						10, 0,	0,	0,	54,	0,	0,	0,	0,	0,	0,	0,	0,
+						10, 0,	54,	0,	71,	0,	0,	0,	0,	0,	0,	0,	0,
 						1,	1,	1,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,
-						1,	1,	1,	0,	0,	0,	0,	0,	0,	55,	0,	0,	0,
+						1,	1,	1,	0,	0,	0,	0,	0,	0,	72,	0,	0,	0,
 						1,	1,	1,	0,	0,	0,	0,	0,	0,	0,	0,	0,	11,
 						1,	1,	1,	0,	0,	0,	0,	0,	0,	0,	1,	1,	1,
-						1,	1,	1,	0,	0,	0,	0,	0,	0,	0,	1,	1,	1,
+						1,	1,	1,	0,	0,	0,	0,	0,	0,	55,	1,	1,	1,
 						1,	1,	1,	1,	1,	1,	1,	1,	1,	1,	1,	1,	1
 					],
 	"signs":	[
 					{"id":54, "text":"Fall off the ledge to build up energy!"},
-					{"id":55, "text":"Press space to spring using your stored energy!"}
+					{"id":55, "text":"Press space to spring using your stored energy!"},
+					{"id":71, "text":"Fall off the ledge to build up energy!"},
+					{"id":72, "text":"Press space to spring using your stored energy!"}
 				]
 	}

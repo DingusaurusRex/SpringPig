@@ -84,7 +84,7 @@ package
 		private var m_signText:TextField;
 
         // Logger
-        private var m_logger:Logger;
+        public var m_logger:Logger;
         // 5 below are not reset when rewind is called so a complete solution
         // can include springs rewinded
         private var successfulSprings:int;
@@ -115,6 +115,8 @@ package
 
        private var background:Sprite;
 
+        public static var version:String;
+
 		/**
 		 * Begins the game
 		 * @param	p - Player Object (added to stage in main)
@@ -136,7 +138,7 @@ package
 			
 			this.m_levelReader = new LevelParser();
 
-            this.m_logger = logger;
+            m_logger = logger;
 
             this.playStates = new Array();
 
@@ -216,7 +218,9 @@ package
 				platforms = m_boardSprite.platforms;
 
 				updateButtons();
-				//displaySign();
+                if (version == Constants.VERSION_A) {
+                    displaySign();
+                }
 				updateCrates();
 				
 				var wasInAir:Boolean = m_player.inAir;
@@ -720,7 +724,8 @@ package
 								if (m_player.dy > 0.1) {
 									closeToTop = true;
 								}
-								if ((tileAboveLadder == Constants.EMPTY || tileAboveLadder == Constants.START || tileAboveLadder == Constants.END)
+								if ((tileAboveLadder == Constants.EMPTY || tileAboveLadder == Constants.START || tileAboveLadder == Constants.END ||
+									(tileAboveLadder >= Constants.PLASTERED_SIGN1 && tileAboveLadder <= Constants.PLASTERED_SIGN5))
 									&& tileAboveLadder != -1 && closeToTop && !m_keyDown)
 								{
 									m_player.asset.y = (int) (tile.y * m_board.tileSideLength - m_player.height);
@@ -740,6 +745,7 @@ package
 									 id != Constants.CRATE &&
 									 id != Constants.LAVA &&
 									 !(id >= Constants.SIGN1 && id <= Constants.SIGN5) &&
+									 !(id >= Constants.PLASTERED_SIGN1 && id <= Constants.PLASTERED_SIGN5) && 
 									 !isButton(id) && 
 									 !isOpenGate(id) &&
 									 !isMovingPlatformStartOrEnd(id) &&
@@ -1177,6 +1183,7 @@ package
 								if (id != Constants.EMPTY &&
 									id != Constants.START &&
 									id != Constants.CRATE &&
+									!(id >= Constants.PLASTERED_SIGN1 && id <= Constants.PLASTERED_SIGN5) &&
 									!isButton(id) && 
 									!isOpenGate(id) &&
 									!isMovingPlatformStartOrEnd(id))
@@ -1222,6 +1229,7 @@ package
 								if (id != Constants.EMPTY &&
 									id != Constants.START &&
 									id != Constants.CRATE &&
+									!(id >= Constants.PLASTERED_SIGN1 && id <= Constants.PLASTERED_SIGN5) && 
 									!isButton(id) && 
 									!isOpenGate(id) &&
 									!isMovingPlatformStartOrEnd(id))
@@ -1259,6 +1267,7 @@ package
 								if (id != Constants.EMPTY &&
 									id != Constants.START &&
 									id != Constants.CRATE &&
+									!(id >= Constants.PLASTERED_SIGN1 && id <= Constants.PLASTERED_SIGN5) && 
 									!isButton(id) && 
 									!isOpenGate(id) &&
 									!isMovingPlatformStartOrEnd(id))
@@ -1637,7 +1646,8 @@ package
 				var id:int = m_board.getTile(tile.x, tile.y);
 				if (id == Constants.LADDER) {
 					result = true;
-				} else if (id != Constants.EMPTY && id != Constants.START && id != Constants.END) {
+				} else if (id != Constants.EMPTY && id != Constants.START && id != Constants.END &&
+					!(id >= Constants.PLASTERED_SIGN1 && id <= Constants.PLASTERED_SIGN5)) {
 					result = false;
 					break;
 				}

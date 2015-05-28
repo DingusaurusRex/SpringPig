@@ -62,26 +62,32 @@ package
             var progression:ByteArray;
             var versionID:int;
 
+            // A/B Signs
+            progression = new EasyProgression() as ByteArray;
+            // Reset selection
+            //GameState.clearSaveFile(SHA256.computeDigest(progression));
+
+            // A/B Progression
+            /*
             var progression1:ByteArray = new Progression1() as ByteArray;
             var progression2:ByteArray = new EasyProgression() as ByteArray;
 
+            // Reset selection
             //GameState.clearSaveFile(SHA256.computeDigest(progression1));
             //GameState.clearSaveFile(SHA256.computeDigest(progression2));
+
             if (GameState.checkSaveFile(SHA256.computeDigest(progression1))) {
                 progression = progression1;
                 versionID = 303;
-                //trace("1");
             } else if (GameState.checkSaveFile(SHA256.computeDigest(progression2))) {
                 progression = progression2;
                 versionID = 302;
-                //trace("2");
             } else {
                 var num:Number = Math.random();
                 var useHardProg:Boolean = true;
                 if (num >= .5) {
                     useHardProg = false;
                 }
-                //trace("3");
                 trace(useHardProg);
 
                 if (useHardProg) {
@@ -92,33 +98,46 @@ package
                     versionID = 302;
                 }
             }
-			/*
-			var num:Number = Math.random();
-			var useHardProg:Boolean = true;
-			if (num >= .5) {
-				useHardProg = false;
-			}
-			trace(useHardProg);
-			
-			// Parse LevelProgression JSON
-			if (useHardProg) {
-				progression = new EasyProgression() as ByteArray;
-				versionID = 302;
-			} else {
-				progression = new Progression1() as ByteArray;
-				versionID = 300;
-			}*/
-			//var progression:ByteArray = new EasyProgression(); // Change this for progression
-			//var versionID:int = 302; // This is cid in the wiki
+            */
+
+            // No A/B
+            /*
+			progression = new EasyProgression(); // Change this for progression
+			versionID = 302; // This is cid in the wiki
+			*/
+
 			var progressionString:String = progression.toString();
 			var prog:Object = JSON.parse(progressionString);
 
-           
-            var logger:Logger = Logger.initialize(Constants.GID, Constants.DB_NAME, Constants.SKEY, versionID, null, false);
-			
+
             // Initialization
-			var game:Game = new Game(stage, prog, logger);
+			var game:Game = new Game(stage, prog, null);
+
             GameState.Init(SHA256.computeDigest(progression), game);
+
+            // A/B Signs
+            if (GameState.getPlayerVersion() == Constants.VERSION_NULL) {
+                var num:Number = Math.random();
+                var useA:Boolean = true;
+                if (num >= .5) {
+                    useA = false;
+                }
+                //trace("rand");
+                if (useA) {
+                    Game.version = Constants.VERSION_A;
+                    versionID = 303;
+                } else {
+                    Game.version = Constants.VERSION_B;
+                    versionID = 302;
+                }
+                GameState.savePlayerVersion(Game.version);
+            } else {
+                Game.version = GameState.getPlayerVersion();
+            }
+
+            var logger:Logger = Logger.initialize(Constants.GID, Constants.DB_NAME, Constants.SKEY, versionID, null, false);
+            game.m_logger = logger;
+
 			Audio.Init(GameState.getPlayerMuteOption());
 			Stopwatch.Init();
 			Menu.Init(stage, game);
