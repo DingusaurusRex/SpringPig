@@ -240,9 +240,9 @@ package
 					}
 				}
 				if (m_keyLeft) {
-					trace(m_player.asset.x);
 					if (m_player.asset.x > 0) {
 						m_player.inAir ? m_player.asset.x -= m_player.airSpeedX : m_player.asset.x -= m_player.speedX;
+						checkPlayerCollision(Constants.LEFT);
 					} else {
 						m_player.asset.x = 0;
 					}

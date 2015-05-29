@@ -21,7 +21,7 @@ package
         /**
          * Debug Options
          */
-        public static const SHOW_ALL_LEVELS:Boolean = true;
+        public static const SHOW_ALL_LEVELS:Boolean = false;
 
         /**
          * Rewind Options
@@ -44,7 +44,7 @@ package
         /**
          * Logging info
          */
-        public static const LOG:Boolean = false;
+        public static const LOG:Boolean = true;
 
         public static const GID:int = 116;
         public static const DB_NAME:String = "cgs_gc_SpringMan";
@@ -255,7 +255,7 @@ package
 		
 		public static const INITIAL_FALL_VELOCITY:Number = .15	// The velocity given to an object when it starts falling
 		public static const ENERGY_DOWNGRADE:int = 1;			// How much energy is lost every time you fall.
-		public static const TERMINAL_VELOCITY:Number = .75;		// Maximum Velocity (game might break if exceeded)
+		public static const TERMINAL_VELOCITY:Number = .7;		// Maximum Velocity (game might break if exceeded)
 		public static const GRAVITY:Number = .03;				// change in blocks / update ^2
 		
 		public static const PLAYER_SPEED:Number = 5.5;
@@ -511,7 +511,7 @@ package
         public static const BEST_TOTAL_TIME_ALIGNMENT:String = "center";
 
         // Rewind tutorial
-        public static const REWIND_INSTRUCTION_TEXT:String = "Rewind: R\tReset: Y";
+        public static const REWIND_INSTRUCTION_TEXT:String = "Rewind: R Reset: Y";
         public static const REWIND_INSTRUCTION_BOTTOM_PADDING:int = 3;
         public static const REWIND_INSTRUCTION_LEFT_PADDING:int = 5;
         public static const REWIND_INSTRUCTION_RIGHT_PADDING:int = 5;

@@ -11,11 +11,12 @@
 						1,	4,	0,	0,	0,	0,	0,	0,	0,	1,	1,	1,
 						1,	4,	0,	0,	0,	0,	0,	0,	0,	1,	1,	1,
 						1,	4,	0,	0,	0,	0,	0,	0,	0,	1,	1,	1,
-						1,	4,	0,	0,	0,	0,	0,	0,	0,	1,	1,	1,
+						1,	4,	0,	71,	0,	0,	0,	0,	0,	1,	1,	1,
 						1,	4,	0,	54,	0,	0,	0,	0,	0,	1,	1,	1,
 						1,	1,	1,	1,	1,	2,	2,	2,	1,	1,	1,	1
 					],
 	"signs":	[
-					{"id":54, "text":"You can avoid the lava by jumping up there!"}
+					{"id":54, "text":"You can avoid the lava by jumping up there!"},
+					{"id":71, "text":"You can avoid the lava by jumping up there!"}
 				]
 }

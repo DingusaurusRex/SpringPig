@@ -615,8 +615,8 @@ import flash.utils.Dictionary;
 				var start:IntPair = m_platformStart[id];
 				var endId:int = m_platformStartToEnd[id];
 				var end:IntPair = m_platformEnd[endId];
-				
-				if (dir == Constants.RIGHT && platform.x < (end.x * board.tileSideLength)) 
+	
+				if (dir == Constants.RIGHT && platform.x <= (end.x * board.tileSideLength)) 
 				{
 					platform.x += Constants.PLATFORM_SPEED;
 					if (player.onPlatform) {
@@ -632,7 +632,7 @@ import flash.utils.Dictionary;
 						m_platformDirs[id] = Constants.LEFT;
 					}
 				}
-				else if (dir == Constants.LEFT && platform.x > (start.x * board.tileSideLength)) 
+				else if (dir == Constants.LEFT && platform.x >= (start.x * board.tileSideLength)) 
 				{
 					platform.x -= Constants.PLATFORM_SPEED;
 					if (player.onPlatform) {
