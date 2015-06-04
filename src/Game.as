@@ -1612,6 +1612,7 @@ package
 					{
 						m_signText = new TextField();
 						m_signText.text = m_board.getSignText(id);
+                        m_signText.embedFonts = true;
 						m_signText.x = tile.x * m_board.tileSideLength;
 						m_signText.y = (tile.y - 1) * m_board.tileSideLength;
 						m_signText.background = true;
@@ -1622,6 +1623,7 @@ package
 						m_signText.autoSize = TextFieldAutoSize.LEFT
 						var format:TextFormat = m_signText.getTextFormat()
 						format.size = Constants.SIGN_TEXT_FONT_SIZE;
+                        format.font = Constants.MENU_FONT;
 						m_signText.setTextFormat(format);
 						addChild(m_signText);
 					}

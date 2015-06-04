@@ -36,12 +36,14 @@ public class GameState {
             }
 
             playerRecordGameText.text = Constants.PLAYER_RECORD_TIME_GAME_DEFAULT_TEXT + Constants.STOPWATCH_DEFAULT_TIME;
+            playerRecordGameText.embedFonts = true;
             playerRecordGameDefaultTextFormat.font = Constants.MENU_FONT;
             playerRecordGameDefaultTextFormat.size = Constants.PLAYER_RECORD_TIME_GAME_FONT_SIZE;
             playerRecordGameDefaultTextFormat.align = Constants.PLAYER_RECORD_TIME_GAME_TEXT_ALIGNMENT;
             playerRecordGameText.setTextFormat(playerRecordGameDefaultTextFormat);
 
             playerRecordEndLevelText.text = Constants.PLAYER_RECORD_TIME_END_LEVEL_DEFAULT_TEXT + Constants.STOPWATCH_DEFAULT_TIME;
+            playerRecordEndLevelText.embedFonts = true;
             playerRecordEndLevelText.width = Constants.SCREEN_WIDTH;
             playerRecordEndLevelDefaultTextFormat.font = Constants.MENU_FONT;
             playerRecordEndLevelDefaultTextFormat.size = Constants.PLAYER_RECORD_TIME_END_LEVEL_FONT_SIZE;
