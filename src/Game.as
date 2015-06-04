@@ -118,7 +118,9 @@ package
         private var initialFrames:Number;
 
 
-       private var background:Sprite;
+		private var background:Sprite;
+		
+		public var kongregate:*;
 
         public static var version:String;
 
@@ -126,8 +128,9 @@ package
 		 * Begins the game
 		 * @param	p - Player Object (added to stage in main)
 		 */
-		public function Game(stage:Stage, progObj:Object, logger:Logger)
+		public function Game(stage:Stage, progObj:Object, kongregate:*, logger:Logger)
 		{
+			this.kongregate = kongregate;
 			
 			// Get the graphics for the meter
 			m_meter = new MeterView();
@@ -278,6 +281,7 @@ package
 				if (m_keyY && !resetted) {
                     var logData:Object = {x:m_player.asset.x, y:m_player.asset.y};
                     m_logger.logAction(Constants.AID_RESET, logData);
+					kongregate.stats.submit("Reset", 1);
                     resetted = true;
                     util.Audio.playResetSFX();
 
@@ -530,6 +534,7 @@ package
 
             // Set up logging
             m_logger.logLevelStart(currLevelIndex + 1, null);
+					
             successfulSprings = 0;
             failedSprings = 0;
             successfulTrampolineSprings = 0;
@@ -797,6 +802,7 @@ package
                         util.Audio.playWinSFX();
                         var logData:Object = {time:Stopwatch.getCurrentTiming(), ss:successfulSprings, fs:failedSprings, sts:successfulTrampolineSprings, fts:failedTrampolineSprings, ts:totalSprings, r:totalRewinds, tss:totalSuccessfulSprings};
                         m_logger.logLevelEnd(logData);
+						kongregate.stats.submit("Level Finish", currLevelIndex);
                         Menu.updatePlaythroughTime();
                         GameState.openNextLevelSave();
 						if (currLevelIndex == progression.length - 1) {
@@ -839,9 +845,11 @@ package
                 updateSpringCounter();
                 if (manual) {
                     m_logger.logAction(Constants.AID_SUCCESSFUL_SPRING, logData);
+					kongregate.stats.submit("Spring", 1);
                     successfulSprings++;
                 } else {
                     m_logger.logAction(Constants.AID_SUCCESSFUL_TRAMPOLINE_SPRING, logData);
+					kongregate.stats.submit("Trampoline Spring", 1);
                     successfulTrampolineSprings++;
                 }
                 m_player.velocity = Constants.JUMP_VELOCITIES[m_player.energy];
@@ -853,9 +861,11 @@ package
             } else {
                 if (manual) {
                     m_logger.logAction(Constants.AID_FAILED_SPRING, logData);
+					kongregate.stats.submit("Spring", 1);
                     failedSprings++;
                 } else {
                     m_logger.logAction(Constants.AID_FAILED_TRAMPOLINE_SPRING, logData);
+					kongregate.stats.submit("Trampoline Spring", 1);
                     failedTrampolineSprings++;
                 }
             }
@@ -1711,6 +1721,7 @@ package
 				if (!playerBottom || (playerBottom && playerLeft <= tileRight && playerRight >= tileLeft)) {
 					var logData:Object = {x:m_player.asset.x, y:m_player.asset.y};
 					m_logger.logAction(Constants.AID_DEATH, logData);
+					kongregate.stats.submit("Death", 1);
                     util.Audio.playDeathSFX();
 					resetPlayer();
 					resetCrates();
@@ -1938,6 +1949,7 @@ package
                         framesRewound = 0;
                         var logData:Object = {x: m_player.asset.x, y: m_player.asset.y, power: m_player.energy};
                         m_logger.logAction(Constants.AID_START_REWIND, logData);
+						kongregate.stats.submit("Rewind", 1);
                         rewindStarted = true;
                         initialFrames = playStates.length;
                         addChild(rewindSymbol);
