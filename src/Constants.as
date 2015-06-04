@@ -160,9 +160,9 @@ package
 
         public static const MIN_SPRING_DEFAULT_VALUE:String = "N/A";
 
-        public static const MIN_SPRING_GAME_DEFAULT_TEXT:String = "Min Springs: ";
+        public static const MIN_SPRING_GAME_DEFAULT_TEXT:String = "Best # Springs: ";
         public static const MIN_SPRING_GAME_FONT_SIZE:int = 15;
-        public static const MIN_SPRING_GAME_WIDTH:int = 120;
+        public static const MIN_SPRING_GAME_WIDTH:int = 130;
         public static const MIN_SPRING_GAME_TOP_PADDING:int = 25;
         public static const MIN_SPRING_GAME_TEXT_ALIGNMENT:String = "left";
 
