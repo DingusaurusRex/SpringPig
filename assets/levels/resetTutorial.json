@@ -11,11 +11,12 @@
                         0,	0,	0,	0,	0,  0,	0,	0,	0,	0,	0,	0,	0,	0,
                         0,	54,	1,	0,	0,  1,	0,	0,	1,	0,	0,	1,	0,	0,
                         10,	1,	1,	4,	0,  0,	0,	0,	0,	0,	0,	1,	1,	11,
-                        1,	1,	1,	4,	0,  0,	0,	71,	0,	0,	0,	1,	1,	1,
+                        1,	1,	1,	4,	0,  71,	0,	0,	0,	72,	0,	1,	1,	1,
                         1,	1,	1,	1,	1,  1,	1,	1,	1,	1,	1,	1,	1,	1
 					],
 	"signs":	[
 					{"id":54, "text":"Press R to rewind and Y to reset"},
-					{"id":71, "text":"Press R to rewind and Y to reset"}
+					{"id":71, "text":"Press R to rewind and Y to reset"},
+					{"id":72, "text":"You can also rewind pass deaths"}
     ]
 	}
