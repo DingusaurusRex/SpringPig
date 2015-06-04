@@ -71,42 +71,6 @@ package
 			// entry point
 			
 			initKongregateAPI();
-			
-            var progression:ByteArray;
-            var versionID:int;
-
-            // A/B Signs
-            progression = new EasyProgression() as ByteArray;
-            // Reset selection
-            //GameState.clearSaveFile(SHA256.computeDigest(progression));
-
-			var progressionString:String = progression.toString();
-			var prog:Object = JSON.parse(progressionString);
-
-
-            // Initialization
-			var game:Game = new Game(stage, prog, null);
-
-            GameState.Init(SHA256.computeDigest(progression), game);
-
-            // A/B Signs
-            if (GameState.getPlayerVersion() == Constants.VERSION_NULL) {
-				Game.version = Constants.VERSION_A;
-				versionID = 302;
-                GameState.savePlayerVersion(Game.version);
-				trace("here");
-            } else {
-                Game.version = GameState.getPlayerVersion();
-            }
-			
-			
-
-            var logger:Logger = Logger.initialize(Constants.GID, Constants.DB_NAME, Constants.SKEY, versionID, null, false);
-            game.m_logger = logger;
-
-			Audio.Init(GameState.getPlayerMuteOption());
-			Stopwatch.Init();
-			Menu.Init(stage, game);
 		}
 		
 		private function initKongregateAPI():void {
@@ -116,8 +80,6 @@ package
 			// The API path. The "shadow" API will load if testing locally. 
 			var apiPath:String = paramObj.kongregate_api_path || 
 			"http://www.kongregate.com/flash/API_AS3_Local.swf";
-			
-			trace(apiPath);
 			
 			// Allow the API access to this SWF
 			Security.allowDomain(apiPath);
@@ -148,6 +110,41 @@ package
 			// kongregate.stats
 			// etc...
 			
+            var progression:ByteArray;
+            var versionID:int;
+
+            // A/B Signs
+            progression = new EasyProgression() as ByteArray;
+            // Reset selection
+            //GameState.clearSaveFile(SHA256.computeDigest(progression));
+
+			var progressionString:String = progression.toString();
+			var prog:Object = JSON.parse(progressionString);
+			
+            // Initialization
+			var game:Game = new Game(stage, prog, kongregate, null);
+
+            GameState.Init(SHA256.computeDigest(progression), game);
+
+            // A/B Signs
+			Game.version = Constants.VERSION_B;
+			versionID = 302;
+			/*
+            if (GameState.getPlayerVersion() == Constants.VERSION_NULL) {
+				Game.version = Constants.VERSION_A;
+				versionID = 302;
+                GameState.savePlayerVersion(Game.version);
+            } else {
+                Game.version = GameState.getPlayerVersion();
+            }	
+			*/
+
+            var logger:Logger = Logger.initialize(Constants.GID, Constants.DB_NAME, Constants.SKEY, versionID, null, false);
+            game.m_logger = logger;
+
+			Audio.Init(GameState.getPlayerMuteOption());
+			Stopwatch.Init();
+			Menu.Init(stage, game);
 			Menu.createMainMenu();
 		}
 	}
