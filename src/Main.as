@@ -18,11 +18,18 @@ package
 	import view.BoardView;
 	import view.MeterView;
 	
+	import flash.display.LoaderInfo;
+	import flash.display.Loader;
+	import flash.net.URLRequest;
+	import flash.events.Event;
+	import flash.system.Security;
+	
 	/**
 	 * ...
 	 * @author Jack
 	**/
 	
+	[Frame(factoryClass = "Preloader")]
 	[SWF(width = "800", height = "600", frameRate = "30")]
 	
 	public class Main extends Sprite 
@@ -49,6 +56,9 @@ package
 		[Embed(source = "../assets/progressions/signsProgression.json", mimeType = "application/octet-stream")]
 		private var signsProgression:Class;
 		
+		private var kongregate:*;
+
+		
 		public function Main():void 
 		{
 			if (stage) init();
@@ -59,6 +69,9 @@ package
 		{
 			removeEventListener(Event.ADDED_TO_STAGE, init);
 			// entry point
+			
+			initKongregateAPI();
+			
             var progression:ByteArray;
             var versionID:int;
 
@@ -66,45 +79,6 @@ package
             progression = new EasyProgression() as ByteArray;
             // Reset selection
             //GameState.clearSaveFile(SHA256.computeDigest(progression));
-
-            // A/B Progression
-            /*
-            var progression1:ByteArray = new Progression1() as ByteArray;
-            var progression2:ByteArray = new EasyProgression() as ByteArray;
-
-            // Reset selection
-            //GameState.clearSaveFile(SHA256.computeDigest(progression1));
-            //GameState.clearSaveFile(SHA256.computeDigest(progression2));
-
-            if (GameState.checkSaveFile(SHA256.computeDigest(progression1))) {
-                progression = progression1;
-                versionID = 303;
-            } else if (GameState.checkSaveFile(SHA256.computeDigest(progression2))) {
-                progression = progression2;
-                versionID = 302;
-            } else {
-                var num:Number = Math.random();
-                var useHardProg:Boolean = true;
-                if (num >= .5) {
-                    useHardProg = false;
-                }
-                trace(useHardProg);
-
-                if (useHardProg) {
-                    progression = progression1;
-                    versionID = 303;
-                } else {
-                    progression = progression2;
-                    versionID = 302;
-                }
-            }
-            */
-
-            // No A/B
-            /*
-			progression = new EasyProgression(); // Change this for progression
-			versionID = 302; // This is cid in the wiki
-			*/
 
 			var progressionString:String = progression.toString();
 			var prog:Object = JSON.parse(progressionString);
@@ -117,23 +91,14 @@ package
 
             // A/B Signs
             if (GameState.getPlayerVersion() == Constants.VERSION_NULL) {
-                var num:Number = Math.random();
-                var useA:Boolean = true;
-                if (num >= .5) {
-                    useA = false;
-                }
-                //trace("rand");
-                if (useA) {
-                    Game.version = Constants.VERSION_A;
-                    versionID = 303;
-                } else {
-                    Game.version = Constants.VERSION_B;
-                    versionID = 302;
-                }
+				Game.version = Constants.VERSION_B;
+				versionID = 302;
                 GameState.savePlayerVersion(Game.version);
             } else {
                 Game.version = GameState.getPlayerVersion();
             }
+			
+			
 
             var logger:Logger = Logger.initialize(Constants.GID, Constants.DB_NAME, Constants.SKEY, versionID, null, false);
             game.m_logger = logger;
@@ -142,7 +107,41 @@ package
 			Stopwatch.Init();
 			Menu.Init(stage, game);
 			Menu.createMainMenu();
-
-		}		
-	}	
+		}
+		
+		private function initKongregateAPI():void {
+			// Pull the API path from the FlashVars
+			var paramObj:Object = LoaderInfo(root.loaderInfo).parameters;
+					 
+			// The API path. The "shadow" API will load if testing locally. 
+			var apiPath:String = paramObj.kongregate_api_path || 
+			"http://www.kongregate.com/flash/API_AS3_Local.swf";
+					 
+			// Allow the API access to this SWF
+			Security.allowDomain(apiPath);
+					 
+			// Load the API
+			var request:URLRequest = new URLRequest(apiPath);
+			var loader:Loader = new Loader();
+			loader.contentLoaderInfo.addEventListener(Event.COMPLETE, loadComplete);
+			loader.load(request);
+			this.addChild(loader);          
+		}
+		
+		// This function is called when loading is complete
+		private function loadComplete(event:Event):void {
+			// Save Kongregate API reference
+			kongregate = event.target.content;
+				 
+			// Connect to the back-end
+			kongregate.services.connect();
+					 
+			// You can now access the API via:
+			// kongregate.services
+			// kongregate.user
+			// kongregate.scores
+			// kongregate.stats
+			// etc...
+		}
+	}
 }
