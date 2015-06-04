@@ -56,7 +56,7 @@ package
 		[Embed(source = "../assets/progressions/signsProgression.json", mimeType = "application/octet-stream")]
 		private var signsProgression:Class;
 		
-		private var kongregate:*;
+		public var kongregate:*;
 
 		
 		public function Main():void 
@@ -91,9 +91,10 @@ package
 
             // A/B Signs
             if (GameState.getPlayerVersion() == Constants.VERSION_NULL) {
-				Game.version = Constants.VERSION_B;
+				Game.version = Constants.VERSION_A;
 				versionID = 302;
                 GameState.savePlayerVersion(Game.version);
+				trace("here");
             } else {
                 Game.version = GameState.getPlayerVersion();
             }
@@ -132,9 +133,12 @@ package
 		private function loadComplete(event:Event):void {
 			// Save Kongregate API reference
 			kongregate = event.target.content;
-				 
 			// Connect to the back-end
-			kongregate.services.connect();
+			if (kongregate != null && kongregate.services != null) {
+				kongregate.services.connect();
+			} else {
+				trace("kongregate null");
+			}
 					 
 			// You can now access the API via:
 			// kongregate.services
