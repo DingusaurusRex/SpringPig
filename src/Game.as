@@ -800,9 +800,12 @@ package
 						pause = true; // So that player position is disregarded
                         Stopwatch.pause();
                         util.Audio.playWinSFX();
-                        var logData:Object = {time:Stopwatch.getCurrentTiming(), ss:successfulSprings, fs:failedSprings, sts:successfulTrampolineSprings, fts:failedTrampolineSprings, ts:totalSprings, r:totalRewinds, tss:totalSuccessfulSprings};
+						var t:int = Stopwatch.getCurrentTiming();
+                        var logData:Object = {time:t, ss:successfulSprings, fs:failedSprings, sts:successfulTrampolineSprings, fts:failedTrampolineSprings, ts:totalSprings, r:totalRewinds, tss:totalSuccessfulSprings};
                         m_logger.logLevelEnd(logData);
-						kongregate.stats.submit("Level Finish", currLevelIndex);
+						var highScore:int = 1000 * (successfulSprings + failedSprings + successfulTrampolineSprings + failedTrampolineSprings) + t / 100;
+						kongregate.stats.submit("Level Finish", currLevelIndex + 1);
+						kongregate.stats.submit("High Score", highScore);
                         Menu.updatePlaythroughTime();
                         GameState.openNextLevelSave();
 						if (currLevelIndex == progression.length - 1) {
