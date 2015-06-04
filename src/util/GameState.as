@@ -121,6 +121,9 @@ public class GameState {
             if (Stopwatch.getCurrentTiming() < playerData.data.personalRecords[game.currLevelIndex]) {
                 playerData.data.personalRecords[game.currLevelIndex] = Stopwatch.getCurrentTiming();
             }
+            if (game.totalSuccessfulSprings < playerData.data.springs[game.currLevelIndex]) {
+                playerData.data.springs[game.currLevelIndex] = game.totalSuccessfulSprings;
+            }
             playerData.flush();
         }
     }

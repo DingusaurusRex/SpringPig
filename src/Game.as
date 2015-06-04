@@ -88,7 +88,7 @@ package
         // 5 below are not reset when rewind is called so a complete solution
         // can include springs rewinded
         private var successfulSprings:int;
-        private var totalSuccessfulSprings:int;
+        public var totalSuccessfulSprings:int;
         private var failedSprings:int;
         private var successfulTrampolineSprings:int;
         private var failedTrampolineSprings:int;
@@ -835,11 +835,11 @@ package
             var logData:Object = {x:m_player.asset.x, y:m_player.asset.y, power:m_player.energy};
             if (m_player.energy > 0) {
                 util.Audio.playSpringSFX();
+                totalSuccessfulSprings++;
+                updateSpringCounter();
                 if (manual) {
                     m_logger.logAction(Constants.AID_SUCCESSFUL_SPRING, logData);
                     successfulSprings++;
-                    totalSuccessfulSprings++;
-                    updateSpringCounter();
                 } else {
                     m_logger.logAction(Constants.AID_SUCCESSFUL_TRAMPOLINE_SPRING, logData);
                     successfulTrampolineSprings++;
