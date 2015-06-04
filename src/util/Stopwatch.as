@@ -28,6 +28,7 @@ public class Stopwatch {
         started = false;
         paused = false;
         stopwatchText.text = Constants.STOPWATCH_DEFAULT_TEXT;
+        stopwatchText.embedFonts = true;
         stopwatchText.width = Constants.GAME_STOPWATCH_WIDTH;
         stopwatchText.height = Constants.GAME_STOPWATCH_HEIGHT;
         stopwatchText.textColor = Constants.IN_GAME_TEXT_COLOR;
@@ -36,6 +37,7 @@ public class Stopwatch {
         stopwatchText.setTextFormat(stopwatchDefaultTextFormat);
 
         stopwatchMenuText.text = Constants.MENU_STOPWATCH_DEFAULT_TEXT + Constants.STOPWATCH_DEFAULT_TEXT;
+        stopwatchMenuText.embedFonts = true;
         stopwatchMenuText.height = Constants.MENU_STOPWATCH_HEIGHT;
         stopwatchMenuText.width = Constants.SCREEN_WIDTH;
 

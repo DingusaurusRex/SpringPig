@@ -21,7 +21,7 @@ package
         /**
          * Debug Options
          */
-        public static const SHOW_ALL_LEVELS:Boolean = false;
+        public static const SHOW_ALL_LEVELS:Boolean = true;
 
         /**
          * Rewind Options
@@ -44,7 +44,7 @@ package
         /**
          * Logging info
          */
-        public static const LOG:Boolean = true;
+        public static const LOG:Boolean = false;
 
         public static const GID:int = 116;
         public static const DB_NAME:String = "cgs_gc_SpringMan";
@@ -121,7 +121,7 @@ package
 		public static const STOPWATCH_DEFAULT_TEXT:String = "00:00.000";
         public static const STOPWATCH_DEFAULT_TIME:int = 5999999;
 		
-		public static const GAME_STOPWATCH_FONT:String = "arial";
+		public static const GAME_STOPWATCH_FONT:String = "breeSerif";
 		public static const GAME_STOPWATCH_FONT_SIZE:int = 20;
 		public static const GAME_STOPWATCH_WIDTH:int = 100;
 		public static const GAME_STOPWATCH_HEIGHT:int = 25;
@@ -288,7 +288,7 @@ package
         public static const STATE_TIME_RECORDS_MENU:int = 7;
 
 		// General menu
-		public static const MENU_FONT:String = "arial";
+		public static const MENU_FONT:String = "breeSerif";
 		public static const MENU_TITLE_ALIGNMENT:String = "center";
 
         public static const MENU_BACKGROUND_COVER_COLOR:uint = 0xFFFFFF;
@@ -299,7 +299,7 @@ package
 		public static const MENU_BUTTON_WIDTH:int = 130;
 		public static const MENU_BUTTON_HEIGHT:int = 18;
 		public static const MENU_BUTTON_FONT_SIZE:int = 12;
-		public static const MENU_BUTTON_TEXT_TOP_PADDING:int = 2;
+		public static const MENU_BUTTON_TEXT_TOP_PADDING:int = 1;
 		public static const MENU_BUTTON_TEXT_ALIGNMENT:String = "center";
 		public static const MENU_BUTTON_BORDER_SIZE:int = 2;
 		public static const MENU_BUTTON_BORDER_COLOR:uint = 0x000000;
@@ -316,7 +316,7 @@ package
 		public static const MAIN_MENU_BUTTON_TOP_PADDING:int = 20;
 		public static const MAIN_MENU_BUTTON_LEFT_PADDING:int = 20;
 
-        public static const INSTRUCTIONS_MENU:String = "How to play:\nMove Left\t: Left Arrow\nMove Right\t: Right Arrow\nJump\t\t: Up Arrow\nSpring\t\t: Space\nRewind\t\t: R\nReset\t\t: Y\nPause\t\t: Escape";
+        public static const INSTRUCTIONS_MENU:String = "How to play:\nMove Left\t: Left Arrow\nMove Right\t: Right Arrow\nJump\t\t: Up Arrow\nSpring\t: Space\nRewind\t: R\nReset\t\t: Y\nPause\t\t: Escape";
         public static const INSTRUCTIONS_GAME:String = "Controls:\nLeft\t: Left Arrow\nRight\t: Right Arrow\nJump\t: Up Arrow\nSpring\t: Space\nRewind\t: R\nReset\t: Y\nPause\t: Escape";
         public static const INSTRUCTIONS_MENU_TOP_PADDING:int = 440;
         public static const INSTRUCTIONS_MENU_LEFT_PADDING:int = 30;
@@ -355,7 +355,7 @@ package
         public static const MAIN_MENU_BUTTON_HEIGHT:int = 68;
         public static const MAIN_MENU_BUTTON_TEXT_HEIGHT:int = 28;
         public static const MAIN_MENU_BUTTON_FONT_SIZE:int = 20;
-        public static const MAIN_MENU_BUTTON_TEXT_TOP_PADDING:int = 4;
+        public static const MAIN_MENU_BUTTON_TEXT_TOP_PADDING:int = 3;
         public static const MAIN_MENU_BUTTON_TEXT_ALIGNMENT:String = "center";
         public static const MAIN_MENU_BUTTON_BORDER_SIZE:int = 2;
         public static const MAIN_MENU_BUTTON_BORDER_COLOR:uint = 0x000000;
@@ -387,7 +387,7 @@ package
         public static const LEVEL_SELECT_TIME_RECORD_TEXT:String = "Personal Best:\n";
         public static const LEVEL_SELECT_TIME_RECORD_TOP_PADDING:int = 3;
         public static const LEVEL_SELECT_TIME_RECORD_FONT_SIZE:int = 15;
-        public static const LEVEL_SELECT_TIME_RECORD_HEIGHT:int = 40;
+        public static const LEVEL_SELECT_TIME_RECORD_HEIGHT:int = 45;
         public static const LEVEL_SELECT_TIME_RECORD_ALIGNMENT:String = "center";
 
         // Time records menu
@@ -431,13 +431,18 @@ package
                 "\n" +
                 "SFX from:\n" +
                 "-http://www.freesfx.co.uk\n" +
-                "-http://www.freesound.org"/* + 
+                "-http://www.freesound.org\n" +
+                "\n"+
+                "Game font (Bree Serif) from:\n" +
+                "-http://www.fontsquirrel.com/fonts/bree-serif\n" +
+                " licensed under the SIL Open Font License, Version 1.1.\n" +
+                " available at: http://scripts.sil.org/OFL"/* +
 				"\n\n" + 
 				"Presented by AlbinoBlackSheep"*/;
 		public static const CREDITS_TOP_PADDING:int = 130;
 		public static const CREDITS_HEIGHT:int = 500;
 		public static const CREDITS_WIDTH:int = 400;
-		public static const CREDITS_FONT_SIZE:int = 20;
+		public static const CREDITS_FONT_SIZE:int = 15;
 		public static const CREDITS_ALIGNMENT:String = "left";
 
         public static const CREDITS_RESET_PROGRESS_BUTTON_TEXT:String = "Reset Progress";
@@ -506,13 +511,13 @@ package
         public static const BEST_TOTAL_TIME_TEXT:String = "Best Playthrough Time:\n";
         public static const BEST_TOTAL_TIME_BOTTOM_PADDING:int = 45;
         public static const BEST_TOTAL_TIME_HEIGHT:int = 56;
-        public static const BEST_TOTAL_TIME_WIDTH:int = 190;
+        public static const BEST_TOTAL_TIME_WIDTH:int = 195;
         public static const BEST_TOTAL_TIME_FONT_SIZE:int = 18;
         public static const BEST_TOTAL_TIME_ALIGNMENT:String = "center";
 
         // Rewind tutorial
         public static const REWIND_INSTRUCTION_TEXT:String = "Rewind: R Reset: Y";
-        public static const REWIND_INSTRUCTION_BOTTOM_PADDING:int = 3;
+        public static const REWIND_INSTRUCTION_BOTTOM_PADDING:int = 5;
         public static const REWIND_INSTRUCTION_LEFT_PADDING:int = 5;
         public static const REWIND_INSTRUCTION_RIGHT_PADDING:int = 5;
         public static const REWIND_INSTRUCTION_HEIGHT:int = 25;

@@ -339,6 +339,7 @@ import flash.utils.Dictionary;
 			else if (id >= Constants.PLASTERED_SIGN1 && id <= Constants.PLASTERED_SIGN5)
 			{
                 var signText:TextField = new TextField();
+                signText.embedFonts = true;
                 signText.text = board.getSignText(id);
                 signText.x = 0;
                 signText.y = 0;
@@ -354,6 +355,7 @@ import flash.utils.Dictionary;
                 var signFormat:TextFormat = new TextFormat();
                 signFormat.size = Constants.SIGN_TEXT_FONT_SIZE;
                 signFormat.align = Constants.SIGN_TEXT_ALIGNMENT;
+                signFormat.font = Constants.MENU_FONT;
                 signText.setTextFormat(signFormat);
                 result = new Sprite();
                 result.addChild(signText);
