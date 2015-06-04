@@ -107,7 +107,6 @@ package
 			Audio.Init(GameState.getPlayerMuteOption());
 			Stopwatch.Init();
 			Menu.Init(stage, game);
-			Menu.createMainMenu();
 		}
 		
 		private function initKongregateAPI():void {
@@ -117,7 +116,9 @@ package
 			// The API path. The "shadow" API will load if testing locally. 
 			var apiPath:String = paramObj.kongregate_api_path || 
 			"http://www.kongregate.com/flash/API_AS3_Local.swf";
-					 
+			
+			trace(apiPath);
+			
 			// Allow the API access to this SWF
 			Security.allowDomain(apiPath);
 					 
@@ -130,7 +131,7 @@ package
 		}
 		
 		// This function is called when loading is complete
-		private function loadComplete(event:Event):void {
+		public function loadComplete(event:Event):void {
 			// Save Kongregate API reference
 			kongregate = event.target.content;
 			// Connect to the back-end
@@ -146,6 +147,8 @@ package
 			// kongregate.scores
 			// kongregate.stats
 			// etc...
+			
+			Menu.createMainMenu();
 		}
 	}
 }
