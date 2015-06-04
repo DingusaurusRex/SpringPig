@@ -803,7 +803,7 @@ package
 						var t:int = Stopwatch.getCurrentTiming();
                         var logData:Object = {time:t, ss:successfulSprings, fs:failedSprings, sts:successfulTrampolineSprings, fts:failedTrampolineSprings, ts:totalSprings, r:totalRewinds, tss:totalSuccessfulSprings};
                         m_logger.logLevelEnd(logData);
-						var highScore:int = 1000 * (successfulSprings + failedSprings + successfulTrampolineSprings + failedTrampolineSprings) + t / 100;
+						var highScore:int = 1000 * totalSuccessfulSprings + t / 100;
 						kongregate.stats.submit("Level Finish", currLevelIndex + 1);
 						kongregate.stats.submit("High Score", highScore);
                         Menu.updatePlaythroughTime();
