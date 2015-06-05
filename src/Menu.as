@@ -26,7 +26,7 @@ public class Menu {
     public static var pauseMenu:PauseMenu;
     public static var endLevelMenu:EndLevelMenu;
     public static var endGameMenu:EndGameMenu;
-    public static var timeRecordsMenu:TimeRecordsMenu;
+    public static var recordsMenu:RecordsMenu;
     private static var muteButton:SimpleButton;
     private static var menuInstructions:TextField;
     public static var gameInstructions:TextField;
@@ -89,7 +89,7 @@ public class Menu {
         pauseMenu = new PauseMenu();
         endLevelMenu = new EndLevelMenu();
         endGameMenu = new EndGameMenu();
-        timeRecordsMenu = new TimeRecordsMenu();
+        recordsMenu = new RecordsMenu();
         muteButton = Audio.muteButton;
 
         // Instructions
@@ -254,11 +254,11 @@ public class Menu {
         stage.focus = stage;
     }
 
-    public static function createTimeRecordsMenu():void {
+    public static function createRecordsMenu():void {
         stage.removeChildren();
-        timeRecordsMenu.regeneratePages();
+        recordsMenu.regeneratePages();
         state = Constants.STATE_TIME_RECORDS_MENU;
-        stage.addChild(timeRecordsMenu);
+        stage.addChild(recordsMenu);
         stage.focus = stage;
     }
 
@@ -346,8 +346,8 @@ public class Menu {
         createLevelSelectMenu();
     }
 
-    public static function onTimeRecordsClick(event:MouseEvent):void {
-        createTimeRecordsMenu();
+    public static function onRecordsClick(event:MouseEvent):void {
+        createRecordsMenu();
     }
 
     public static function onCreditsClick(event:MouseEvent):void {
@@ -406,8 +406,8 @@ public class Menu {
                     case Keyboard.C:
                         createCreditsMenu();
                         break;
-                    case Keyboard.T:
-                        createTimeRecordsMenu();
+                    case Keyboard.R:
+                        createRecordsMenu();
                         break;
                 }
                 break;
@@ -627,7 +627,7 @@ class MainMenu extends Sprite {
     private var continueButtonCover:Sprite;
     private var startButton:SimpleButton;
     private var levelSelectButton:SimpleButton;
-    private var timeRecordsButton:SimpleButton;
+    private var recordsButton:SimpleButton;
     private var creditsButton:SimpleButton;
     private var bestPlaythroughTime:TextField;
     private var bestPlaythroughTimeTextFormat:TextFormat;
@@ -698,8 +698,8 @@ class MainMenu extends Sprite {
                 Menu.getMainMenuButtonBackground(),
                 Menu.onLevelSelectClick);
 
-        // Time records button
-        timeRecordsButton = Menu.getButton(Constants.TIME_RECORDS_BUTTON_TEXT,
+        // Records button
+        recordsButton = Menu.getButton(Constants.TIME_RECORDS_BUTTON_TEXT,
                 Menu.getTextFormat(Constants.MAIN_MENU_BUTTON_FONT_SIZE, Constants.MAIN_MENU_BUTTON_TEXT_ALIGNMENT),
                 Constants.MAIN_MENU_BUTTON_WIDTH,
                 Constants.MAIN_MENU_BUTTON_TEXT_HEIGHT,
@@ -707,7 +707,7 @@ class MainMenu extends Sprite {
                         Constants.SCREEN_WIDTH * 5 / 6 - Constants.MAIN_MENU_BUTTON_WIDTH / 2,
                         levelSelectButton.y + Constants.MAIN_MENU_BUTTON_HEIGHT + Constants.MAIN_MENU_BUTTON_PADDING_BETWEEN,
                 Menu.getMainMenuButtonBackground(),
-                Menu.onTimeRecordsClick);
+                Menu.onRecordsClick);
 
         // Credits button
         creditsButton = Menu.getMenuButton(Constants.CREDITS_BUTTON_TEXT,
@@ -721,7 +721,7 @@ class MainMenu extends Sprite {
                 Constants.BEST_TOTAL_TIME_HEIGHT,
                 Constants.BEST_TOTAL_TIME_WIDTH,
                         Constants.SCREEN_WIDTH * 5 / 6 - Constants.BEST_TOTAL_TIME_WIDTH / 2,
-                        timeRecordsButton.y + Constants.MAIN_MENU_BUTTON_HEIGHT + Constants.MAIN_MENU_BUTTON_PADDING_BETWEEN,
+                        recordsButton.y + Constants.MAIN_MENU_BUTTON_HEIGHT + Constants.MAIN_MENU_BUTTON_PADDING_BETWEEN,
                 Constants.MENU_FONT,
                 Constants.BEST_TOTAL_TIME_FONT_SIZE,
                 Constants.BEST_TOTAL_TIME_ALIGNMENT);
@@ -734,7 +734,7 @@ class MainMenu extends Sprite {
         addChild(continueButton);
         addChild(startButton);
         addChild(levelSelectButton);
-        addChild(timeRecordsButton);
+        addChild(recordsButton);
         addChild(creditsButton);
         if (bestTime != Constants.STOPWATCH_DEFAULT_TIME) {
             addChild(bestPlaythroughTime);
@@ -1082,7 +1082,7 @@ class LevelSelectMenu extends Sprite {
     }
 }
 
-class TimeRecordsMenu extends Sprite {
+class RecordsMenu extends Sprite {
     private var background:Sprite;
     private var backgroundCover:Sprite;
     private var mainMenuButton:SimpleButton;
@@ -1095,7 +1095,7 @@ class TimeRecordsMenu extends Sprite {
     private var pages:Array;
     private var totalPages:int;
 	
-    public function TimeRecordsMenu():void {
+    public function RecordsMenu():void {
         // Background
         background = new Menu.menuBackgroundArt();
         background.width = Constants.SCREEN_WIDTH;
@@ -1113,20 +1113,20 @@ class TimeRecordsMenu extends Sprite {
                 Constants.MAIN_MENU_BUTTON_LEFT_PADDING,
                 Menu.onMainMenuClick);
 
-        // Time Record title
-        title = Menu.getMenuTitle(Constants.TIME_RECORDS_TITLE_TEXT,
-                Constants.TIME_RECORDS_TITLE_TOP_PADDING,
-                Constants.TIME_RECORDS_TITLE_FONT_SIZE);
+        // Record title
+        title = Menu.getMenuTitle(Constants.RECORDS_TITLE_TEXT,
+                Constants.RECORDS_TITLE_TOP_PADDING,
+                Constants.RECORDS_TITLE_FONT_SIZE);
 
         // Page buttons
-        previousPageButton = Menu.getMenuButton(Constants.TIME_RECORDS_PREVIOUS_PAGE_BUTTON_TEXT,
-                        Constants.SCREEN_WIDTH / Constants.TIME_RECORDS_PAGE_BUTTON_COLUMNS - Constants.MENU_BUTTON_WIDTH / 2,
-                        Constants.SCREEN_HEIGHT - Constants.TIME_RECORDS_PAGE_BUTTON_BOTTOM_PADDING,
+        previousPageButton = Menu.getMenuButton(Constants.RECORDS_PREVIOUS_PAGE_BUTTON_TEXT,
+                        Constants.SCREEN_WIDTH / Constants.RECORDS_PAGE_BUTTON_COLUMNS - Constants.MENU_BUTTON_WIDTH / 2,
+                        Constants.SCREEN_HEIGHT - Constants.RECORDS_PAGE_BUTTON_BOTTOM_PADDING,
                 onPreviousPageClick);
 
-        nextPageButton = Menu.getMenuButton(Constants.TIME_RECORDS_NEXT_PAGE_BUTTON_TEXT,
-                        Constants.SCREEN_WIDTH * (Constants.TIME_RECORDS_PAGE_BUTTON_COLUMNS - 1) / Constants.TIME_RECORDS_PAGE_BUTTON_COLUMNS - Constants.MENU_BUTTON_WIDTH / 2,
-                        Constants.SCREEN_HEIGHT - Constants.TIME_RECORDS_PAGE_BUTTON_BOTTOM_PADDING,
+        nextPageButton = Menu.getMenuButton(Constants.RECORDS_NEXT_PAGE_BUTTON_TEXT,
+                        Constants.SCREEN_WIDTH * (Constants.RECORDS_PAGE_BUTTON_COLUMNS - 1) / Constants.RECORDS_PAGE_BUTTON_COLUMNS - Constants.MENU_BUTTON_WIDTH / 2,
+                        Constants.SCREEN_HEIGHT - Constants.RECORDS_PAGE_BUTTON_BOTTOM_PADDING,
                 onNextPageClick);
     }
 
@@ -1139,13 +1139,13 @@ class TimeRecordsMenu extends Sprite {
         if (Constants.SHOW_ALL_LEVELS) {
             levels = Menu.game.progression.length;
         }
-        var levelsPerPage:int = Constants.TIME_RECORDS_ROWS * Constants.TIME_RECORDS_COLUMNS;
+        var levelsPerPage:int = Constants.RECORDS_ROWS * Constants.RECORDS_COLUMNS;
         totalPages = levels / levelsPerPage;
         if (levels % levelsPerPage != 0) {
             totalPages++;
         }
 
-        var pageHeight:int = Constants.SCREEN_HEIGHT - Constants.TIME_RECORDS_PAGE_TOP_PADDING - Constants.TIME_RECORDS_PAGE_BUTTON_BOTTOM_PADDING;
+        var pageHeight:int = Constants.SCREEN_HEIGHT - Constants.RECORDS_PAGE_TOP_PADDING - Constants.RECORDS_PAGE_BUTTON_BOTTOM_PADDING;
         pages = new Array();
 
         var l:int = 0;
@@ -1154,20 +1154,20 @@ class TimeRecordsMenu extends Sprite {
         var c:int;
         PageCreation: for (p = 0; p < totalPages; p++) {
             var page:Sprite = new Sprite();
-            LevelAddition:for (c = 0; c < Constants.TIME_RECORDS_COLUMNS; c++) {
-                for (r = 0; r < Constants.TIME_RECORDS_ROWS; r++) {
-                    var x:int = Constants.SCREEN_WIDTH * (c * 2 + 1) / (Constants.TIME_RECORDS_COLUMNS + 2) - Constants.TIME_RECORDS_TIME_RECORD_WIDTH / 2;
-                    var y:int = Constants.TIME_RECORDS_PAGE_TOP_PADDING + pageHeight * r / Constants.TIME_RECORDS_ROWS;
+            LevelAddition:for (c = 0; c < Constants.RECORDS_COLUMNS; c++) {
+                for (r = 0; r < Constants.RECORDS_ROWS; r++) {
+                    var x:int = Constants.SCREEN_WIDTH * (c * 2 + 1) / (Constants.RECORDS_COLUMNS + 2) - Constants.RECORDS_TIME_RECORD_WIDTH / 2;
+                    var y:int = Constants.RECORDS_PAGE_TOP_PADDING + pageHeight * r / Constants.RECORDS_ROWS;
 					var levelReader:LevelParser = new LevelParser();
 					var board:Board = levelReader.parseLevel(Menu.game.progression[l]);
-                    var levelRecord:TextField = Menu.getTextField(board.name + Constants.TIME_RECORDS_TIME_RECORD_TEXT + Stopwatch.formatTiming(GameState.getPlayerRecord(l)),
-                            Constants.TIME_RECORDS_TIME_RECORD_HEIGHT,
-                            Constants.TIME_RECORDS_TIME_RECORD_WIDTH,
+                    var levelRecord:TextField = Menu.getTextField(board.name + Constants.RECORDS_TIME_RECORD_TEXT + GameState.getPlayerHighScoreString(l),
+                            Constants.RECORDS_TIME_RECORD_HEIGHT,
+                            Constants.RECORDS_TIME_RECORD_WIDTH,
                             x,
                             y,
                             Constants.MENU_FONT,
-                            Constants.TIME_RECORDS_TIME_RECORD_FONT_SIZE,
-                            Constants.TIME_RECORDS_TIME_RECORD_ALIGNMENT);
+                            Constants.RECORDS_TIME_RECORD_FONT_SIZE,
+                            Constants.RECORDS_TIME_RECORD_ALIGNMENT);
                     page.addChild(levelRecord);
                     l++;
                     if (l == levels) {
