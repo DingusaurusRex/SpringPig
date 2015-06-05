@@ -31,6 +31,8 @@ public class Menu {
     private static var menuInstructions:TextField;
     public static var gameInstructions:TextField;
     private static var previousRecord:TextField;
+    private static var playthroughSprings:TextField;
+    private static var playthroughScore:TextField;
     private static var playthroughTip:TextField;
     private static var playthroughTime:TextField;
     private static var playthroughTimeTextFormat:TextFormat;
@@ -130,6 +132,15 @@ public class Menu {
                 Constants.TOTAL_TIME_ALIGNMENT);
         playthroughTimeTextFormat = playthroughTime.getTextFormat();
 
+		playthroughSprings = getTextField(Constants.TOTAL_TIME_TEXT + Constants.STOPWATCH_DEFAULT_TEXT,
+                Constants.TOTAL_TIME_HEIGHT,
+                Constants.SCREEN_WIDTH,
+                0,
+                        Constants.SCREEN_HEIGHT - Constants.TOTAL_TIME_BOTTOM_PADDING,
+                Constants.MENU_FONT,
+                Constants.TOTAL_TIME_FONT_SIZE,
+                Constants.TOTAL_TIME_ALIGNMENT);
+		
         rewindInstructions = getTextField(Constants.REWIND_INSTRUCTION_TEXT,
                 Constants.REWIND_INSTRUCTION_HEIGHT,
                 Constants.REWIND_INSTRUCTION_WIDTH,
@@ -200,10 +211,14 @@ public class Menu {
         }
         Stopwatch.stopwatchMenuText.x = Constants.END_LEVEL_STOPWATCH_LEFT_PADDING;
         Stopwatch.stopwatchMenuText.y = Constants.END_LEVEL_STOPWATCH_TOP_PADDING;
-        previousRecord = GameState.getPlayerRecordEndLevelTextField(game.currLevelIndex);
+		playthroughSprings.text = "Springs: " + 5 + " * 1000"
+		playthroughSprings.x = Stopwatch.stopwatchMenuText.x;
+		playthroughSprings.y = Stopwatch.stopwatchMenuText.y + Constants.PLAYER_RECORD_TIME_END_LEVEL_TOP_PADDING;
+		previousRecord = GameState.getPlayerRecordEndLevelTextField(game.currLevelIndex);
         previousRecord.x = Stopwatch.stopwatchMenuText.x;
         previousRecord.y = Stopwatch.stopwatchMenuText.y + Constants.PLAYER_RECORD_TIME_END_LEVEL_TOP_PADDING;
-        stage.addChild(Stopwatch.stopwatchMenuText);
+        stage.addChild(playthroughSprings);
+		stage.addChild(Stopwatch.stopwatchMenuText);
         stage.addChild(previousRecord);
         stage.addEventListener(KeyboardEvent.KEY_DOWN, Menu.onKeyDown);
         stage.focus = stage;

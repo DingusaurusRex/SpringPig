@@ -138,6 +138,9 @@ package model.levelHandling
 		[Embed(source = "../../../assets/levels/levelA4.json", mimeType = "application/octet-stream")]
 		private var LevelA4:Class;
 		
+		[Embed(source = "../../../assets/levels/levelA5.json", mimeType = "application/octet-stream")]
+		private var LevelA5:Class;
+		
 		
 		/**
 		 *	Level Names Dictionary
@@ -191,6 +194,7 @@ package model.levelHandling
 			m_levelNames["levelA2"] = LevelA2;
 			m_levelNames["levelA3"] = LevelA3;
 			m_levelNames["levelA4"] = LevelA4;
+			m_levelNames["levelA5"] = LevelA5;
 		}
 		
 		/**

@@ -36,7 +36,7 @@ public class Stopwatch {
         stopwatchDefaultTextFormat.size = Constants.GAME_STOPWATCH_FONT_SIZE;
         stopwatchText.setTextFormat(stopwatchDefaultTextFormat);
 
-        stopwatchMenuText.text = Constants.MENU_STOPWATCH_DEFAULT_TEXT + Constants.STOPWATCH_DEFAULT_TEXT;
+        stopwatchMenuText.text = Constants.MENU_STOPWATCH_DEFAULT_TEXT + Constants.STOPWATCH_DEFAULT_TEXT + " * 10";
         stopwatchMenuText.embedFonts = true;
         stopwatchMenuText.height = Constants.MENU_STOPWATCH_HEIGHT;
         stopwatchMenuText.width = Constants.SCREEN_WIDTH;
