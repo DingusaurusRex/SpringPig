@@ -810,9 +810,9 @@ package
                         m_logger.logLevelEnd(logData);
 						highScore = 1000 * totalSuccessfulSprings + t / 100;
 						kongregate.stats.submit("Level Finish", currLevelIndex + 1);
-						kongregate.stats.submit("High Score", highScore);
                         Menu.updatePlaythroughTime();
                         GameState.openNextLevelSave();
+						GameState.sendHighScoresToKong(kongregate);
 						if (currLevelIndex == progression.length - 1) {
 							Menu.createEndGameMenu();
 						} else {
