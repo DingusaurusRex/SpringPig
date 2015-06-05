@@ -23,9 +23,6 @@ public class GameState {
     private static var minSpringsGameText:TextField = new TextField();
     private static var minSpringsGameDefaultTextFormat:TextFormat = new TextFormat();
 
-    private static var minSpringsEndLevelText:TextField = new TextField();
-    private static var minSpringsEndLevelDefaultTextFormat:TextFormat = new TextFormat();
-
     public static function Init(progressionFileName:String, g:Game):void {
         game = g;
         try {

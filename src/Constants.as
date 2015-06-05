@@ -405,14 +405,14 @@ package
 		
 		public static const LEVEL_SELECT_PAGE_TOP_PADDING:int = 200;
 
-        public static const LEVEL_SELECT_HIGH_SCORE_TEXT:String = "High Score:\n";
+        public static const LEVEL_SELECT_HIGH_SCORE_TEXT:String = "Best Score:\n";
         public static const LEVEL_SELECT_HIGH_SCORE_TOP_PADDING:int = 3;
         public static const LEVEL_SELECT_HIGH_SCORE_FONT_SIZE:int = 15;
         public static const LEVEL_SELECT_HIGH_SCORE_HEIGHT:int = 45;
         public static const LEVEL_SELECT_HIGH_SCORE_ALIGNMENT:String = "center";
 
         // Time records menu
-        public static const RECORDS_TITLE_TEXT:String = "Your High Scores";
+        public static const RECORDS_TITLE_TEXT:String = "Your Best Scores";
         public static const RECORDS_TITLE_TOP_PADDING:int = 50;
         public static const RECORDS_TITLE_FONT_SIZE:int = 80;
 
@@ -515,7 +515,7 @@ package
 		public static const END_GAME_SUBTITLE_FONT_SIZE:int = 50;
 
         // Full playthrough tip
-        public static const TOTAL_TIME_TIP_TEXT:String = "Tip: Play through the whole game with no continue and no restart to see playthrough time.";
+        public static const TOTAL_TIME_TIP_TEXT:String = "Try to get the lowest score you can!";
         public static const TOTAL_TIME_TIP_BOTTOM_PADDING:int = 40;
         public static const TOTAL_TIME_TIP_HEIGHT:int = 25;
         public static const TOTAL_TIME_TIP_FONT_SIZE:int = 15;
@@ -545,6 +545,20 @@ package
         public static const REWIND_INSTRUCTION_WIDTH:int = 210;
         public static const REWIND_INSTRUCTION_FONT_SIZE:int = 20;
         public static const REWIND_INSTRUCTION_ALIGNMENT:String = "left";
+
+        // End Level Scoring
+        public static const END_LEVEL_SCORING_TIME_TEXT:String = "Time\t\t: ";
+        public static const END_LEVEL_SCORING_SPRING_TEXT:String = "Springs\t: ";
+        public static const END_LEVEL_SCORING_TOTAL_TEXT:String = "Total\t\t: ";
+        public static const END_LEVEL_SCORING_BEST_TOTAL_TEXT:String = "NEW BEST SCORE!";
+        public static const END_LEVEL_SCORING_FONT_SIZE:int = 25;
+        public static const END_LEVEL_SCORING_TOP_PADDING:int = 420;
+        public static const END_LEVEL_SCORING_HEIGHT:int = 110;
+        public static const END_LEVEL_SCORING_WIDTH:int = 300;
+        public static const END_LEVEL_SCORING_TEXT_ALIGNMENT:String = "left";
+
+        public static const END_LEVEL_SCORING_HIGH_SCORE_INDICATOR_HEIGHT:int = 30;
+        public static const END_LEVEL_SCORING_HIGH_SCORE_INDICATOR_TEXT_ALIGNMENT:String = "center";
 	}
 
 }

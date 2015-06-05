@@ -12,6 +12,7 @@ import flash.ui.Keyboard;
 import util.Audio;
 import util.GameState;
 import util.Stopwatch;
+import util.Stopwatch;
 
 /**
  * ...
@@ -31,11 +32,11 @@ public class Menu {
     private static var menuInstructions:TextField;
     public static var gameInstructions:TextField;
     private static var previousRecord:TextField;
-    private static var playthroughSprings:TextField;
-    private static var playthroughScore:TextField;
     private static var playthroughTip:TextField;
     private static var playthroughTime:TextField;
     private static var playthroughTimeTextFormat:TextFormat;
+    private static var calculations:TextField;
+    private static var highScoreIndicator:TextField;
     public static var state:int;
 
     public static var rewindInstructions:TextField;
@@ -131,15 +132,6 @@ public class Menu {
                 Constants.TOTAL_TIME_FONT_SIZE,
                 Constants.TOTAL_TIME_ALIGNMENT);
         playthroughTimeTextFormat = playthroughTime.getTextFormat();
-
-		playthroughSprings = getTextField(Constants.TOTAL_TIME_TEXT + Constants.STOPWATCH_DEFAULT_TEXT,
-                Constants.TOTAL_TIME_HEIGHT,
-                Constants.SCREEN_WIDTH,
-                0,
-                        Constants.SCREEN_HEIGHT - Constants.TOTAL_TIME_BOTTOM_PADDING,
-                Constants.MENU_FONT,
-                Constants.TOTAL_TIME_FONT_SIZE,
-                Constants.TOTAL_TIME_ALIGNMENT);
 		
         rewindInstructions = getTextField(Constants.REWIND_INSTRUCTION_TEXT,
                 Constants.REWIND_INSTRUCTION_HEIGHT,
@@ -150,6 +142,15 @@ public class Menu {
                 Constants.REWIND_INSTRUCTION_FONT_SIZE,
                 Constants.REWIND_INSTRUCTION_ALIGNMENT,
                 Constants.IN_GAME_TEXT_COLOR);
+
+        highScoreIndicator = Menu.getTextField(Constants.END_LEVEL_SCORING_BEST_TOTAL_TEXT,
+                Constants.END_LEVEL_SCORING_HIGH_SCORE_INDICATOR_HEIGHT,
+                Constants.SCREEN_WIDTH,
+                        0,
+                        Constants.END_LEVEL_SCORING_TOP_PADDING + Constants.END_LEVEL_SCORING_HEIGHT,
+                Constants.MENU_FONT,
+                Constants.END_LEVEL_SCORING_FONT_SIZE,
+                Constants.END_LEVEL_SCORING_HIGH_SCORE_INDICATOR_TEXT_ALIGNMENT);
 
         state = 0;
 
@@ -204,22 +205,35 @@ public class Menu {
         muteButton.y = Constants.MUTE_BUTTON_TOP_PADDING;
         endLevelMenu.addChild(muteButton);
         stage.addChild(endLevelMenu);
+        /*
         if (fullPlaythrough) {
             stage.addChild(Menu.playthroughTime);
         } else {
             stage.addChild(playthroughTip);
-        }
+        }*/
+        stage.addChild(playthroughTip);
         Stopwatch.stopwatchMenuText.x = Constants.END_LEVEL_STOPWATCH_LEFT_PADDING;
         Stopwatch.stopwatchMenuText.y = Constants.END_LEVEL_STOPWATCH_TOP_PADDING;
-		playthroughSprings.text = "Springs: " + 5 + " * 1000"
-		playthroughSprings.x = Stopwatch.stopwatchMenuText.x;
-		playthroughSprings.y = Stopwatch.stopwatchMenuText.y + Constants.PLAYER_RECORD_TIME_END_LEVEL_TOP_PADDING;
 		previousRecord = GameState.getPlayerRecordEndLevelTextField(game.currLevelIndex);
         previousRecord.x = Stopwatch.stopwatchMenuText.x;
         previousRecord.y = Stopwatch.stopwatchMenuText.y + Constants.PLAYER_RECORD_TIME_END_LEVEL_TOP_PADDING;
-        stage.addChild(playthroughSprings);
-		stage.addChild(Stopwatch.stopwatchMenuText);
-        stage.addChild(previousRecord);
+		//stage.addChild(Stopwatch.stopwatchMenuText);
+        //stage.addChild(previousRecord);
+        calculations = Menu.getTextField(
+                Constants.END_LEVEL_SCORING_TIME_TEXT + Stopwatch.formatScoreTiming(Stopwatch.getCurrentTiming()) + "\tX 10\n" +
+                Constants.END_LEVEL_SCORING_SPRING_TEXT + game.totalSuccessfulSprings + "\tX 1000\n" +
+                Constants.END_LEVEL_SCORING_TOTAL_TEXT + game.highScore + "\n",
+                Constants.END_LEVEL_SCORING_HEIGHT,
+                Constants.END_LEVEL_SCORING_WIDTH,
+                (Constants.SCREEN_WIDTH - Constants.END_LEVEL_SCORING_WIDTH) / 2,
+                Constants.END_LEVEL_SCORING_TOP_PADDING,
+                Constants.MENU_FONT,
+                Constants.END_LEVEL_SCORING_FONT_SIZE,
+                Constants.END_LEVEL_SCORING_TEXT_ALIGNMENT);
+        if (game.highScore == GameState.getPlayerHighScore(game.currLevelIndex)) {
+            stage.addChild(highScoreIndicator);
+        }
+        stage.addChild(calculations);
         stage.addEventListener(KeyboardEvent.KEY_DOWN, Menu.onKeyDown);
         stage.focus = stage;
     }
@@ -229,18 +243,35 @@ public class Menu {
         stage.removeEventListener(KeyboardEvent.KEY_DOWN, game.onKeyDown); // Need to do this whenever leaving game state
         state = Constants.STATE_END_GAME_MENU;
         stage.addChild(endGameMenu);
+        /*
         if (fullPlaythrough) {
             stage.addChild(Menu.playthroughTime);
         } else {
             stage.addChild(playthroughTip);
-        }
+        }*/
+        stage.addChild(playthroughTip);
         Stopwatch.stopwatchMenuText.x = Constants.END_GAME_STOPWATCH_LEFT_PADDING;
         Stopwatch.stopwatchMenuText.y = Constants.END_GAME_STOPWATCH_TOP_PADDING;
         previousRecord = GameState.getPlayerRecordEndLevelTextField(game.currLevelIndex);
         previousRecord.x = Stopwatch.stopwatchMenuText.x;
         previousRecord.y = Stopwatch.stopwatchMenuText.y + Constants.PLAYER_RECORD_TIME_END_LEVEL_TOP_PADDING;
-        stage.addChild(Stopwatch.stopwatchMenuText);
-        stage.addChild(previousRecord);
+        //stage.addChild(Stopwatch.stopwatchMenuText);
+        //stage.addChild(previousRecord);
+        calculations = Menu.getTextField(
+                        Constants.END_LEVEL_SCORING_TIME_TEXT + Stopwatch.formatScoreTiming(Stopwatch.getCurrentTiming()) + "\tX 10\n" +
+                        Constants.END_LEVEL_SCORING_SPRING_TEXT + game.totalSuccessfulSprings + "\tX 1000\n" +
+                        Constants.END_LEVEL_SCORING_TOTAL_TEXT + game.highScore + "\n",
+                Constants.END_LEVEL_SCORING_HEIGHT,
+                Constants.END_LEVEL_SCORING_WIDTH,
+                        (Constants.SCREEN_WIDTH - Constants.END_LEVEL_SCORING_WIDTH) / 2,
+                Constants.END_LEVEL_SCORING_TOP_PADDING,
+                Constants.MENU_FONT,
+                Constants.END_LEVEL_SCORING_FONT_SIZE,
+                Constants.END_LEVEL_SCORING_TEXT_ALIGNMENT);
+        if (game.highScore == GameState.getPlayerHighScore(game.currLevelIndex)) {
+            stage.addChild(highScoreIndicator);
+        }
+        stage.addChild(calculations);
         stage.addEventListener(KeyboardEvent.KEY_DOWN, Menu.onKeyDown);
         stage.focus = stage;
     }
@@ -306,13 +337,19 @@ public class Menu {
     public static function startNextLevel():void {
         stage.removeEventListener(KeyboardEvent.KEY_DOWN, Menu.onKeyDown);
         stage.removeChild(endLevelMenu);
-        stage.removeChild(Stopwatch.stopwatchMenuText);
-        stage.removeChild(previousRecord);
+        //stage.removeChild(Stopwatch.stopwatchMenuText);
+        //stage.removeChild(previousRecord);
         state = Constants.STATE_GAME;
+        /*
         if (fullPlaythrough) {
             stage.removeChild(playthroughTime);
         } else {
             stage.removeChild(playthroughTip);
+        }*/
+        stage.removeChild(playthroughTip);
+        stage.removeChild(calculations);
+        if (game.highScore == GameState.getPlayerHighScore(game.currLevelIndex)) {
+            stage.removeChild(highScoreIndicator);
         }
         game.startNextLevel();
     }
@@ -320,13 +357,19 @@ public class Menu {
     public static function restartLevel():void {
         stage.removeEventListener(KeyboardEvent.KEY_DOWN, Menu.onKeyDown);
         stage.removeChild(endLevelMenu);
-        stage.removeChild(Stopwatch.stopwatchMenuText);
-        stage.removeChild(previousRecord);
+        //stage.removeChild(Stopwatch.stopwatchMenuText);
+        //stage.removeChild(previousRecord);
         state = Constants.STATE_GAME;
+        /*
         if (fullPlaythrough) {
             stage.removeChild(playthroughTime);
         } else {
             stage.removeChild(playthroughTip);
+        }*/
+        stage.removeChild(playthroughTip);
+        stage.removeChild(calculations);
+        if (game.highScore == GameState.getPlayerHighScore(game.currLevelIndex)) {
+            stage.removeChild(highScoreIndicator);
         }
         fullPlaythrough = false;
         totalTime = 0;

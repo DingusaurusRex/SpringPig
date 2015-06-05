@@ -127,6 +127,18 @@ public class Stopwatch {
         time += String(milliseconds);
         return time;
     }
+
+    public static function formatScoreTiming(timing:int):String {
+        if (timing == Constants.STOPWATCH_DEFAULT_TIME) {
+            return "N/A";
+        }
+        var time:String = "";
+        var seconds:int = timing / 1000;
+        var milliseconds:int = (timing % 60000) % 1000 / 100;
+        time += String(seconds) + ".";
+        time += String(milliseconds);
+        return time;
+    }
 }
 
 }
