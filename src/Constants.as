@@ -158,15 +158,16 @@ package
         public static const SPRING_COUNTER_LEFT_PADDING:int = 20;
         public static const SPRING_COUNTER_TEXT_ALIGNMENT:String = "left";
 
-        public static const MIN_SPRING_DEFAULT_VALUE:String = "N/A";
+        public static const MIN_SPRING_DEFAULT_TEXT:String = "N/A";
 
         public static const MIN_SPRING_GAME_DEFAULT_TEXT:String = "Best # Springs: ";
         public static const MIN_SPRING_GAME_FONT_SIZE:int = 15;
-        public static const MIN_SPRING_GAME_WIDTH:int = 130;
+        public static const MIN_SPRING_GAME_WIDTH:int = 135;
         public static const MIN_SPRING_GAME_TOP_PADDING:int = 25;
         public static const MIN_SPRING_GAME_TEXT_ALIGNMENT:String = "left";
 
-        public static const SCORES_DEFAULT_VALUE:int = -1;
+        public static const SCORES_DEFAULT_VALUE:int = int.MAX_VALUE;
+        public static const SCORES_DEFAULT_TEXT:String = "N/A";
 
 		// Directions
 		public static const RIGHT:int = 0;
@@ -404,11 +405,11 @@ package
 		
 		public static const LEVEL_SELECT_PAGE_TOP_PADDING:int = 200;
 
-        public static const LEVEL_SELECT_TIME_RECORD_TEXT:String = "Personal Best:\n";
-        public static const LEVEL_SELECT_TIME_RECORD_TOP_PADDING:int = 3;
-        public static const LEVEL_SELECT_TIME_RECORD_FONT_SIZE:int = 15;
-        public static const LEVEL_SELECT_TIME_RECORD_HEIGHT:int = 45;
-        public static const LEVEL_SELECT_TIME_RECORD_ALIGNMENT:String = "center";
+        public static const LEVEL_SELECT_HIGH_SCORE_TEXT:String = "Personal Best:\n";
+        public static const LEVEL_SELECT_HIGH_SCORE_TOP_PADDING:int = 3;
+        public static const LEVEL_SELECT_HIGH_SCORE_FONT_SIZE:int = 15;
+        public static const LEVEL_SELECT_HIGH_SCORE_HEIGHT:int = 45;
+        public static const LEVEL_SELECT_HIGH_SCORE_ALIGNMENT:String = "center";
 
         // Time records menu
         public static const TIME_RECORDS_TITLE_TEXT:String = "Your Best Times";

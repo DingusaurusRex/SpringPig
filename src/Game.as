@@ -102,6 +102,9 @@ package
         private var springCounter:TextField;
         private var springCounterFormat:TextFormat;
 
+        // High Score
+        public var highScore:int;
+
         // Rewind
         private var playStates:Array;
         private var ticker:int;
@@ -543,6 +546,8 @@ package
 
             totalRewinds = 0;
 
+            highScore = int.MAX_VALUE;
+
             framesRewound = 0;
             rewindStarted = false;
             powerupUsed = null;
@@ -803,7 +808,7 @@ package
 						var t:int = Stopwatch.getCurrentTiming();
                         var logData:Object = {time:t, ss:successfulSprings, fs:failedSprings, sts:successfulTrampolineSprings, fts:failedTrampolineSprings, ts:totalSprings, r:totalRewinds, tss:totalSuccessfulSprings};
                         m_logger.logLevelEnd(logData);
-						var highScore:int = 1000 * totalSuccessfulSprings + t / 100;
+						highScore = 1000 * totalSuccessfulSprings + t / 100;
 						kongregate.stats.submit("Level Finish", currLevelIndex + 1);
 						kongregate.stats.submit("High Score", highScore);
                         Menu.updatePlaythroughTime();
@@ -864,11 +869,9 @@ package
             } else {
                 if (manual) {
                     m_logger.logAction(Constants.AID_FAILED_SPRING, logData);
-					kongregate.stats.submit("Spring", 1);
                     failedSprings++;
                 } else {
                     m_logger.logAction(Constants.AID_FAILED_TRAMPOLINE_SPRING, logData);
-					kongregate.stats.submit("Trampoline Spring", 1);
                     failedTrampolineSprings++;
                 }
             }

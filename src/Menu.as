@@ -1023,14 +1023,14 @@ class LevelSelectMenu extends Sprite {
                             Menu.onLevelClick);
                     levelButton.name = String(l);
 
-                    var levelRecord:TextField = Menu.getTextField(Constants.LEVEL_SELECT_TIME_RECORD_TEXT + Stopwatch.formatTiming(GameState.getPlayerRecord(l)),
-                            Constants.LEVEL_SELECT_TIME_RECORD_HEIGHT,
+                    var levelRecord:TextField = Menu.getTextField(Constants.LEVEL_SELECT_HIGH_SCORE_TEXT + GameState.getPlayerHighScoreString(l),
+                            Constants.LEVEL_SELECT_HIGH_SCORE_HEIGHT,
                             Constants.LEVEL_SELECT_BUTTON_WIDTH,
                             x,
-                                    y + Constants.LEVEL_SELECT_BUTTON_HEIGHT + Constants.LEVEL_SELECT_TIME_RECORD_TOP_PADDING,
+                                    y + Constants.LEVEL_SELECT_BUTTON_HEIGHT + Constants.LEVEL_SELECT_HIGH_SCORE_TOP_PADDING,
                             Constants.MENU_FONT,
-                            Constants.LEVEL_SELECT_TIME_RECORD_FONT_SIZE,
-                            Constants.LEVEL_SELECT_TIME_RECORD_ALIGNMENT);
+                            Constants.LEVEL_SELECT_HIGH_SCORE_FONT_SIZE,
+                            Constants.LEVEL_SELECT_HIGH_SCORE_ALIGNMENT);
                     page.addChild(levelButton);
                     page.addChild(levelRecord);
                     l++;
