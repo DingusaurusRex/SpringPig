@@ -158,15 +158,16 @@ package
         public static const SPRING_COUNTER_LEFT_PADDING:int = 20;
         public static const SPRING_COUNTER_TEXT_ALIGNMENT:String = "left";
 
-        public static const MIN_SPRING_DEFAULT_VALUE:String = "N/A";
+        public static const MIN_SPRING_DEFAULT_TEXT:String = "N/A";
 
         public static const MIN_SPRING_GAME_DEFAULT_TEXT:String = "Best # Springs: ";
         public static const MIN_SPRING_GAME_FONT_SIZE:int = 15;
-        public static const MIN_SPRING_GAME_WIDTH:int = 130;
+        public static const MIN_SPRING_GAME_WIDTH:int = 135;
         public static const MIN_SPRING_GAME_TOP_PADDING:int = 25;
         public static const MIN_SPRING_GAME_TEXT_ALIGNMENT:String = "left";
 
-        public static const SCORES_DEFAULT_VALUE:int = -1;
+        public static const SCORES_DEFAULT_VALUE:int = int.MAX_VALUE;
+        public static const SCORES_DEFAULT_TEXT:String = "N/A";
 
 		// Directions
 		public static const RIGHT:int = 0;
@@ -360,7 +361,7 @@ package
 
         public static const START_BUTTON_TEXT:String = "[S]tart";
         public static const LEVEL_SELECT_BUTTON_TEXT:String = "Select [L]evel";
-        public static const TIME_RECORDS_BUTTON_TEXT:String = "[T]ime Records";
+        public static const TIME_RECORDS_BUTTON_TEXT:String = "[R]ecords";
 
 		public static const MAIN_CREDITS_BUTTON_RIGHT_PADDING:int = 30;
 		public static const MAIN_CREDITS_BUTTON_BOTTOM_PADDING:int = 40;
@@ -404,32 +405,32 @@ package
 		
 		public static const LEVEL_SELECT_PAGE_TOP_PADDING:int = 200;
 
-        public static const LEVEL_SELECT_TIME_RECORD_TEXT:String = "Personal Best:\n";
-        public static const LEVEL_SELECT_TIME_RECORD_TOP_PADDING:int = 3;
-        public static const LEVEL_SELECT_TIME_RECORD_FONT_SIZE:int = 15;
-        public static const LEVEL_SELECT_TIME_RECORD_HEIGHT:int = 45;
-        public static const LEVEL_SELECT_TIME_RECORD_ALIGNMENT:String = "center";
+        public static const LEVEL_SELECT_HIGH_SCORE_TEXT:String = "High Score:\n";
+        public static const LEVEL_SELECT_HIGH_SCORE_TOP_PADDING:int = 3;
+        public static const LEVEL_SELECT_HIGH_SCORE_FONT_SIZE:int = 15;
+        public static const LEVEL_SELECT_HIGH_SCORE_HEIGHT:int = 45;
+        public static const LEVEL_SELECT_HIGH_SCORE_ALIGNMENT:String = "center";
 
         // Time records menu
-        public static const TIME_RECORDS_TITLE_TEXT:String = "Your Best Times";
-        public static const TIME_RECORDS_TITLE_TOP_PADDING:int = 50;
-        public static const TIME_RECORDS_TITLE_FONT_SIZE:int = 80;
+        public static const RECORDS_TITLE_TEXT:String = "Your High Scores";
+        public static const RECORDS_TITLE_TOP_PADDING:int = 50;
+        public static const RECORDS_TITLE_FONT_SIZE:int = 80;
 
-        public static const TIME_RECORDS_ROWS:int = 7;
-        public static const TIME_RECORDS_COLUMNS:int = 2;
+        public static const RECORDS_ROWS:int = 7;
+        public static const RECORDS_COLUMNS:int = 2;
 
-        public static const TIME_RECORDS_PREVIOUS_PAGE_BUTTON_TEXT:String = "Previous Page";
-        public static const TIME_RECORDS_NEXT_PAGE_BUTTON_TEXT:String = "Next Page";
-        public static const TIME_RECORDS_PAGE_BUTTON_BOTTOM_PADDING:int = 50;
-        public static const TIME_RECORDS_PAGE_BUTTON_COLUMNS:int = 3;
+        public static const RECORDS_PREVIOUS_PAGE_BUTTON_TEXT:String = "Previous Page";
+        public static const RECORDS_NEXT_PAGE_BUTTON_TEXT:String = "Next Page";
+        public static const RECORDS_PAGE_BUTTON_BOTTOM_PADDING:int = 50;
+        public static const RECORDS_PAGE_BUTTON_COLUMNS:int = 3;
 
-        public static const TIME_RECORDS_PAGE_TOP_PADDING:int = 160;
+        public static const RECORDS_PAGE_TOP_PADDING:int = 160;
 
-        public static const TIME_RECORDS_TIME_RECORD_TEXT:String = ": ";
-        public static const TIME_RECORDS_TIME_RECORD_HEIGHT:int = 25;
-        public static const TIME_RECORDS_TIME_RECORD_WIDTH:int = 300;
-        public static const TIME_RECORDS_TIME_RECORD_FONT_SIZE:int = 18;
-        public static const TIME_RECORDS_TIME_RECORD_ALIGNMENT:String = "left";
+        public static const RECORDS_TIME_RECORD_TEXT:String = ": ";
+        public static const RECORDS_TIME_RECORD_HEIGHT:int = 25;
+        public static const RECORDS_TIME_RECORD_WIDTH:int = 300;
+        public static const RECORDS_TIME_RECORD_FONT_SIZE:int = 18;
+        public static const RECORDS_TIME_RECORD_ALIGNMENT:String = "left";
 		
 		// Credits menu
 		public static const CREDITS_TITLE_TEXT:String = "Credits";

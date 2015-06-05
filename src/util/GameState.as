@@ -58,7 +58,7 @@ public class GameState {
             playerRecordEndLevelDefaultTextFormat.align = Constants.PLAYER_RECORD_TIME_END_LEVEL_TEXT_ALIGNMENT;
             playerRecordEndLevelText.setTextFormat(playerRecordGameDefaultTextFormat);
 
-            minSpringsGameText.text = Constants.MIN_SPRING_GAME_DEFAULT_TEXT + Constants.MIN_SPRING_DEFAULT_VALUE;
+            minSpringsGameText.text = Constants.MIN_SPRING_GAME_DEFAULT_TEXT + Constants.MIN_SPRING_DEFAULT_TEXT;
             minSpringsGameText.embedFonts = true;
             minSpringsGameDefaultTextFormat.font = Constants.MENU_FONT;
             minSpringsGameDefaultTextFormat.size = Constants.MIN_SPRING_GAME_FONT_SIZE;
@@ -124,6 +124,9 @@ public class GameState {
             if (game.totalSuccessfulSprings < playerData.data.springs[game.currLevelIndex]) {
                 playerData.data.springs[game.currLevelIndex] = game.totalSuccessfulSprings;
             }
+            if (game.highScore < playerData.data.scores[game.currLevelIndex]) {
+                playerData.data.scores[game.currLevelIndex] = game.highScore;
+            }
             playerData.flush();
         }
     }
@@ -169,6 +172,23 @@ public class GameState {
         return Constants.STOPWATCH_DEFAULT_TIME;
     }
 
+    public static function getPlayerHighScore(level:int):int {
+        if (saveable) {
+            return playerData.data.scores[level];
+        }
+        return Constants.SCORES_DEFAULT_VALUE;
+    }
+
+    public static function getPlayerHighScoreString(level:int):String {
+        if (saveable) {
+            if (playerData.data.scores[level] == Constants.SCORES_DEFAULT_VALUE) {
+                return Constants.SCORES_DEFAULT_TEXT;
+            }
+            return "" + playerData.data.scores[level];
+        }
+        return Constants.SCORES_DEFAULT_TEXT;
+    }
+
     public static function getPlayerBestPlaythroughTime():int {
         if (saveable) {
             return playerData.data.playthroughBest;
@@ -204,7 +224,7 @@ public class GameState {
         if (saveable) {
             var springs:String = "" + playerData.data.springs[level];
             if (playerData.data.springs[level] == Constants.SPRINGS_DEFAULT_VALUE) {
-                springs = Constants.MIN_SPRING_DEFAULT_VALUE;
+                springs = Constants.MIN_SPRING_DEFAULT_TEXT;
             }
             minSpringsGameText.text = Constants.MIN_SPRING_GAME_DEFAULT_TEXT + springs;
             minSpringsGameText.width = Constants.MIN_SPRING_GAME_WIDTH;

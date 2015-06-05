@@ -115,7 +115,7 @@ public class Stopwatch {
         var time:String = "";
         var minutes:int = timing / 60000;
         var seconds:int = (timing % 60000) / 1000;
-        var milliseconds:int = (timing % 60000) % 1000;
+        var milliseconds:int = (timing % 60000) % 1000 / 100;
         if (minutes < 10) {
             time += "0";
         }
@@ -124,11 +124,6 @@ public class Stopwatch {
             time += "0";
         }
         time += String(seconds) + ".";
-        if (milliseconds < 10) {
-            time += "00";
-        } else if (milliseconds < 100) {
-            time += "0";
-        }
         time += String(milliseconds);
         return time;
     }
