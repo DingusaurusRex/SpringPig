@@ -1290,6 +1290,11 @@ package
 								}
 							}
 						}
+						if (crate.asset.x < 0)
+						{
+							crate.asset.x = 0;
+							result = true;
+						}
 					}
 					break;
 				case Constants.DOWN:
