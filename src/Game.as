@@ -88,6 +88,7 @@ package
         // 5 below are not reset when rewind is called so a complete solution
         // can include springs rewinded
         private var successfulSprings:int;
+        public var totalSuccessfulSprings:int;
         private var failedSprings:int;
         private var successfulTrampolineSprings:int;
         private var failedTrampolineSprings:int;
@@ -96,6 +97,10 @@ package
         private var springed:Boolean;
 
         private var totalRewinds:int;
+
+        // Spring counter
+        private var springCounter:TextField;
+        private var springCounterFormat:TextFormat;
 
         // Rewind
         private var playStates:Array;
@@ -444,13 +449,33 @@ package
             Stopwatch.stopwatchText.y = Constants.SCREEN_HEIGHT - Constants.GAME_STOPWATCH_HEIGHT - Constants.GAME_STOPWATCH_BOTTOM_PADDING;
 
             var previousRecord:TextField = GameState.getPlayerRecordGameTextField(currLevelIndex);
-            previousRecord.x = Stopwatch.stopwatchText.x + Constants.GAME_STOPWATCH_WIDTH + Constants.PLAYER_RECORD_TIME_GAME_LEFT_PADDING;
+            previousRecord.x = Stopwatch.stopwatchText.x;
             previousRecord.y = Stopwatch.stopwatchText.y + Constants.PLAYER_RECORD_TIME_GAME_TOP_PADDING;
             previousRecord.textColor = Constants.IN_GAME_TEXT_COLOR;
+
+            totalSuccessfulSprings = 0;
+            springCounter = Menu.getTextField(Constants.SPRING_COUNTER_DEFAULT_TEXT + totalSuccessfulSprings,
+            Constants.SPRING_COUNTER_HEIGHT,
+            Constants.SPRING_COUNTER_WIDTH,
+                    previousRecord.x + Constants.PLAYER_RECORD_TIME_GAME_WIDTH + Constants.SPRING_COUNTER_LEFT_PADDING,
+                            Constants.SCREEN_HEIGHT - Constants.SPRING_COUNTER_HEIGHT - Constants.SPRING_COUNTER_BOTTOM_PADDING,
+            Constants.MENU_FONT,
+            Constants.SPRING_COUNTER_FONT_SIZE,
+            Constants.SPRING_COUNTER_TEXT_ALIGNMENT,
+            Constants.IN_GAME_TEXT_COLOR);
+            springCounterFormat = springCounter.getTextFormat();
+
+            var minSprings:TextField = GameState.getMinSpringsGameTextField(currLevelIndex);
+            minSprings.x = springCounter.x;
+            minSprings.y = springCounter.y + Constants.MIN_SPRING_GAME_TOP_PADDING;
+            minSprings.textColor = Constants.IN_GAME_TEXT_COLOR;
+
 
             m_stage.addChild(Menu.rewindInstructions);
             m_stage.addChild(Stopwatch.stopwatchText);
             m_stage.addChild(previousRecord);
+            m_stage.addChild(springCounter);
+            m_stage.addChild(minSprings);
 
             // Clear rewind
             playStates.length = 0;
@@ -565,6 +590,11 @@ package
 			currLevelIndex = l;
 			startLevel(progression[currLevelIndex]);
 		}
+
+        private function updateSpringCounter():void {
+            springCounter.text = Constants.SPRING_COUNTER_DEFAULT_TEXT + totalSuccessfulSprings;
+            springCounter.setTextFormat(springCounterFormat);
+        }
 		
 		/**
 		 * 
@@ -770,9 +800,12 @@ package
 						pause = true; // So that player position is disregarded
                         Stopwatch.pause();
                         util.Audio.playWinSFX();
-                        var logData:Object = {time:Stopwatch.getCurrentTiming(), ss:successfulSprings, fs:failedSprings, sts:successfulTrampolineSprings, fts:failedTrampolineSprings, ts:totalSprings, r:totalRewinds};
+						var t:int = Stopwatch.getCurrentTiming();
+                        var logData:Object = {time:t, ss:successfulSprings, fs:failedSprings, sts:successfulTrampolineSprings, fts:failedTrampolineSprings, ts:totalSprings, r:totalRewinds, tss:totalSuccessfulSprings};
                         m_logger.logLevelEnd(logData);
-						kongregate.stats.submit("Level Finish", currLevelIndex);
+						var highScore:int = 1000 * (successfulSprings + failedSprings + successfulTrampolineSprings + failedTrampolineSprings) + t / 100;
+						kongregate.stats.submit("Level Finish", currLevelIndex + 1);
+						kongregate.stats.submit("High Score", highScore);
                         Menu.updatePlaythroughTime();
                         GameState.openNextLevelSave();
 						if (currLevelIndex == progression.length - 1) {
@@ -811,6 +844,8 @@ package
             var logData:Object = {x:m_player.asset.x, y:m_player.asset.y, power:m_player.energy};
             if (m_player.energy > 0) {
                 util.Audio.playSpringSFX();
+                totalSuccessfulSprings++;
+                updateSpringCounter();
                 if (manual) {
                     m_logger.logAction(Constants.AID_SUCCESSFUL_SPRING, logData);
 					kongregate.stats.submit("Spring", 1);

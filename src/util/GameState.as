@@ -20,6 +20,12 @@ public class GameState {
     private static var playerRecordEndLevelText:TextField = new TextField();
     private static var playerRecordEndLevelDefaultTextFormat:TextFormat = new TextFormat();
 
+    private static var minSpringsGameText:TextField = new TextField();
+    private static var minSpringsGameDefaultTextFormat:TextFormat = new TextFormat();
+
+    private static var minSpringsEndLevelText:TextField = new TextField();
+    private static var minSpringsEndLevelDefaultTextFormat:TextFormat = new TextFormat();
+
     public static function Init(progressionFileName:String, g:Game):void {
         game = g;
         try {
@@ -31,7 +37,9 @@ public class GameState {
                     !playerData.data.hasOwnProperty("personalRecords") ||
                     !playerData.data.hasOwnProperty("mute") ||
                     !playerData.data.hasOwnProperty("playthroughBest") ||
-                    !playerData.data.hasOwnProperty("version")) {
+                    !playerData.data.hasOwnProperty("version") ||
+                    !playerData.data.hasOwnProperty("springs") ||
+                    !playerData.data.hasOwnProperty("scores")) {
                 resetProgress(false);
             }
 
@@ -49,6 +57,13 @@ public class GameState {
             playerRecordEndLevelDefaultTextFormat.size = Constants.PLAYER_RECORD_TIME_END_LEVEL_FONT_SIZE;
             playerRecordEndLevelDefaultTextFormat.align = Constants.PLAYER_RECORD_TIME_END_LEVEL_TEXT_ALIGNMENT;
             playerRecordEndLevelText.setTextFormat(playerRecordGameDefaultTextFormat);
+
+            minSpringsGameText.text = Constants.MIN_SPRING_GAME_DEFAULT_TEXT + Constants.MIN_SPRING_DEFAULT_VALUE;
+            minSpringsGameText.embedFonts = true;
+            minSpringsGameDefaultTextFormat.font = Constants.MENU_FONT;
+            minSpringsGameDefaultTextFormat.size = Constants.MIN_SPRING_GAME_FONT_SIZE;
+            minSpringsGameDefaultTextFormat.align = Constants.MIN_SPRING_GAME_TEXT_ALIGNMENT;
+            minSpringsGameText.setTextFormat(minSpringsGameDefaultTextFormat);
         } catch (e:Error) {
             trace(e);
             trace(e.getStackTrace());
@@ -64,7 +79,9 @@ public class GameState {
                     !data.data.hasOwnProperty("personalRecords") ||
                     !data.data.hasOwnProperty("mute") ||
                     !data.data.hasOwnProperty("playthroughBest") ||
-                    !data.data.hasOwnProperty("version")) {
+                    !data.data.hasOwnProperty("version") ||
+                    !data.data.hasOwnProperty("springs") ||
+                    !data.data.hasOwnProperty("scores")) {
                 data.clear();
                 return false;
             }
@@ -103,6 +120,9 @@ public class GameState {
             }
             if (Stopwatch.getCurrentTiming() < playerData.data.personalRecords[game.currLevelIndex]) {
                 playerData.data.personalRecords[game.currLevelIndex] = Stopwatch.getCurrentTiming();
+            }
+            if (game.totalSuccessfulSprings < playerData.data.springs[game.currLevelIndex]) {
+                playerData.data.springs[game.currLevelIndex] = game.totalSuccessfulSprings;
             }
             playerData.flush();
         }
@@ -180,6 +200,20 @@ public class GameState {
         return new TextField();
     }
 
+    public static function getMinSpringsGameTextField(level:int):TextField {
+        if (saveable) {
+            var springs:String = "" + playerData.data.springs[level];
+            if (playerData.data.springs[level] == Constants.SPRINGS_DEFAULT_VALUE) {
+                springs = Constants.MIN_SPRING_DEFAULT_VALUE;
+            }
+            minSpringsGameText.text = Constants.MIN_SPRING_GAME_DEFAULT_TEXT + springs;
+            minSpringsGameText.width = Constants.MIN_SPRING_GAME_WIDTH;
+            minSpringsGameText.setTextFormat(minSpringsGameDefaultTextFormat);
+            return minSpringsGameText;
+        }
+        return new TextField();
+    }
+
     public static function getPlayerRecordEndLevelTextField(level:int):TextField {
         if (saveable) {
             var playerRecordText:String = Constants.PLAYER_RECORD_TIME_END_LEVEL_DEFAULT_TEXT + Stopwatch.formatTiming(getPlayerRecord(level));
@@ -202,13 +236,24 @@ public class GameState {
         playerData.data.unlocked = 1;
         playerData.data.progress = 0;
         var personalRecords:Array = new Array();
-        for (var i:int = 0; i < game.progression.length; i++) {
+        var i:int = 0;
+        for (i = 0; i < game.progression.length; i++) {
             personalRecords.push(Constants.STOPWATCH_DEFAULT_TIME);
         }
         playerData.data.personalRecords = personalRecords;
         playerData.data.mute = false;
         playerData.data.playthroughBest = Constants.STOPWATCH_DEFAULT_TIME;
         playerData.data.version = Constants.VERSION_NULL;
+        var springs:Array = new Array();
+        for (i = 0; i < game.progression.length; i++) {
+            springs.push(Constants.SPRINGS_DEFAULT_VALUE);
+        }
+        playerData.data.springs = springs;
+        var scores:Array = new Array();
+        for (i = 0; i < game.progression.length; i++) {
+            scores.push(Constants.SCORES_DEFAULT_VALUE);
+        }
+        playerData.data.scores = scores;
         playerData.flush();
         if (removeBestTimeText) {
             Menu.removeBestPlaythroughTime();

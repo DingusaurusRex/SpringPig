@@ -121,12 +121,11 @@ package
 		public static const STOPWATCH_DEFAULT_TEXT:String = "00:00.000";
         public static const STOPWATCH_DEFAULT_TIME:int = 5999999;
 		
-		public static const GAME_STOPWATCH_FONT:String = "breeSerif";
 		public static const GAME_STOPWATCH_FONT_SIZE:int = 20;
 		public static const GAME_STOPWATCH_WIDTH:int = 100;
 		public static const GAME_STOPWATCH_HEIGHT:int = 25;
 		public static const GAME_STOPWATCH_TOP_PADDING:int = 10;
-		public static const GAME_STOPWATCH_BOTTOM_PADDING:int = 5;
+		public static const GAME_STOPWATCH_BOTTOM_PADDING:int = 25;
 		public static const GAME_STOPWATCH_LEFT_PADDING:int = 5;
 
 		public static const MENU_STOPWATCH_DEFAULT_TEXT:String = "Your Time: ";
@@ -138,7 +137,7 @@ package
         public static const PLAYER_RECORD_TIME_GAME_DEFAULT_TEXT:String = "Best Time: ";
         public static const PLAYER_RECORD_TIME_GAME_FONT_SIZE:int = 15;
         public static const PLAYER_RECORD_TIME_GAME_WIDTH:int = 150;
-        public static const PLAYER_RECORD_TIME_GAME_TOP_PADDING:int = 5;
+        public static const PLAYER_RECORD_TIME_GAME_TOP_PADDING:int = 25;
         public static const PLAYER_RECORD_TIME_GAME_LEFT_PADDING:int = 20;
         public static const PLAYER_RECORD_TIME_GAME_TEXT_ALIGNMENT:String = "left";
 
@@ -147,6 +146,27 @@ package
         public static const PLAYER_RECORD_TIME_END_LEVEL_FONT_SIZE:int = 25;
         public static const PLAYER_RECORD_TIME_END_LEVEL_TOP_PADDING:int = 40;
         public static const PLAYER_RECORD_TIME_END_LEVEL_TEXT_ALIGNMENT:String = "center";
+
+
+        public static const SPRINGS_DEFAULT_VALUE:int = 10000;
+
+        public static const SPRING_COUNTER_DEFAULT_TEXT:String = "Springs: ";
+        public static const SPRING_COUNTER_FONT_SIZE:int = 20;
+        public static const SPRING_COUNTER_WIDTH:int = 100;
+        public static const SPRING_COUNTER_HEIGHT:int = 25;
+        public static const SPRING_COUNTER_BOTTOM_PADDING:int = 25;
+        public static const SPRING_COUNTER_LEFT_PADDING:int = 20;
+        public static const SPRING_COUNTER_TEXT_ALIGNMENT:String = "left";
+
+        public static const MIN_SPRING_DEFAULT_VALUE:String = "N/A";
+
+        public static const MIN_SPRING_GAME_DEFAULT_TEXT:String = "Best # Springs: ";
+        public static const MIN_SPRING_GAME_FONT_SIZE:int = 15;
+        public static const MIN_SPRING_GAME_WIDTH:int = 130;
+        public static const MIN_SPRING_GAME_TOP_PADDING:int = 25;
+        public static const MIN_SPRING_GAME_TEXT_ALIGNMENT:String = "left";
+
+        public static const SCORES_DEFAULT_VALUE:int = -1;
 
 		// Directions
 		public static const RIGHT:int = 0;
