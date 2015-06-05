@@ -537,10 +537,10 @@ package
         public static const BEST_TOTAL_TIME_ALIGNMENT:String = "center";
 
         // Rewind tutorial
-        public static const REWIND_INSTRUCTION_TEXT:String = "Rewind: R Reset: Y";
+        public static const REWIND_INSTRUCTION_TEXT:String = "Rewind: R\tReset: Y";
         public static const REWIND_INSTRUCTION_BOTTOM_PADDING:int = 5;
         public static const REWIND_INSTRUCTION_LEFT_PADDING:int = 5;
-        public static const REWIND_INSTRUCTION_RIGHT_PADDING:int = 5;
+        public static const REWIND_INSTRUCTION_RIGHT_PADDING:int = 20;
         public static const REWIND_INSTRUCTION_HEIGHT:int = 25;
         public static const REWIND_INSTRUCTION_WIDTH:int = 210;
         public static const REWIND_INSTRUCTION_FONT_SIZE:int = 20;
