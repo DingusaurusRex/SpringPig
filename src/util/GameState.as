@@ -100,6 +100,9 @@ public class GameState {
         }
     }
 
+	/**
+	 * Saves high score, time, springs for a given level
+	 */
     public static function openNextLevelSave():void {
         if (saveable) {
             playerData.data.progress = game.currLevelIndex + 1;
@@ -127,6 +130,55 @@ public class GameState {
             playerData.flush();
         }
     }
+	
+	public static function sendHighScoresToKong(kongregate:*):void
+	{
+		var send:Boolean = true;
+		var sum:int = 0;
+		
+		// LEVELS 1-10
+		for (var i:int = 0; i <= 9; i++) {
+			if (playerData.data.scores[i] == Constants.SCORES_DEFAULT_VALUE) {
+				send = false;
+				break;
+			} else {
+				sum += playerData.data.scores[i];
+			}
+		}
+		if (send) {
+			kongregate.stats.submit("Level 1 - 10 Score", sum);
+		}
+		
+		// LEVELS 11-20
+		send = true;
+		sum = 0;
+		for (i = 10; i <= 19; i++) {
+			if (playerData.data.scores[i] == Constants.SCORES_DEFAULT_VALUE) {
+				send = false;
+				break;
+			} else {
+				sum += playerData.data.scores[i];
+			}
+		}
+		if (send) {
+			kongregate.stats.submit("Level 11 - 20 Score", sum);
+		}
+		
+		// LEVELS 21-30
+		send = true;
+		sum = 0;
+		for (i = 20; i <= 29; i++) {
+			if (playerData.data.scores[i] == Constants.SCORES_DEFAULT_VALUE) {
+				send = false;
+				break;
+			} else {
+				sum += playerData.data.scores[i];
+			}
+		}
+		if (send) {
+			kongregate.stats.submit("Level 21 - 30 Score", sum);
+		}
+	}
 
     public static function currentLevelSave():void {
         if (saveable) {
