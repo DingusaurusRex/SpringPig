@@ -795,7 +795,7 @@ class MainMenu extends Sprite {
         addChild(recordsButton);
         addChild(creditsButton);
         if (bestTime != Constants.STOPWATCH_DEFAULT_TIME) {
-            addChild(bestPlaythroughTime);
+            //addChild(bestPlaythroughTime);
         }
 
         if (GameState.getPlayerLetestProgress() == 0) {
@@ -828,13 +828,13 @@ class MainMenu extends Sprite {
             bestTime = Menu.totalTime;
             bestPlaythroughTime.text = Constants.BEST_TOTAL_TIME_TEXT + Stopwatch.formatTiming(bestTime);
             bestPlaythroughTime.setTextFormat(bestPlaythroughTimeTextFormat);
-            addChild(bestPlaythroughTime);
+            //addChild(bestPlaythroughTime);
         }
     }
 
     public function removeBestPlaythroughTime():void {
-        addChild(bestPlaythroughTime);
-        removeChild(bestPlaythroughTime);
+        //addChild(bestPlaythroughTime);
+        //removeChild(bestPlaythroughTime);
     }
 }
 
