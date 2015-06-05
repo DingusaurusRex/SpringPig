@@ -144,7 +144,7 @@ package
         public static const PLAYER_RECORD_TIME_END_LEVEL_DEFAULT_TEXT:String = "Best Time: ";
         public static const PLAYER_RECORD_TIME_END_LEVEL_NEW_RECORD_TEXT:String = "\nNEW RECORD!";
         public static const PLAYER_RECORD_TIME_END_LEVEL_FONT_SIZE:int = 25;
-        public static const PLAYER_RECORD_TIME_END_LEVEL_TOP_PADDING:int = 40;
+        public static const PLAYER_RECORD_TIME_END_LEVEL_TOP_PADDING:int = 30;
         public static const PLAYER_RECORD_TIME_END_LEVEL_TEXT_ALIGNMENT:String = "center";
 
 
